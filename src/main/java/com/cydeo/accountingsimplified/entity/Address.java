@@ -1,5 +1,6 @@
 package com.cydeo.accountingsimplified.entity;
 
+import com.cydeo.accountingsimplified.enums.Country;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
