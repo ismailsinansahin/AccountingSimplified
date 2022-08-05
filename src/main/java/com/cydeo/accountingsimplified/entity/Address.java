@@ -5,32 +5,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "companies")
+@Table(name = "addresses")
 @Where(clause = "is_deleted=false")
 public class Address extends BaseEntity {
 
     private String addressLine1;
-
     private String addressLine2;
-
-    @Enumerated(EnumType.STRING)
-    private City city;
-
-    @Enumerated(EnumType.STRING)
-    private State state;
-
-    @Enumerated(EnumType.STRING)
-    private Country country;
-
+    private String city;
+    private String state;
+    private String country;
     private String zipCode;
 
 }
