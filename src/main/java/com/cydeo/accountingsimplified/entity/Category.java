@@ -12,25 +12,16 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "addresses")
+@Table(name = "categories")
 @Where(clause = "is_deleted=false")
-public class Address extends BaseEntity {
+public class Category extends BaseEntity{
 
     @NotNull
-    private String addressLine1;
-
-    private String addressLine2;
+    private String description;
 
     @NotNull
-    private String city;
-
-    @NotNull
-    private String state;
-
-    @NotNull
-    private String country;
-
-    @NotNull
-    private String zipCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
 
 }
