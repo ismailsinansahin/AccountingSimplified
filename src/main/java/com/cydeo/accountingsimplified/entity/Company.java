@@ -4,13 +4,13 @@ import com.cydeo.accountingsimplified.enums.CompanyStatus;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +22,7 @@ public class Company extends BaseEntity{
     @NotNull
     private String title;
 
+    @NotNull
     private String phone;
 
     private String website;

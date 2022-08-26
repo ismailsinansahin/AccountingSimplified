@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "addresses")
 @Where(clause = "is_deleted=false")
-public class Address extends BaseEntity {
+public class Address extends BaseEntity{
 
     @NotNull
     private String addressLine1;
@@ -32,5 +32,8 @@ public class Address extends BaseEntity {
 
     @NotNull
     private String zipCode;
+
+    @OneToOne(mappedBy = "address")
+    private Company company;
 
 }

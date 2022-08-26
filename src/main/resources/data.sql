@@ -1,5 +1,5 @@
 insert into roles(insert_date_time, insert_user_id, is_deleted, last_update_date_time,
-                  last_update_user_id, role)
+                  last_update_user_id, description)
 values ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1, 'Root User'),
        ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1, 'Admin'),
        ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1, 'Manager'),
@@ -19,6 +19,8 @@ values ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
 insert into companies(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                       title, phone, website, address_id, company_status)
 values ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
+        'Red Tech','1-652-852-3246', 'redtech.com', 3, 'PASSIVE'),
+       ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
         'Blue Tech','1-215-654-5268', 'bluetech.com', 1, 'ACTIVE'),
        ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
         'Green Tech','1-215-846-2642', 'greentech.com', 2, 'ACTIVE');
@@ -26,9 +28,15 @@ values ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
 insert into users(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                   username, password, firstname, lastname, phone, role_id, company_id)
 values ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
-        'mt@bluetech.com', 'Abc1', 'Mike', 'Times', '1-854-741-8569', 1, 1),
+        'jt@cydeo.com', 'Abc1', 'Jay', 'Thunder', '1-852-564-5874', 1, null),
        ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
-        'cb@greentech.com', 'Abc1', 'Chris', 'Brown', '1-235-258-3544', 1, 2);
+        'mg@gmail.com', 'Abc1', 'Mary', 'Grant', '1-234-345-4362', 2, null),
+       ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
+        'rn@redtech.com', 'Abc1', 'Robert', 'Noah', '1-852-564-5874', 2, 3),
+       ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
+        'mt@bluetech.com', 'Abc1', 'Mike', 'Times', '1-854-741-8569', 2, null),
+       ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
+        'cb@greentech.com', 'Abc1', 'Chris', 'Brown', '1-235-258-3544', 2, null);
 
 insert into clients_vendors(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                             company_name, phone, website, client_vendor_type, address_id, company_id)
@@ -89,24 +97,3 @@ values ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
          1, 100, 10, 110, 0, 0, 0, 0, 1, 5),
        ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
         1, 0, 0, 0, 200, 10, 220, 0, 1, 6);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

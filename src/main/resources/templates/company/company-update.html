@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="/fragments/head :: header"><title>Company Update</title></head>
+
+<body>
+<div class="dashboard-main-wrapper">
+  <div th:replace="/fragments/header :: header"></div>
+  <div th:replace="/fragments/left-sidebar :: left-sidebar"></div>
+  <div class="dashboard-wrapper">
+    <div class="dashboard-ecommerce">
+      <div class="container-fluid dashboard-content">
+        <div class="ecommerce-widget">
+          <div class="input-group row">
+            <div class="col-auto">
+              <form>
+                <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
+                  <a id="companylistlink" class="btn bg-dark text-light mb-1"
+                     th:href="@{/companies/list}"><i class="fa fa-list mr-1"></i>Company List</a>
+                </div>
+              </form>
+            </div>
+          </div><br>
+          <header class="panel-heading">
+            <h2 class="panel-title">Edit Company</h2>
+        </header>
+          <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane fade mt-2 show active" id="account" role="tabpanel"
+                                     aria-labelledby="account-tab">
+                                    <form class="needs-validation" novalidate
+                                          th:action="@{/companies/update/{id}(id=${company.getId()})}"
+                                          th:method="post" th:object="${company}">
+                                        <div class="row">
+                                            <div class="col-12 col-md-8">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label>Title</label>
+                                                        <input type="text" th:field="*{title}" placeholder="Title"
+                                                               class="form-control" required="required" aria-invalid="false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-4">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label>Phone</label>
+                                                        <input type="text" th:field="*{phone}" placeholder="Phone"
+                                                               class="form-control" required="required" aria-invalid="false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label>Website</label>
+                                                        <input type="text" th:field="*{website}" placeholder="Website"
+                                                               class="form-control" aria-invalid="false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-4">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label>Address</label>
+                                                        <input type="text" th:field="*{address.addressLine1}" placeholder="Address"
+                                                               class="form-control" required="required" aria-invalid="false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label>Address</label>
+                                                        <input type="text" th:field="*{address.addressLine2}" placeholder="Address"
+                                                               class="form-control" aria-invalid="false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-4">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label>City</label>
+                                                        <input type="text" th:field="*{address.city}" placeholder="City"
+                                                               class="form-control" required="required" aria-invalid="false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label>Zip Code</label>
+                                                        <input type="text" th:field="*{address.zipCode}" placeholder="Zip Code"
+                                                               class="form-control" required="required" aria-invalid="false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 col-md-4">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label>State</label>
+                                                        <input type="text" th:field="*{address.state}" placeholder="State"
+                                                               class="form-control" required="required" aria-invalid="false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label>Country</label>
+                                                        <input type="text" th:field="*{address.country}" placeholder="Country"
+                                                               class="form-control" required="required" aria-invalid="false">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-3 mt-sm-2">
+                                            <button class="btn btn-success mb-2 mb-sm-0 mr-sm-2"
+                                                    type="submit" name="action" value="save">Save
+                                            </button>
+                                            <button class="btn btn-danger mb-2 mb-sm-0 mr-sm-2"
+                                                    type="reset">Cancel
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div th:replace="/fragments/footer :: footer"></div>
+<div th:replace="/fragments/javascript :: js"></div>
+</body>
+</html>

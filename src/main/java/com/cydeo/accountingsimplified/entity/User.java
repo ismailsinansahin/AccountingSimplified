@@ -34,7 +34,6 @@ public class User extends BaseEntity{
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
