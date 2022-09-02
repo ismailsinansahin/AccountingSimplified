@@ -71,7 +71,4 @@ public class CompanyController {
         return "redirect:/companies/list";
     }
 
-
-
-
 }

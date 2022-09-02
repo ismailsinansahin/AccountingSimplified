@@ -55,8 +55,7 @@
                                                             </tr>
                                                             </thead>
                                                             <tbody>
-                                                            <tr th:each="user, comStat : ${users}"
-                                                                th:style="${user.company} == null ? 'background-color: #fcd7d7' : 'background-color: #eee'">
+                                                            <tr th:each="user, comStat : ${users}">
                                                                 <td th:text="${comStat.count}"></td>
                                                                 <td th:if="${user.company != null}" th:text="${user.company.title}"></td>
                                                                 <td th:if="${user.company == null}" th:text="${'-'}"></td>

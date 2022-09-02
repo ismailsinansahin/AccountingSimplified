@@ -8,7 +8,7 @@ values ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1, 'Root User'),
 insert into addresses(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                       address_line1, address_line2, city, state, country, zip_code)
 values ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
-        '15th Avenue', 'Ronaldinho Street', 'Montgomery', 'Alabama', 'USA', '12345-1234'),
+        '7925 Jones Branch Dr, #3300', 'Tysons', 'Virginia', 'VA', 'USA', '22102-1234'),
        ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
         'Future Street', 'Times Square', 'Atlanta', 'Alabama', 'USA', '54321-4321'),
        ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
@@ -19,24 +19,31 @@ values ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
 insert into companies(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                       title, phone, website, address_id, company_status)
 values ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
-        'Red Tech','1-652-852-3246', 'redtech.com', 3, 'PASSIVE'),
+        'CYDEO','1-652-852-8888', 'cydeo.com', 1, 'ACTIVE'),
        ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
-        'Blue Tech','1-215-654-5268', 'bluetech.com', 1, 'ACTIVE'),
+        'Green Tech','1-652-852-3246', 'greentech.com', 2, 'PASSIVE'),
        ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
-        'Green Tech','1-215-846-2642', 'greentech.com', 2, 'ACTIVE');
+        'Blue Tech','1-215-654-5268', 'bluetech.com', 3, 'ACTIVE'),
+       ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
+        'Red Tech','1-215-846-2642', 'redtech.com', 4, 'ACTIVE');
 
 insert into users(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                   username, password, firstname, lastname, phone, role_id, company_id)
 values ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
-        'jt@cydeo.com', 'Abc1', 'Jay', 'Thunder', '1-852-564-5874', 1, null),
+        'jt@cydeo.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
+        'Jay', 'Thunder', '1-852-564-5874', 1, 1),
        ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
-        'mg@gmail.com', 'Abc1', 'Mary', 'Grant', '1-234-345-4362', 2, null),
+        'mg@greentech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
+        'Mary', 'Grant', '1-234-345-4362', 2, 2),
        ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
-        'rn@redtech.com', 'Abc1', 'Robert', 'Noah', '1-852-564-5874', 2, 3),
+        'rn@redtech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
+        'Robert', 'Noah', '1-852-564-5874', 2, 3),
        ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
-        'mt@bluetech.com', 'Abc1', 'Mike', 'Times', '1-854-741-8569', 2, null),
+        'mt@greentech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
+        'Mike', 'Times', '1-854-741-8569', 3, 2),
        ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
-        'cb@greentech.com', 'Abc1', 'Chris', 'Brown', '1-235-258-3544', 2, null);
+        'cb@greentech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
+        'Chris', 'Brown', '1-235-258-3544', 4, 2);
 
 insert into clients_vendors(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                             company_name, phone, website, client_vendor_type, address_id, company_id)
