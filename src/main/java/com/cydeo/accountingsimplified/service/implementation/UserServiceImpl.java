@@ -1,18 +1,18 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
-import com.cydeo.accountingsimplified.dto.AddressDto;
 import com.cydeo.accountingsimplified.dto.CompanyDto;
 import com.cydeo.accountingsimplified.dto.RoleDto;
 import com.cydeo.accountingsimplified.dto.UserDto;
-import com.cydeo.accountingsimplified.entity.Address;
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.entity.Role;
 import com.cydeo.accountingsimplified.entity.User;
+import com.cydeo.accountingsimplified.entity.common.UserPrincipal;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.CompanyRepository;
 import com.cydeo.accountingsimplified.repository.RoleRepository;
 import com.cydeo.accountingsimplified.repository.UserRepository;
 import com.cydeo.accountingsimplified.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +25,10 @@ public class UserServiceImpl implements UserService {
     private final CompanyRepository companyRepository;
     private final RoleRepository roleRepository;
     private final MapperUtil mapperUtil;
+    private UserPrincipal userPrincipal;
 
-    public UserServiceImpl(UserRepository userRepository, CompanyRepository companyRepository, RoleRepository roleRepository, MapperUtil mapperUtil) {
+    public UserServiceImpl(UserRepository userRepository, CompanyRepository companyRepository,
+                           RoleRepository roleRepository, MapperUtil mapperUtil) {
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
         this.roleRepository = roleRepository;
@@ -40,7 +42,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
+    public List<UserDto> getAllUsers() throws Exception {
         User currentUser = getCurrentUser();
         if (currentUser.getRole().getDescription().equals("Root User")) {
             Role role1 = roleRepository.findByDescription("Root User");
@@ -58,9 +60,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto create(UserDto userDto) {
+    public UserDto create(UserDto userDto) throws Exception {
         User user = mapperUtil.convert(userDto, new User());
-        if(getCurrentUser().getRole().getDescription().equals("Admin")){
+        if(user.getRole().getDescription().equals("Root User")){
+            user.setCompany(companyRepository.findCompanyByTitle("CYDEO"));
+        }
+        else if(!user.getRole().getDescription().equals("Admin")){
             user.setCompany(getCurrentUser().getCompany());
         }
         userRepository.save(user);
@@ -68,15 +73,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<RoleDto> getAllRoles() {
-        return roleRepository.findAll()
-        .stream()
-        .map(each -> mapperUtil.convert(each, new RoleDto()))
-        .collect(Collectors.toList());
+    public List<RoleDto> getAllRoles() throws Exception {
+        if(getCurrentUser().getRole().getDescription().equals("Root User")){
+            List<Role> roleList = roleRepository.findAllByDescriptionOrDescription("Root User", "Admin");
+            return roleList.stream()
+                    .map(each -> mapperUtil.convert(each, new RoleDto()))
+                    .collect(Collectors.toList());
+        }
+        else {
+            return roleRepository.findAll()
+                    .stream()
+                    .map(each -> mapperUtil.convert(each, new RoleDto()))
+                    .collect(Collectors.toList());
+        }
     }
 
     @Override
-    public CompanyDto getCompanyOfNewUser() {
+    public CompanyDto getCompanyOfNewUser() throws Exception {
         User user = getCurrentUser();
         return mapperUtil.convert(user.getCompany(), new CompanyDto());
     }
@@ -102,8 +115,18 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    public User getCurrentUser(){
-        return userRepository.findUserById(3L);
+    public User getCurrentUser() throws Exception {
+        userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println("userPrincipal.getUsername() = " + userPrincipal.getUsername());
+        return userRepository.findUserById(userPrincipal.getId());
+    }
+
+    @Override
+    public UserDto getCurrentUserDto() {
+        userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println("userPrincipal.getUsername() = " + userPrincipal.getUsername());
+        User user =  userRepository.findUserById(userPrincipal.getId());
+        return mapperUtil.convert(user, new UserDto());
     }
 
 }

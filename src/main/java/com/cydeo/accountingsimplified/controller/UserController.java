@@ -1,8 +1,6 @@
 package com.cydeo.accountingsimplified.controller;
 
-import com.cydeo.accountingsimplified.dto.CompanyDto;
 import com.cydeo.accountingsimplified.dto.UserDto;
-import com.cydeo.accountingsimplified.enums.CompanyStatus;
 import com.cydeo.accountingsimplified.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Arrays;
 
 @Controller
 @RequestMapping("/users")
@@ -24,21 +20,21 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    public String navigateToUserList(Model model) {
+    public String navigateToUserList(Model model) throws Exception {
+        System.out.println("userService.getCurrentUserDto().getUsername() = " + userService.getCurrentUserDto().getUsername());
         model.addAttribute("users", userService.getAllUsers());
         return "/user/user-list";
     }
 
     @GetMapping("/create")
-    public String navigateToUserCreate(Model model) {
+    public String navigateToUserCreate(Model model) throws Exception {
         model.addAttribute("newUser", new UserDto());
-        model.addAttribute("company", userService.getCompanyOfNewUser());
         model.addAttribute("userRoles", userService.getAllRoles());
         return "/user/user-create";
     }
 
     @PostMapping("/create")
-    public String createNewUser(UserDto userDto) {
+    public String createNewUser(UserDto userDto) throws Exception {
         userService.create(userDto);
         return "redirect:/users/list";
     }
@@ -49,7 +45,7 @@ public class UserController {
     }
 
     @GetMapping("/update/{userId}")
-    public String navigateToUserUpate(@PathVariable("userId") Long userId, Model model) {
+    public String navigateToUserUpate(@PathVariable("userId") Long userId, Model model) throws Exception {
         model.addAttribute("user", userService.findUserById(userId));
         model.addAttribute("userRoles", userService.getAllRoles());
         return "/user/user-update";
@@ -66,6 +62,5 @@ public class UserController {
         userService.delete(userId);
         return "redirect:/users/list";
     }
-
 
 }
