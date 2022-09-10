@@ -14,18 +14,22 @@ values ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
        ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
         'North Street', 'Circle Square', 'San Francisco', 'California', 'USA', '65245-8546'),
        ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
-        'West Street', 'Triangle Square', 'Los Angeles', 'California', 'USA', '54782-5214');
+        'West Street', 'Triangle Square', 'Los Angeles', 'California', 'USA', '54782-5214'),
+       ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
+        'East Street', 'Cube Square', 'Los Angeles', 'California', 'USA', '54782-5214'),
+       ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
+        'South Street', 'Times Square', 'Los Angeles', 'California', 'USA', '54782-5214');;
 
 insert into companies(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                       title, phone, website, address_id, company_status)
 values ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
         'CYDEO','1-652-852-8888', 'cydeo.com', 1, 'ACTIVE'),
        ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
-        'Green Tech','1-652-852-3246', 'greentech.com', 2, 'PASSIVE'),
+        'Green Tech','1-652-852-3246', 'greentech.com', 2, 'ACTIVE'),
        ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
         'Blue Tech','1-215-654-5268', 'bluetech.com', 3, 'ACTIVE'),
        ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
-        'Red Tech','1-215-846-2642', 'redtech.com', 4, 'ACTIVE');
+        'Red Tech','1-215-846-2642', 'redtech.com', 4, 'PASSIVE');
 
 insert into users(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                   username, password, firstname, lastname, phone, role_id, company_id)
@@ -37,34 +41,34 @@ values ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
         'Mary', 'Grant', '1-234-345-4362', 2, 2),
        ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
         'rn@redtech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
-        'Robert', 'Noah', '1-852-564-5874', 2, 3),
+        'Robert', 'Noah', '1-852-564-5874', 3, 2),
        ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
         'mt@greentech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
-        'Mike', 'Times', '1-854-741-8569', 3, 2),
+        'Mike', 'Times', '1-854-741-8569', 4, 2),
        ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
         'cb@greentech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
-        'Chris', 'Brown', '1-235-258-3544', 4, 2);
+        'Chris', 'Brown', '1-235-258-3544', 2, 3);
 
 insert into clients_vendors(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
-                            company_name, phone, website, client_vendor_type, address_id, company_id)
+                            company_name, client_vendor_type, phone, website, address_id, company_id)
 values ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
-        'Zara','1-236-958-4521', 'zara.com', 'CLIENT', 3, 1),
+        'Orange', 'CLIENT', '1-251-321-4141', 'orange.com', 5, 2),
        ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
-        'MediaMarkt','1-365-125-9341', 'mediamarkt.com', 'VENDOR', 4, 1);
+        'Green Tech', 'VENDOR', '1-652-852-3246', 'greentech.com', 6, 2);
 
 insert into categories(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                        description, company_id)
 values ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
-        'Clothes', 1),
+        'Computers', 2),
        ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
-        'Electronics', 1);
+        'Phones', 2);
 
 insert into products(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
-                     name, quantity_in_stock, invoiced_quantity, low_limit_alert, product_unit, category_id, company_id)
+                     name, quantity_in_stock, quantity_in_invoice, low_limit_alert, product_unit, category_id)
 values ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
-        'Jean', 10, 3, 5, 'PCS', 1, 1),
+        'Apple IPhone-13', 10, 0, 5, 'PCS', 1),
        ('2021-01-05 00:00:00', 1, false, '2021-01-05 00:00:00', 1,
-        'T-shirt', 10, 2, 5, 'PCS', 1, 1);
+        'Samsung Galaxy S22', 10, 0, 5, 'PCS', 1);
 
 insert into invoices(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                      invoice_no, invoice_status, invoice_type, date, company_id, client_vendor_id)

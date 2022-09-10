@@ -5,16 +5,13 @@ import lombok.Getter;
 @Getter
 public enum ClientVendorType {
 
-    VENDOR("Vendor"), CLIENT("Client");
+    VENDOR("Vendor"),
+    CLIENT("Client");
 
-    private String value;
+    private final String value;
 
     ClientVendorType(String value) {
         this.value = value;
-    }
-
-    public String getValue() {
-        return value;
     }
 
 }

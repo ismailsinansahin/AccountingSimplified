@@ -23,8 +23,8 @@ public class SecurityConfig {
 
         return http
                 .authorizeRequests()
-//                    .antMatchers("/users/**").hasAnyAuthority("Root User","Admin")
-//                    .antMatchers("/companies/**").hasAnyAuthority("Root User")
+                    .antMatchers("/users/**").hasAnyAuthority("Root User","Admin")
+                    .antMatchers("/companies/**").hasAnyAuthority("Root User")
 //                    .antMatchers("/category/**").hasAnyAuthority("Admin", "Manager","Employee")
 //                    .antMatchers("/product/**").hasAnyAuthority("Admin", "Manager","Employee")
 //                    .antMatchers("/invoice/**").hasAnyAuthority("Admin", "Manager","Employee")

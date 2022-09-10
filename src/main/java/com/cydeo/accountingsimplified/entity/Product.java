@@ -22,7 +22,7 @@ public class Product extends BaseEntity{
 
     private Integer quantityInStock;
 
-    private Integer invoicedQuantity;
+    private Integer quantityInInvoice;
 
     @NotNull
     private Integer lowLimitAlert;
@@ -35,10 +35,5 @@ public class Product extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
-
-    @NotNull
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "company_id")
-    private Company company;
 
 }

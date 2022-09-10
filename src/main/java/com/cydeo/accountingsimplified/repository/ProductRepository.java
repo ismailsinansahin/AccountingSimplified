@@ -1,12 +1,15 @@
 package com.cydeo.accountingsimplified.repository;
 
 import com.cydeo.accountingsimplified.entity.Company;
+import com.cydeo.accountingsimplified.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface CompanyRepository extends JpaRepository<Company, Long> {
+import java.util.List;
 
-    Company findCompanyByTitle(String title);
+@Repository
+public interface ProductRepository extends JpaRepository<Product, Long> {
+
+    List<Product> findAllByCategoryCompany(Company company);
 
 }

@@ -35,5 +35,4 @@ public class InvoiceProduct extends BaseEntity{
     @JoinColumn(name = "product_id")
     private Product product;
 
-
 }

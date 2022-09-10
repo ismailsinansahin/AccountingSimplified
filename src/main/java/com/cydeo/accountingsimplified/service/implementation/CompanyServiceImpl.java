@@ -8,8 +8,6 @@ import com.cydeo.accountingsimplified.enums.CompanyStatus;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.AddressRepository;
 import com.cydeo.accountingsimplified.repository.CompanyRepository;
-import com.cydeo.accountingsimplified.repository.RoleRepository;
-import com.cydeo.accountingsimplified.repository.UserRepository;
 import com.cydeo.accountingsimplified.service.CompanyService;
 import org.springframework.stereotype.Service;
 
