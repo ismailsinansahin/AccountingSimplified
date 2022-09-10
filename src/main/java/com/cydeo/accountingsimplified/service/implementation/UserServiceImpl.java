@@ -1,9 +1,7 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
-import com.cydeo.accountingsimplified.dto.CompanyDto;
 import com.cydeo.accountingsimplified.dto.RoleDto;
 import com.cydeo.accountingsimplified.dto.UserDto;
-import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.entity.Role;
 import com.cydeo.accountingsimplified.entity.User;
 import com.cydeo.accountingsimplified.entity.common.UserPrincipal;
@@ -73,28 +71,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<RoleDto> getAllRoles() throws Exception {
-        if(getCurrentUser().getRole().getDescription().equals("Root User")){
-            List<Role> roleList = roleRepository.findAllByDescriptionOrDescription("Root User", "Admin");
-            return roleList.stream()
-                    .map(each -> mapperUtil.convert(each, new RoleDto()))
-                    .collect(Collectors.toList());
-        }
-        else {
-            return roleRepository.findAll()
-                    .stream()
-                    .map(each -> mapperUtil.convert(each, new RoleDto()))
-                    .collect(Collectors.toList());
-        }
-    }
-
-    @Override
-    public CompanyDto getCompanyOfNewUser() throws Exception {
-        User user = getCurrentUser();
-        return mapperUtil.convert(user.getCompany(), new CompanyDto());
-    }
-
-    @Override
     public UserDto update(Long userId, UserDto userDto) {
         User user = userRepository.findById(userId).get();
         user.setFirstname(userDto.getFirstname());
@@ -115,18 +91,26 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public List<RoleDto> getAllRoles() throws Exception {
+        if(getCurrentUser().getRole().getDescription().equals("Root User")){
+            List<Role> roleList = roleRepository.findAllByDescriptionOrDescription("Root User", "Admin");
+            return roleList.stream()
+                    .map(each -> mapperUtil.convert(each, new RoleDto()))
+                    .collect(Collectors.toList());
+        }
+        else {
+            return roleRepository.findAll()
+                    .stream()
+                    .map(each -> mapperUtil.convert(each, new RoleDto()))
+                    .collect(Collectors.toList());
+        }
+    }
+
     public User getCurrentUser() throws Exception {
         userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println("userPrincipal.getUsername() = " + userPrincipal.getUsername());
         return userRepository.findUserById(userPrincipal.getId());
-    }
-
-    @Override
-    public UserDto getCurrentUserDto() {
-        userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println("userPrincipal.getUsername() = " + userPrincipal.getUsername());
-        User user =  userRepository.findUserById(userPrincipal.getId());
-        return mapperUtil.convert(user, new UserDto());
     }
 
 }

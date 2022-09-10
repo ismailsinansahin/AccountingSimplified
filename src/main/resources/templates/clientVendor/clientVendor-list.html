@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
-<head th:replace="/fragments/head :: header"><title>User List</title></head>
+<head th:replace="/fragments/head :: header"><title>Client/Vendor List</title></head>
 
 <body>
 <div class="dashboard-main-wrapper">
@@ -15,19 +15,19 @@
                         <div class="col-auto">
                             <form>
                                 <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
-                                    <a id="userCreateLink" class="btn bg-dark text-light mb-1"
-                                       th:href="@{/users/create}"><i class="fa fa-plus mr-1"></i>
-                                        Create User</a>
+                                    <a id="companyCreateLink" class="btn bg-dark text-light mb-1"
+                                       th:href="@{/clientVendors/create}"><i class="fa fa-plus mr-1"></i>
+                                        Create Client/Vendor</a>
                                 </div>
                             </form>
                         </div>
                     </div>
                     <br>
                     <section class="panel">
-                        <header class="panel-heading"><h2 class="panel-title">User List</h2></header>
-<!--                        <div class="alert alert-danger" role="alert">-->
-<!--                            th:text="${deleteConfirmation}" th:if="${deleteConfirmation}"></div>-->
-<!--                        <a id="delete" class="btn bg-danger-light text-danger mb-1" style="color: #721c24">Delete</a>-->
+                        <header class="panel-heading"><h2 class="panel-title">Client/Vendor List</h2></header>
+                        <!--                            <div class="alert alert-danger" role="alert">-->
+                        <!--                                 th:text="${deleteConfirmation}" th:if="${deleteConfirmation}"></div>-->
+                        <!--                            <a id="delete" class="btn bg-danger-light text-danger mb-1" style="color: #721c24">Delete</a>-->
                         <div class="panel-body">
                             <div class="users-list-table">
                                 <div class="row">
@@ -42,27 +42,27 @@
                                                             <thead>
                                                             <tr>
                                                                 <th scope="col">#</th>
-                                                                <th scope="col">Company</th>
-                                                                <th scope="col">Role</th>
-                                                                <th scope="col">Firstname</th>
-                                                                <th scope="col">Lastname</th>
-                                                                <th scope="col">Username</th>
+                                                                <th scope="col">Type</th>
+                                                                <th scope="col">Company Name</th>
+                                                                <th scope="col">Website</th>
                                                                 <th scope="col">Phone</th>
+                                                                <th scope="col">City</th>
+                                                                <th scope="col">State</th>
                                                                 <th scope="col">Action</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
-                                                            <tr th:each="user, comStat : ${users}">
+                                                            <tr th:each="clientVendor,comStat : ${clientVendors}"
+                                                                th:style="${clientVendor.clientVendorType.value} == 'Passive' ? 'background-color: #fcd7d7' : 'background-color: #eee'">
                                                                 <td th:text="${comStat.count}"></td>
-                                                                <td th:if="${user.company != null}" th:text="${user.company.title}"></td>
-                                                                <td th:if="${user.company == null}" th:text="${'-'}"></td>
-                                                                <td th:text="${user.role.description}"></td>
-                                                                <td th:text="${user.firstname}"></td>
-                                                                <td th:text="${user.lastname}"></td>
-                                                                <td th:text="${user.username}"></td>
-                                                                <td th:text="${user.phone}"></td>
+                                                                <td th:text="${clientVendor.clientVendorType.value}"></td>
+                                                                <td th:text="${clientVendor.companyName}"></td>
+                                                                <td th:text="${clientVendor.website}"></td>
+                                                                <td th:text="${clientVendor.phone}"></td>
+                                                                <td th:text="${clientVendor.address.city}"></td>
+                                                                <td th:text="${clientVendor.address.state}"></td>
                                                                 <td class="actions">
-                                                                    <form action="#" method="post" data-th-action="@{/users/actions/{id}(id=${user.getId()})}">
+                                                                    <form action="#" method="post" data-th-action="@{/clientVendors/actions/{id}(id=${clientVendor.getId()})}">
                                                                         <button class="btn btn-primary mb-2 mb-sm-0 mr-sm-2"
                                                                                 type="submit" name="action" value="update">Edit
                                                                         </button>

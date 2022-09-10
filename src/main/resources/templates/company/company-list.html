@@ -15,9 +15,6 @@
                             <div class="col-auto">
                                 <form>
                                     <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
-                                        <a id="companyListLink" class="btn bg-dark text-light mb-1x"
-                                           th:href="@{/companies/list}"><i class="fa fa-list mr-1"></i>
-                                           Company List</a>&nbsp&nbsp
                                         <a id="companyCreateLink" class="btn bg-dark text-light mb-1"
                                            th:href="@{/companies/create}"><i class="fa fa-plus mr-1"></i>
                                            Create Company</a>
@@ -63,7 +60,7 @@
                                                                     <td th:text="${company.phone}"></td>
                                                                     <td th:text="${company.address.city}"></td>
                                                                     <td th:text="${company.address.state}"></td>
-                                                                    <td th:text="${company.companyStatus}"></td>
+                                                                    <td th:text="${company.companyStatus.value}"></td>
                                                                     <td class="actions">
                                                                         <form action="#" method="post" data-th-action="@{/companies/actions/{id}(id=${company.getId()})}">
                                                                             <button class="btn btn-primary mb-2 mb-sm-0 mr-sm-2"

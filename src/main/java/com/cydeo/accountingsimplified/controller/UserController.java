@@ -21,7 +21,6 @@ public class UserController {
 
     @GetMapping("/list")
     public String navigateToUserList(Model model) throws Exception {
-        System.out.println("userService.getCurrentUserDto().getUsername() = " + userService.getCurrentUserDto().getUsername());
         model.addAttribute("users", userService.getAllUsers());
         return "/user/user-list";
     }
