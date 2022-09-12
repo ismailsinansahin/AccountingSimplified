@@ -16,14 +16,11 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=false")
 public class InvoiceProduct extends BaseEntity{
 
-    private int quantityInInvoice;
-    private int purchasePrice;
-    private int purchaseTax;
-    private int purchaseCost;
-    private int saledPrice;
-    private int saledTax;
-    private int saledAmount;
-    private int profitLoss;
+    private Integer quantity;
+    private Integer price;
+    private Integer tax;
+    private Integer amount;
+    private Integer profitLoss;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

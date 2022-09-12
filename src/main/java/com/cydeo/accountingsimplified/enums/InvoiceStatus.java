@@ -1,5 +1,8 @@
 package com.cydeo.accountingsimplified.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum InvoiceStatus {
 
     APPROVED("Approved"),
