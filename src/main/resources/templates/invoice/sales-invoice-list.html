@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       lang="en">
 
-<head th:replace="/fragments/head :: header"><title>Purchase Invoice List</title></head>
+<head th:replace="/fragments/head :: header"><title>Sales Invoice List</title></head>
 
 <body>
     <div class="dashboard-main-wrapper">
@@ -18,15 +18,15 @@
                                 <form>
                                     <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
                                         <a id="companyCreateLink" class="btn bg-dark text-light mb-1"
-                                           th:href="@{/purchaseInvoices/create}"><i class="fa fa-plus mr-1"></i>
-                                           Create Purchase Invoice</a>
+                                           th:href="@{/salesInvoices/create}"><i class="fa fa-plus mr-1"></i>
+                                           Create Sales Invoice</a>
                                     </div>
                                 </form>
                             </div>
                         </div>
                         <br>
                         <section class="panel">
-                            <header class="panel-heading"><h2 class="panel-title">Purchase Invoice List</h2></header>
+                            <header class="panel-heading"><h2 class="panel-title">Sales Invoice List</h2></header>
 <!--                            <div class="alert alert-danger" role="alert">-->
 <!--                                 th:text="${deleteConfirmation}" th:if="${deleteConfirmation}"></div>-->
 <!--                            <a id="delete" class="btn bg-danger-light text-danger mb-1" style="color: #721c24">Delete</a>-->
@@ -63,7 +63,7 @@
                                                                     <td th:text="${invoice.tax}"></td>
                                                                     <td th:text="${invoice.total}"></td>
                                                                     <td class="actions">
-                                                                        <form action="#" method="post" data-th-action="@{/purchaseInvoices/actions/{id}(id=${invoice.getId()})}">
+                                                                        <form action="#" method="post" data-th-action="@{/salesInvoices/actions/{id}(id=${invoice.getId()})}">
                                                                             <button th:if="${invoice.invoiceStatus.value} == 'Awaiting Approval'"
                                                                                     class="btn btn-primary mb-2 mb-sm-0 mr-sm-2"
                                                                                     type="submit" name="action" value="update">Edit

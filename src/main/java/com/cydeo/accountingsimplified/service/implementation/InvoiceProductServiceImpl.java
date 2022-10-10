@@ -23,6 +23,6 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     @Override
     public InvoiceProductDto findInvoiceProductById(long id) {
         return mapperUtil.convert(invoiceProductRepository.findInvoiceProductById(id), new InvoiceProductDto());
-
     }
+
 }

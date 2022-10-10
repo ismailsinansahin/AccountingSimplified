@@ -19,9 +19,11 @@ public interface InvoiceService {
     InvoiceDto update(Long invoiceId, InvoiceDto invoiceDto);
     InvoiceDto approve(Long invoiceId);
     void delete(Long invoiceId);
-    List<InvoiceProductDto> getInvoiceProductsOfInvoice(Long invoiceId);
     List<ProductDto> getProductsOfCompany();
-    InvoiceProductDto getNewInvoiceProduct(Long invoiceId);
 
+    List<InvoiceProductDto> getInvoiceProductsOfInvoice(Long invoiceId);
+    InvoiceProductDto findInvoiceProductById(long id);
+    void addInvoiceProduct(Long invoiceId, InvoiceProductDto invoiceProductDto);
+    void removeInvoiceProduct(Long invoiceProductId);
 
 }

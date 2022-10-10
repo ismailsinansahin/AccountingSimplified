@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="/fragments/head :: header"><title>Purchase Invoice Update</title></head>
+<head th:replace="/fragments/head :: header"><title>Sales Invoice Update</title></head>
 
 <body>
 <div class="dashboard-main-wrapper">
@@ -15,14 +15,14 @@
                             <form>
                                 <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
                                     <a id="companylistlink" class="btn bg-dark text-light mb-1"
-                                       th:href="@{/purchaseInvoices/list}"><i class="fa fa-list mr-1"></i>Purchase Invoice List</a>
+                                       th:href="@{/salesInvoices/list}"><i class="fa fa-list mr-1"></i>Sales Invoice List</a>
                                 </div>
                             </form>
                         </div>
                     </div>
                     <br>
                     <header class="panel-heading">
-                        <h4 class="panel-title">Edit Purchase Invoice</h4>
+                        <h4 class="panel-title">Edit Sales Invoice</h4>
                     </header>
                     <div class="row">
                         <div class="col-12">
@@ -33,7 +33,7 @@
                                             <div class="tab-pane fade mt-2 show active" id="account" role="tabpanel"
                                                  aria-labelledby="account-tab">
                                                 <form class="needs-validation" novalidate
-                                                      th:action="@{/purchaseInvoices/update/{id}(id=${invoice.getId()})}"
+                                                      th:action="@{/salesInvoices/update/{id}(id=${invoice.getId()})}"
                                                       th:method="post" th:object="${invoice}">
                                                     <div class="row">
                                                         <div class="col-12 col-md-4">
@@ -59,9 +59,9 @@
                                                                 <div class="controls">
                                                                     <label>Vendor</label>
                                                                     <select id="role" class="form-control" th:field="*{clientVendor}" required>
-                                                                        <option th:each= "vendor:${vendors}"
-                                                                                th:value="${vendor.id}"
-                                                                                th:text="${vendor.companyName}"
+                                                                        <option th:each= "client:${clients}"
+                                                                                th:value="${client.id}"
+                                                                                th:text="${client.companyName}"
                                                                                 th:selected="${invoice.clientVendor.companyName}"></option>
                                                                     </select>
                                                                 </div>
@@ -97,7 +97,7 @@
                                             <div class="tab-pane fade mt-2 show active" id="products" role="tabpanel"
                                                  aria-labelledby="account-tab">
                                                 <form class="needs-validation" novalidate
-                                                      th:action="@{/purchaseInvoices/addInvoiceProduct/{id}(id=${invoice.getId()})}"
+                                                      th:action="@{/salesInvoices/addInvoiceProduct/{id}(id=${invoice.getId()})}"
                                                       th:method="post" th:object="${newInvoiceProduct}">
                                                     <div class="row">
                                                         <div class="col-12 col-md-3">
@@ -193,7 +193,7 @@
                                                                 <td th:text="${invoiceProduct.total}"></td>
                                                                 <td>
                                                                     <form method="post"
-                                                                          data-th-action="@{/purchaseInvoices/removeInvoiceProduct/{invoiceId}/{invoiceProuductId}(invoiceId=${invoice.getId()}, invoiceProuductId=${invoiceProduct.getId()})}">
+                                                                          data-th-action="@{/salesInvoices/removeInvoiceProduct/{invoiceId}/{invoiceProuductId}(invoiceId=${invoice.getId()}, invoiceProuductId=${invoiceProduct.getId()})}">
                                                                           <button class="ft-minus btn-danger bg-light-primary" type="submit"></button>
                                                                     </form>
                                                                 </td>

@@ -15,7 +15,7 @@ public class InvoiceProductDto {
     private Integer quantity;
     private Integer price;
     private Integer tax;
-    private Integer amount;
+    private Integer total;
     private Integer profitLoss;
     private InvoiceDto invoice;
     private ProductDto product;

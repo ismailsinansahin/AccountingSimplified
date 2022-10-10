@@ -19,7 +19,7 @@ public class InvoiceProduct extends BaseEntity{
     private Integer quantity;
     private Integer price;
     private Integer tax;
-    private Integer amount;
+    private Integer total;
     private Integer profitLoss;
 
     @NotNull
