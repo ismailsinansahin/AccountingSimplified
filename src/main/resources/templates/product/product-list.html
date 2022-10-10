@@ -47,7 +47,6 @@
                                                                 <th scope="col">Product Unit</th>
                                                                 <th scope="col">Low Limit Alert</th>
                                                                 <th scope="col">Qty in Stock</th>
-                                                                <th scope="col">Qty in Invoice</th>
                                                                 <th scope="col">Action</th>
                                                             </tr>
                                                             </thead>
@@ -59,7 +58,6 @@
                                                                 <td th:text="${product.productUnit.value}"></td>
                                                                 <td th:text="${product.lowLimitAlert}"></td>
                                                                 <td th:text="${product.quantityInStock}"></td>
-                                                                <td th:text="${product.quantityInInvoice}"></td>
                                                                 <td class="actions">
                                                                     <form action="#" method="post" data-th-action="@{/products/actions/{id}(id=${product.getId()})}">
                                                                         <button class="btn btn-primary mb-2 mb-sm-0 mr-sm-2"

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+
+<head th:replace="/fragments/head :: header"><title>Purchase Invoice List</title></head>
+
+<body>
+    <div class="dashboard-main-wrapper">
+        <div th:replace="/fragments/header :: header"></div>
+        <div th:replace="/fragments/left-sidebar :: left-sidebar"></div>
+        <div class="dashboard-wrapper">
+            <div class="dashboard-ecommerce">
+                <div class="container-fluid dashboard-content">
+                    <div class="ecommerce-widget">
+                        <div class="input-group row">
+                            <div class="col-auto">
+                                <form>
+                                    <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
+                                        <a id="companyCreateLink" class="btn bg-dark text-light mb-1"
+                                           th:href="@{/purchaseInvoices/create}"><i class="fa fa-plus mr-1"></i>
+                                           Create Purchase Invoice</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <br>
+                        <section class="panel">
+                            <header class="panel-heading"><h2 class="panel-title">Purchase Invoice List</h2></header>
+<!--                            <div class="alert alert-danger" role="alert">-->
+<!--                                 th:text="${deleteConfirmation}" th:if="${deleteConfirmation}"></div>-->
+<!--                            <a id="delete" class="btn bg-danger-light text-danger mb-1" style="color: #721c24">Delete</a>-->
+                            <div class="panel-body">
+                                <div class="users-list-table">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-content fw-container">
+                                                    <div class="card-body fw-body">
+                                                        <div class="table-responsive content demo-html">
+                                                            <table id="example"
+                                                                   class="table table-striped table-bordered file-export"
+                                                                   style="width:100%">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th scope="col">#</th>
+                                                                    <th scope="col">Invoice No</th>
+                                                                    <th scope="col">Vendor</th>
+                                                                    <th scope="col">Date</th>
+                                                                    <th scope="col">Price</th>
+                                                                    <th scope="col">Tax</th>
+                                                                    <th scope="col">Total</th>
+                                                                    <th scope="col">Action</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr th:each="invoice,comStat : ${invoices}">
+                                                                    <td th:text="${comStat.count}"></td>
+                                                                    <td th:text="${invoice.invoiceNo}"></td>
+                                                                    <td th:text="${invoice.clientVendor.companyName}"></td>
+                                                                    <td th:text="${invoice.date}"></td>
+                                                                    <td th:text="${invoice.price}"></td>
+                                                                    <td th:text="${invoice.tax}"></td>
+                                                                    <td th:text="${invoice.total}"></td>
+                                                                    <td class="actions">
+                                                                        <form action="#" method="post" data-th-action="@{/purchaseInvoices/actions/{id}(id=${invoice.getId()})}">
+                                                                            <button th:if="${invoice.invoiceStatus.value} == 'Awaiting Approval'"
+                                                                                    class="btn btn-primary mb-2 mb-sm-0 mr-sm-2"
+                                                                                    type="submit" name="action" value="update">Edit
+                                                                            </button>
+                                                                            <button th:if="${invoice.invoiceStatus.value} == 'Awaiting Approval'"
+                                                                                    class="btn btn-danger mb-2 mb-sm-0 mr-sm-2"
+                                                                                    type="submit" name="action" value="delete">Delete
+                                                                            </button>
+                                                                            <button sec:authorize="hasAnyAuthority('Manager')"
+                                                                                    th:if="${invoice.invoiceStatus.value} == 'Awaiting Approval'"
+                                                                                    class="btn btn-success mb-2 mb-sm-0 mr-sm-2"
+                                                                                    type="submit" name="action" value="approve">Approve
+                                                                            </button>
+                                                                            <button th:if="${invoice.invoiceStatus.value} == 'Approved'"
+                                                                                    class="btn btn-info mb-2 mb-sm-0 mr-sm-2"
+                                                                                    type="submit" name="action" value="print">Print
+                                                                            </button>
+                                                                        </form>
+                                                                    </td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="/fragments/footer :: footer"></div>
+    <div th:replace="/fragments/javascript :: js"></div>
+</body>
+
+</html>

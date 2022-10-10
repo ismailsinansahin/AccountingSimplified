@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="/fragments/head :: header"><title>Sales Invoice Create</title></head>
+
+<body>
+<div class="dashboard-main-wrapper">
+    <div th:replace="/fragments/header :: header"></div>
+    <div th:replace="/fragments/left-sidebar :: left-sidebar"></div>
+    <div class="dashboard-wrapper">
+        <div class="dashboard-ecommerce">
+            <div class="container-fluid dashboard-content">
+                <div class="ecommerce-widget">
+                    <div class="input-group row">
+                        <div class="col-auto">
+                            <form>
+                                <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
+                                    <a id="companylistlink" class="btn bg-dark text-light mb-1"
+                                       th:href="@{/salesInvoices/list}"><i class="fa fa-list mr-1"></i>Sales Invoice List</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div><br>
+                    <header class="panel-heading">
+                        <h2 class="panel-title">Create New Sales Invoice</h2>
+                    </header>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <div class="tab-content">
+                                            <div class="tab-pane fade mt-2 show active" id="account" role="tabpanel"
+                                                 aria-labelledby="account-tab">
+                                                <form class="needs-validation" novalidate
+                                                      th:action="@{/salesInvoices/create}"
+                                                      th:method="post" th:object="${newSalesInvoice}">
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-4">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label>Invoice No</label>
+                                                                    <input type="text" th:field="*{invoiceNo}" placeholder="Invoice No" readonly
+                                                                           class="form-control" required="required" aria-invalid="false">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-4">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label>Date</label>
+                                                                    <input type="text" th:field="*{date}" placeholder="Date" readonly
+                                                                           class="form-control" required="required" aria-invalid="false">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-4">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label>Vendor</label>
+                                                                    <select id="role" class="form-control" th:field="*{clientVendor}" required>
+                                                                        <option th:value="''" th:text="'Select'" selected></option>
+                                                                        <option th:each= "client:${clients}"
+                                                                                th:value="${client.id}"
+                                                                                th:text="${client.companyName}"></option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-3 mt-sm-2">
+                                                        <button class="btn btn-success mb-2 mb-sm-0 mr-sm-2"
+                                                                type="submit" name="action" value="save">Save
+                                                        </button>
+                                                        <button class="btn btn-danger mb-2 mb-sm-0 mr-sm-2"
+                                                                type="reset">Cancel
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="/fragments/footer :: footer"></div>
+<div th:replace="/fragments/javascript :: js"></div>
+</body>
+</html>

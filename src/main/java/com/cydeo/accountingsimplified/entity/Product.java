@@ -22,8 +22,6 @@ public class Product extends BaseEntity{
 
     private Integer quantityInStock;
 
-    private Integer quantityInInvoice;
-
     @NotNull
     private Integer lowLimitAlert;
 
