@@ -1,9 +1,7 @@
 package com.cydeo.accountingsimplified.controller;
 
 import com.cydeo.accountingsimplified.dto.ClientVendorDto;
-import com.cydeo.accountingsimplified.dto.CompanyDto;
 import com.cydeo.accountingsimplified.enums.ClientVendorType;
-import com.cydeo.accountingsimplified.enums.CompanyStatus;
 import com.cydeo.accountingsimplified.service.ClientVendorService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
