@@ -11,7 +11,6 @@ import com.cydeo.accountingsimplified.entity.common.UserPrincipal;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.AddressRepository;
 import com.cydeo.accountingsimplified.repository.ClientVendorRepository;
-import com.cydeo.accountingsimplified.repository.CompanyRepository;
 import com.cydeo.accountingsimplified.repository.UserRepository;
 import com.cydeo.accountingsimplified.service.ClientVendorService;
 import org.springframework.security.core.context.SecurityContextHolder;
