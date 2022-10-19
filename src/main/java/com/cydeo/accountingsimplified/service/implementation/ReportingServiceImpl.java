@@ -1,10 +1,9 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import com.cydeo.accountingsimplified.enums.InvoiceStatus;
 import org.springframework.stereotype.Service;
 
 import com.cydeo.accountingsimplified.dto.InvoiceProductDto;
@@ -27,16 +26,24 @@ public class ReportingServiceImpl implements ReportingService{
 
     @Override
     public List<InvoiceProductDto> getStockData() {
-        return invoiceProductRepository.findAll()
-        .stream()
-        .map(each -> mapperUtil.convert(each, new InvoiceProductDto()))
-        .collect(Collectors.toList());
+        return invoiceProductRepository.findInvoiceProductsByInvoiceInvoiceStatus(InvoiceStatus.APPROVED)
+                .stream()
+                .sorted(Comparator.comparing(InvoiceProduct::getId).reversed())
+                .map(each -> mapperUtil.convert(each, new InvoiceProductDto()))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Map<String, List<Object>> getProfitLossDataMap() {
-        Map<String, List<Object>> profitLossDataMap = new HashMap<>();
-        List<InvoiceProduct> salesInvoiceProducts = invoiceProductRepository.findInvoiceProductsByInvoiceInvoiceType(InvoiceType.SALES);
+    public Map<String, Integer> getMonthlyProfitLossDataMap() {
+        Map<String, Integer> profitLossDataMap = new TreeMap<>();
+        List<InvoiceProduct> salesInvoiceProducts =invoiceProductRepository.findInvoiceProductsByInvoiceInvoiceType(InvoiceType.SALES);
+        for(InvoiceProduct invoiceProduct : salesInvoiceProducts) {
+            int year = invoiceProduct.getInvoice().getDate().getYear();
+            String month = invoiceProduct.getInvoice().getDate().getMonth().toString();
+            int profitLoss = invoiceProduct.getProfitLoss();
+            String timeWindow = year + " " + month;
+            profitLossDataMap.put(timeWindow, profitLossDataMap.getOrDefault(timeWindow, 0) + profitLoss);
+        }
         return profitLossDataMap;
     }
 

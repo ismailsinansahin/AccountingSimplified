@@ -21,6 +21,7 @@ public class InvoiceProduct extends BaseEntity{
     private Integer tax;
     private Integer total;
     private Integer profitLoss;
+    private Integer remainingQuantity;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

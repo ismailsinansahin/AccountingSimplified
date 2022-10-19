@@ -10,7 +10,7 @@
             <div class="container-fluid dashboard-content">
                 <div class="ecommerce-widget">
                     <section class="panel">
-                        <header class="panel-heading"><h2 class="panel-title">Stock Report</h2></header>
+                        <header class="panel-heading"><h2 class="panel-title">Profit/Loss Report</h2></header>
                         <div class="panel-body">
                             <div class="users-list-table">
                                 <div class="row">
@@ -25,21 +25,15 @@
                                                             <thead>
                                                             <tr>
                                                                 <th scope="col">#</th>
-                                                                <th scope="col">Invoice No</th>
-                                                                <th scope="col">Invoice Date</th>
-                                                                <th scope="col">Quantity</th>
-                                                                <th scope="col">Product Name</th>
-                                                                <th scope="col">Category</th>
+                                                                <th scope="col">Month</th>
+                                                                <th scope="col">Profit/Loss</th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
-                                                            <tr th:each="invoiceProduct,comStat : ${invoiceProducts}">
+                                                            <tr th:each="month, comStat : ${monthlyProfitLossDataMap.keySet()}">
                                                                 <td th:text="${comStat.count}"></td>
-                                                                <td th:text="${invoiceProduct.invoice.invoiceNo}"></td>
-                                                                <td th:text="${invoiceProduct.invoice.date}"></td>
-                                                                <td th:text="${invoiceProduct.quantity}"></td>
-                                                                <td th:text="${invoiceProduct.product.name}"></td>
-                                                                <td th:text="${invoiceProduct.product.category.description}"></td>
+                                                                <td th:text="${month}"></td>
+                                                                <td th:text="${monthlyProfitLossDataMap.get(month)}"></td>
                                                             </tr>
                                                             </tbody>
                                                         </table>
