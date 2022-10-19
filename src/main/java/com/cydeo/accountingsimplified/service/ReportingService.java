@@ -7,6 +7,6 @@ import java.util.Map;
 public interface ReportingService {
 
     List<InvoiceProductDto> getStockData();
-    Map<String, List<Object>> getProfitLossDataMap();
+    Map<String, Integer> getMonthlyProfitLossDataMap();
     
 }
