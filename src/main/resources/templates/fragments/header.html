@@ -6,11 +6,11 @@
     <div th:fragment="header">
         <div class="dashboard-header">
             <nav class="navbar navbar-expand-lg bg-white fixed-top">
-                <a class="navbar-brand"><img src="/images/logo.png" height="45" alt="JSOFT Admin"/></a>
+                <a class="navbar-brand"><img src="/images/CydeoLogoMini.jpg" height="45" alt="JSOFT Admin"/></a>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent" sec:authorize="isAuthenticated()">
                     <ul class="navbar-nav ml-auto navbar-right-top">
                         <li class="nav-item dropdown connection">
-                            <a class="nav-link" href="dashboard.html"><i class="fas fa-home"></i></a>
+                            <a class="nav-link" th:href="@{/dashboard}"><i class="fas fa-home"></i></a>
                         </li>
                         <li class="nav-item dropdown nav-user">
                             <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown"

@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface ReportingService {
 
-    List<InvoiceProductDto> getStockData();
+    List<InvoiceProductDto> getStockData() throws Exception;
     Map<String, Integer> getMonthlyProfitLossDataMap();
     
 }
