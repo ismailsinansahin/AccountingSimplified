@@ -40,6 +40,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto findByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        return mapperUtil.convert(user, new UserDto());
+    }
+
+    @Override
     public List<UserDto> getAllUsers() throws Exception {
         User currentUser = getCurrentUser();
         if (currentUser.getRole().getDescription().equals("Root User")) {

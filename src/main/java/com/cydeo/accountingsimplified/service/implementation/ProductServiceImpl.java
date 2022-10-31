@@ -11,6 +11,7 @@ import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.CategoryRepository;
 import com.cydeo.accountingsimplified.repository.ProductRepository;
 import com.cydeo.accountingsimplified.repository.UserRepository;
+import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.ProductService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -20,18 +21,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final CompanyService companyService;
     private final MapperUtil mapperUtil;
-    private UserPrincipal userPrincipal;
 
-    public ProductServiceImpl(ProductRepository productRepository, UserRepository userRepository,
-                              CategoryRepository categoryRepository, MapperUtil mapperUtil) {
+    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository,
+                              CompanyService companyService, MapperUtil mapperUtil) {
         this.productRepository = productRepository;
-        this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+        this.companyService = companyService;
         this.mapperUtil = mapperUtil;
     }
 
@@ -43,7 +42,16 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getAllProducts() throws Exception {
-        Company company = getCurrentUser().getCompany();
+        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        return productRepository.findAllByCategoryCompany(company)
+                .stream()
+                .map(each -> mapperUtil.convert(each, new ProductDto()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductDto> getProductsOfCompany() {
+        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
         return productRepository.findAllByCategoryCompany(company)
                 .stream()
                 .map(each -> mapperUtil.convert(each, new ProductDto()))
@@ -83,16 +91,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<CategoryDto> getAllCategories() throws Exception {
-        Company company = getCurrentUser().getCompany();
+        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
         return categoryRepository.findAllByCompany(company)
                 .stream()
                 .map(each -> mapperUtil.convert(each, new CategoryDto()))
                 .collect(Collectors.toList());
     }
 
-    public User getCurrentUser() throws Exception {
-        userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userRepository.findUserById(userPrincipal.getId());
-    }
 
 }

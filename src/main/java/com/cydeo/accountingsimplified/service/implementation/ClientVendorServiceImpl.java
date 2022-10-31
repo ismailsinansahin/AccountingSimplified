@@ -6,14 +6,13 @@ import com.cydeo.accountingsimplified.dto.CompanyDto;
 import com.cydeo.accountingsimplified.entity.Address;
 import com.cydeo.accountingsimplified.entity.ClientVendor;
 import com.cydeo.accountingsimplified.entity.Company;
-import com.cydeo.accountingsimplified.entity.User;
-import com.cydeo.accountingsimplified.entity.common.UserPrincipal;
+import com.cydeo.accountingsimplified.enums.ClientVendorType;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.AddressRepository;
 import com.cydeo.accountingsimplified.repository.ClientVendorRepository;
 import com.cydeo.accountingsimplified.repository.UserRepository;
 import com.cydeo.accountingsimplified.service.ClientVendorService;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.cydeo.accountingsimplified.service.CompanyService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,16 +22,15 @@ import java.util.stream.Collectors;
 public class ClientVendorServiceImpl implements ClientVendorService {
 
     private final ClientVendorRepository clientVendorRepository;
-    private final UserRepository userRepository;
     private final MapperUtil mapperUtil;
-    private UserPrincipal userPrincipal;
+    private final CompanyService companyService;
     private final AddressRepository addressRepository;
 
-    public ClientVendorServiceImpl(ClientVendorRepository clientVendorRepository, UserRepository userRepository,
-                                   MapperUtil mapperUtil, AddressRepository addressRepository) {
+    public ClientVendorServiceImpl(ClientVendorRepository clientVendorRepository, MapperUtil mapperUtil,
+                                   CompanyService companyService, AddressRepository addressRepository) {
         this.clientVendorRepository = clientVendorRepository;
-        this.userRepository = userRepository;
         this.mapperUtil = mapperUtil;
+        this.companyService = companyService;
         this.addressRepository = addressRepository;
     }
 
@@ -43,9 +41,19 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     }
 
     @Override
-    public List<ClientVendorDto> getAllClientVendors() throws Exception {
-        Company company = getCurrentUser().getCompany();
+    public List<ClientVendorDto> getAllClientVendors() {
+        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
         return clientVendorRepository.findAllByCompany(company)
+                .stream()
+                .map(each -> mapperUtil.convert(each, new ClientVendorDto()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ClientVendorDto> getAllClientVendorsOfCompany(ClientVendorType clientVendorType) {
+        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        return clientVendorRepository
+                .findAllByCompanyAndClientVendorType(company, clientVendorType)
                 .stream()
                 .map(each -> mapperUtil.convert(each, new ClientVendorDto()))
                 .collect(Collectors.toList());
@@ -55,7 +63,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     public ClientVendorDto create(ClientVendorDto clientVendorDto) throws Exception {
         Address address = mapperUtil.convert(clientVendorDto.getAddress(), new Address());
         addressRepository.save(address);
-        CompanyDto companyDto = mapperUtil.convert(getCurrentUser().getCompany(), new CompanyDto());
+        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        CompanyDto companyDto = mapperUtil.convert(company, new CompanyDto());
         clientVendorDto.setCompany(companyDto);
         ClientVendor clientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());
         clientVendor.setAddress(address);
@@ -90,9 +99,5 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         clientVendorRepository.save(clientVendor);
     }
 
-    public User getCurrentUser() throws Exception {
-        userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userRepository.findUserById(userPrincipal.getId());
-    }
 
 }

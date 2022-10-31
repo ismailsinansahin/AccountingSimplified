@@ -9,6 +9,7 @@ import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.CategoryRepository;
 import com.cydeo.accountingsimplified.repository.UserRepository;
 import com.cydeo.accountingsimplified.service.CategoryService;
+import com.cydeo.accountingsimplified.service.CompanyService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +18,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
-
-    private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final MapperUtil mapperUtil;
-    private UserPrincipal userPrincipal;
+    private final CompanyService companyService;
 
-    public CategoryServiceImpl(UserRepository userRepository, CategoryRepository categoryRepository, MapperUtil mapperUtil) {
-        this.userRepository = userRepository;
+    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, CompanyService companyService) {
         this.categoryRepository = categoryRepository;
         this.mapperUtil = mapperUtil;
+        this.companyService = companyService;
     }
 
     @Override
@@ -37,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getAllCategories() throws Exception {
-        Company company = getCurrentUser().getCompany();
+        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
         return categoryRepository.findAllByCompany(company)
                 .stream()
                 .map(each -> mapperUtil.convert(each, new CategoryDto()))
@@ -47,7 +46,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto create(CategoryDto categoryDto) throws Exception {
         Category category = mapperUtil.convert(categoryDto, new Category());
-        category.setCompany(getCurrentUser().getCompany());
+        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        category.setCompany(company);
         categoryRepository.save(category);
         return mapperUtil.convert(category, categoryDto);
     }
@@ -67,9 +67,5 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.save(category);
     }
 
-    public User getCurrentUser() throws Exception {
-        userPrincipal = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userRepository.findUserById(userPrincipal.getId());
-    }
 
 }

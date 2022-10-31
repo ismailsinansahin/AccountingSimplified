@@ -4,7 +4,10 @@ import com.cydeo.accountingsimplified.dto.InvoiceDto;
 import com.cydeo.accountingsimplified.dto.InvoiceProductDto;
 import com.cydeo.accountingsimplified.enums.ClientVendorType;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
+import com.cydeo.accountingsimplified.service.ClientVendorService;
+import com.cydeo.accountingsimplified.service.InvoiceProductService;
 import com.cydeo.accountingsimplified.service.InvoiceService;
+import com.cydeo.accountingsimplified.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +21,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class SalesInvoiceController {
 
     private final InvoiceService invoiceService;
+    private final InvoiceProductService invoiceProductService;
+    private final ClientVendorService clientVendorService;
+    private final ProductService productService;
 
-    public SalesInvoiceController(InvoiceService invoiceService) {
+    public SalesInvoiceController(InvoiceService invoiceService, InvoiceProductService invoiceProductService, ClientVendorService clientVendorService, ProductService productService) {
         this.invoiceService = invoiceService;
+        this.invoiceProductService = invoiceProductService;
+        this.clientVendorService = clientVendorService;
+        this.productService = productService;
     }
 
     @GetMapping("/list")
@@ -32,7 +41,7 @@ public class SalesInvoiceController {
     @GetMapping("/create")
     public String navigateToSalesInvoiceCreate(Model model) throws Exception {
         model.addAttribute("newSalesInvoice", invoiceService.getNewInvoice(InvoiceType.SALES));
-        model.addAttribute("clients", invoiceService.getAllClientVendorsOfCompany(ClientVendorType.CLIENT));
+        model.addAttribute("clients", clientVendorService.getAllClientVendorsOfCompany(ClientVendorType.CLIENT));
         return "/invoice/sales-invoice-create";
     }
 
@@ -50,10 +59,10 @@ public class SalesInvoiceController {
     @GetMapping("/update/{invoiceId}")
     public String navigateToSalesInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId, Model model) throws Exception {
         model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
-        model.addAttribute("clients", invoiceService.getAllClientVendorsOfCompany(ClientVendorType.CLIENT));
-        model.addAttribute("products", invoiceService.getProductsOfCompany());
+        model.addAttribute("clients", clientVendorService.getAllClientVendorsOfCompany(ClientVendorType.CLIENT));
+        model.addAttribute("products", productService.getProductsOfCompany());
         model.addAttribute("newInvoiceProduct", new InvoiceProductDto());
-        model.addAttribute("invoiceProducts", invoiceService.getInvoiceProductsOfInvoice(invoiceId));
+        model.addAttribute("invoiceProducts", invoiceProductService.getInvoiceProductsOfInvoice(invoiceId));
         return "/invoice/sales-invoice-update";
     }
 
@@ -65,13 +74,13 @@ public class SalesInvoiceController {
 
     @PostMapping("/addInvoiceProduct/{invoiceId}")
     public String addInvoiceProductToPurchaseInvoice(@PathVariable("invoiceId") Long invoiceId, InvoiceProductDto invoiceProductDto) {
-        invoiceService.addInvoiceProduct(invoiceId, invoiceProductDto);
+        invoiceProductService.addInvoiceProduct(invoiceId, invoiceProductDto);
         return "redirect:/salesInvoices/update/" + invoiceId;
     }
 
     @PostMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
     public String removeInvoiceProductFromPurchaseInvoice(@PathVariable("invoiceId") Long invoiceId, @PathVariable("invoiceProductId") Long invoiceProductId) {
-        invoiceService.removeInvoiceProduct(invoiceProductId);
+        invoiceProductService.removeInvoiceProduct(invoiceProductId);
         return "redirect:/salesInvoices/update/" + invoiceId;
     }
 

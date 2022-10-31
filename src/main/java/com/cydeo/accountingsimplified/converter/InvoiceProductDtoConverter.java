@@ -1,6 +1,7 @@
 package com.cydeo.accountingsimplified.converter;
 
 import com.cydeo.accountingsimplified.dto.InvoiceProductDto;
+import com.cydeo.accountingsimplified.service.InvoiceProductService;
 import com.cydeo.accountingsimplified.service.InvoiceService;
 import lombok.SneakyThrows;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
@@ -11,17 +12,17 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationPropertiesBinding
 public class InvoiceProductDtoConverter implements Converter<String, InvoiceProductDto> {
+    private final InvoiceProductService invoiceProductService;
 
-    private final InvoiceService invoiceService;
+    public InvoiceProductDtoConverter(@Lazy InvoiceProductService invoiceProductService) {
 
-    public InvoiceProductDtoConverter(@Lazy InvoiceService invoiceService) {
-        this.invoiceService = invoiceService;
+        this.invoiceProductService = invoiceProductService;
     }
 
     @SneakyThrows
     @Override
     public InvoiceProductDto convert(String id){
-        return invoiceService.findInvoiceProductById(Long.parseLong(id));
+        return invoiceProductService.findInvoiceProductById(Long.parseLong(id));
     }
 
 }

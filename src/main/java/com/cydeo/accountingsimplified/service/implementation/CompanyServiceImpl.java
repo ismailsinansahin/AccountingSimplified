@@ -2,6 +2,7 @@ package com.cydeo.accountingsimplified.service.implementation;
 
 import com.cydeo.accountingsimplified.dto.AddressDto;
 import com.cydeo.accountingsimplified.dto.CompanyDto;
+import com.cydeo.accountingsimplified.dto.UserDto;
 import com.cydeo.accountingsimplified.entity.Address;
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.enums.CompanyStatus;
@@ -9,6 +10,8 @@ import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.AddressRepository;
 import com.cydeo.accountingsimplified.repository.CompanyRepository;
 import com.cydeo.accountingsimplified.service.CompanyService;
+import com.cydeo.accountingsimplified.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -20,12 +23,14 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
     private final AddressRepository addressRepository;
+    private final UserService userService;
     private final MapperUtil mapperUtil;
 
     public CompanyServiceImpl(CompanyRepository companyRepository, AddressRepository addressRepository,
-                              MapperUtil mapperUtil) {
+                              UserService userService, MapperUtil mapperUtil) {
         this.companyRepository = companyRepository;
         this.addressRepository = addressRepository;
+        this.userService = userService;
         this.mapperUtil = mapperUtil;
     }
 
@@ -87,6 +92,13 @@ public class CompanyServiceImpl implements CompanyService {
         company.setCompanyStatus(CompanyStatus.PASSIVE);
         companyRepository.save(company);
         return mapperUtil.convert(company, new CompanyDto());
+    }
+
+    @Override
+    public CompanyDto getCompanyByLoggedInUser() {
+        var currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserDto userDTO = userService.findByUsername(currentUsername);
+        return userDTO.getCompany();
     }
 
 }

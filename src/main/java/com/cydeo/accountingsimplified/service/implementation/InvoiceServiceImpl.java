@@ -8,6 +8,7 @@ import com.cydeo.accountingsimplified.enums.InvoiceStatus;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.*;
+import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.InvoiceService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -19,27 +20,25 @@ import java.util.stream.Collectors;
 
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
-
-    private final UserRepository userRepository;
     private final InvoiceRepository invoiceRepository;
     private final InvoiceProductRepository invoiceProductRepository;
     private final ClientVendorRepository clientVendorRepository;
     private final AddressRepository addressRepository;
     private final ProductRepository productRepository;
     private final MapperUtil mapperUtil;
-    private UserPrincipal userPrincipal;
+    private final CompanyService companyService;
 
-    public InvoiceServiceImpl(UserRepository userRepository, InvoiceRepository invoiceRepository,
+    public InvoiceServiceImpl(InvoiceRepository invoiceRepository,
                               InvoiceProductRepository invoiceProductRepository,
                               ClientVendorRepository clientVendorRepository, AddressRepository addressRepository,
-                              ProductRepository productRepository, MapperUtil mapperUtil) {
-        this.userRepository = userRepository;
+                              ProductRepository productRepository, MapperUtil mapperUtil, CompanyService companyService) {
         this.invoiceRepository = invoiceRepository;
         this.invoiceProductRepository = invoiceProductRepository;
         this.clientVendorRepository = clientVendorRepository;
         this.addressRepository = addressRepository;
         this.productRepository = productRepository;
         this.mapperUtil = mapperUtil;
+        this.companyService = companyService;
     }
 
     @Override
@@ -49,7 +48,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public List<InvoiceDto> getAllInvoicesOfCompany(InvoiceType invoiceType){
-        Company company = getCurrentUser().getCompany();
+        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
         List<InvoiceDto> allInvoicesOfTheCompany = invoiceRepository
                 .findInvoicesByCompanyAndInvoiceType(company, invoiceType)
                 .stream()
@@ -59,11 +58,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         allInvoicesOfTheCompany.forEach(each -> each.setTax(getTaxOfInvoiceProduct(each.getId())));
         allInvoicesOfTheCompany.forEach(each -> each.setTotal(getTotalOfInvoiceProduct(each.getId())));
         return allInvoicesOfTheCompany;
-    }
-
-    private User getCurrentUser(){
-        userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userRepository.findUserById(userPrincipal.getId());
     }
 
     private int getPriceOfInvoiceProduct(Long id){
@@ -89,12 +83,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setInvoiceNo(generateInvoiceNo(invoiceType));
         invoiceDto.setDate(LocalDate.now());
-        invoiceDto.setCompany(mapperUtil.convert(getCurrentUser().getCompany(), new CompanyDto()));
+        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        invoiceDto.setCompany(mapperUtil.convert(company, new CompanyDto()));
         return invoiceDto;
     }
 
     private String generateInvoiceNo(InvoiceType invoiceType){
-        Company company = getCurrentUser().getCompany();
+        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
         if (invoiceRepository.findInvoicesByCompanyAndInvoiceType(company, invoiceType).size() ==0) {
             return invoiceType.name().charAt(0) + "-001";
         }
@@ -106,20 +101,11 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public List<ClientVendorDto> getAllClientVendorsOfCompany(ClientVendorType clientVendorType){
-        Company company = getCurrentUser().getCompany();
-        return clientVendorRepository
-                .findAllByCompanyAndClientVendorType(company, clientVendorType)
-                .stream()
-                .map(each -> mapperUtil.convert(each, new ClientVendorDto()))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public InvoiceDto create(InvoiceDto invoiceDto, InvoiceType invoiceType){
         Address address = mapperUtil.convert(invoiceDto.getClientVendor().getAddress(), new Address());
         addressRepository.save(address);
-        CompanyDto companyDto = mapperUtil.convert(getCurrentUser().getCompany(), new CompanyDto());
+        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        CompanyDto companyDto = mapperUtil.convert(company, new CompanyDto());
         invoiceDto.setCompany(companyDto);
         invoiceDto.setInvoiceType(invoiceType);
         invoiceDto.setInvoiceStatus(InvoiceStatus.AWAITING_APPROVAL);
@@ -220,57 +206,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoiceRepository.save(invoice);
     }
 
-    @Override
-    public List<ProductDto> getProductsOfCompany() {
-        Company company = getCurrentUser().getCompany();
-        return productRepository.findAllByCategoryCompany(company)
-                .stream()
-                .map(each -> mapperUtil.convert(each, new ProductDto()))
-                .collect(Collectors.toList());
-    }
 
-    @Override
-    public InvoiceProductDto findInvoiceProductById(long id) {
-        return mapperUtil.convert(invoiceProductRepository.findInvoiceProductById(id), new InvoiceProductDto());
-    }
 
-    @Override
-    public List<InvoiceProductDto> getInvoiceProductsOfInvoice(Long invoiceId) {
-        Invoice invoice = invoiceRepository.findInvoiceById(invoiceId);
-        return invoiceProductRepository
-                .findInvoiceProductsByInvoice(invoice)
-                .stream()
-                .map(each -> mapperUtil.convert(each, new InvoiceProductDto()))
-                .collect(Collectors.toList());
-    }
 
-    @Override
-    public void addInvoiceProduct(Long invoiceId, InvoiceProductDto invoiceProductDto){
-        InvoiceDto invoiceDto = mapperUtil.convert(invoiceRepository.findInvoiceById(invoiceId), new InvoiceDto());
-        invoiceProductDto.setInvoice(invoiceDto);
-        invoiceProductDto.setTotal(getAmountOfInvoiceProduct(invoiceProductDto));
-        if(invoiceDto.getInvoiceType() == InvoiceType.PURCHASE){
-            invoiceProductDto.setProfitLoss(0);
-        }else{
-            invoiceProductDto.setProfitLoss(0);
-            invoiceProductDto.setRemainingQuantity(0);
-        }
-        InvoiceProduct invoiceProduct = mapperUtil.convert(invoiceProductDto, new InvoiceProduct());
-        invoiceProductRepository.save(invoiceProduct);
-    }
-
-    private Integer getAmountOfInvoiceProduct(InvoiceProductDto invoiceProductDto) {
-        int quantity = invoiceProductDto.getQuantity();
-        int price = invoiceProductDto.getPrice();
-        int tax = invoiceProductDto.getTax();
-        return (quantity * price) + (quantity * price * tax / 100);
-    }
-
-    @Override
-    public void removeInvoiceProduct(Long invoiceProductId){
-        InvoiceProduct invoiceProduct = invoiceProductRepository.findInvoiceProductById(invoiceProductId);
-        invoiceProduct.setIsDeleted(true);
-        invoiceProductRepository.save(invoiceProduct);
-    }
 
 }
