@@ -10,7 +10,7 @@ import com.cydeo.accountingsimplified.enums.ClientVendorType;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.AddressRepository;
 import com.cydeo.accountingsimplified.repository.ClientVendorRepository;
-import com.cydeo.accountingsimplified.repository.UserRepository;
+import com.cydeo.accountingsimplified.service.AddressService;
 import com.cydeo.accountingsimplified.service.ClientVendorService;
 import com.cydeo.accountingsimplified.service.CompanyService;
 import org.springframework.stereotype.Service;
@@ -24,14 +24,14 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     private final ClientVendorRepository clientVendorRepository;
     private final MapperUtil mapperUtil;
     private final CompanyService companyService;
-    private final AddressRepository addressRepository;
+    private final AddressService addressService;
 
     public ClientVendorServiceImpl(ClientVendorRepository clientVendorRepository, MapperUtil mapperUtil,
-                                   CompanyService companyService, AddressRepository addressRepository) {
+                                   CompanyService companyService, AddressService addressService) {
         this.clientVendorRepository = clientVendorRepository;
         this.mapperUtil = mapperUtil;
         this.companyService = companyService;
-        this.addressRepository = addressRepository;
+        this.addressService = addressService;
     }
 
     @Override
@@ -61,33 +61,22 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public ClientVendorDto create(ClientVendorDto clientVendorDto) throws Exception {
-        Address address = mapperUtil.convert(clientVendorDto.getAddress(), new Address());
-        addressRepository.save(address);
-        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
-        CompanyDto companyDto = mapperUtil.convert(company, new CompanyDto());
+        AddressDto addressDto = addressService.save(clientVendorDto.getAddress());
+        CompanyDto companyDto = companyService.getCompanyByLoggedInUser();
+        clientVendorDto.setAddress(addressDto);
         clientVendorDto.setCompany(companyDto);
         ClientVendor clientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());
-        clientVendor.setAddress(address);
-        clientVendorRepository.save(clientVendor);
-        return mapperUtil.convert(clientVendor, clientVendorDto);
+        return mapperUtil.convert(clientVendorRepository.save(clientVendor), new ClientVendorDto());
     }
 
     @Override
-    public ClientVendorDto update(Long clientVendorId, ClientVendorDto clientVendorDto) {
+    public ClientVendorDto update(Long clientVendorId, ClientVendorDto clientVendorDto) throws ClassNotFoundException, CloneNotSupportedException {
         ClientVendor clientVendor = clientVendorRepository.findById(clientVendorId).get();
         clientVendor.setCompanyName(clientVendorDto.getCompanyName());
         clientVendor.setClientVendorType(clientVendorDto.getClientVendorType());
         clientVendor.setWebsite(clientVendorDto.getWebsite());
         clientVendor.setPhone(clientVendorDto.getPhone());
-        AddressDto adressDto = clientVendorDto.getAddress();
-        Address address = addressRepository.findById(clientVendor.getAddress().getId()).get();
-        address.setAddressLine1(adressDto.getAddressLine1());
-        address.setAddressLine2(adressDto.getAddressLine2());
-        address.setCity(adressDto.getCity());
-        address.setState(adressDto.getState());
-        address.setCountry(adressDto.getCountry());
-        address.setZipCode(adressDto.getZipCode());
-        addressRepository.save(address);
+        clientVendor.setAddress(mapperUtil.convert(addressService.update(clientVendorDto.getAddress()), new Address()));
         clientVendorRepository.save(clientVendor);
         return mapperUtil.convert(clientVendor, clientVendorDto);
     }
