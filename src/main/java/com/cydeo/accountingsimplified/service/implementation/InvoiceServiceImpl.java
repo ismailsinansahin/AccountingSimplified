@@ -47,25 +47,25 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .stream()
                 .map(each -> mapperUtil.convert(each, new InvoiceDto()))
                 .collect(Collectors.toList());
-        allInvoicesOfTheCompany.forEach(each -> each.setPrice(getPriceOfInvoiceProduct(each.getId())));
-        allInvoicesOfTheCompany.forEach(each -> each.setTax(getTaxOfInvoiceProduct(each.getId())));
-        allInvoicesOfTheCompany.forEach(each -> each.setTotal(getTotalOfInvoiceProduct(each.getId())));
+        allInvoicesOfTheCompany.forEach(each -> each.setPrice(getTotalPriceOfInvoice(each.getId())));
+        allInvoicesOfTheCompany.forEach(each -> each.setTax(getTotalTaxOfInvoice(each.getId())));
+        allInvoicesOfTheCompany.forEach(each -> each.setTotal(calculateTotalAmountOfInvoice(each.getId())));
         return allInvoicesOfTheCompany;
     }
 
-    private int getPriceOfInvoiceProduct(Long id){
+    private int getTotalPriceOfInvoice(Long id){
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
         return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProductDto::getPrice).sum();
     }
 
-    private int getTaxOfInvoiceProduct(Long id){
+    private int getTotalTaxOfInvoice(Long id){
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
         return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProductDto::getTax).sum();
     }
 
-    private int getTotalOfInvoiceProduct(Long id){
+    private int calculateTotalAmountOfInvoice(Long id){
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
         return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProductDto::getTotal).sum();
@@ -95,15 +95,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public InvoiceDto create(InvoiceDto invoiceDto, InvoiceType invoiceType){
-        addressService.save(invoiceDto.getClientVendor().getAddress());
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        CompanyDto companyDto = mapperUtil.convert(company, new CompanyDto());
-        invoiceDto.setCompany(companyDto);
+        invoiceDto.setCompany(securityService.getLoggedInUser().getCompany());
         invoiceDto.setInvoiceType(invoiceType);
         invoiceDto.setInvoiceStatus(InvoiceStatus.AWAITING_APPROVAL);
         Invoice invoice = mapperUtil.convert(invoiceDto, new Invoice());
-        invoiceRepository.save(invoice);
-        return mapperUtil.convert(invoice, invoiceDto);
+        return mapperUtil.convert(invoiceRepository.save(invoice), new InvoiceDto());
     }
 
     @Override

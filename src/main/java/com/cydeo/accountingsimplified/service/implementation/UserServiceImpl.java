@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public User getCurrentUser() throws Exception {
+    private User getCurrentUser() throws Exception {
         userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println("userPrincipal.getUsername() = " + userPrincipal.getUsername());
         return userRepository.findUserById(userPrincipal.getId());

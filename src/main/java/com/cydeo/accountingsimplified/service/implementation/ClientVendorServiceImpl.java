@@ -43,7 +43,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     @Override
     public List<ClientVendorDto> getAllClientVendors() {
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        return clientVendorRepository.findAllByCompany(company)
+        return clientVendorRepository
+                .findAllByCompany(company)
                 .stream()
                 .map(each -> mapperUtil.convert(each, new ClientVendorDto()))
                 .collect(Collectors.toList());
@@ -61,10 +62,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public ClientVendorDto create(ClientVendorDto clientVendorDto) throws Exception {
-        AddressDto addressDto = addressService.save(clientVendorDto.getAddress());
-        CompanyDto companyDto = securityService.getLoggedInUser().getCompany();
-        clientVendorDto.setAddress(addressDto);
-        clientVendorDto.setCompany(companyDto);
+        clientVendorDto.setAddress(addressService.save(clientVendorDto.getAddress()));
+        clientVendorDto.setCompany(securityService.getLoggedInUser().getCompany());
         ClientVendor clientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());
         return mapperUtil.convert(clientVendorRepository.save(clientVendor), new ClientVendorDto());
     }
