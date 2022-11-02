@@ -9,7 +9,6 @@ import java.util.Map;
 public interface DashboardService {
 
     Map<String, Integer> getSummaryNumbers() throws Exception;
-    List<InvoiceDto> getLastThreeInvoices() throws Exception;
     List<String> getExchangeRates();
 
 }

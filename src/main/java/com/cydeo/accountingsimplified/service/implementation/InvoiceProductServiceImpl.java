@@ -71,4 +71,32 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         invoiceProductRepository.save(invoiceProduct);
     }
 
+    @Override
+    public int getPriceOfInvoiceProduct(Long id) {
+        Invoice invoice = invoiceRepository.findInvoiceById(id);
+        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
+        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getPrice).sum();
+    }
+
+    @Override
+    public int getTaxOfInvoiceProduct(Long id) {
+        Invoice invoice = invoiceRepository.findInvoiceById(id);
+        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
+        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getTax).sum();
+    }
+
+    @Override
+    public int getTotalOfInvoiceProduct(Long id) {
+        Invoice invoice = invoiceRepository.findInvoiceById(id);
+        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
+        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getTotal).sum();
+    }
+
+    @Override
+    public int getProfitLossOfInvoiceProduct(Long id) {
+        Invoice invoice = invoiceRepository.findInvoiceById(id);
+        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
+        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getProfitLoss).sum();
+    }
+
 }

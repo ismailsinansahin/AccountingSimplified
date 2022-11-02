@@ -2,15 +2,13 @@ package com.cydeo.accountingsimplified.service.implementation;
 
 import com.cydeo.accountingsimplified.dto.*;
 import com.cydeo.accountingsimplified.entity.*;
-import com.cydeo.accountingsimplified.entity.common.UserPrincipal;
-import com.cydeo.accountingsimplified.enums.ClientVendorType;
 import com.cydeo.accountingsimplified.enums.InvoiceStatus;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.*;
 import com.cydeo.accountingsimplified.service.CompanyService;
+import com.cydeo.accountingsimplified.service.InvoiceProductService;
 import com.cydeo.accountingsimplified.service.InvoiceService;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,6 +19,8 @@ import java.util.stream.Collectors;
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceRepository invoiceRepository;
+    private final InvoiceProductService invoiceProductService;
+
     private final InvoiceProductRepository invoiceProductRepository;
     private final ClientVendorRepository clientVendorRepository;
     private final AddressRepository addressRepository;
@@ -28,11 +28,11 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final MapperUtil mapperUtil;
     private final CompanyService companyService;
 
-    public InvoiceServiceImpl(InvoiceRepository invoiceRepository,
-                              InvoiceProductRepository invoiceProductRepository,
-                              ClientVendorRepository clientVendorRepository, AddressRepository addressRepository,
+    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, InvoiceProductService invoiceProductService,
+                              InvoiceProductRepository invoiceProductRepository, ClientVendorRepository clientVendorRepository, AddressRepository addressRepository,
                               ProductRepository productRepository, MapperUtil mapperUtil, CompanyService companyService) {
         this.invoiceRepository = invoiceRepository;
+        this.invoiceProductService = invoiceProductService;
         this.invoiceProductRepository = invoiceProductRepository;
         this.clientVendorRepository = clientVendorRepository;
         this.addressRepository = addressRepository;
@@ -62,20 +62,20 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     private int getPriceOfInvoiceProduct(Long id){
         Invoice invoice = invoiceRepository.findInvoiceById(id);
-        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
-        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getPrice).sum();
+        List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
+        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProductDto::getPrice).sum();
     }
 
     private int getTaxOfInvoiceProduct(Long id){
         Invoice invoice = invoiceRepository.findInvoiceById(id);
-        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
-        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getTax).sum();
+        List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
+        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProductDto::getTax).sum();
     }
 
     private int getTotalOfInvoiceProduct(Long id){
         Invoice invoice = invoiceRepository.findInvoiceById(id);
-        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
-        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getTotal).sum();
+        List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
+        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProductDto::getTotal).sum();
     }
 
     @Override
@@ -206,8 +206,19 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoiceRepository.save(invoice);
     }
 
-
-
+    @Override
+    public List<InvoiceDto> getLastThreeInvoices() {
+        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        List<InvoiceDto> last3Invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceStatusOrderByDateDesc(company, InvoiceStatus.APPROVED)
+                .stream()
+                .limit(3)
+                .map(each -> mapperUtil.convert(each, new InvoiceDto()))
+                .collect(Collectors.toList());
+        last3Invoices.forEach(each -> each.setPrice(invoiceProductService.getPriceOfInvoiceProduct(each.getId())));
+        last3Invoices.forEach(each -> each.setTax(invoiceProductService.getTaxOfInvoiceProduct(each.getId())));
+        last3Invoices.forEach(each -> each.setTotal(invoiceProductService.getTotalOfInvoiceProduct(each.getId())));
+        return last3Invoices;
+    }
 
 
 }

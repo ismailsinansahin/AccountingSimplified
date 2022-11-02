@@ -11,4 +11,9 @@ public interface InvoiceProductService {
     void addInvoiceProduct(Long invoiceId, InvoiceProductDto invoiceProductDto);
     void removeInvoiceProduct(Long invoiceProductId);
 
+    int getPriceOfInvoiceProduct(Long id);
+    int getTaxOfInvoiceProduct(Long id);
+    int getTotalOfInvoiceProduct(Long id);
+    int getProfitLossOfInvoiceProduct(Long id);
+
 }

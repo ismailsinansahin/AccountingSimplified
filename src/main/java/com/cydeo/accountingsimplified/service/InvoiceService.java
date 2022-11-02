@@ -19,4 +19,6 @@ public interface InvoiceService {
     InvoiceDto approve(Long invoiceId);
     void delete(Long invoiceId);
 
+    List<InvoiceDto> getLastThreeInvoices();
+
 }
