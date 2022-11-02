@@ -2,8 +2,10 @@ package com.cydeo.accountingsimplified.service.implementation;
 
 import com.cydeo.accountingsimplified.dto.InvoiceDto;
 import com.cydeo.accountingsimplified.dto.InvoiceProductDto;
+import com.cydeo.accountingsimplified.dto.ProductDto;
 import com.cydeo.accountingsimplified.entity.Invoice;
 import com.cydeo.accountingsimplified.entity.InvoiceProduct;
+import com.cydeo.accountingsimplified.entity.Product;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.InvoiceProductRepository;
@@ -97,6 +99,20 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
         return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getProfitLoss).sum();
+    }
+
+    @Override
+    public void update(InvoiceProductDto invoiceProductDto) {
+        invoiceProductRepository.save(mapperUtil.convert(invoiceProductDto, new InvoiceProduct()));
+    }
+
+    @Override
+    public List<InvoiceProductDto> findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType type, ProductDto product, Integer remainingQuantity ) {
+       return invoiceProductRepository
+                .findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(type,mapperUtil.convert(product, new Product()),remainingQuantity)
+                .stream()
+                .map(invoiceProduct -> mapperUtil.convert(invoiceProduct, new InvoiceProductDto()))
+                .collect(Collectors.toList());
     }
 
 }

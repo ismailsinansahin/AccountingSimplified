@@ -10,7 +10,7 @@ public interface ProductService {
     ProductDto findProductById(Long productId);
     List<ProductDto> getAllProducts() throws Exception;
     List<ProductDto> getProductsOfCompany();
-    ProductDto create(ProductDto productDto);
+    ProductDto save(ProductDto productDto);
     ProductDto update(Long productId, ProductDto productDto);
     void delete(Long productId);
     List<CategoryDto> getAllCategories() throws Exception;

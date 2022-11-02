@@ -16,10 +16,12 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryServiceImpl extends CommonService implements CategoryService {
     private final CategoryRepository categoryRepository;
+    private final CompanyService companyService;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, UserService userService) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, UserService userService, CompanyService companyService) {
         super(userService, mapperUtil);
         this.categoryRepository = categoryRepository;
+        this.companyService = companyService;
     }
 
 
@@ -31,6 +33,7 @@ public class CategoryServiceImpl extends CommonService implements CategoryServic
 
     @Override
     public List<CategoryDto> getAllCategories() throws Exception {
+        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
         return categoryRepository.findAllByCompany(company)
                 .stream()
                 .map(each -> mapperUtil.convert(each, new CategoryDto()))
@@ -40,6 +43,7 @@ public class CategoryServiceImpl extends CommonService implements CategoryServic
     @Override
     public CategoryDto create(CategoryDto categoryDto) throws Exception {
         Category category = mapperUtil.convert(categoryDto, new Category());
+        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
         category.setCompany(company);
         categoryRepository.save(category);
         return mapperUtil.convert(category, categoryDto);

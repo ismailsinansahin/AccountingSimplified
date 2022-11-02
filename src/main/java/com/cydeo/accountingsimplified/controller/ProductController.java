@@ -38,7 +38,7 @@ public class ProductController {
 
     @PostMapping("/create")
     public String createNewProduct(ProductDto productDto) throws Exception {
-        productService.create(productDto);
+        productService.save(productDto);
         return "redirect:/products/list";
     }
 

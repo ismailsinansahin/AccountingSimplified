@@ -59,15 +59,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto create(ProductDto productDto) {
+    public ProductDto save(ProductDto productDto) {
         Product product = mapperUtil.convert(productDto, new Product());
-        Category category = mapperUtil.convert(productDto.getCategory(), new Category());
-        product.setCategory(category);
-        product.setName(productDto.getName());
-        product.setLowLimitAlert(productDto.getLowLimitAlert());
-        product.setProductUnit(productDto.getProductUnit());
-        productRepository.save(product);
-        return mapperUtil.convert(product, productDto);
+        return mapperUtil.convert(productRepository.save(product), new ProductDto());
     }
 
     @Override
