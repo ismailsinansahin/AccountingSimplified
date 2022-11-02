@@ -55,6 +55,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto save(ProductDto productDto) {
         Product product = mapperUtil.convert(productDto, new Product());
+        product.setQuantityInStock(0);
         return mapperUtil.convert(productRepository.save(product), new ProductDto());
     }
 
@@ -66,6 +67,7 @@ public class ProductServiceImpl implements ProductService {
         product.setName(productDto.getName());
         product.setLowLimitAlert(productDto.getLowLimitAlert());
         product.setProductUnit(productDto.getProductUnit());
+        product.setQuantityInStock(productDto.getQuantityInStock());
         productRepository.save(product);
         return mapperUtil.convert(product, productDto);
     }

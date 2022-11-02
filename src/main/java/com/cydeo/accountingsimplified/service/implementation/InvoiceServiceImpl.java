@@ -130,6 +130,7 @@ public class InvoiceServiceImpl implements InvoiceService {
             for(InvoiceProductDto purchaseInvoiceProduct : invoiceProductList) {
                 updateQuantityOfProductForPurchaseInvoice(purchaseInvoiceProduct);
                 purchaseInvoiceProduct.setRemainingQuantity(purchaseInvoiceProduct.getQuantity());
+                // todo toplamamiz gerekmez mi? purchaseInvoiceProduct.getRemainingQuantity +
                 invoiceProductService.update(purchaseInvoiceProduct);
             }
         }
@@ -144,15 +145,15 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     private void updateQuantityOfProductForSalesInvoice(InvoiceProductDto salesInvoiceProduct) {
-        ProductDto product = salesInvoiceProduct.getProduct();
-        product.setQuantityInStock(product.getQuantityInStock() - salesInvoiceProduct.getQuantity());
-        productService.save(product);
+        ProductDto productDto = salesInvoiceProduct.getProduct();
+        productDto.setQuantityInStock(productDto.getQuantityInStock() - salesInvoiceProduct.getQuantity());
+        productService.update(productDto.getId(), productDto);
     }
 
     private void updateQuantityOfProductForPurchaseInvoice(InvoiceProductDto purchaseInvoiceProduct) {
-        ProductDto product = purchaseInvoiceProduct.getProduct();
-        product.setQuantityInStock(product.getQuantityInStock() + purchaseInvoiceProduct.getQuantity());
-        productService.save(product);
+        ProductDto productDto = purchaseInvoiceProduct.getProduct();
+        productDto.setQuantityInStock(productDto.getQuantityInStock() + purchaseInvoiceProduct.getQuantity());
+        productService.update(productDto.getId(), productDto);
     }
 
     private void setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProductDto salesInvoiceProduct) {
