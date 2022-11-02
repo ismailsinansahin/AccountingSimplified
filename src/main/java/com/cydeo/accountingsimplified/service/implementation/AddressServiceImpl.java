@@ -47,7 +47,6 @@ public class AddressServiceImpl implements AddressService {
         address.get().setCountry(dto.getCountry());
         address.get().setZipCode(dto.getZipCode());
         address.get().setCity(dto.getCity());
-
-        return null;
+        return mapper.convert(addressRepository.save(address.get()), new AddressDto());
     }
 }

@@ -72,8 +72,7 @@
                                                                                     class="btn btn-danger mb-2 mb-sm-0 mr-sm-2"
                                                                                     type="submit" name="action" value="delete">Delete
                                                                             </button>
-                                                                            <button sec:authorize="hasAnyAuthority('Manager')"
-                                                                                    th:if="${invoice.invoiceStatus.value} == 'Awaiting Approval'"
+                                                                            <button th:if="${invoice.invoiceStatus.value} == 'Awaiting Approval'"
                                                                                     class="btn btn-success mb-2 mb-sm-0 mr-sm-2"
                                                                                     type="submit" name="action" value="approve">Approve
                                                                             </button>

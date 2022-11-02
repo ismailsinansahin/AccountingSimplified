@@ -13,6 +13,5 @@ public interface ProductService {
     ProductDto save(ProductDto productDto);
     ProductDto update(Long productId, ProductDto productDto);
     void delete(Long productId);
-    List<CategoryDto> getAllCategories() throws Exception;
 
 }

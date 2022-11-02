@@ -4,13 +4,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.cydeo.accountingsimplified.entity.Company;
-import com.cydeo.accountingsimplified.entity.User;
-import com.cydeo.accountingsimplified.entity.common.UserPrincipal;
 import com.cydeo.accountingsimplified.enums.InvoiceStatus;
-import com.cydeo.accountingsimplified.repository.InvoiceRepository;
-import com.cydeo.accountingsimplified.repository.UserRepository;
 import com.cydeo.accountingsimplified.service.CompanyService;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.cydeo.accountingsimplified.service.SecurityService;
 import org.springframework.stereotype.Service;
 import com.cydeo.accountingsimplified.dto.InvoiceProductDto;
 import com.cydeo.accountingsimplified.entity.InvoiceProduct;
@@ -23,19 +19,20 @@ import com.cydeo.accountingsimplified.mapper.MapperUtil;
 public class ReportingServiceImpl implements ReportingService{
 
     private final InvoiceProductRepository invoiceProductRepository;
-    private final CompanyService companyService;
+    private final SecurityService securityService;
     private final MapperUtil mapperUtil;
 
     public ReportingServiceImpl(InvoiceProductRepository invoiceProductRepository,
-                                CompanyService companyService, MapperUtil mapperUtil) {
+                                SecurityService securityService,
+                                MapperUtil mapperUtil) {
         this.invoiceProductRepository = invoiceProductRepository;
-        this.companyService = companyService;
+        this.securityService = securityService;
         this.mapperUtil = mapperUtil;
     }
 
     @Override
     public List<InvoiceProductDto> getStockData() {
-        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return invoiceProductRepository.findInvoiceProductsByInvoiceInvoiceStatusAndInvoiceCompany(InvoiceStatus.APPROVED, company)
                 .stream()
                 .sorted(Comparator.comparing(InvoiceProduct::getId).reversed())

@@ -1,16 +1,15 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
-import com.cydeo.accountingsimplified.dto.AddressDto;
 import com.cydeo.accountingsimplified.dto.CompanyDto;
 import com.cydeo.accountingsimplified.dto.UserDto;
 import com.cydeo.accountingsimplified.entity.Address;
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.enums.CompanyStatus;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
-import com.cydeo.accountingsimplified.repository.AddressRepository;
 import com.cydeo.accountingsimplified.repository.CompanyRepository;
 import com.cydeo.accountingsimplified.service.AddressService;
 import com.cydeo.accountingsimplified.service.CompanyService;
+import com.cydeo.accountingsimplified.service.SecurityService;
 import com.cydeo.accountingsimplified.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -25,13 +24,15 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final AddressService addressService;
     private final UserService userService;
+    private final SecurityService securityService;
     private final MapperUtil mapperUtil;
 
     public CompanyServiceImpl(CompanyRepository companyRepository, AddressService addressService,
-                              UserService userService, MapperUtil mapperUtil) {
+                              UserService userService, SecurityService securityService, MapperUtil mapperUtil) {
         this.companyRepository = companyRepository;
         this.addressService = addressService;
         this.userService = userService;
+        this.securityService = securityService;
         this.mapperUtil = mapperUtil;
     }
 
@@ -89,9 +90,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDto getCompanyByLoggedInUser() {
-        var currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        UserDto userDTO = userService.findByUsername(currentUsername);
-        return userDTO.getCompany();
+        return securityService.getLoggedInUser().getCompany();
     }
 
 }

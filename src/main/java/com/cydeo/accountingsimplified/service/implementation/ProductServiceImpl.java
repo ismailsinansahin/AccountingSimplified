@@ -1,19 +1,14 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
-import com.cydeo.accountingsimplified.dto.CategoryDto;
 import com.cydeo.accountingsimplified.dto.ProductDto;
 import com.cydeo.accountingsimplified.entity.Category;
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.entity.Product;
-import com.cydeo.accountingsimplified.entity.User;
-import com.cydeo.accountingsimplified.entity.common.UserPrincipal;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
-import com.cydeo.accountingsimplified.repository.CategoryRepository;
 import com.cydeo.accountingsimplified.repository.ProductRepository;
-import com.cydeo.accountingsimplified.repository.UserRepository;
 import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.ProductService;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.cydeo.accountingsimplified.service.SecurityService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,15 +17,14 @@ import java.util.stream.Collectors;
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
-    private final CompanyService companyService;
+    private final SecurityService securityService;
     private final MapperUtil mapperUtil;
 
-    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository,
-                              CompanyService companyService, MapperUtil mapperUtil) {
+    public ProductServiceImpl(ProductRepository productRepository,
+                              SecurityService securityService,
+                              MapperUtil mapperUtil) {
         this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
-        this.companyService = companyService;
+        this.securityService = securityService;
         this.mapperUtil = mapperUtil;
     }
 
@@ -42,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getAllProducts() throws Exception {
-        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return productRepository.findAllByCategoryCompany(company)
                 .stream()
                 .map(each -> mapperUtil.convert(each, new ProductDto()))
@@ -51,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getProductsOfCompany() {
-        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return productRepository.findAllByCategoryCompany(company)
                 .stream()
                 .map(each -> mapperUtil.convert(each, new ProductDto()))
@@ -83,14 +77,7 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
-    @Override
-    public List<CategoryDto> getAllCategories() throws Exception {
-        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
-        return categoryRepository.findAllByCompany(company)
-                .stream()
-                .map(each -> mapperUtil.convert(each, new CategoryDto()))
-                .collect(Collectors.toList());
-    }
+
 
 
 }

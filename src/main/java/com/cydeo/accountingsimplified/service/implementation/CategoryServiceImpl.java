@@ -7,23 +7,25 @@ import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.CategoryRepository;
 import com.cydeo.accountingsimplified.service.CategoryService;
 import com.cydeo.accountingsimplified.service.CompanyService;
-import com.cydeo.accountingsimplified.service.UserService;
+import com.cydeo.accountingsimplified.service.SecurityService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CategoryServiceImpl extends CommonService implements CategoryService {
+public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
-    private final CompanyService companyService;
+    private final SecurityService securityService;
+    private final MapperUtil mapperUtil;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, MapperUtil mapperUtil, UserService userService, CompanyService companyService) {
-        super(userService, mapperUtil);
+    public CategoryServiceImpl(CategoryRepository categoryRepository,
+                               SecurityService securityService,
+                               MapperUtil mapperUtil) {
         this.categoryRepository = categoryRepository;
-        this.companyService = companyService;
+        this.securityService = securityService;
+        this.mapperUtil = mapperUtil;
     }
-
 
     @Override
     public CategoryDto findCategoryById(Long categoryId) {
@@ -33,8 +35,9 @@ public class CategoryServiceImpl extends CommonService implements CategoryServic
 
     @Override
     public List<CategoryDto> getAllCategories() throws Exception {
-        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
-        return categoryRepository.findAllByCompany(company)
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+        return categoryRepository
+                .findAllByCompany(company)
                 .stream()
                 .map(each -> mapperUtil.convert(each, new CategoryDto()))
                 .collect(Collectors.toList());
@@ -43,18 +46,16 @@ public class CategoryServiceImpl extends CommonService implements CategoryServic
     @Override
     public CategoryDto create(CategoryDto categoryDto) throws Exception {
         Category category = mapperUtil.convert(categoryDto, new Category());
-        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         category.setCompany(company);
-        categoryRepository.save(category);
-        return mapperUtil.convert(category, categoryDto);
+        return mapperUtil.convert(categoryRepository.save(category), new CategoryDto());
     }
 
     @Override
     public CategoryDto update(Long categoryId, CategoryDto categoryDto) {
         Category category = categoryRepository.findById(categoryId).get();
         category.setDescription(categoryDto.getDescription());
-        categoryRepository.save(category);
-        return mapperUtil.convert(category, categoryDto);
+        return mapperUtil.convert(categoryRepository.save(category), new CategoryDto());
     }
 
     @Override

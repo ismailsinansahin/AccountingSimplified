@@ -21,17 +21,17 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final AddressService addressService;
     private final ProductService productService;
     private final MapperUtil mapperUtil;
-    private final CompanyService companyService;
+    private final SecurityService securityService;
 
     public InvoiceServiceImpl(InvoiceRepository invoiceRepository, InvoiceProductService invoiceProductService,
                               AddressService addressService, ProductService productService,
-                              MapperUtil mapperUtil, CompanyService companyService) {
+                              MapperUtil mapperUtil, SecurityService securityService) {
         this.invoiceRepository = invoiceRepository;
         this.invoiceProductService = invoiceProductService;
         this.addressService = addressService;
         this.productService = productService;
         this.mapperUtil = mapperUtil;
-        this.companyService = companyService;
+        this.securityService = securityService;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public List<InvoiceDto> getAllInvoicesOfCompany(InvoiceType invoiceType){
-        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         List<InvoiceDto> allInvoicesOfTheCompany = invoiceRepository
                 .findInvoicesByCompanyAndInvoiceType(company, invoiceType)
                 .stream()
@@ -76,13 +76,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setInvoiceNo(generateInvoiceNo(invoiceType));
         invoiceDto.setDate(LocalDate.now());
-        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         invoiceDto.setCompany(mapperUtil.convert(company, new CompanyDto()));
         return invoiceDto;
     }
 
     private String generateInvoiceNo(InvoiceType invoiceType){
-        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         if (invoiceRepository.findInvoicesByCompanyAndInvoiceType(company, invoiceType).size() ==0) {
             return invoiceType.name().charAt(0) + "-001";
         }
@@ -96,7 +96,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public InvoiceDto create(InvoiceDto invoiceDto, InvoiceType invoiceType){
         addressService.save(invoiceDto.getClientVendor().getAddress());
-        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         CompanyDto companyDto = mapperUtil.convert(company, new CompanyDto());
         invoiceDto.setCompany(companyDto);
         invoiceDto.setInvoiceType(invoiceType);
@@ -198,7 +198,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public List<InvoiceDto> getLastThreeInvoices() {
-        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         List<InvoiceDto> last3Invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceStatusOrderByDateDesc(company, InvoiceStatus.APPROVED)
                 .stream()
                 .limit(3)

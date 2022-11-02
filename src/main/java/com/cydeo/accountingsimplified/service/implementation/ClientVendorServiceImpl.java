@@ -8,11 +8,11 @@ import com.cydeo.accountingsimplified.entity.ClientVendor;
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.enums.ClientVendorType;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
-import com.cydeo.accountingsimplified.repository.AddressRepository;
 import com.cydeo.accountingsimplified.repository.ClientVendorRepository;
 import com.cydeo.accountingsimplified.service.AddressService;
 import com.cydeo.accountingsimplified.service.ClientVendorService;
 import com.cydeo.accountingsimplified.service.CompanyService;
+import com.cydeo.accountingsimplified.service.SecurityService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,14 +23,14 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     private final ClientVendorRepository clientVendorRepository;
     private final MapperUtil mapperUtil;
-    private final CompanyService companyService;
+    private final SecurityService securityService;
     private final AddressService addressService;
 
     public ClientVendorServiceImpl(ClientVendorRepository clientVendorRepository, MapperUtil mapperUtil,
-                                   CompanyService companyService, AddressService addressService) {
+                                   SecurityService securityService, AddressService addressService) {
         this.clientVendorRepository = clientVendorRepository;
         this.mapperUtil = mapperUtil;
-        this.companyService = companyService;
+        this.securityService = securityService;
         this.addressService = addressService;
     }
 
@@ -42,7 +42,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public List<ClientVendorDto> getAllClientVendors() {
-        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return clientVendorRepository.findAllByCompany(company)
                 .stream()
                 .map(each -> mapperUtil.convert(each, new ClientVendorDto()))
@@ -51,7 +51,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public List<ClientVendorDto> getAllClientVendorsOfCompany(ClientVendorType clientVendorType) {
-        Company company = mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return clientVendorRepository
                 .findAllByCompanyAndClientVendorType(company, clientVendorType)
                 .stream()
@@ -62,7 +62,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     @Override
     public ClientVendorDto create(ClientVendorDto clientVendorDto) throws Exception {
         AddressDto addressDto = addressService.save(clientVendorDto.getAddress());
-        CompanyDto companyDto = companyService.getCompanyByLoggedInUser();
+        CompanyDto companyDto = securityService.getLoggedInUser().getCompany();
         clientVendorDto.setAddress(addressDto);
         clientVendorDto.setCompany(companyDto);
         ClientVendor clientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());

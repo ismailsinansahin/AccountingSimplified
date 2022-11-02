@@ -11,6 +11,8 @@ import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.InvoiceProductRepository;
 import com.cydeo.accountingsimplified.repository.InvoiceRepository;
 import com.cydeo.accountingsimplified.service.InvoiceProductService;
+import com.cydeo.accountingsimplified.service.InvoiceService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,12 +22,13 @@ import java.util.stream.Collectors;
 public class InvoiceProductServiceImpl implements InvoiceProductService {
 
     private final InvoiceProductRepository invoiceProductRepository;
-    private final InvoiceRepository invoiceRepository;
+    private final InvoiceService invoiceService;
     private final MapperUtil mapperUtil;
 
-    public InvoiceProductServiceImpl(InvoiceProductRepository invoiceProductRepository, InvoiceRepository invoiceRepository, MapperUtil mapperUtil) {
+    public InvoiceProductServiceImpl(InvoiceProductRepository invoiceProductRepository,
+                                     @Lazy InvoiceService invoiceService, MapperUtil mapperUtil) {
         this.invoiceProductRepository = invoiceProductRepository;
-        this.invoiceRepository = invoiceRepository;
+        this.invoiceService = invoiceService;
         this.mapperUtil = mapperUtil;
     }
 
@@ -36,9 +39,9 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
     @Override
     public List<InvoiceProductDto> getInvoiceProductsOfInvoice(Long invoiceId) {
-        Invoice invoice = invoiceRepository.findInvoiceById(invoiceId);
+        InvoiceDto invoiceDto = invoiceService.findInvoiceById(invoiceId);
         return invoiceProductRepository
-                .findInvoiceProductsByInvoice(invoice)
+                .findInvoiceProductsByInvoice(mapperUtil.convert(invoiceDto, new Invoice()))
                 .stream()
                 .map(each -> mapperUtil.convert(each, new InvoiceProductDto()))
                 .collect(Collectors.toList());
@@ -46,7 +49,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
     @Override
     public void addInvoiceProduct(Long invoiceId, InvoiceProductDto invoiceProductDto) {
-        InvoiceDto invoiceDto = mapperUtil.convert(invoiceRepository.findInvoiceById(invoiceId), new InvoiceDto());
+        InvoiceDto invoiceDto = invoiceService.findInvoiceById(invoiceId);
         invoiceProductDto.setInvoice(invoiceDto);
         invoiceProductDto.setTotal(getAmountOfInvoiceProduct(invoiceProductDto));
         if(invoiceDto.getInvoiceType() == InvoiceType.PURCHASE){
@@ -75,29 +78,29 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
     @Override
     public int getPriceOfInvoiceProduct(Long id) {
-        Invoice invoice = invoiceRepository.findInvoiceById(id);
-        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
+        InvoiceDto invoiceDto = invoiceService.findInvoiceById(id);
+        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(mapperUtil.convert(invoiceDto, new Invoice()));
         return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getPrice).sum();
     }
 
     @Override
     public int getTaxOfInvoiceProduct(Long id) {
-        Invoice invoice = invoiceRepository.findInvoiceById(id);
-        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
+        InvoiceDto invoiceDto = invoiceService.findInvoiceById(id);
+        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(mapperUtil.convert(invoiceDto, new Invoice()));
         return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getTax).sum();
     }
 
     @Override
     public int getTotalOfInvoiceProduct(Long id) {
-        Invoice invoice = invoiceRepository.findInvoiceById(id);
-        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
+        InvoiceDto invoiceDto = invoiceService.findInvoiceById(id);
+        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(mapperUtil.convert(invoiceDto, new Invoice()));
         return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getTotal).sum();
     }
 
     @Override
     public int getProfitLossOfInvoiceProduct(Long id) {
-        Invoice invoice = invoiceRepository.findInvoiceById(id);
-        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
+        InvoiceDto invoiceDto = invoiceService.findInvoiceById(id);
+        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(mapperUtil.convert(invoiceDto, new Invoice()));
         return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getProfitLoss).sum();
     }
 
