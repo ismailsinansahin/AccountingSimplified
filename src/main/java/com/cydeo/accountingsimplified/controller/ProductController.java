@@ -2,6 +2,7 @@ package com.cydeo.accountingsimplified.controller;
 
 import com.cydeo.accountingsimplified.dto.ProductDto;
 import com.cydeo.accountingsimplified.enums.ProductUnit;
+import com.cydeo.accountingsimplified.service.CategoryService;
 import com.cydeo.accountingsimplified.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,9 +18,11 @@ import java.util.Arrays;
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("/list")
@@ -31,14 +34,14 @@ public class ProductController {
     @GetMapping("/create")
     public String navigateToProductCreate(Model model) throws Exception {
         model.addAttribute("newProduct", new ProductDto());
-        model.addAttribute("categories", productService.getAllCategories());
+        model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
         return "/product/product-create";
     }
 
     @PostMapping("/create")
     public String createNewProduct(ProductDto productDto) throws Exception {
-        productService.create(productDto);
+        productService.save(productDto);
         return "redirect:/products/list";
     }
 
@@ -50,7 +53,7 @@ public class ProductController {
     @GetMapping("/update/{productId}")
     public String navigateToProductUpate(@PathVariable("productId") Long productId, Model model) throws Exception {
         model.addAttribute("product", productService.findProductById(productId));
-        model.addAttribute("categories", productService.getAllCategories());
+        model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
         return "/product/product-update";
     }

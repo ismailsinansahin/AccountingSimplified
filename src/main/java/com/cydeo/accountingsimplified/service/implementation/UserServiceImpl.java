@@ -40,6 +40,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto findByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        return mapperUtil.convert(user, new UserDto());
+    }
+
+    @Override
     public List<UserDto> getAllUsers() throws Exception {
         User currentUser = getCurrentUser();
         if (currentUser.getRole().getDescription().equals("Root User")) {
@@ -107,7 +113,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public User getCurrentUser() throws Exception {
+    private User getCurrentUser() throws Exception {
         userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println("userPrincipal.getUsername() = " + userPrincipal.getUsername());
         return userRepository.findUserById(userPrincipal.getId());

@@ -54,7 +54,7 @@ public class ClientVendorController {
     }
 
     @PostMapping("/update/{clientVendorId}")
-    public String updateClientVendor(@PathVariable("clientVendorId") Long clientVendorId, ClientVendorDto clientVendorDto) {
+    public String updateClientVendor(@PathVariable("clientVendorId") Long clientVendorId, ClientVendorDto clientVendorDto) throws ClassNotFoundException, CloneNotSupportedException {
         clientVendorService.update(clientVendorId, clientVendorDto);
         return "redirect:/clientVendors/list";
     }

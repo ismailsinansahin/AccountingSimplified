@@ -1,14 +1,17 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
-import com.cydeo.accountingsimplified.dto.AddressDto;
 import com.cydeo.accountingsimplified.dto.CompanyDto;
+import com.cydeo.accountingsimplified.dto.UserDto;
 import com.cydeo.accountingsimplified.entity.Address;
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.enums.CompanyStatus;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
-import com.cydeo.accountingsimplified.repository.AddressRepository;
 import com.cydeo.accountingsimplified.repository.CompanyRepository;
+import com.cydeo.accountingsimplified.service.AddressService;
 import com.cydeo.accountingsimplified.service.CompanyService;
+import com.cydeo.accountingsimplified.service.SecurityService;
+import com.cydeo.accountingsimplified.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -19,13 +22,17 @@ import java.util.stream.Collectors;
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
-    private final AddressRepository addressRepository;
+    private final AddressService addressService;
+    private final UserService userService;
+    private final SecurityService securityService;
     private final MapperUtil mapperUtil;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository, AddressRepository addressRepository,
-                              MapperUtil mapperUtil) {
+    public CompanyServiceImpl(CompanyRepository companyRepository, AddressService addressService,
+                              UserService userService, SecurityService securityService, MapperUtil mapperUtil) {
         this.companyRepository = companyRepository;
-        this.addressRepository = addressRepository;
+        this.addressService = addressService;
+        this.userService = userService;
+        this.securityService = securityService;
         this.mapperUtil = mapperUtil;
     }
 
@@ -55,20 +62,12 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public CompanyDto update(Long companyId, CompanyDto companyDto) {
+    public CompanyDto update(Long companyId, CompanyDto companyDto) throws CloneNotSupportedException {
         Company company = companyRepository.findById(companyId).get();
         company.setTitle(companyDto.getTitle());
         company.setPhone(companyDto.getPhone());
         company.setWebsite(companyDto.getWebsite());
-        AddressDto adressDto = companyDto.getAddress();
-        Address address = addressRepository.findById(company.getAddress().getId()).get();
-        address.setAddressLine1(adressDto.getAddressLine1());
-        address.setAddressLine2(adressDto.getAddressLine2());
-        address.setCity(adressDto.getCity());
-        address.setState(adressDto.getState());
-        address.setCountry(adressDto.getCountry());
-        address.setZipCode(adressDto.getZipCode());
-        addressRepository.save(address);
+        company.setAddress(mapperUtil.convert(addressService.update(companyDto.getAddress()), new Address()));
         companyRepository.save(company);
         return mapperUtil.convert(company, companyDto);
     }
@@ -87,6 +86,11 @@ public class CompanyServiceImpl implements CompanyService {
         company.setCompanyStatus(CompanyStatus.PASSIVE);
         companyRepository.save(company);
         return mapperUtil.convert(company, new CompanyDto());
+    }
+
+    @Override
+    public CompanyDto getCompanyByLoggedInUser() {
+        return securityService.getLoggedInUser().getCompany();
     }
 
 }

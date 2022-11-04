@@ -54,7 +54,7 @@ public class CompanyController {
     }
 
     @PostMapping("/update/{companyId}")
-    public String updateCompany(@PathVariable("companyId") Long companyId, CompanyDto companyDto) {
+    public String updateCompany(@PathVariable("companyId") Long companyId, CompanyDto companyDto) throws CloneNotSupportedException {
         companyService.update(companyId, companyDto);
         return "redirect:/companies/list";
     }

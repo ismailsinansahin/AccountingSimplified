@@ -1,18 +1,14 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
-import com.cydeo.accountingsimplified.dto.CategoryDto;
 import com.cydeo.accountingsimplified.dto.ProductDto;
 import com.cydeo.accountingsimplified.entity.Category;
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.entity.Product;
-import com.cydeo.accountingsimplified.entity.User;
-import com.cydeo.accountingsimplified.entity.common.UserPrincipal;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
-import com.cydeo.accountingsimplified.repository.CategoryRepository;
 import com.cydeo.accountingsimplified.repository.ProductRepository;
-import com.cydeo.accountingsimplified.repository.UserRepository;
+import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.ProductService;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.cydeo.accountingsimplified.service.SecurityService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,18 +16,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
+    private final SecurityService securityService;
     private final MapperUtil mapperUtil;
-    private UserPrincipal userPrincipal;
 
-    public ProductServiceImpl(ProductRepository productRepository, UserRepository userRepository,
-                              CategoryRepository categoryRepository, MapperUtil mapperUtil) {
+    public ProductServiceImpl(ProductRepository productRepository,
+                              SecurityService securityService,
+                              MapperUtil mapperUtil) {
         this.productRepository = productRepository;
-        this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
+        this.securityService = securityService;
         this.mapperUtil = mapperUtil;
     }
 
@@ -43,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getAllProducts() throws Exception {
-        Company company = getCurrentUser().getCompany();
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return productRepository.findAllByCategoryCompany(company)
                 .stream()
                 .map(each -> mapperUtil.convert(each, new ProductDto()))
@@ -51,15 +44,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto create(ProductDto productDto) {
+    public List<ProductDto> getProductsOfCompany() {
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+        return productRepository.findAllByCategoryCompany(company)
+                .stream()
+                .map(each -> mapperUtil.convert(each, new ProductDto()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProductDto save(ProductDto productDto) {
         Product product = mapperUtil.convert(productDto, new Product());
-        Category category = mapperUtil.convert(productDto.getCategory(), new Category());
-        product.setCategory(category);
-        product.setName(productDto.getName());
-        product.setLowLimitAlert(productDto.getLowLimitAlert());
-        product.setProductUnit(productDto.getProductUnit());
-        productRepository.save(product);
-        return mapperUtil.convert(product, productDto);
+        product.setQuantityInStock(0);
+        return mapperUtil.convert(productRepository.save(product), new ProductDto());
     }
 
     @Override
@@ -70,6 +67,7 @@ public class ProductServiceImpl implements ProductService {
         product.setName(productDto.getName());
         product.setLowLimitAlert(productDto.getLowLimitAlert());
         product.setProductUnit(productDto.getProductUnit());
+        product.setQuantityInStock(productDto.getQuantityInStock());
         productRepository.save(product);
         return mapperUtil.convert(product, productDto);
     }
@@ -81,18 +79,7 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
-    @Override
-    public List<CategoryDto> getAllCategories() throws Exception {
-        Company company = getCurrentUser().getCompany();
-        return categoryRepository.findAllByCompany(company)
-                .stream()
-                .map(each -> mapperUtil.convert(each, new CategoryDto()))
-                .collect(Collectors.toList());
-    }
 
-    public User getCurrentUser() throws Exception {
-        userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userRepository.findUserById(userPrincipal.getId());
-    }
+
 
 }
