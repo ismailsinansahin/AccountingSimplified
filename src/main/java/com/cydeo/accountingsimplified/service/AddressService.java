@@ -8,5 +8,5 @@ public interface AddressService {
 
     AddressDto getAddressById(Long id) throws ClassNotFoundException;
 
-    AddressDto update(AddressDto dto) throws CloneNotSupportedException;
+    AddressDto update(Long id, AddressDto dto) throws CloneNotSupportedException;
 }

@@ -36,17 +36,14 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public AddressDto update(AddressDto dto) throws CloneNotSupportedException {
-        Optional<Address> address = addressRepository.findById(dto.getId());
-        if(!address.isPresent()){
-            throw new CloneNotSupportedException();
-        }
-        address.get().setAddressLine1(dto.getAddressLine1());
-        address.get().setAddressLine2(dto.getAddressLine2());
-        address.get().setState(dto.getState());
-        address.get().setCountry(dto.getCountry());
-        address.get().setZipCode(dto.getZipCode());
-        address.get().setCity(dto.getCity());
-        return mapper.convert(addressRepository.save(address.get()), new AddressDto());
+    public AddressDto update(Long id, AddressDto dto)  {
+        Address address = addressRepository.findById(id).get();
+        address.setAddressLine1(dto.getAddressLine1());
+        address.setAddressLine2(dto.getAddressLine2());
+        address.setState(dto.getState());
+        address.setCountry(dto.getCountry());
+        address.setZipCode(dto.getZipCode());
+        address.setCity(dto.getCity());
+        return mapper.convert(addressRepository.save(address), new AddressDto());
     }
 }

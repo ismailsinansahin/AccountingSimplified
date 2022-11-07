@@ -75,7 +75,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         clientVendor.setClientVendorType(clientVendorDto.getClientVendorType());
         clientVendor.setWebsite(clientVendorDto.getWebsite());
         clientVendor.setPhone(clientVendorDto.getPhone());
-        clientVendor.setAddress(mapperUtil.convert(addressService.update(clientVendorDto.getAddress()), new Address()));
+        AddressDto addressDto = addressService.update(clientVendor.getAddress().getId(), clientVendorDto.getAddress());
+        clientVendor.setAddress(mapperUtil.convert(addressDto, new Address()));
         clientVendorRepository.save(clientVendor);
         return mapperUtil.convert(clientVendor, clientVendorDto);
     }

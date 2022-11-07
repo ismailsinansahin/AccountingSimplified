@@ -19,6 +19,8 @@ public class CategoryServiceImpl implements CategoryService {
     private final SecurityService securityService;
     private final MapperUtil mapperUtil;
 
+
+
     public CategoryServiceImpl(CategoryRepository categoryRepository,
                                SecurityService securityService,
                                MapperUtil mapperUtil) {
@@ -34,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDto> getAllCategories() throws Exception {
+    public List<CategoryDto> getAllCategories() {
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return categoryRepository
                 .findAllByCompany(company)
