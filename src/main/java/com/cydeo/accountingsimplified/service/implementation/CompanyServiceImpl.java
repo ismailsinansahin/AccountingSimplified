@@ -1,5 +1,6 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
+import com.cydeo.accountingsimplified.dto.AddressDto;
 import com.cydeo.accountingsimplified.dto.CompanyDto;
 import com.cydeo.accountingsimplified.dto.UserDto;
 import com.cydeo.accountingsimplified.entity.Address;
@@ -54,11 +55,9 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyDto create(CompanyDto companyDto) {
         companyDto.setCompanyStatus(CompanyStatus.PASSIVE);
-        Company company = mapperUtil.convert(companyDto, new Company());
-        Address address = mapperUtil.convert(companyDto.getAddress(), new Address());
-        company.setAddress(address);
-        companyRepository.save(company);
-        return mapperUtil.convert(company, companyDto);
+        addressService.save(companyDto.getAddress());
+        Company company = companyRepository.save(mapperUtil.convert(companyDto, new Company()));
+        return mapperUtil.convert(company, new CompanyDto());
     }
 
     @Override
@@ -67,9 +66,10 @@ public class CompanyServiceImpl implements CompanyService {
         company.setTitle(companyDto.getTitle());
         company.setPhone(companyDto.getPhone());
         company.setWebsite(companyDto.getWebsite());
-        company.setAddress(mapperUtil.convert(addressService.update(companyDto.getAddress()), new Address()));
+        AddressDto addressDto = addressService.update(company.getAddress().getId(), companyDto.getAddress());
+        company.setAddress(mapperUtil.convert(addressDto, new Address()));
         companyRepository.save(company);
-        return mapperUtil.convert(company, companyDto);
+        return mapperUtil.convert(company, new CompanyDto());
     }
 
     @Override
