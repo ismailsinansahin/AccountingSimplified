@@ -8,6 +8,7 @@ import com.cydeo.accountingsimplified.entity.Product;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.InvoiceProductRepository;
+import com.cydeo.accountingsimplified.service.ProductService;
 import org.springframework.context.annotation.Lazy;
 import com.cydeo.accountingsimplified.service.InvoiceProductService;
 import com.cydeo.accountingsimplified.service.InvoiceService;
@@ -21,12 +22,15 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
     private final InvoiceProductRepository invoiceProductRepository;
     private final InvoiceService invoiceService;
+    private final ProductService productService;
     private final MapperUtil mapperUtil;
 
     public InvoiceProductServiceImpl(InvoiceProductRepository invoiceProductRepository,
-                                     @Lazy InvoiceService invoiceService, MapperUtil mapperUtil) {
+                                     @Lazy InvoiceService invoiceService, ProductService productService,
+                                     MapperUtil mapperUtil) {
         this.invoiceProductRepository = invoiceProductRepository;
         this.invoiceService = invoiceService;
+        this.productService = productService;
         this.mapperUtil = mapperUtil;
     }
 
@@ -64,6 +68,77 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     public void update(InvoiceProductDto invoiceProductDto) {
         invoiceProductRepository.save(mapperUtil.convert(invoiceProductDto, new InvoiceProduct()));
     }
+
+    @Override
+    public void completeApprovalProcedures(Long invoiceId, InvoiceType type) {
+        List<InvoiceProduct> invoiceProductList = invoiceProductRepository.findInvoiceProductsByInvoice_Id(invoiceId);
+        if(type==InvoiceType.SALES){
+            for(InvoiceProduct salesInvoiceProduct : invoiceProductList){
+                if(checkQuantity(salesInvoiceProduct)){
+                    updateQuantityOfProductForSalesInvoice(salesInvoiceProduct);
+                    salesInvoiceProduct.setRemainingQuantity(salesInvoiceProduct.getQuantity());
+                    invoiceProductRepository.save(salesInvoiceProduct);
+                    setProfitLossOfInvoiceProductsForSalesInvoice(salesInvoiceProduct);
+                }else{
+                    System.out.println("This sale cannot be completed due to insufficient quantity of the product");
+                    throw new RuntimeException(); // todo custom exception
+                }
+            }
+        }else{
+            for(InvoiceProduct purchaseInvoiceProduct : invoiceProductList) {
+                updateQuantityOfProductForPurchaseInvoice(purchaseInvoiceProduct);
+                purchaseInvoiceProduct.setRemainingQuantity(purchaseInvoiceProduct.getQuantity());
+                invoiceProductRepository.save(purchaseInvoiceProduct);
+            }
+        }
+    }
+
+    private boolean checkQuantity(InvoiceProduct salesInvoiceProduct) {
+        return salesInvoiceProduct.getProduct().getQuantityInStock() >= salesInvoiceProduct.getQuantity();
+    }
+
+    private void updateQuantityOfProductForSalesInvoice(InvoiceProduct salesInvoiceProduct) {
+        ProductDto productDto = mapperUtil.convert(salesInvoiceProduct.getProduct(), new ProductDto());
+        productDto.setQuantityInStock(productDto.getQuantityInStock() - salesInvoiceProduct.getQuantity());
+        productService.update(productDto.getId(), productDto);
+    }
+
+    private void updateQuantityOfProductForPurchaseInvoice(InvoiceProduct purchaseInvoiceProduct) {
+        ProductDto productDto = mapperUtil.convert(purchaseInvoiceProduct.getProduct(), new ProductDto());
+        productDto.setQuantityInStock(productDto.getQuantityInStock() + purchaseInvoiceProduct.getQuantity());
+        productService.update(productDto.getId(), productDto);
+    }
+
+    private void setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProduct salesInvoiceProduct) {
+        List<InvoiceProduct> notSoldPurchaseInvoiceProducts = findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType.PURCHASE, salesInvoiceProduct.getProduct(), 0);
+        for (InvoiceProduct notSoldPurchaseInvoiceProduct : notSoldPurchaseInvoiceProducts) {
+            if (salesInvoiceProduct.getRemainingQuantity() > notSoldPurchaseInvoiceProduct.getRemainingQuantity()) {
+                int costTotalForQty = notSoldPurchaseInvoiceProduct.getTotal() * notSoldPurchaseInvoiceProduct.getRemainingQuantity() / notSoldPurchaseInvoiceProduct.getQuantity();
+                int salesPriceForQty = salesInvoiceProduct.getPrice() * notSoldPurchaseInvoiceProduct.getRemainingQuantity();
+                int salesTaxForQty = salesPriceForQty * salesInvoiceProduct.getTax() / 100;
+                int salesTotalForQty = salesPriceForQty + salesTaxForQty;
+                int profitLoss = salesInvoiceProduct.getProfitLoss() + (salesTotalForQty - costTotalForQty);
+                salesInvoiceProduct.setRemainingQuantity(salesInvoiceProduct.getRemainingQuantity() - notSoldPurchaseInvoiceProduct.getRemainingQuantity());
+                notSoldPurchaseInvoiceProduct.setRemainingQuantity(0);
+                salesInvoiceProduct.setProfitLoss(profitLoss);
+                invoiceProductRepository.save(notSoldPurchaseInvoiceProduct);
+                invoiceProductRepository.save(salesInvoiceProduct);
+            } else {
+                int costTotalForQty = notSoldPurchaseInvoiceProduct.getTotal() * salesInvoiceProduct.getRemainingQuantity() / notSoldPurchaseInvoiceProduct.getQuantity();
+                int salesPriceForQty = salesInvoiceProduct.getPrice() * salesInvoiceProduct.getRemainingQuantity();
+                int salesTaxForQty = salesPriceForQty * salesInvoiceProduct.getTax() / 100;
+                int salesTotalForQty = salesPriceForQty + salesTaxForQty;
+                int profitLoss = salesInvoiceProduct.getProfitLoss() + salesTotalForQty - costTotalForQty;
+                notSoldPurchaseInvoiceProduct.setRemainingQuantity(notSoldPurchaseInvoiceProduct.getRemainingQuantity() - salesInvoiceProduct.getRemainingQuantity());
+                salesInvoiceProduct.setRemainingQuantity(0);
+                salesInvoiceProduct.setProfitLoss(profitLoss);
+                invoiceProductRepository.save(notSoldPurchaseInvoiceProduct);
+                invoiceProductRepository.save(salesInvoiceProduct);
+                break;
+            }
+        }
+    }
+
 
     private Integer getAmountOfInvoiceProduct(InvoiceProductDto invoiceProductDto) {
         int quantity = invoiceProductDto.getQuantity();
@@ -110,12 +185,8 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
 
     @Override
-    public List<InvoiceProductDto> findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType type, ProductDto product, Integer remainingQuantity ) {
-       return invoiceProductRepository
-                .findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(type,mapperUtil.convert(product, new Product()),remainingQuantity)
-                .stream()
-                .map(invoiceProduct -> mapperUtil.convert(invoiceProduct, new InvoiceProductDto()))
-                .collect(Collectors.toList());
+    public List<InvoiceProduct> findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType type, Product product, Integer remainingQuantity ) {
+       return invoiceProductRepository.findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(type,product,remainingQuantity);
     }
 
 }
