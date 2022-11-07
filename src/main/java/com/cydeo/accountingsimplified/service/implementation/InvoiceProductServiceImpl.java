@@ -46,7 +46,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     }
 
     @Override
-    public void addInvoiceProduct(Long invoiceId, InvoiceProductDto invoiceProductDto) {
+    public void save(Long invoiceId, InvoiceProductDto invoiceProductDto) {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(invoiceId), new Invoice());
         InvoiceProduct invoiceProduct = mapperUtil.convert(invoiceProductDto, new InvoiceProduct());
         invoiceProduct.setInvoice(invoice);
@@ -58,6 +58,11 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
             invoiceProduct.setRemainingQuantity(0);
         }
         invoiceProductRepository.save(invoiceProduct);
+    }
+
+    @Override
+    public void update(InvoiceProductDto invoiceProductDto) {
+        invoiceProductRepository.save(mapperUtil.convert(invoiceProductDto, new InvoiceProduct()));
     }
 
     private Integer getAmountOfInvoiceProduct(InvoiceProductDto invoiceProductDto) {
@@ -102,10 +107,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getProfitLoss).sum();
     }
 
-    @Override
-    public void update(InvoiceProductDto invoiceProductDto) {
-        invoiceProductRepository.save(mapperUtil.convert(invoiceProductDto, new InvoiceProduct()));
-    }
+
 
     @Override
     public List<InvoiceProductDto> findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType type, ProductDto product, Integer remainingQuantity ) {

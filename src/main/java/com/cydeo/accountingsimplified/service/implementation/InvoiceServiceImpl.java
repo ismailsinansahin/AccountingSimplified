@@ -18,17 +18,14 @@ import java.util.stream.Collectors;
 public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final InvoiceProductService invoiceProductService;
-    private final AddressService addressService;
     private final ProductService productService;
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
 
     public InvoiceServiceImpl(InvoiceRepository invoiceRepository, InvoiceProductService invoiceProductService,
-                              AddressService addressService, ProductService productService,
-                              MapperUtil mapperUtil, SecurityService securityService) {
+                              ProductService productService, MapperUtil mapperUtil, SecurityService securityService) {
         this.invoiceRepository = invoiceRepository;
         this.invoiceProductService = invoiceProductService;
-        this.addressService = addressService;
         this.productService = productService;
         this.mapperUtil = mapperUtil;
         this.securityService = securityService;

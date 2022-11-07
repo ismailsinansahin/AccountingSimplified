@@ -10,7 +10,7 @@ public interface InvoiceProductService {
 
     InvoiceProductDto findInvoiceProductById(long id);
     List<InvoiceProductDto> getInvoiceProductsOfInvoice(Long invoiceId);
-    void addInvoiceProduct(Long invoiceId, InvoiceProductDto invoiceProductDto);
+    void save(Long invoiceId, InvoiceProductDto invoiceProductDto);
     void removeInvoiceProduct(Long invoiceProductId);
     int getPriceOfInvoiceProduct(Long id);
     int getTaxOfInvoiceProduct(Long id);
