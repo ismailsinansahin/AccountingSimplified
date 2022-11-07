@@ -8,7 +8,6 @@ import java.util.List;
 public interface UserService {
 
     UserDto findUserById(Long id);
-
     UserDto findByUsername(String username);
     List<UserDto> getAllUsers() throws Exception;
     UserDto create(UserDto userDto) throws Exception;

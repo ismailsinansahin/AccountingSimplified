@@ -27,15 +27,6 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public AddressDto getAddressById(Long id) throws ClassNotFoundException {
-        Optional<Address> address = addressRepository.findById(id);
-        if(!address.isPresent()){
-            throw new ClassNotFoundException("There is no address in db");
-        }
-        return mapper.convert(address, new AddressDto());
-    }
-
-    @Override
     public AddressDto update(Long id, AddressDto dto)  {
         Address address = addressRepository.findById(id).get();
         address.setAddressLine1(dto.getAddressLine1());

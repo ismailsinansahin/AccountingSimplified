@@ -28,7 +28,7 @@ public class ClientVendor extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private ClientVendorType clientVendorType;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="address_id")
     private Address address;
 

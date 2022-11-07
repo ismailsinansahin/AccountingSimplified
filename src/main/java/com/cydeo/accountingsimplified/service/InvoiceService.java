@@ -18,7 +18,6 @@ public interface InvoiceService {
     InvoiceDto update(Long invoiceId, InvoiceDto invoiceDto);
     InvoiceDto approve(Long invoiceId);
     void delete(Long invoiceId);
-
     List<InvoiceDto> getLastThreeInvoices();
 
 }
