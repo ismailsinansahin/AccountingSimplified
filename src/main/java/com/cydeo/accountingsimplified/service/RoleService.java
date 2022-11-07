@@ -9,8 +9,6 @@ public interface RoleService {
     RoleDto findRoleById(Long id);
 
     RoleDto findByDescription(String description);
-
-    List<RoleDto> findAll();
-    List<RoleDto> findAllByDescriptionOrDescription(String description,String description2);
+    List<RoleDto> getAllRolesForCurrentUser() throws Exception;
 
 }

@@ -41,7 +41,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDto findCompanyByTitle(String title) {
-        return null;
+        return mapperUtil.convert(companyRepository.findCompanyByTitle(title), new CompanyDto());
     }
 
     @Override
@@ -55,8 +55,8 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDto create(CompanyDto companyDto) {
+        companyDto.setAddress(addressService.save(companyDto.getAddress()));
         companyDto.setCompanyStatus(CompanyStatus.PASSIVE);
-        addressService.save(companyDto.getAddress());
         Company company = companyRepository.save(mapperUtil.convert(companyDto, new Company()));
         return mapperUtil.convert(company, new CompanyDto());
     }

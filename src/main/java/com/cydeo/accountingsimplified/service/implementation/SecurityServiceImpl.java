@@ -36,7 +36,7 @@ public class SecurityServiceImpl implements SecurityService {
         var currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         return userService.findByUsername(currentUsername);
     }
-
+    @Override
     public String getCurrentUserUsername(){
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }

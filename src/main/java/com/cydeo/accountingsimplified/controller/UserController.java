@@ -1,6 +1,7 @@
 package com.cydeo.accountingsimplified.controller;
 
 import com.cydeo.accountingsimplified.dto.UserDto;
+import com.cydeo.accountingsimplified.service.RoleService;
 import com.cydeo.accountingsimplified.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController {
 
     private final UserService userService;
+    private final RoleService roleService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping("/list")
@@ -28,7 +31,7 @@ public class UserController {
     @GetMapping("/create")
     public String navigateToUserCreate(Model model) throws Exception {
         model.addAttribute("newUser", new UserDto());
-        model.addAttribute("userRoles", userService.getAllRoles());
+        model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
         return "/user/user-create";
     }
 
@@ -46,7 +49,7 @@ public class UserController {
     @GetMapping("/update/{userId}")
     public String navigateToUserUpate(@PathVariable("userId") Long userId, Model model) throws Exception {
         model.addAttribute("user", userService.findUserById(userId));
-        model.addAttribute("userRoles", userService.getAllRoles());
+        model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
         return "/user/user-update";
     }
 

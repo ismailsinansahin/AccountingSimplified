@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     private final MapperUtil mapperUtil;
 
     public UserServiceImpl(UserRepository userRepository, CompanyService companyService,
-                           RoleService roleService, @ Lazy SecurityService securityService, MapperUtil mapperUtil) {
+                           RoleService roleService, @Lazy SecurityService securityService, MapperUtil mapperUtil) {
         this.userRepository = userRepository;
         this.companyService = companyService;
         this.roleService = roleService;
@@ -49,8 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers() throws Exception {
-        User currentUser = getCurrentUser();
-        if (currentUser.getRole().getDescription().equals("Root User")) {
+        if (getCurrentUser().getRole().getDescription().equals("Root User")) {
             Role role1 = mapperUtil.convert(roleService.findByDescription("Root User"), new Role());
             Role role2 = mapperUtil.convert(roleService.findByDescription("Admin"),new Role());
             return userRepository.findAllByRoleOrRole(role1, role2)
@@ -97,16 +96,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findUserById(userId);
         user.setIsDeleted(true);
         userRepository.save(user);
-    }
-
-    @Override
-    public List<RoleDto> getAllRoles(){
-        if(getCurrentUser().getRole().getDescription().equals("Root User")){
-            return roleService.findAllByDescriptionOrDescription("Root User", "Admin");
-        }
-        else {
-            return roleService.findAll();
-        }
     }
 
     private User getCurrentUser(){
