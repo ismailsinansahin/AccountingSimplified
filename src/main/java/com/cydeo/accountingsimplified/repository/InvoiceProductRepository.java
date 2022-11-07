@@ -18,6 +18,7 @@ public interface InvoiceProductRepository extends JpaRepository<InvoiceProduct, 
 
     InvoiceProduct findInvoiceProductById(Long id);
     List<InvoiceProduct> findInvoiceProductsByInvoice(Invoice invoice);
+    List<InvoiceProduct> findInvoiceProductsByInvoice_Id(Long id);
     List<InvoiceProduct> findInvoiceProductsByInvoiceInvoiceType(InvoiceType invoiceType);
     List<InvoiceProduct> findInvoiceProductsByInvoiceInvoiceStatusAndInvoiceCompany(InvoiceStatus invoiceStatus, Company company);
     List<InvoiceProduct> findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(InvoiceType invoiceType, Product product, Integer remainingQuantity);

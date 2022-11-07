@@ -18,15 +18,13 @@ import java.util.stream.Collectors;
 public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final InvoiceProductService invoiceProductService;
-    private final ProductService productService;
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
 
     public InvoiceServiceImpl(InvoiceRepository invoiceRepository, InvoiceProductService invoiceProductService,
-                              ProductService productService, MapperUtil mapperUtil, SecurityService securityService) {
+                              MapperUtil mapperUtil, SecurityService securityService) {
         this.invoiceRepository = invoiceRepository;
         this.invoiceProductService = invoiceProductService;
-        this.productService = productService;
         this.mapperUtil = mapperUtil;
         this.securityService = securityService;
     }
@@ -110,77 +108,11 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public InvoiceDto approve(Long invoiceId) {
         Invoice invoice = invoiceRepository.findInvoiceById(invoiceId);
-        List<InvoiceProductDto> invoiceProductList = invoiceProductService.getInvoiceProductsOfInvoice(invoiceId);
-        if(invoice.getInvoiceType()==InvoiceType.SALES){
-            for(InvoiceProductDto salesInvoiceProduct : invoiceProductList){
-                if(productIsEnough(salesInvoiceProduct)){
-                    updateQuantityOfProductForSalesInvoice(salesInvoiceProduct);
-                    salesInvoiceProduct.setRemainingQuantity(salesInvoiceProduct.getQuantity());
-                    invoiceProductService.update(salesInvoiceProduct);
-                    setProfitLossOfInvoiceProductsForSalesInvoice(salesInvoiceProduct);
-                }else{
-                    System.out.println("This sale cannot be completed due to insufficient quantity of the product");
-                    return null;
-                }
-            }
-        }else{
-            for(InvoiceProductDto purchaseInvoiceProduct : invoiceProductList) {
-                updateQuantityOfProductForPurchaseInvoice(purchaseInvoiceProduct);
-                purchaseInvoiceProduct.setRemainingQuantity(purchaseInvoiceProduct.getQuantity());
-                // todo toplamamiz gerekmez mi? purchaseInvoiceProduct.getRemainingQuantity +
-                invoiceProductService.update(purchaseInvoiceProduct);
-            }
-        }
+        invoiceProductService.completeApprovalProcedures(invoiceId, invoice.getInvoiceType());
         invoice.setInvoiceStatus(InvoiceStatus.APPROVED);
         invoice.setDate(LocalDate.now());
         invoiceRepository.save(invoice);
         return mapperUtil.convert(invoice, new InvoiceDto());
-    }
-
-    private boolean productIsEnough(InvoiceProductDto salesInvoiceProduct) {
-        return salesInvoiceProduct.getProduct().getQuantityInStock() >= salesInvoiceProduct.getQuantity();
-    }
-
-    private void updateQuantityOfProductForSalesInvoice(InvoiceProductDto salesInvoiceProduct) {
-        ProductDto productDto = salesInvoiceProduct.getProduct();
-        productDto.setQuantityInStock(productDto.getQuantityInStock() - salesInvoiceProduct.getQuantity());
-        productService.update(productDto.getId(), productDto);
-    }
-
-    private void updateQuantityOfProductForPurchaseInvoice(InvoiceProductDto purchaseInvoiceProduct) {
-        ProductDto productDto = purchaseInvoiceProduct.getProduct();
-        productDto.setQuantityInStock(productDto.getQuantityInStock() + purchaseInvoiceProduct.getQuantity());
-        productService.update(productDto.getId(), productDto);
-    }
-
-    private void setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProductDto salesInvoiceProduct) {
-        List<InvoiceProductDto> notSoldPurchaseInvoiceProducts = invoiceProductService.findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType.PURCHASE, salesInvoiceProduct.getProduct(), 0);
-        for (InvoiceProductDto notSoldPurchaseInvoiceProduct : notSoldPurchaseInvoiceProducts) {
-            if (salesInvoiceProduct.getRemainingQuantity() > notSoldPurchaseInvoiceProduct.getRemainingQuantity()) {
-                int costTotalForQty = notSoldPurchaseInvoiceProduct.getTotal() * notSoldPurchaseInvoiceProduct.getRemainingQuantity() / notSoldPurchaseInvoiceProduct.getQuantity();
-                int salesPriceForQty = salesInvoiceProduct.getPrice() * notSoldPurchaseInvoiceProduct.getRemainingQuantity();
-                int salesTaxForQty = salesPriceForQty * salesInvoiceProduct.getTax() / 100;
-                int salesTotalForQty = salesPriceForQty + salesTaxForQty;
-                int profitLoss = salesInvoiceProduct.getProfitLoss() + (salesTotalForQty - costTotalForQty);
-                salesInvoiceProduct.setRemainingQuantity(salesInvoiceProduct.getRemainingQuantity() - notSoldPurchaseInvoiceProduct.getRemainingQuantity());
-                notSoldPurchaseInvoiceProduct.setRemainingQuantity(0);
-                salesInvoiceProduct.setProfitLoss(profitLoss);
-                invoiceProductService.update(notSoldPurchaseInvoiceProduct);
-                invoiceProductService.update(salesInvoiceProduct);
-            } else {
-                int costTotalForQty = notSoldPurchaseInvoiceProduct.getTotal() * salesInvoiceProduct.getRemainingQuantity() / notSoldPurchaseInvoiceProduct.getQuantity();
-                int salesPriceForQty = salesInvoiceProduct.getPrice() * salesInvoiceProduct.getRemainingQuantity();
-                int salesTaxForQty = salesPriceForQty * salesInvoiceProduct.getTax() / 100;
-                int salesTotalForQty = salesPriceForQty + salesTaxForQty;
-                int profitLoss = salesInvoiceProduct.getProfitLoss() + salesTotalForQty - costTotalForQty;
-                notSoldPurchaseInvoiceProduct.setRemainingQuantity(notSoldPurchaseInvoiceProduct.getRemainingQuantity() - salesInvoiceProduct.getRemainingQuantity());
-                salesInvoiceProduct.setRemainingQuantity(0);
-                salesInvoiceProduct.setProfitLoss(profitLoss);
-                invoiceProductService.update(notSoldPurchaseInvoiceProduct);
-                invoiceProductService.update(salesInvoiceProduct);
-                break;
-            }
-        }
     }
 
     @Override
