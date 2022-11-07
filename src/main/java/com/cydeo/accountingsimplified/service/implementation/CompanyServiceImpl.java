@@ -24,15 +24,13 @@ public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
     private final AddressService addressService;
-    private final UserService userService;
     private final SecurityService securityService;
     private final MapperUtil mapperUtil;
 
     public CompanyServiceImpl(CompanyRepository companyRepository, AddressService addressService,
-                              UserService userService, SecurityService securityService, MapperUtil mapperUtil) {
+                              SecurityService securityService, MapperUtil mapperUtil) {
         this.companyRepository = companyRepository;
         this.addressService = addressService;
-        this.userService = userService;
         this.securityService = securityService;
         this.mapperUtil = mapperUtil;
     }
