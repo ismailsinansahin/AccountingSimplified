@@ -37,4 +37,8 @@ public class SecurityServiceImpl implements SecurityService {
         return userService.findByUsername(currentUsername);
     }
 
+    public String getCurrentUserUsername(){
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
 }

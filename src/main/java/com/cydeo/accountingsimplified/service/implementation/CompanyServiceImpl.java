@@ -2,7 +2,6 @@ package com.cydeo.accountingsimplified.service.implementation;
 
 import com.cydeo.accountingsimplified.dto.AddressDto;
 import com.cydeo.accountingsimplified.dto.CompanyDto;
-import com.cydeo.accountingsimplified.dto.UserDto;
 import com.cydeo.accountingsimplified.entity.Address;
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.enums.CompanyStatus;
@@ -11,8 +10,7 @@ import com.cydeo.accountingsimplified.repository.CompanyRepository;
 import com.cydeo.accountingsimplified.service.AddressService;
 import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.SecurityService;
-import com.cydeo.accountingsimplified.service.UserService;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -28,7 +26,7 @@ public class CompanyServiceImpl implements CompanyService {
     private final MapperUtil mapperUtil;
 
     public CompanyServiceImpl(CompanyRepository companyRepository, AddressService addressService,
-                              SecurityService securityService, MapperUtil mapperUtil) {
+                              @Lazy SecurityService securityService, MapperUtil mapperUtil) {
         this.companyRepository = companyRepository;
         this.addressService = addressService;
         this.securityService = securityService;
@@ -39,6 +37,11 @@ public class CompanyServiceImpl implements CompanyService {
     public CompanyDto findCompanyById(Long id) {
         Company company = companyRepository.findById(id).get();
         return mapperUtil.convert(company, new CompanyDto());
+    }
+
+    @Override
+    public CompanyDto findCompanyByTitle(String title) {
+        return null;
     }
 
     @Override

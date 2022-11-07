@@ -7,6 +7,8 @@ import java.util.List;
 public interface CompanyService {
 
     CompanyDto findCompanyById(Long id);
+
+    CompanyDto findCompanyByTitle(String title);
     CompanyDto getCompanyByLoggedInUser();
     List<CompanyDto> getAllCompanies();
     CompanyDto create(CompanyDto companyDto);

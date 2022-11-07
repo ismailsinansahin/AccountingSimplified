@@ -69,7 +69,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         List<InvoiceProduct> invoiceProductList = invoiceProductRepository.findInvoiceProductsByInvoice_Id(invoiceId);
         if(type==InvoiceType.SALES){
             for(InvoiceProduct salesInvoiceProduct : invoiceProductList){
-                if(checkQuantity(salesInvoiceProduct)){
+                if(checkProductQuantity(salesInvoiceProduct)){
                     updateQuantityOfProductForSalesInvoice(salesInvoiceProduct);
                     salesInvoiceProduct.setRemainingQuantity(salesInvoiceProduct.getQuantity());
                     invoiceProductRepository.save(salesInvoiceProduct);
@@ -88,7 +88,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         }
     }
 
-    private boolean checkQuantity(InvoiceProduct salesInvoiceProduct) {
+    private boolean checkProductQuantity(InvoiceProduct salesInvoiceProduct) {
         return salesInvoiceProduct.getProduct().getQuantityInStock() >= salesInvoiceProduct.getQuantity();
     }
 
