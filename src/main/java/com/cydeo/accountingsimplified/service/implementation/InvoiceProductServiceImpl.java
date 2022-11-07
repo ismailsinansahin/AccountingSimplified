@@ -65,11 +65,6 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     }
 
     @Override
-    public void update(InvoiceProductDto invoiceProductDto) {
-        invoiceProductRepository.save(mapperUtil.convert(invoiceProductDto, new InvoiceProduct()));
-    }
-
-    @Override
     public void completeApprovalProcedures(Long invoiceId, InvoiceType type) {
         List<InvoiceProduct> invoiceProductList = invoiceProductRepository.findInvoiceProductsByInvoice_Id(invoiceId);
         if(type==InvoiceType.SALES){
