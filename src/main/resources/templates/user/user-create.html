@@ -108,6 +108,19 @@
                                 </div>
                               </div>
                             </div>
+                            <div class="col-12 col-md-4">
+                              <div class="form-group">
+                                <div class="controls">
+                                  <label>Company</label>
+                                  <select id="company" class="form-control" th:field="*{company}" required>
+                                    <option th:value="''" th:text="'Select'" selected></option>
+                                    <option th:each= "company:${companies}"
+                                            th:value="${company.id}"
+                                            th:text="${company.getTitle()}"></option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                           <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-3 mt-sm-2">
                             <button class="btn btn-success mb-2 mb-sm-0 mr-sm-2"

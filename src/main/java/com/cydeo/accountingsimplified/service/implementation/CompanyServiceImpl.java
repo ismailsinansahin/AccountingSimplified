@@ -48,6 +48,7 @@ public class CompanyServiceImpl implements CompanyService {
     public List<CompanyDto> getAllCompanies() {
         return companyRepository.findAll()
                 .stream()
+                .filter(company -> company.getId() != 1)
                 .sorted(Comparator.comparing(Company::getCompanyStatus))
                 .map(each -> mapperUtil.convert(each, new CompanyDto()))
                 .collect(Collectors.toList());
