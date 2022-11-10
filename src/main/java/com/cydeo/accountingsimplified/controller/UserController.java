@@ -1,6 +1,7 @@
 package com.cydeo.accountingsimplified.controller;
 
 import com.cydeo.accountingsimplified.dto.UserDto;
+import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.RoleService;
 import com.cydeo.accountingsimplified.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -16,10 +17,12 @@ public class UserController {
 
     private final UserService userService;
     private final RoleService roleService;
+    private final CompanyService companyService;
 
-    public UserController(UserService userService, RoleService roleService) {
+    public UserController(UserService userService, RoleService roleService, CompanyService companyService) {
         this.userService = userService;
         this.roleService = roleService;
+        this.companyService = companyService;
     }
 
     @GetMapping("/list")
@@ -32,6 +35,7 @@ public class UserController {
     public String navigateToUserCreate(Model model) throws Exception {
         model.addAttribute("newUser", new UserDto());
         model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
+        model.addAttribute("companies", companyService.getAllCompanies());
         return "/user/user-create";
     }
 
