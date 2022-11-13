@@ -6,10 +6,11 @@ import com.cydeo.accountingsimplified.service.RoleService;
 import com.cydeo.accountingsimplified.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/users")
@@ -32,15 +33,24 @@ public class UserController {
     }
 
     @GetMapping("/create")
-    public String navigateToUserCreate(Model model) throws Exception {
+    public String navigateToUserCreate(Model model) {
         model.addAttribute("newUser", new UserDto());
         model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
         model.addAttribute("companies", companyService.getAllCompanies());
+        model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
         return "/user/user-create";
     }
 
     @PostMapping("/create")
-    public String createNewUser(UserDto userDto) throws Exception {
+    public String createNewUser(@Valid @ModelAttribute("newUser") UserDto userDto, BindingResult result, Model model) throws Exception {
+
+        if (result.hasErrors()){
+            model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
+            model.addAttribute("companies", companyService.getAllCompanies());
+            model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
+            return "/user/user-create";
+        }
+
         userService.create(userDto);
         return "redirect:/users/list";
     }
@@ -51,7 +61,7 @@ public class UserController {
     }
 
     @GetMapping("/update/{userId}")
-    public String navigateToUserUpate(@PathVariable("userId") Long userId, Model model) throws Exception {
+    public String navigateToUserUpdate(@PathVariable("userId") Long userId, Model model) throws Exception {
         model.addAttribute("user", userService.findUserById(userId));
         model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
         return "/user/user-update";
@@ -64,7 +74,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/actions/{userId}", params = {"action=delete"})
-    public String activateCompany(@PathVariable("userId") Long userId){
+    public String deleteUser(@PathVariable("userId") Long userId){
         userService.delete(userId);
         return "redirect:/users/list";
     }

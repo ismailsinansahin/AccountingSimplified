@@ -13,6 +13,7 @@ public interface UserService {
     UserDto create(UserDto userDto) throws Exception;
     UserDto update(Long id, UserDto userDto);
     void delete(Long id);
+    String getCurrentUserRoleDescription();
 
 
 }

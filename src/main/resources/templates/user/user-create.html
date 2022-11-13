@@ -4,144 +4,178 @@
 
 <body>
 <div class="dashboard-main-wrapper">
-  <div th:replace="/fragments/header :: header"></div>
-  <div th:replace="/fragments/left-sidebar :: left-sidebar"></div>
-  <div class="dashboard-wrapper">
-    <div class="dashboard-ecommerce">
-      <div class="container-fluid dashboard-content">
-        <div class="ecommerce-widget">
-          <div class="input-group row">
-            <div class="col-auto">
-              <form>
-                <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
-                  <a id="staffListLink" class="btn bg-dark text-light mb-1"
-                     th:href="@{/users/list}"><i class="fa fa-list mr-1"></i>User List</a>&nbsp&nbsp
-                </div>
-              </form>
-            </div>
-          </div><br>
-          <header class="panel-heading">
-            <h2 class="panel-title">Create User</h2>
-          </header>
-          <div class="row">
-            <div class="col-12">
-              <div class="card">
-                <div class="card-content">
-                  <div class="card-body">
-                    <div class="tab-content">
-                      <div class="tab-pane fade mt-2 show active" id="account" role="tabpanel"
-                           aria-labelledby="account-tab">
-                        <form class="needs-validation" novalidate
-                              th:action="@{/users/create}"
-                              th:method="post" th:object="${newUser}">
-                          <div class="row">
-                            <div class="col-12 col-md-4">
-                              <div class="form-group">
-                                <div class="controls">
-                                  <label>First Name</label>
-                                  <input type="text" th:field="*{firstname}" placeholder="First Name"
-                                         class="form-control" required="required" aria-invalid="false">
+    <div th:replace="/fragments/header :: header"></div>
+    <div th:replace="/fragments/left-sidebar :: left-sidebar"></div>
+    <div class="dashboard-wrapper">
+        <div class="dashboard-ecommerce">
+            <div class="container-fluid dashboard-content">
+                <div class="ecommerce-widget">
+                    <div class="input-group row">
+                        <div class="col-auto">
+                            <form>
+                                <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
+                                    <a id="staffListLink" class="btn bg-dark text-light mb-1"
+                                       th:href="@{/users/list}"><i class="fa fa-list mr-1"></i>User List</a>&nbsp&nbsp
                                 </div>
-                              </div>
-                            </div>
-                            <div class="col-12 col-md-4">
-                              <div class="form-group">
-                                <div class="controls">
-                                  <label>Last Name</label>
-                                  <input type="text" th:field="*{lastname}" placeholder="Last Name"
-                                         class="form-control" required="required" aria-invalid="false">
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-12 col-md-4">
-                              <div class="form-group">
-                                <div class="controls">
-                                  <label>Username</label>
-                                  <input type="text" th:field="*{username}" placeholder="Username"
-                                         class="form-control" required="required" aria-invalid="false">
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-12 col-md-4">
-                              <div class="form-group">
-                                <div class="controls">
-                                  <label>Phone</label>
-                                  <input type="text" th:field="*{phone}" placeholder="Phone"
-                                         class="form-control" required="required" aria-invalid="false">
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-12 col-md-4">
-                              <div class="form-group">
-                                <div class="controls">
-                                  <label>Password</label>
-                                  <input type="password" th:field="*{password}" placeholder="Password"
-                                         class="form-control" required="required" aria-invalid="false">
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-12 col-md-4">
-                              <div class="form-group">
-                                <div class="controls">
-                                  <label>Confirm Password</label>
-                                  <input type="password" th:field="*{confirmPassword}" placeholder="Confirm Password"
-                                         class="form-control" required="required" aria-invalid="false">
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-12 col-md-4">
-                              <div class="form-group">
-                                <div class="controls">
-                                  <label>Role</label>
-                                  <select id="role" class="form-control" th:field="*{role}" required>
-                                    <option th:value="''" th:text="'Select'" selected></option>
-                                    <option th:each= "role:${userRoles}"
-                                            th:value="${role.id}"
-                                            th:text="${role.description}"></option>
-                                  </select>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-12 col-md-4">
-                              <div class="form-group">
-                                <div class="controls">
-                                  <label>Company</label>
-                                  <select id="company" class="form-control" th:field="*{company}" required>
-                                    <option th:value="''" th:text="'Select'" selected></option>
-                                    <option th:each= "company:${companies}"
-                                            th:value="${company.id}"
-                                            th:text="${company.getTitle()}"></option>
-                                  </select>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-3 mt-sm-2">
-                            <button class="btn btn-success mb-2 mb-sm-0 mr-sm-2"
-                                    type="submit" name="action" value="save">Save
-                            </button>
-                            <button class="btn btn-danger mb-2 mb-sm-0 mr-sm-2"
-                                    type="reset">Cancel
-                            </button>
-                          </div>
-                        </form>
-                      </div>
+                            </form>
+                        </div>
                     </div>
-                  </div>
+                    <br>
+                    <header class="panel-heading">
+                        <h2 class="panel-title">Create User</h2>
+                    </header>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <div class="tab-content">
+                                            <div class="tab-pane fade mt-2 show active" id="account" role="tabpanel"
+                                                 aria-labelledby="account-tab">
+
+                                                <!--                        form starts -->
+                                                <form th:action="@{/users/create}" th:method="post"
+                                                      th:object="${newUser}">
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-4">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label>First Name</label>
+                                                                    <input type="text" th:field="*{firstname}"
+                                                                           placeholder="First Name"
+                                                                           class="form-control">
+                                                                    <p th:if="${#fields.hasErrors('firstname')}"
+                                                                       th:style="${'color: red;'}"
+                                                                       th:errors="*{firstname}"></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-4">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label>Last Name</label>
+                                                                    <input type="text" th:field="*{lastname}"
+                                                                           placeholder="Last Name" class="form-control">
+                                                                    <p th:if="${#fields.hasErrors('lastname')}"
+                                                                       th:style="${'color: red;'}"
+                                                                       th:errors="*{lastname}"></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-4">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label>Email</label>
+                                                                    <input type="email" th:field="*{username}"
+                                                                           placeholder="e-mail" class="form-control">
+                                                                    <p th:if="${#fields.hasErrors('username')}"
+                                                                       th:style="${'color: red;'}"
+                                                                       th:errors="*{username}"></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-4">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label>Phone</label>
+                                                                    <input type="tel" th:field="*{phone}"
+                                                                           placeholder="Phone" class="form-control">
+                                                                    <p th:if="${#fields.hasErrors('phone')}"
+                                                                       th:style="${'color: red;'}"
+                                                                       th:errors="*{phone}"></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-4">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label>Password</label>
+                                                                    <input type="password" th:field="*{password}"
+                                                                           placeholder="Password" class="form-control">
+                                                                    <p th:if="${#fields.hasErrors('password')}"
+                                                                       th:style="${'color: red;'}"
+                                                                       th:errors="*{password}"></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-4">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label>Confirm Password</label>
+                                                                    <input type="password" th:field="*{confirmPassword}"
+                                                                           placeholder="Confirm Password"
+                                                                           class="form-control">
+                                                                    <p th:if="${#fields.hasErrors('confirmPassword')}"
+                                                                       th:style="${'color: red;'}"
+                                                                       th:errors="*{confirmPassword}"></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-4">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label>Role</label>
+                                                                    <select id="role" name="role" class="custom-select"
+                                                                            th:with="role=*{role}">
+                                                                        <option th:value="''"
+                                                                                th:text="'Select'"></option>
+                                                                        <option th:each="role:${userRoles}"
+                                                                                th:value="${role.id}"
+                                                                                th:text="${role.description}"></option>
+                                                                    </select>
+                                                                    <p th:if="${#fields.hasErrors('role')}"
+                                                                       th:style="${'color: red;'}"
+                                                                       th:errors="*{role}"></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div th:if="'Root User'== ${currentUserRole}"
+                                                             class="col-12 col-md-4">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label>Company</label>
+                                                                    <select id="company" name="company" class="custom-select"
+                                                                            th:field="*{company}">
+                                                                        <option th:value="''"
+                                                                                th:text="'Select'"></option>
+                                                                        <option th:each="company:${companies}"
+                                                                                th:value="${company.id}"
+                                                                                th:text="${company.getTitle()}"></option>
+                                                                    </select>
+                                                                    <p th:if="${#fields.hasErrors('company')}"
+                                                                       th:style="${'color: red;'}"
+                                                                       th:errors="*{company}"></p>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-3 mt-sm-2">
+                                                        <button class="btn btn-success mb-2 mb-sm-0 mr-sm-2"
+                                                                type="submit" name="action" value="save">Save
+                                                        </button>
+                                                        <button class="btn btn-danger mb-2 mb-sm-0 mr-sm-2"
+                                                                type="reset">Cancel
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 <div th:replace="/fragments/footer :: footer"></div>
 <div th:replace="/fragments/javascript :: js"></div>

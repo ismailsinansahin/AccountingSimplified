@@ -14,22 +14,22 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=false")
 public class User extends BaseEntity{
 
-    @NotNull
-    @Column(unique = true)
+//    @NotNull
+//    @Column(unique = true)
     private String username;
 
-    @NotNull
+//    @NotNull
     private String password;
 
-    @NotNull
+//    @NotNull
     private String firstname;
 
-    @NotNull
+//    @NotNull
     private String lastname;
 
     private String phone;
 
-    @NotNull
+//    @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;

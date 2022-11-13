@@ -18,9 +18,12 @@ public class CompanyDtoConverter implements Converter<String,CompanyDto> {
         this.companyService = companyService;
     }
 
-    @SneakyThrows
+//    @SneakyThrows
     @Override
     public CompanyDto convert(String id){
+        // it throws error if user selects "Select" even with @SneakyThrows
+        if (id == null || id.isBlank())
+            return null;
         return companyService.findCompanyById(Long.parseLong(id));
     }
 
