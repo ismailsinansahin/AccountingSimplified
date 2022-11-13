@@ -40,12 +40,14 @@
                                 <div class="controls">
                                   <label>First Name</label>
                                   <input type="text" th:field="*{firstname}" placeholder="First Name" class="form-control">
-                                  <div class="invalid-feedback" th:if="${#fields.hasErrors('firstname')}">
-                                    <ul>
-                                      <li th:each="err : ${#fields.errors('firstname')}"
-                                          th:text="${err}"></li>
-                                    </ul>
-                                  </div>
+                                  <p th:if="${#fields.hasErrors('firstname')}" th:style="${'color: red;'}"
+                                     th:errors="*{firstname}"></p>
+<!--                                  <div class="invalid-feedback" th:if="${#fields.hasErrors('firstname')}">-->
+<!--                                    <ul>-->
+<!--                                      <li th:each="err : ${#fields.errors('firstname')}"-->
+<!--                                          th:text="${err}"></li>-->
+<!--                                    </ul>-->
+<!--                                  </div>-->
                                 </div>
                               </div>
                             </div>
@@ -54,12 +56,14 @@
                                 <div class="controls">
                                   <label>Last Name</label>
                                   <input type="text" th:field="*{lastname}" placeholder="Last Name" class="form-control">
-                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('lastname')}">
-                                        <ul>
-                                            <li th:each="err : ${#fields.errors('lastname')}"
-                                                th:text="${err}"></li>
-                                        </ul>
-                                    </div>
+                                  <p th:if="${#fields.hasErrors('lastname')}" th:style="${'color: red;'}"
+                                     th:errors="*{lastname}"></p>
+<!--                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('lastname')}">-->
+<!--                                        <ul>-->
+<!--                                            <li th:each="err : ${#fields.errors('lastname')}"-->
+<!--                                                th:text="${err}"></li>-->
+<!--                                        </ul>-->
+<!--                                    </div>-->
                                 </div>
                               </div>
                             </div>
@@ -68,14 +72,16 @@
                             <div class="col-12 col-md-4">
                               <div class="form-group">
                                 <div class="controls">
-                                  <label>Username</label>
-                                  <input type="text" th:field="*{username}" placeholder="Username" class="form-control">
-                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}">
-                                        <ul>
-                                            <li th:each="err : ${#fields.errors('username')}"
-                                                th:text="${err}"></li>
-                                        </ul>
-                                    </div>
+                                  <label>Email</label>
+                                  <input type="email" th:field="*{username}" placeholder="e-mail" class="form-control">
+                                  <p th:if="${#fields.hasErrors('username')}" th:style="${'color: red;'}"
+                                     th:errors="*{username}"></p>
+<!--                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}">-->
+<!--                                        <ul>-->
+<!--                                            <li th:each="err : ${#fields.errors('username')}"-->
+<!--                                                th:text="${err}"></li>-->
+<!--                                        </ul>-->
+<!--                                    </div>-->
                                 </div>
                               </div>
                             </div>
@@ -84,12 +90,14 @@
                                 <div class="controls">
                                   <label>Phone</label>
                                   <input type="text" th:field="*{phone}" placeholder="Phone" class="form-control">
-                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('phone')}">
-                                        <ul>
-                                            <li th:each="err : ${#fields.errors('phone')}"
-                                                th:text="${err}"></li>
-                                        </ul>
-                                    </div>
+                                  <p th:if="${#fields.hasErrors('phone')}" th:style="${'color: red;'}"
+                                     th:errors="*{phone}"></p>
+<!--                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('phone')}">-->
+<!--                                        <ul>-->
+<!--                                            <li th:each="err : ${#fields.errors('phone')}"-->
+<!--                                                th:text="${err}"></li>-->
+<!--                                        </ul>-->
+<!--                                    </div>-->
                                 </div>
                               </div>
                             </div>
@@ -100,12 +108,14 @@
                                 <div class="controls">
                                   <label>Password</label>
                                   <input type="password" th:field="*{password}" placeholder="Password" class="form-control">
-                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}">
-                                        <ul>
-                                            <li th:each="err : ${#fields.errors('password')}"
-                                                th:text="${err}"></li>
-                                        </ul>
-                                    </div>
+                                  <p th:if="${#fields.hasErrors('password')}" th:style="${'color: red;'}"
+                                     th:errors="*{password}"></p>
+<!--                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}">-->
+<!--                                        <ul>-->
+<!--                                            <li th:each="err : ${#fields.errors('password')}"-->
+<!--                                                th:text="${err}"></li>-->
+<!--                                        </ul>-->
+<!--                                    </div>-->
                                 </div>
                               </div>
                             </div>
@@ -114,12 +124,14 @@
                                 <div class="controls">
                                   <label>Confirm Password</label>
                                   <input type="password" th:field="*{confirmPassword}" placeholder="Confirm Password" class="form-control">
-                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('confirmPassword')}">
-                                        <ul>
-                                            <li th:each="err : ${#fields.errors('confirmPassword')}"
-                                                th:text="${err}"></li>
-                                        </ul>
-                                    </div>
+                                  <p th:if="${#fields.hasErrors('confirmPassword')}" th:style="${'color: red;'}"
+                                     th:errors="*{confirmPassword}"></p>
+<!--                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('confirmPassword')}">-->
+<!--                                        <ul>-->
+<!--                                            <li th:each="err : ${#fields.errors('confirmPassword')}"-->
+<!--                                                th:text="${err}"></li>-->
+<!--                                        </ul>-->
+<!--                                    </div>-->
                                 </div>
                               </div>
                             </div>
@@ -130,17 +142,19 @@
                                 <div class="controls">
                                   <label>Role</label>
                                   <select name="role" class="custom-select" th:field="*{role}">
-                                    <option th:value="'1'" th:text="Select"></option>
+<!--                                    <option th:value="''" th:text="Select"></option>-->
                                     <option th:each="role:${userRoles}"
                                             th:value="${role.id}"
                                             th:text="${role.description}"></option>
                                   </select>
-                                  <div class="invalid-feedback" th:if="${#fields.hasErrors('role')}">
-                                    <ul>
-                                      <li th:each="err : ${#fields.errors('role')}"
-                                          th:text="${err}"></li>
-                                    </ul>
-                                  </div>
+                                  <p th:if="${#fields.hasErrors('role')}" th:style="${'color: red;'}"
+                                     th:errors="*{role}"></p>
+<!--                                  <div class="invalid-feedback" th:if="${#fields.hasErrors('role')}">-->
+<!--                                    <ul>-->
+<!--                                      <li th:each="err : ${#fields.errors('role')}"-->
+<!--                                          th:text="${err}"></li>-->
+<!--                                    </ul>-->
+<!--                                  </div>-->
                                 </div>
                               </div>
                             </div>
@@ -149,17 +163,19 @@
                                 <div class="controls">
                                   <label>Company</label>
                                   <select id="company" class="form-control" th:field="*{company}">
-                                    <option th:value="'1'" th:text="'Select'"></option>
+<!--                                    <option th:value="''" th:text="'Select'"></option>-->
                                     <option th:each= "company:${companies}"
                                             th:value="${company.id}"
                                             th:text="${company.getTitle()}"></option>
                                   </select>
-                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('company')}">
-                                        <ul>
-                                            <li th:each="err : ${#fields.errors('company')}"
-                                                th:text="${err}"></li>
-                                        </ul>
-                                    </div>
+                                  <p th:if="${#fields.hasErrors('company')}" th:style="${'color: red;'}"
+                                     th:errors="*{company}"></p>
+<!--                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('company')}">-->
+<!--                                        <ul>-->
+<!--                                            <li th:each="err : ${#fields.errors('company')}"-->
+<!--                                                th:text="${err}"></li>-->
+<!--                                        </ul>-->
+<!--                                    </div>-->
                                 </div>
                               </div>
                             </div>

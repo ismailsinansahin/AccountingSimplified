@@ -13,36 +13,37 @@ public class UserDto {
 
     private Long id;
 
-    @NotBlank
-    @Size(min = 2)
+//    @NotBlank // @Size is enough to check if it is not blank
+    @Size(min = 2, max = 50)
     private String firstname;
 
-    @NotBlank
-    @Size(min = 2)
+//    @NotBlank // @Size is enough to check if it is not blank
+    @Size(min = 2, max = 50)
     private String lastname;
 
     @Column(unique = true)
     @Email
-    @NotBlank
+    @NotBlank   // @Email is not enough to check if it is not blank
     private String username;
 
-    @NotBlank
+//    @NotBlank   // @Pattern is enough to check if it is not blank
     @Pattern(regexp = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}")
     private String password;
 
-//    @NotNull
+    @NotNull
     private String confirmPassword;
 
     // https://www.baeldung.com/java-regex-validate-phone-numbers
-    @NotBlank
+//    @NotBlank // @Pattern is enough to check if it is not blank
     @Pattern(regexp = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
             + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
             + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$")
     private String phone;
 
-//    @NotNull
+    @NotNull
     private RoleDto role;
 
+    @NotNull
     private CompanyDto company;
 
 
@@ -84,7 +85,7 @@ public class UserDto {
 
     public void setPassword(String password) {
         this.password = password;
-//        checkConfirmPassword();
+        checkConfirmPassword();
     }
 
     public String getConfirmPassword() {
@@ -93,11 +94,11 @@ public class UserDto {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
-//        checkConfirmPassword();
+        checkConfirmPassword();
     }
 
     private void checkConfirmPassword() {
-        if (!this.password.equals(this.confirmPassword)) {
+        if (password != null && !password.equals(confirmPassword)) {
             this.confirmPassword = null;
         }
     }
