@@ -140,13 +140,22 @@
                             <div class="col-12 col-md-4">
                               <div class="form-group">
                                 <div class="controls">
-                                  <label>Role</label>
-                                  <select name="role" class="custom-select" th:field="*{role}">
-<!--                                    <option th:value="''" th:text="Select"></option>-->
-                                    <option th:each="role:${userRoles}"
-                                            th:value="${role.id}"
-                                            th:text="${role.description}"></option>
-                                  </select>
+                                    <label>Role</label>
+                                    <select id="role" class="form-control" th:field="*{role}">
+                                        <option th:value="''" th:text="'Select'" selected></option>
+                                        <option th:each= "role:${userRoles}"
+                                                th:value="${role.id}"
+                                                th:text="${role.description}"></option>
+                                    </select>
+
+
+<!--                                  <label>Role</label>-->
+<!--                                  <select name="role" class="custom-select" th:field="*{role}">-->
+<!--&lt;!&ndash;                                    <option th:value="''" th:text="Select"></option>&ndash;&gt;-->
+<!--                                    <option th:each="role:${userRoles}"-->
+<!--                                            th:value="${role.id}"-->
+<!--                                            th:text="${role.description}"></option>-->
+<!--                                  </select>-->
                                   <p th:if="${#fields.hasErrors('role')}" th:style="${'color: red;'}"
                                      th:errors="*{role}"></p>
 <!--                                  <div class="invalid-feedback" th:if="${#fields.hasErrors('role')}">-->
@@ -163,7 +172,7 @@
                                 <div class="controls">
                                   <label>Company</label>
                                   <select id="company" class="form-control" th:field="*{company}">
-<!--                                    <option th:value="''" th:text="'Select'"></option>-->
+                                    <option th:value="''" th:text="'Select'"></option>
                                     <option th:each= "company:${companies}"
                                             th:value="${company.id}"
                                             th:text="${company.getTitle()}"></option>
