@@ -7,6 +7,7 @@ import com.cydeo.accountingsimplified.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -58,7 +59,7 @@ public class UserController {
     }
 
     @GetMapping("/update/{userId}")
-    public String navigateToUserUpate(@PathVariable("userId") Long userId, Model model) throws Exception {
+    public String navigateToUserUpdate(@PathVariable("userId") Long userId, Model model) throws Exception {
         model.addAttribute("user", userService.findUserById(userId));
         model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
         return "/user/user-update";
