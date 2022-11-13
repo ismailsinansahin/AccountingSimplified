@@ -38,23 +38,23 @@ insert into users(insert_date_time, insert_user_id, is_deleted, last_update_date
 values
 -- COMPANY-1 / CYDEO / ROOT USER
        ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
-        'jt@cydeo.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
+        'root@cydeo.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
         'Jay', 'Thunder', '1-852-564-5874', 1, 1),
 -- COMPANY-2 / ADMIN
        ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
-        'mg@greentech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
+        'admin@greentech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
         'Mary', 'Grant', '1-234-345-4362', 2, 2),
 -- COMPANY-2 / MANAGER
        ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
-        'rn@redtech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
+        'manager@redtech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
         'Robert', 'Noah', '1-852-564-5874', 3, 2),
 -- COMPANY-2 / EMPLOYEE
        ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
-        'mt@greentech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
+        'employee@greentech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
         'Mike', 'Times', '1-854-741-8569', 4, 2),
 -- COMPANY-3
        ('2021-09-09 00:00:00', 1, false, '2021-09-09 00:00:00', 1,
-        'cb@greentech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
+        'admin@bluetech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
         'Chris', 'Brown', '1-235-258-3544', 2, 3);
 
 insert into clients_vendors(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,

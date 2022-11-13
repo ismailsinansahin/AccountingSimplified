@@ -103,4 +103,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(currentUserName);
     }
 
+    public String getCurrentUserRoleDescription(){
+        return getCurrentUser().getRole().getDescription();
+    }
+
 }

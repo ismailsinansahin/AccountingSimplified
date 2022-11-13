@@ -33,10 +33,11 @@ public class UserController {
     }
 
     @GetMapping("/create")
-    public String navigateToUserCreate(Model model) throws Exception {
+    public String navigateToUserCreate(Model model) {
         model.addAttribute("newUser", new UserDto());
         model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
         model.addAttribute("companies", companyService.getAllCompanies());
+        model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
         return "/user/user-create";
     }
 
@@ -46,6 +47,7 @@ public class UserController {
         if (result.hasErrors()){
             model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
             model.addAttribute("companies", companyService.getAllCompanies());
+            model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
             return "/user/user-create";
         }
 
@@ -72,7 +74,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/actions/{userId}", params = {"action=delete"})
-    public String activateCompany(@PathVariable("userId") Long userId){
+    public String deleteUser(@PathVariable("userId") Long userId){
         userService.delete(userId);
         return "redirect:/users/list";
     }

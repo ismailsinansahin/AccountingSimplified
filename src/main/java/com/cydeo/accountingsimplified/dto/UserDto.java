@@ -43,7 +43,7 @@ public class UserDto {
     @NotNull
     private RoleDto role;
 
-    @NotNull
+//    @NotNull // it should be null if current user is not root user
     private CompanyDto company;
 
 

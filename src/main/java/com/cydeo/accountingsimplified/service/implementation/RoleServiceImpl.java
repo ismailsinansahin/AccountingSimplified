@@ -7,8 +7,8 @@ import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.RoleRepository;
 import com.cydeo.accountingsimplified.service.RoleService;
 import com.cydeo.accountingsimplified.service.SecurityService;
-import org.springframework.stereotype.Service;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,14 +38,14 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<RoleDto> getAllRolesForCurrentUser(){
+    public List<RoleDto> getAllRolesForCurrentUser() {
         UserDto user = securityService.getLoggedInUser();
-        if(user.getRole().getDescription().equals("Root User")){
+        if (user.getRole().getDescription().equals("Root User")) {
             return findAllByDescriptionOrDescription("Root User", "Admin");
-        }
-        else {
+        } else {
             return roleRepository.findAll()
                     .stream()
+                    .filter(role -> !role.getDescription().equals("Root User"))
                     .map(role -> mapperUtil.convert(role, new RoleDto()))
                     .collect(Collectors.toList());
         }
