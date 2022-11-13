@@ -43,7 +43,6 @@
                                                                 <tr>
                                                                     <th scope="col">#</th>
                                                                     <th scope="col">Title</th>
-                                                                    <th scope="col">Website</th>
                                                                     <th scope="col">Phone</th>
                                                                     <th scope="col">City</th>
                                                                     <th scope="col">State</th>
@@ -56,7 +55,6 @@
                                                                     th:style="${company.companyStatus.value} == 'Passive' ? 'background-color: #fcd7d7' : 'background-color: #eee'">
                                                                     <td th:text="${comStat.count}"></td>
                                                                     <td th:text="${company.title}"></td>
-                                                                    <td th:text="${company.website}"></td>
                                                                     <td th:text="${company.phone}"></td>
                                                                     <td th:text="${company.address.city}"></td>
                                                                     <td th:text="${company.address.state}"></td>

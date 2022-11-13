@@ -11,7 +11,7 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav flex-column">
                             <li class="nav-divider"></li>
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('Root User')">
+                            <li class="nav-item" sec:authorize="hasAnyAuthority('Root User')" >
                                 <a class="nav-link active"
                                    href="#"
                                    data-toggle="collapse"
@@ -45,7 +45,7 @@
                                     <ul class="nav flex-column">
                                         <li class="nav-item" sec:authorize="hasAnyAuthority('Admin')">
                                             <a class="nav-link" th:href="@{/users/list}">User Registration</a></li>
-                                        <li class="nav-item" sec:authorize="hasAnyAuthority('Manager','Employee')">
+                                        <li class="nav-item" sec:authorize="hasAnyAuthority('Admin', 'Manager','Employee')">
                                             <a class="nav-link" th:href="@{/clientVendors/list}">Client/Vendor Registration</a></li>
                                     </ul>
                                 </div>

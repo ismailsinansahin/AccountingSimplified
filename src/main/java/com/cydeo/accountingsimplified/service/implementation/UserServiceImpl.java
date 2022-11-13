@@ -2,7 +2,6 @@ package com.cydeo.accountingsimplified.service.implementation;
 
 import com.cydeo.accountingsimplified.dto.RoleDto;
 import com.cydeo.accountingsimplified.dto.UserDto;
-import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.entity.Role;
 import com.cydeo.accountingsimplified.entity.User;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
@@ -21,15 +20,13 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final CompanyService companyService;
     private final RoleService roleService;
     private final SecurityService securityService;
     private final MapperUtil mapperUtil;
 
-    public UserServiceImpl(UserRepository userRepository, CompanyService companyService,
-                           RoleService roleService, @Lazy SecurityService securityService, MapperUtil mapperUtil) {
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService,
+                           @Lazy SecurityService securityService, MapperUtil mapperUtil) {
         this.userRepository = userRepository;
-        this.companyService = companyService;
         this.roleService = roleService;
         this.securityService = securityService;
         this.mapperUtil = mapperUtil;
@@ -67,10 +64,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto create(UserDto userDto) throws Exception {
         User user = mapperUtil.convert(userDto, new User());
-        if(user.getRole().getDescription().equals("Root User")){
-            user.setCompany(mapperUtil.convert(companyService.findCompanyByTitle("CYDEO"), new Company()));
-        }
-        else if(!user.getRole().getDescription().equals("Admin")){
+        if(user.getCompany() == null){
             user.setCompany(getCurrentUser().getCompany());
         }
         userRepository.save(user);

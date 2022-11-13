@@ -55,6 +55,13 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    public List<CompanyDto> getAllActiveCompanies() {
+        return getAllCompanies().stream()
+                .filter(companyDto -> companyDto.getCompanyStatus().equals(CompanyStatus.ACTIVE))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public CompanyDto create(CompanyDto companyDto) {
         companyDto.setAddress(addressService.save(companyDto.getAddress()));
         companyDto.setCompanyStatus(CompanyStatus.PASSIVE);

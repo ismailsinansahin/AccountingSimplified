@@ -36,7 +36,7 @@ public class UserController {
     public String navigateToUserCreate(Model model) {
         model.addAttribute("newUser", new UserDto());
         model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
-        model.addAttribute("companies", companyService.getAllCompanies());
+        model.addAttribute("companies", companyService.getAllActiveCompanies());
         model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
         return "/user/user-create";
     }
