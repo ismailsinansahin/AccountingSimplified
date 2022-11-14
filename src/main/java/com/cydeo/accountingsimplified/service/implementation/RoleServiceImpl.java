@@ -41,7 +41,7 @@ public class RoleServiceImpl implements RoleService {
     public List<RoleDto> getAllRolesForCurrentUser() {
         UserDto user = securityService.getLoggedInUser();
         if (user.getRole().getDescription().equals("Root User")) {
-            return findAllByDescriptionOrDescription("Root User", "Admin");
+            return findAllByDescriptionOrDescription("Admin");
         } else {
             return roleRepository.findAll()
                     .stream()
@@ -51,8 +51,8 @@ public class RoleServiceImpl implements RoleService {
         }
     }
 
-    public List<RoleDto> findAllByDescriptionOrDescription(String description, String description2) {
-        List<Role> roles = roleRepository.findAllByDescriptionOrDescription(description, description2);
+    public List<RoleDto> findAllByDescriptionOrDescription(String description) {
+        List<Role> roles = roleRepository.findAllByDescription(description);
         return roles.stream()
                 .map(role -> mapperUtil.convert(role, new RoleDto()))
                 .collect(Collectors.toList());

@@ -45,7 +45,7 @@
                                                                            placeholder="First Name"
                                                                            class="form-control">
                                                                     <p th:if="${#fields.hasErrors('firstname')}"
-                                                                       th:style="${'color: red;'}"
+                                                                       class="validation"
                                                                        th:errors="*{firstname}"></p>
                                                                 </div>
                                                             </div>
@@ -57,8 +57,8 @@
                                                                     <input type="text" th:field="*{lastname}"
                                                                            placeholder="Last Name" class="form-control">
                                                                     <p th:if="${#fields.hasErrors('lastname')}"
-                                                                       th:style="${'color: red;'}"
-                                                                       th:errors="*{lastname}"></p>
+                                                                       th:errors="*{lastname}"
+                                                                        class="validation"></p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -71,7 +71,7 @@
                                                                     <input type="email" th:field="*{username}"
                                                                            placeholder="e-mail" class="form-control">
                                                                     <p th:if="${#fields.hasErrors('username')}"
-                                                                       th:style="${'color: red;'}"
+                                                                       class="validation"
                                                                        th:errors="*{username}"></p>
                                                                 </div>
                                                             </div>
@@ -83,7 +83,7 @@
                                                                     <input type="tel" th:field="*{phone}"
                                                                            placeholder="Phone" class="form-control">
                                                                     <p th:if="${#fields.hasErrors('phone')}"
-                                                                       th:style="${'color: red;'}"
+                                                                       class="validation"
                                                                        th:errors="*{phone}"></p>
                                                                 </div>
                                                             </div>
@@ -97,7 +97,7 @@
                                                                     <input type="password" th:field="*{password}"
                                                                            placeholder="Password" class="form-control">
                                                                     <p th:if="${#fields.hasErrors('password')}"
-                                                                       th:style="${'color: red;'}"
+                                                                       class="validation"
                                                                        th:errors="*{password}"></p>
                                                                 </div>
                                                             </div>
@@ -110,7 +110,7 @@
                                                                            placeholder="Confirm Password"
                                                                            class="form-control">
                                                                     <p th:if="${#fields.hasErrors('confirmPassword')}"
-                                                                       th:style="${'color: red;'}"
+                                                                       class="validation"
                                                                        th:errors="*{confirmPassword}"></p>
                                                                 </div>
                                                             </div>
@@ -130,7 +130,7 @@
                                                                                 th:text="${role.description}"></option>
                                                                     </select>
                                                                     <p th:if="${#fields.hasErrors('role')}"
-                                                                       th:style="${'color: red;'}"
+                                                                       class="validation"
                                                                        th:errors="*{role}"></p>
                                                                 </div>
                                                             </div>
@@ -149,7 +149,7 @@
                                                                                 th:text="${company.getTitle()}"></option>
                                                                     </select>
                                                                     <p th:if="${#fields.hasErrors('company')}"
-                                                                       th:style="${'color: red;'}"
+                                                                       class="validation"
                                                                        th:errors="*{company}"></p>
 
                                                                 </div>
