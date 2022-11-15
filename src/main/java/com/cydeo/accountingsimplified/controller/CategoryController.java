@@ -60,6 +60,7 @@ public class CategoryController {
     public String updateCategory(@Valid @ModelAttribute("category") CategoryDto categoryDto, BindingResult bindingResult, @PathVariable("categoryId") Long categoryId) {
 
         if (bindingResult.hasErrors()) {
+            categoryDto.setId(categoryId);
             return "/category/category-update";
         }
 
