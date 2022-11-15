@@ -6,7 +6,6 @@ import com.cydeo.accountingsimplified.entity.Role;
 import com.cydeo.accountingsimplified.entity.User;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.UserRepository;
-import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.RoleService;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import com.cydeo.accountingsimplified.service.UserService;
@@ -45,10 +44,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsers() throws Exception {
-        if (getCurrentUser().getRole().getDescription().equals("Root User")) {
+    public List<UserDto> getAllUsers() {
+        if (getCurrentUserRoleDescription().equals("Root User")) {
             Role role1 = mapperUtil.convert(roleService.findByDescription("Root User"), new Role());
-            Role role2 = mapperUtil.convert(roleService.findByDescription("Admin"),new Role());
+            Role role2 = mapperUtil.convert(roleService.findByDescription("Admin"), new Role());
             return userRepository.findAllByRoleOrRole(role1, role2)
                     .stream()
                     .map(each -> mapperUtil.convert(each, new UserDto()))
@@ -64,9 +63,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto create(UserDto userDto) {
         User user = mapperUtil.convert(userDto, new User());
-        if(user.getCompany() == null){
-            user.setCompany(getCurrentUser().getCompany());
-        }
         userRepository.save(user);
         return mapperUtil.convert(user, userDto);
     }
@@ -92,18 +88,25 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    private User getCurrentUser(){
+
+    private User getCurrentUser() {
         String currentUserName = securityService.getCurrentUserUsername();
         return userRepository.findByUsername(currentUserName);
     }
 
-    public String getCurrentUserRoleDescription(){
+    @Override
+    public String getCurrentUserRoleDescription() {
         return getCurrentUser().getRole().getDescription();
     }
 
     @Override
     public Boolean validateIfEmailUnique(String email) {
         return userRepository.existsByUsername(email);
+    }
+
+    @Override
+    public UserDto getCurrentUserDto() {
+        return mapperUtil.convert(getCurrentUser(), new UserDto());
     }
 
 }

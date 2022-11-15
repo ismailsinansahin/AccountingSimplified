@@ -10,7 +10,7 @@ public interface CompanyService {
     CompanyDto findCompanyByTitle(String title);
     CompanyDto getCompanyByLoggedInUser();
     List<CompanyDto> getAllCompanies();
-    List<CompanyDto> getAllActiveCompanies();
+    List<CompanyDto> getAllSuitableCompanies();
     CompanyDto create(CompanyDto companyDto);
     CompanyDto update(Long companyId, CompanyDto companyDto) throws CloneNotSupportedException;
     CompanyDto activate(Long companyId);

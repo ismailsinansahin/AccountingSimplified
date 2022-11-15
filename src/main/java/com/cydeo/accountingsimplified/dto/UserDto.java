@@ -12,15 +12,15 @@ public class UserDto {
 
     private Long id;
 
-//    @NotBlank // @Size is enough to check if it is not blank
+    @NotBlank
     @Size(min = 2, max = 50)
     private String firstname;
 
-//    @NotBlank // @Size is enough to check if it is not blank
+    @NotBlank
     @Size(min = 2, max = 50)
     private String lastname;
 
-    @NotBlank   // @Email is not enough to check if it is not blank
+    @NotBlank
     @Email
 //    @Pattern("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$")
 //    @Pattern("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@(?!-)[a-zA-Z0-9.-]+$")    // email validation permitted by RFC 5322
@@ -44,7 +44,7 @@ public class UserDto {
     @NotNull
     private RoleDto role;
 
-//    @NotNull // it should be null if current user is not root user. we validate company at UserController
+    @NotNull
     private CompanyDto company;
 
     public Long getId() {

@@ -7,7 +7,6 @@ import com.cydeo.accountingsimplified.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -36,7 +35,7 @@ public class UserController {
     public String navigateToUserCreate(Model model) {
         model.addAttribute("newUser", new UserDto());
         model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
-        model.addAttribute("companies", companyService.getAllActiveCompanies());
+        model.addAttribute("companies", companyService.getAllSuitableCompanies());
         model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
         return "/user/user-create";
     }
@@ -49,9 +48,10 @@ public class UserController {
             if (emailExist) {
                 result.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
             }
-            if (userService.getCurrentUserRoleDescription().equalsIgnoreCase("root user") && userDto.getCompany() == null){
-                result.rejectValue("company", "NotNull.newUser.company", "Company is required field.");
-            }
+            // back-up option for company validation:
+//            if (userService.getCurrentUserRoleDescription().equalsIgnoreCase("root user") && userDto.getCompany() == null){
+//                result.rejectValue("company", "NotNull.newUser.company", "Company is required field.");
+//            }
             model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
             model.addAttribute("companies", companyService.getAllCompanies());
             model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not

@@ -156,18 +156,20 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div th:if="'Root User'== ${currentUserRole}"
+                                                        <div
                                                              class="col-12 col-md-4">
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Company</label>
                                                                     <select id="company" name="company" class="custom-select"
                                                                             th:field="*{company}">
-                                                                        <option th:value="''"
+                                                                        <option th:if="'Root User'== ${currentUserRole}"
+                                                                                th:value="''"
                                                                                 th:text="'Select'"></option>
                                                                         <option th:each="company:${companies}"
                                                                                 th:value="${company.id}"
                                                                                 th:text="${company.getTitle()}"></option>
+
                                                                     </select>
                                                                     <div th:if="${#fields.hasErrors('company')}">
                                                                         <ul>
