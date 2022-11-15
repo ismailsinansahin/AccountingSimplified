@@ -3,8 +3,10 @@ package com.cydeo.accountingsimplified.service.implementation;
 import com.cydeo.accountingsimplified.dto.CategoryDto;
 import com.cydeo.accountingsimplified.entity.Category;
 import com.cydeo.accountingsimplified.entity.Company;
+import com.cydeo.accountingsimplified.entity.Product;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.CategoryRepository;
+import com.cydeo.accountingsimplified.repository.ProductRepository;
 import com.cydeo.accountingsimplified.service.CategoryService;
 import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.SecurityService;
@@ -13,19 +15,19 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Service
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final SecurityService securityService;
+    private final ProductRepository productRepository;
     private final MapperUtil mapperUtil;
 
 
-
-    public CategoryServiceImpl(CategoryRepository categoryRepository,
-                               SecurityService securityService,
-                               MapperUtil mapperUtil) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, SecurityService securityService, ProductRepository productRepository, MapperUtil mapperUtil) {
         this.categoryRepository = categoryRepository;
         this.securityService = securityService;
+        this.productRepository = productRepository;
         this.mapperUtil = mapperUtil;
     }
 
@@ -41,8 +43,12 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository
                 .findAllByCompany(company)
                 .stream()
-                .map(each -> mapperUtil.convert(each, new CategoryDto()))
-                .collect(Collectors.toList());
+                .map(each -> {
+                    CategoryDto dto = mapperUtil.convert(each, new CategoryDto());
+                    dto.setHasProduct(hasProduct(dto.getId()));
+                    return dto;
+                }).collect(Collectors.toList());
+
     }
 
     @Override
@@ -63,8 +69,15 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void delete(Long categoryId) {
         Category category = categoryRepository.findById(categoryId).get();
+
         category.setIsDeleted(true);
         categoryRepository.save(category);
+    }
+
+    @Override
+    public boolean hasProduct(Long categoryId) {
+        List<Product> productsWithCurrentCategory = productRepository.findByCategoryId(categoryId);
+        return productsWithCurrentCategory.size() > 0;
     }
 
 
