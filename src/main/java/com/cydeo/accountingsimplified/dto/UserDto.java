@@ -12,11 +12,11 @@ public class UserDto {
 
     private Long id;
 
-    //    @NotBlank // @Size is enough to check if it is not blank
+//    @NotBlank // @Size is enough to check if it is not blank
     @Size(min = 2, max = 50)
     private String firstname;
 
-    //    @NotBlank // @Size is enough to check if it is not blank
+//    @NotBlank // @Size is enough to check if it is not blank
     @Size(min = 2, max = 50)
     private String lastname;
 
@@ -25,7 +25,7 @@ public class UserDto {
 //    @Pattern()
     private String username;
 
-    //    @NotBlank   // @Pattern is enough to check if it is not blank
+//    @NotBlank   // @Pattern is enough to check if it is not blank
     @Pattern(regexp = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}")
     private String password;
 
@@ -35,6 +35,9 @@ public class UserDto {
     //    @NotBlank // @Pattern is enough to check if it is not blank
 //    @Pattern(regexp = "^1-[0-9]{3}?-[0-9]{3}?-[0-9]{4}$")     //  format "1-xxx-xxx-xxxx"
     @Pattern(regexp = "^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$", message = "Phone should be in proper format")
+    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
+            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
+            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$")
     private String phone;
 
     @NotNull
