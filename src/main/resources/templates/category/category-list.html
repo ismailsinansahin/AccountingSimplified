@@ -51,29 +51,30 @@
                                                                 <td th:text="${comStat.count}"></td>
                                                                 <td th:text="${category.description}"></td>
                                                                 <td class="actions">
-                                                                    <form action="#" method="post"
-                                                                          data-th-action="@{/categories/actions/{id}(id=${category.getId()})}">
-                                                                        <button class="btn btn-primary mb-2 mb-sm-0 mr-sm-2"
-                                                                                type="submit" name="action"
-                                                                                value="update">Edit
+                                                                    <a th:href="@{/categories/update/{id}(id=${category.getId()})}">
+                                                                        <button type="button"
+                                                                                class="btn btn-primary mb-2 mb-sm-0 mr-sm-2">
+                                                                            Edit
                                                                         </button>
-                                                                        <span th:if="${category.hasProduct}"
-                                                                              class="d-inline-block" tabindex="0"
-                                                                              data-toggle="tooltip"
-                                                                              data-placement="right"
-                                                                              title="Can not be deleted! This Category has product/products.">
+                                                                    </a>
+                                                                    <span th:if="${category.hasProduct}"
+                                                                          class="d-inline-block" tabindex="0"
+                                                                          data-toggle="tooltip"
+                                                                          data-placement="right"
+                                                                          title="Can not be deleted! This category has product/products.">
                                                                         <button
                                                                                 class="btn btn-danger mb-2 mb-sm-0 mr-sm-2"
                                                                                 style="pointer-events: none;"
                                                                                 type="submit" disabled>Delete
                                                                         </button>
-                                                                        </span>
-                                                                        <button th:unless="${category.hasProduct}"
-                                                                                class="btn btn-danger mb-2 mb-sm-0 mr-sm-2"
-                                                                                type="submit" name="action"
-                                                                                value="delete">Delete
+                                                                    </span>
+                                                                    <a th:unless="${category.hasProduct}"
+                                                                       th:href="@{/categories/delete/{id}(id=${category.getId()})}">
+                                                                        <button type="button"
+                                                                                class="btn btn-danger mb-2 mb-sm-0 mr-sm-2">
+                                                                            Delete
                                                                         </button>
-                                                                    </form>
+                                                                    </a>
                                                                 </td>
                                                             </tr>
                                                             </tbody>

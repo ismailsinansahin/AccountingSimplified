@@ -16,6 +16,7 @@ import javax.validation.constraints.Size;
 public class CategoryDto {
 
     private Long id;
+    @NotBlank(message = "Description is a required field")
     @Size(max = 15, min = 2, message = "Description should have 2-15 characters long")
     private String description;
 
