@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto create(UserDto userDto) throws Exception {
+    public UserDto create(UserDto userDto) {
         User user = mapperUtil.convert(userDto, new User());
         if(user.getCompany() == null){
             user.setCompany(getCurrentUser().getCompany());
@@ -99,6 +99,11 @@ public class UserServiceImpl implements UserService {
 
     public String getCurrentUserRoleDescription(){
         return getCurrentUser().getRole().getDescription();
+    }
+
+    @Override
+    public Boolean validateIfEmailUnique(String email) {
+        return userRepository.existsByUsername(email);
     }
 
 }

@@ -20,8 +20,10 @@ public class UserDto {
     @Size(min = 2, max = 50)
     private String lastname;
 
-    @Email
     @NotBlank   // @Email is not enough to check if it is not blank
+    @Email
+//    @Pattern("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$")
+//    @Pattern("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@(?!-)[a-zA-Z0-9.-]+$")    // email validation permitted by RFC 5322
     private String username;
 
 //    @NotBlank   // @Pattern is enough to check if it is not blank
@@ -31,19 +33,19 @@ public class UserDto {
     @NotNull
     private String confirmPassword;
 
-    // https://www.baeldung.com/java-regex-validate-phone-numbers
 //    @NotBlank // @Pattern is enough to check if it is not blank
-    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
-            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
-            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$")
+//    @Pattern(regexp = "^1-[0-9]{3}?-[0-9]{3}?-[0-9]{4}$")                         //  format "1-xxx-xxx-xxxx"
+//    imported from https://www.baeldung.com/java-regex-validate-phone-numbers :
+    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$" // +111 (202) 555-0125  +1 (202) 555-0125
+            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"                                  // +111 123 456 789
+            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$")                     // +111 123 45 67 89
     private String phone;
 
     @NotNull
     private RoleDto role;
 
-//    @NotNull // it should be null if current user is not root user
+//    @NotNull // it should be null if current user is not root user. we validate company at UserController
     private CompanyDto company;
-
 
     public Long getId() {
         return id;
