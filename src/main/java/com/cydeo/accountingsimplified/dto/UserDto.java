@@ -3,7 +3,6 @@ package com.cydeo.accountingsimplified.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.validation.constraints.*;
 
 // we don't use lombok getter setter to be able to validate confirm password field.
@@ -21,7 +20,6 @@ public class UserDto {
     @Size(min = 2, max = 50)
     private String lastname;
 
-    @Column(unique = true)
     @Email
     @NotBlank   // @Email is not enough to check if it is not blank
     private String username;
