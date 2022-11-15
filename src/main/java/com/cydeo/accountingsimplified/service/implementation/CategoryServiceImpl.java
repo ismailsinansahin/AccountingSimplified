@@ -3,31 +3,30 @@ package com.cydeo.accountingsimplified.service.implementation;
 import com.cydeo.accountingsimplified.dto.CategoryDto;
 import com.cydeo.accountingsimplified.entity.Category;
 import com.cydeo.accountingsimplified.entity.Company;
+import com.cydeo.accountingsimplified.entity.Product;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.CategoryRepository;
+import com.cydeo.accountingsimplified.repository.ProductRepository;
 import com.cydeo.accountingsimplified.service.CategoryService;
 import com.cydeo.accountingsimplified.service.CompanyService;
+import com.cydeo.accountingsimplified.service.ProductService;
 import com.cydeo.accountingsimplified.service.SecurityService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 @Service
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final SecurityService securityService;
+
+    private final ProductService productService;
+    private final ProductRepository productRepository;
     private final MapperUtil mapperUtil;
 
-
-
-    public CategoryServiceImpl(CategoryRepository categoryRepository,
-                               SecurityService securityService,
-                               MapperUtil mapperUtil) {
-        this.categoryRepository = categoryRepository;
-        this.securityService = securityService;
-        this.mapperUtil = mapperUtil;
-    }
 
     @Override
     public CategoryDto findCategoryById(Long categoryId) {
@@ -41,8 +40,12 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository
                 .findAllByCompany(company)
                 .stream()
-                .map(each -> mapperUtil.convert(each, new CategoryDto()))
-                .collect(Collectors.toList());
+                .map(each -> {
+                    CategoryDto dto = mapperUtil.convert(each, new CategoryDto());
+                    dto.setHasProduct(hasProduct(dto.getId()));
+                    return dto;
+                }).collect(Collectors.toList());
+
     }
 
     @Override
@@ -63,8 +66,14 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void delete(Long categoryId) {
         Category category = categoryRepository.findById(categoryId).get();
+
         category.setIsDeleted(true);
         categoryRepository.save(category);
+    }
+
+    @Override
+    public boolean hasProduct(Long categoryId) {
+        return productService.findAllProductsWithCategoryId(categoryId).size() > 0;
     }
 
 

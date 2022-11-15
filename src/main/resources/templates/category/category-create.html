@@ -31,8 +31,7 @@
                     <div class="tab-content">
                       <div class="tab-pane fade mt-2 show active" id="account" role="tabpanel"
                            aria-labelledby="account-tab">
-                        <form class="needs-validation" novalidate
-                              th:action="@{/categories/create}"
+                        <form th:action="@{/categories/create}"
                               th:method="post" th:object="${newCategory}">
                           <div class="row">
                             <div class="col-12 col-md-8">
@@ -40,7 +39,13 @@
                                 <div class="controls">
                                   <label>Description</label>
                                   <input type="text" th:field="*{description}" placeholder="Description"
-                                         class="form-control" required="required" aria-invalid="false">
+                                         class="form-control">
+                                  <div th:if="${#fields.hasErrors('description')}">
+                                    <ul>
+                                      <li class="validation" th:each="err : ${#fields.errors('description')}"
+                                          th:text="${err}"></li>
+                                    </ul>
+                                  </div>
                                 </div>
                               </div>
                             </div>

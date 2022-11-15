@@ -78,7 +78,13 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
+    @Override
+    public List<ProductDto> findAllProductsWithCategoryId(Long categoryId) {
+        return productRepository.findByCategoryId(categoryId).stream()
+                .map(product -> mapperUtil.convert(product, new ProductDto()))
+                .collect(Collectors.toList());
 
+    }
 
 
 }
