@@ -63,7 +63,7 @@
                                                                           data-placement="right"
                                                                           title="Can not be deleted! This category has product/products.">
                                                                         <button
-                                                                                class="btn btn-danger mb-2 mb-sm-0 mr-sm-2"
+                                                                                class="btn btn-danger mb-2 ml-2 mb-sm-0 mr-sm-2"
                                                                                 style="pointer-events: none;"
                                                                                 type="submit" disabled>Delete
                                                                         </button>
@@ -71,7 +71,7 @@
                                                                     <a th:unless="${category.hasProduct}"
                                                                        th:href="@{/categories/delete/{id}(id=${category.getId()})}">
                                                                         <button type="button"
-                                                                                class="btn btn-danger mb-2 mb-sm-0 mr-sm-2">
+                                                                                class="btn btn-danger mb-2 ml-2 mb-sm-0 mr-sm-2">
                                                                             Delete
                                                                         </button>
                                                                     </a>
