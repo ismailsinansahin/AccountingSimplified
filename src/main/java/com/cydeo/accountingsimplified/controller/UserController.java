@@ -42,9 +42,14 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String createNewUser(@Valid @ModelAttribute("newUser") UserDto userDto, BindingResult result, Model model) throws Exception {
+    public String createNewUser(@Valid @ModelAttribute("newUser") UserDto userDto, BindingResult result, Model model) {
+        boolean emailExist = userService.validateIfEmailUnique(userDto.getUsername());
+//        boolean emailExist = false;
 
-        if (result.hasErrors()){
+        if (result.hasErrors() || emailExist){
+            if (emailExist) {
+                result.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
+            }
             model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
             model.addAttribute("companies", companyService.getAllCompanies());
             model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
