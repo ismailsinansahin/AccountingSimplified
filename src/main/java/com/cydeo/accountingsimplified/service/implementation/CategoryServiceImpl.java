@@ -9,27 +9,24 @@ import com.cydeo.accountingsimplified.repository.CategoryRepository;
 import com.cydeo.accountingsimplified.repository.ProductRepository;
 import com.cydeo.accountingsimplified.service.CategoryService;
 import com.cydeo.accountingsimplified.service.CompanyService;
+import com.cydeo.accountingsimplified.service.ProductService;
 import com.cydeo.accountingsimplified.service.SecurityService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@AllArgsConstructor
 @Service
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final SecurityService securityService;
+
+    private final ProductService productService;
     private final ProductRepository productRepository;
     private final MapperUtil mapperUtil;
 
-
-    public CategoryServiceImpl(CategoryRepository categoryRepository, SecurityService securityService, ProductRepository productRepository, MapperUtil mapperUtil) {
-        this.categoryRepository = categoryRepository;
-        this.securityService = securityService;
-        this.productRepository = productRepository;
-        this.mapperUtil = mapperUtil;
-    }
 
     @Override
     public CategoryDto findCategoryById(Long categoryId) {
@@ -76,8 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public boolean hasProduct(Long categoryId) {
-        List<Product> productsWithCurrentCategory = productRepository.findByCategoryId(categoryId);
-        return productsWithCurrentCategory.size() > 0;
+        return productService.findAllProductsWithCategoryId(categoryId).size() > 0;
     }
 
 
