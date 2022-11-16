@@ -7,7 +7,6 @@ import com.cydeo.accountingsimplified.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    public String navigateToUserList(Model model) throws Exception {
+    public String listUsers(Model model) throws Exception {
         model.addAttribute("users", userService.getAllUsers());
         return "/user/user-list";
     }
@@ -35,8 +34,8 @@ public class UserController {
     @GetMapping("/create")
     public String navigateToUserCreate(Model model) {
         model.addAttribute("newUser", new UserDto());
-        model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
-        model.addAttribute("companies", companyService.getAllActiveCompanies());
+        model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
+        model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
         model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
         return "/user/user-create";
     }
@@ -49,11 +48,12 @@ public class UserController {
             if (emailExist) {
                 result.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
             }
-            if (userService.getCurrentUserRoleDescription().equalsIgnoreCase("root user") && userDto.getCompany() == null){
-                result.rejectValue("company", "NotNull.newUser.company", "Company is required field.");
-            }
-            model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
-            model.addAttribute("companies", companyService.getAllCompanies());
+            // back-up option for company validation:
+//            if (userService.getCurrentUserRoleDescription().equalsIgnoreCase("root user") && userDto.getCompany() == null){
+//                result.rejectValue("company", "NotNull.newUser.company", "Company is required field.");
+//            }
+            model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
+            model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
             model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
             return "/user/user-create";
         }
@@ -62,25 +62,30 @@ public class UserController {
         return "redirect:/users/list";
     }
 
-    @PostMapping(value = "/actions/{userId}", params = {"action=update"})
-    public String navigateToUserUpdate(@PathVariable("userId") Long userId){
-        return "redirect:/users/update/" + userId;
-    }
-
     @GetMapping("/update/{userId}")
-    public String navigateToUserUpdate(@PathVariable("userId") Long userId, Model model) throws Exception {
+    public String navigateToUserUpdate(@PathVariable("userId") Long userId, Model model) {
         model.addAttribute("user", userService.findUserById(userId));
-        model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
+        model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
+        model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
+        model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
         return "/user/user-update";
     }
 
     @PostMapping("/update/{userId}")
-    public String updateCompany(@PathVariable("userId") Long userId, UserDto userDto) {
+    public String updateUser(@PathVariable("userId") Long userId, @Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
+
+        if (result.hasErrors()){
+            userDto.setId(userId);
+            model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
+            model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
+            model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show all companies or only user's company
+            return "/user/user-update";
+        }
         userService.update(userId, userDto);
         return "redirect:/users/list";
     }
 
-    @PostMapping(value = "/actions/{userId}", params = {"action=delete"})
+    @GetMapping("/delete/{userId}")
     public String deleteUser(@PathVariable("userId") Long userId){
         userService.delete(userId);
         return "redirect:/users/list";

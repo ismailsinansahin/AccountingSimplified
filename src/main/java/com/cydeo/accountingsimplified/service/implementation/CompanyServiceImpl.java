@@ -10,6 +10,7 @@ import com.cydeo.accountingsimplified.repository.CompanyRepository;
 import com.cydeo.accountingsimplified.service.AddressService;
 import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.SecurityService;
+import com.cydeo.accountingsimplified.service.UserService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +24,15 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final AddressService addressService;
     private final SecurityService securityService;
+    private final UserService userService;
     private final MapperUtil mapperUtil;
 
     public CompanyServiceImpl(CompanyRepository companyRepository, AddressService addressService,
-                              @Lazy SecurityService securityService, MapperUtil mapperUtil) {
+                              @Lazy SecurityService securityService, UserService userService, MapperUtil mapperUtil) {
         this.companyRepository = companyRepository;
         this.addressService = addressService;
         this.securityService = securityService;
+        this.userService = userService;
         this.mapperUtil = mapperUtil;
     }
 
@@ -55,9 +58,15 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<CompanyDto> getAllActiveCompanies() {
+    public List<CompanyDto> getFilteredCompaniesForCurrentUser() {
         return getAllCompanies().stream()
-                .filter(companyDto -> companyDto.getCompanyStatus().equals(CompanyStatus.ACTIVE))
+                .filter(companyDto -> {
+                    if (userService.getCurrentUserRoleDescription().equalsIgnoreCase("root user")) {
+                        return companyDto.getCompanyStatus().equals(CompanyStatus.ACTIVE);
+                    } else {
+                        return companyDto.getTitle().equals(userService.getCurrentUserDto().getCompany().getTitle());
+                    }
+                })
                 .collect(Collectors.toList());
     }
 

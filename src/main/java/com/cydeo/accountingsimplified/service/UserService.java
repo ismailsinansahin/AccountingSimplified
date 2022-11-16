@@ -14,5 +14,5 @@ public interface UserService {
     void delete(Long id);
     String getCurrentUserRoleDescription();
     Boolean validateIfEmailUnique(String email);
-
+    UserDto getCurrentUserDto();
 }

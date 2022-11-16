@@ -10,6 +10,7 @@ import com.cydeo.accountingsimplified.service.SecurityService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,10 +39,12 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<RoleDto> getAllRolesForCurrentUser() {
+    public List<RoleDto> getFilteredRolesForCurrentUser() {
         UserDto user = securityService.getLoggedInUser();
         if (user.getRole().getDescription().equals("Root User")) {
-            return findAllByDescriptionOrDescription("Admin");
+            List<RoleDto> list = new ArrayList<>();
+            list.add(mapperUtil.convert(roleRepository.findByDescription("Admin"), new RoleDto()));
+            return list;
         } else {
             return roleRepository.findAll()
                     .stream()
@@ -49,13 +52,6 @@ public class RoleServiceImpl implements RoleService {
                     .map(role -> mapperUtil.convert(role, new RoleDto()))
                     .collect(Collectors.toList());
         }
-    }
-
-    public List<RoleDto> findAllByDescriptionOrDescription(String description) {
-        List<Role> roles = roleRepository.findAllByDescription(description);
-        return roles.stream()
-                .map(role -> mapperUtil.convert(role, new RoleDto()))
-                .collect(Collectors.toList());
     }
 
 }
