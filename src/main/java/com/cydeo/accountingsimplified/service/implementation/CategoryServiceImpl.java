@@ -68,6 +68,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryRepository.findById(categoryId).get();
 
         category.setIsDeleted(true);
+        category.setDescription(category.getDescription() + " " + category.getId());
         categoryRepository.save(category);
     }
 
@@ -76,5 +77,10 @@ public class CategoryServiceImpl implements CategoryService {
         return productService.findAllProductsWithCategoryId(categoryId).size() > 0;
     }
 
+    @Override
+    public boolean isCategoryDescriptionExist(String categoryDescription) {
+        return getAllCategories().stream()
+                .anyMatch(categoryDto -> categoryDto.getDescription().equals(categoryDescription));
 
+    }
 }

@@ -17,5 +17,6 @@ public interface CategoryService {
 
     void delete(Long categoryId);
     boolean hasProduct(Long categoryId);
+    boolean isCategoryDescriptionExist(String categoryDescription);
 
 }

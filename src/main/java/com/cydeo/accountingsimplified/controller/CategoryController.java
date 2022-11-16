@@ -1,5 +1,6 @@
 package com.cydeo.accountingsimplified.controller;
 
+import com.cydeo.accountingsimplified.app_util.ErrorGenerator;
 import com.cydeo.accountingsimplified.dto.CategoryDto;
 import com.cydeo.accountingsimplified.service.CategoryService;
 import org.springframework.stereotype.Controller;
@@ -35,17 +36,18 @@ public class CategoryController {
     @PostMapping("/create")
     public String createNewCategory(@Valid @ModelAttribute("newCategory") CategoryDto categoryDto, BindingResult bindingResult) throws Exception {
 
+        boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto.getDescription());
+
+        if (categoryDescriptionExist){
+            ErrorGenerator.generateErrorMessage(bindingResult,"description","This category description already exists");
+        }
+
         if (bindingResult.hasErrors()) {
             return "/category/category-create";
         }
 
         categoryService.create(categoryDto);
         return "redirect:/categories/list";
-    }
-
-    @PostMapping(value = "/actions/{categoryId}", params = {"action=update"})
-    public String navigateToCategoryUpdate(@PathVariable("categoryId") Long categoryId) {
-        return "redirect:/categories/update/" + categoryId;
     }
 
     @GetMapping("/update/{categoryId}")
@@ -58,6 +60,11 @@ public class CategoryController {
 
     @PostMapping("/update/{categoryId}")
     public String updateCategory(@Valid @ModelAttribute("category") CategoryDto categoryDto, BindingResult bindingResult, @PathVariable("categoryId") Long categoryId) {
+        boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto.getDescription());
+
+        if (categoryDescriptionExist){
+            ErrorGenerator.generateErrorMessage(bindingResult,"description","This category description already exists");
+        }
 
         if (bindingResult.hasErrors()) {
             categoryDto.setId(categoryId);
@@ -68,10 +75,9 @@ public class CategoryController {
         return "redirect:/categories/list";
     }
 
-    @PostMapping(value = "/actions/{categoryId}", params = {"action=delete"})
+    @GetMapping( "/delete/{categoryId}")
     public String activateCategory(@PathVariable("categoryId") Long categoryId) {
         categoryService.delete(categoryId);
         return "redirect:/categories/list";
     }
-
 }
