@@ -48,9 +48,9 @@
                                                                 <td th:text="${comStat.count}"></td>
                                                                 <td th:text="${category.description}"></td>
                                                                 <td class="actions">
-                                                                    <a th:href="@{/categories/update/{id}(id=${category.getId()})}">
-                                                                        <button type="button"
-                                                                                class="btn btn-primary mb-2 mb-sm-0 mr-sm-2">
+                                                                    <a th:href="@{/categories/update/{id}(id=${category.getId()})}"
+                                                                       type="button">
+                                                                        <button class="btn btn-primary mb-2 mb-sm-0 mr-sm-2">
                                                                             Edit
                                                                         </button>
                                                                     </a>
@@ -61,14 +61,13 @@
                                                                           title="Can not be deleted! This category has product/products.">
                                                                         <button
                                                                                 class="btn btn-danger mb-2 ml-2 mb-sm-0 mr-sm-2"
-                                                                                style="pointer-events: none;"
-                                                                                type="submit" disabled>Delete
+                                                                                style="pointer-events: none;" disabled>Delete
                                                                         </button>
                                                                     </span>
                                                                     <a th:unless="${category.hasProduct}"
-                                                                       th:href="@{/categories/delete/{id}(id=${category.getId()})}">
-                                                                        <button type="button"
-                                                                                class="btn btn-danger mb-2 ml-2 mb-sm-0 mr-sm-2">
+                                                                       th:href="@{/categories/delete/{id}(id=${category.getId()})}"
+                                                                       type="button">
+                                                                        <button class="btn btn-danger mb-2 ml-2 mb-sm-0 mr-sm-2">
                                                                             Delete
                                                                         </button>
                                                                     </a>
