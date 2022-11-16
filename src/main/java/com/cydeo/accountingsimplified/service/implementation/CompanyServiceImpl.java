@@ -58,7 +58,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public List<CompanyDto> getAllSuitableCompanies() {
+    public List<CompanyDto> getFilteredCompaniesForCurrentUser() {
         return getAllCompanies().stream()
                 .filter(companyDto -> {
                     if (userService.getCurrentUserRoleDescription().equalsIgnoreCase("root user")) {

@@ -45,7 +45,6 @@ public class CategoryServiceImpl implements CategoryService {
                     dto.setHasProduct(hasProduct(dto.getId()));
                     return dto;
                 }).collect(Collectors.toList());
-
     }
 
     @Override

@@ -34,8 +34,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto findUserById(Long id) {
         User user = userRepository.findUserById(id);
-        UserDto dto =mapperUtil.convert(user, new UserDto());
-        dto.setLastAdminOrRootUser(isLastAdminOrRootUser(dto));
+        UserDto dto = mapperUtil.convert(user, new UserDto());
+        dto.setIsOnlyAdmin(checkIfOnlyAdminForCompany(dto));
         return dto;
     }
 
@@ -47,23 +47,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers() {
+        List<User> userList;
         if (getCurrentUserRoleDescription().equals("Root User")) {
-            Role role1 = mapperUtil.convert(roleService.findByDescription("Root User"), new Role());
-            Role role2 = mapperUtil.convert(roleService.findByDescription("Admin"), new Role());
-            return userRepository.findAllByRoleOrRole(role1, role2)
-                    .stream()
-                    .map(entity -> {
-                        UserDto dto  = mapperUtil.convert(entity, new UserDto());
-                        dto.setLastAdminOrRootUser(isLastAdminOrRootUser(dto));
-                        return dto;
-                    })
-                    .collect(Collectors.toList());
+            userList = userRepository.findAllByRole_Description("Admin");
         } else {
-            return userRepository.findAllByCompany(getCurrentUser().getCompany())
-                    .stream()
-                    .map(each -> mapperUtil.convert(each, new UserDto()))
-                    .collect(Collectors.toList());
+            userList = userRepository.findAllByCompany(getCurrentUser().getCompany());
         }
+        return userList.stream()
+                .map(entity -> {
+                    UserDto dto = mapperUtil.convert(entity, new UserDto());
+                    dto.setIsOnlyAdmin(checkIfOnlyAdminForCompany(dto));
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -115,9 +111,12 @@ public class UserServiceImpl implements UserService {
         return mapperUtil.convert(getCurrentUser(), new UserDto());
     }
 
-    private Boolean isLastAdminOrRootUser(UserDto dto) {
-        List<User> users = userRepository.findAllByCompany_TitleAndRole_Description(dto.getCompany().getTitle(), "Admin");
-        return dto.getCompany().getTitle().equalsIgnoreCase("Cydeo") || users.size() == 1;
+    private Boolean checkIfOnlyAdminForCompany(UserDto dto) {
+        if (dto.getRole().getDescription().equalsIgnoreCase("Admin")) {
+            List<User> users = userRepository.findAllByCompany_TitleAndRole_Description(dto.getCompany().getTitle(), "Admin");
+            return users.size() == 1;
+        }
+        return false;
     }
 
 }

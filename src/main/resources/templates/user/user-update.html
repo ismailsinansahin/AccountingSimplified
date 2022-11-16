@@ -145,13 +145,12 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Role</label>
-                                                                    <select id="role" name="role" class="custom-select"
-                                                                            th:with="role=*{role}">
-                                                                        <option th:value="''"
-                                                                                th:text="'Select'"></option>
+                                                                    <select class="custom-select" id="role" name="role"
+                                                                            th:with="role=*{role}"  >
                                                                         <option th:each="role:${userRoles}"
                                                                                 th:value="${role.id}"
-                                                                                th:text="${role.description}"></option>
+                                                                                th:text="${role.description}"
+                                                                                th:selected="${role.id} == ${user.role.id}"></option>
                                                                     </select>
                                                                     <div th:if="${#fields.hasErrors('role')}">
                                                                         <ul>
@@ -168,15 +167,12 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Company</label>
-                                                                    <select id="company" name="company"
-                                                                            class="custom-select"
-                                                                            th:field="*{company}">
-                                                                        <option th:if="'Root User'== ${currentUserRole}"
-                                                                                th:value="''"
-                                                                                th:text="'Select'"></option>
+                                                                    <select class="custom-select" id="company" name="company"
+                                                                            th:with="company=*{company}">
                                                                         <option th:each="company:${companies}"
                                                                                 th:value="${company.id}"
-                                                                                th:text="${company.getTitle()}"></option>
+                                                                                th:text="${company.getTitle()}"
+                                                                                th:selected="${company.id} == ${user.company.id}"></option>
 
                                                                     </select>
                                                                     <div th:if="${#fields.hasErrors('company')}">
@@ -200,7 +196,7 @@
                                                             Reset
                                                         </button>
                                                     </div>
-                                                    <div th:if="${user.lastAdminOrRootUser}" class="row">
+                                                    <div th:if="${user.isOnlyAdmin}" class="row">
                                                         <div class="col-12 col-md-8">
                                                             <div class="form-group">
                                                                 <div class="controls">

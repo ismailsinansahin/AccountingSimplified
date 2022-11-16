@@ -34,8 +34,8 @@ public class UserController {
     @GetMapping("/create")
     public String navigateToUserCreate(Model model) {
         model.addAttribute("newUser", new UserDto());
-        model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
-        model.addAttribute("companies", companyService.getAllSuitableCompanies());
+        model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
+        model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
         model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
         return "/user/user-create";
     }
@@ -52,8 +52,8 @@ public class UserController {
 //            if (userService.getCurrentUserRoleDescription().equalsIgnoreCase("root user") && userDto.getCompany() == null){
 //                result.rejectValue("company", "NotNull.newUser.company", "Company is required field.");
 //            }
-            model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
-            model.addAttribute("companies", companyService.getAllCompanies());
+            model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
+            model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
             model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
             return "/user/user-create";
         }
@@ -65,10 +65,9 @@ public class UserController {
     @GetMapping("/update/{userId}")
     public String navigateToUserUpdate(@PathVariable("userId") Long userId, Model model) {
         model.addAttribute("user", userService.findUserById(userId));
-        model.addAttribute("companies", companyService.getAllCompanies());
-        model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
+        model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
+        model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
         model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
-        System.out.println("last : " + userService.findUserById(userId).getFirstname() + userService.findUserById(userId).getLastAdminOrRootUser());
         return "/user/user-update";
     }
 
@@ -77,8 +76,8 @@ public class UserController {
 
         if (result.hasErrors()){
             userDto.setId(userId);
-            model.addAttribute("companies", companyService.getAllCompanies());
-            model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
+            model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
+            model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
             model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show all companies or only user's company
             return "/user/user-update";
         }

@@ -47,7 +47,7 @@ public class UserDto {
     @NotNull
     private CompanyDto company;
 
-    private Boolean lastAdminOrRootUser;
+    private Boolean isOnlyAdmin;
 
 
 
@@ -132,11 +132,11 @@ public class UserDto {
         this.company = company;
     }
 
-    public Boolean getLastAdminOrRootUser() {
-        return lastAdminOrRootUser;
+    public Boolean getIsOnlyAdmin() {
+        return isOnlyAdmin;
     }
 
-    public void setLastAdminOrRootUser(Boolean lastAdminOrRootUser) {
-        this.lastAdminOrRootUser = lastAdminOrRootUser;
+    public void setIsOnlyAdmin(Boolean isOnlyAdmin) {
+        this.isOnlyAdmin = isOnlyAdmin;
     }
 }

@@ -8,6 +8,6 @@ public interface RoleService {
 
     RoleDto findRoleById(Long id);
     RoleDto findByDescription(String description);
-    List<RoleDto> getAllRolesForCurrentUser();
+    List<RoleDto> getFilteredRolesForCurrentUser();
 
 }
