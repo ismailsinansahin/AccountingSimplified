@@ -34,7 +34,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto findUserById(Long id) {
         User user = userRepository.findUserById(id);
-        return mapperUtil.convert(user, new UserDto());
+        UserDto dto =mapperUtil.convert(user, new UserDto());
+        dto.setLastAdminOrRootUser(isLastAdminOrRootUser(dto));
+        return dto;
     }
 
     @Override
@@ -50,7 +52,11 @@ public class UserServiceImpl implements UserService {
             Role role2 = mapperUtil.convert(roleService.findByDescription("Admin"), new Role());
             return userRepository.findAllByRoleOrRole(role1, role2)
                     .stream()
-                    .map(each -> mapperUtil.convert(each, new UserDto()))
+                    .map(entity -> {
+                        UserDto dto  = mapperUtil.convert(entity, new UserDto());
+                        dto.setLastAdminOrRootUser(isLastAdminOrRootUser(dto));
+                        return dto;
+                    })
                     .collect(Collectors.toList());
         } else {
             return userRepository.findAllByCompany(getCurrentUser().getCompany())
@@ -107,6 +113,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getCurrentUserDto() {
         return mapperUtil.convert(getCurrentUser(), new UserDto());
+    }
+
+    private Boolean isLastAdminOrRootUser(UserDto dto) {
+        List<User> users = userRepository.findAllByCompany_TitleAndRole_Description(dto.getCompany().getTitle(), "Admin");
+        return dto.getCompany().getTitle().equalsIgnoreCase("Cydeo") || users.size() == 1;
     }
 
 }

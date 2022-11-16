@@ -51,7 +51,7 @@ public class CategoryController {
     }
 
     @GetMapping("/update/{categoryId}")
-    public String navigateToCategoryUpate(@PathVariable("categoryId") Long categoryId, Model model) {
+    public String navigateToCategoryUpdate(@PathVariable("categoryId") Long categoryId, Model model) {
         CategoryDto categoryById = categoryService.findCategoryById(categoryId);
         categoryById.setHasProduct(categoryService.hasProduct(categoryId));
         model.addAttribute("category", categoryById);

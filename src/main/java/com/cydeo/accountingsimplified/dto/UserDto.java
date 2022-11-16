@@ -47,6 +47,11 @@ public class UserDto {
     @NotNull
     private CompanyDto company;
 
+    private Boolean lastAdminOrRootUser;
+
+
+
+
     public Long getId() {
         return id;
     }
@@ -125,5 +130,13 @@ public class UserDto {
 
     public void setCompany(CompanyDto company) {
         this.company = company;
+    }
+
+    public Boolean getLastAdminOrRootUser() {
+        return lastAdminOrRootUser;
+    }
+
+    public void setLastAdminOrRootUser(Boolean lastAdminOrRootUser) {
+        this.lastAdminOrRootUser = lastAdminOrRootUser;
     }
 }

@@ -26,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    public String navigateToUserList(Model model) throws Exception {
+    public String listUsers(Model model) throws Exception {
         model.addAttribute("users", userService.getAllUsers());
         return "/user/user-list";
     }
@@ -62,25 +62,31 @@ public class UserController {
         return "redirect:/users/list";
     }
 
-    @PostMapping(value = "/actions/{userId}", params = {"action=update"})
-    public String navigateToUserUpdate(@PathVariable("userId") Long userId){
-        return "redirect:/users/update/" + userId;
-    }
-
     @GetMapping("/update/{userId}")
-    public String navigateToUserUpdate(@PathVariable("userId") Long userId, Model model) throws Exception {
+    public String navigateToUserUpdate(@PathVariable("userId") Long userId, Model model) {
         model.addAttribute("user", userService.findUserById(userId));
+        model.addAttribute("companies", companyService.getAllCompanies());
         model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
+        model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
+        System.out.println("last : " + userService.findUserById(userId).getFirstname() + userService.findUserById(userId).getLastAdminOrRootUser());
         return "/user/user-update";
     }
 
     @PostMapping("/update/{userId}")
-    public String updateCompany(@PathVariable("userId") Long userId, UserDto userDto) {
+    public String updateUser(@PathVariable("userId") Long userId, @Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
+
+        if (result.hasErrors()){
+            userDto.setId(userId);
+            model.addAttribute("companies", companyService.getAllCompanies());
+            model.addAttribute("userRoles", roleService.getAllRolesForCurrentUser());
+            model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show all companies or only user's company
+            return "/user/user-update";
+        }
         userService.update(userId, userDto);
         return "redirect:/users/list";
     }
 
-    @PostMapping(value = "/actions/{userId}", params = {"action=delete"})
+    @GetMapping("/delete/{userId}")
     public String deleteUser(@PathVariable("userId") Long userId){
         userService.delete(userId);
         return "redirect:/users/list";

@@ -25,9 +25,9 @@
                     <br>
                     <section class="panel">
                         <header class="panel-heading"><h2 class="panel-title">User List</h2></header>
-<!--                        <div class="alert alert-danger" role="alert">-->
-<!--                            th:text="${deleteConfirmation}" th:if="${deleteConfirmation}"></div>-->
-<!--                        <a id="delete" class="btn bg-danger-light text-danger mb-1" style="color: #721c24">Delete</a>-->
+                        <!--                        <div class="alert alert-danger" role="alert">-->
+                        <!--                            th:text="${deleteConfirmation}" th:if="${deleteConfirmation}"></div>-->
+                        <!--                        <a id="delete" class="btn bg-danger-light text-danger mb-1" style="color: #721c24">Delete</a>-->
                         <div class="panel-body">
                             <div class="users-list-table">
                                 <div class="row">
@@ -54,22 +54,38 @@
                                                             <tbody>
                                                             <tr th:each="user, comStat : ${users}">
                                                                 <td th:text="${comStat.count}"></td>
-                                                                <td th:if="${user.company != null}" th:text="${user.company.title}"></td>
-                                                                <td th:if="${user.company == null}" th:text="${'-'}"></td>
+                                                                <td th:if="${user.company != null}"
+                                                                    th:text="${user.company.title}"></td>
+                                                                <td th:if="${user.company == null}"
+                                                                    th:text="${'-'}"></td>
                                                                 <td th:text="${user.role.description}"></td>
                                                                 <td th:text="${user.firstname}"></td>
                                                                 <td th:text="${user.lastname}"></td>
                                                                 <td th:text="${user.username}"></td>
                                                                 <td th:text="${user.phone}"></td>
                                                                 <td class="actions">
-                                                                    <form action="#" method="post" data-th-action="@{/users/actions/{id}(id=${user.getId()})}">
+                                                                    <a th:href="@{/users/update/{id}(id=${user.id})}" type="button">
                                                                         <button class="btn btn-primary mb-2 mb-sm-0 mr-sm-2"
-                                                                                type="submit" name="action" value="update">Edit
+                                                                                type="button">Edit
                                                                         </button>
+                                                                    </a>
+                                                                    <span th:if="${user.lastAdminOrRootUser}"
+                                                                          class="d-inline-block" tabindex="0"
+                                                                          data-toggle="tooltip"
+                                                                          data-placement="right"
+                                                                          title="Can not be deleted! This user is last admin of this company or root user.">
+                                                                        <button
+                                                                                class="btn btn-danger mb-2 ml-2 mb-sm-0 mr-sm-2"
+                                                                                style="pointer-events: none;"
+                                                                                type="button" disabled>Delete
+                                                                        </button>
+                                                                    </span>
+                                                                    <a th:unless="${user.lastAdminOrRootUser}"
+                                                                       th:href="@{/users/delete/{id}(id=${user.id})}" type="button">
                                                                         <button class="btn btn-danger mb-2 mb-sm-0 mr-sm-2"
-                                                                                type="submit" name="action" value="delete">Delete
+                                                                                type="button">Delete
                                                                         </button>
-                                                                    </form>
+                                                                    </a>
                                                                 </td>
                                                             </tr>
                                                             </tbody>
