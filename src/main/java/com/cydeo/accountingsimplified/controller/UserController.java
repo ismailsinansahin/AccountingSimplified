@@ -27,7 +27,7 @@ public class UserController {
 
     @GetMapping("/list")
     public String listUsers(Model model) throws Exception {
-        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("users", userService.getFilteredUsers());
         return "/user/user-list";
     }
 
@@ -36,25 +36,19 @@ public class UserController {
         model.addAttribute("newUser", new UserDto());
         model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
         model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
-        model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
         return "/user/user-create";
     }
 
     @PostMapping("/create")
     public String createNewUser(@Valid @ModelAttribute("newUser") UserDto userDto, BindingResult result, Model model) {
-        boolean emailExist = userService.validateIfEmailUnique(userDto.getUsername());
+        boolean emailExist = userService.emailExist(userDto);
 
         if (result.hasErrors() || emailExist){
             if (emailExist) {
                 result.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
             }
-            // back-up option for company validation:
-//            if (userService.getCurrentUserRoleDescription().equalsIgnoreCase("root user") && userDto.getCompany() == null){
-//                result.rejectValue("company", "NotNull.newUser.company", "Company is required field.");
-//            }
             model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
             model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
-            model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
             return "/user/user-create";
         }
 
@@ -67,21 +61,23 @@ public class UserController {
         model.addAttribute("user", userService.findUserById(userId));
         model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
         model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
-        model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show the company box or not
         return "/user/user-update";
     }
 
     @PostMapping("/update/{userId}")
     public String updateUser(@PathVariable("userId") Long userId, @Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
+        userDto.setId(userId);  // spring cannot set id since it is not seen in UI and we need to check if updated email is used by different user.
+        boolean emailExist = userService.emailExist(userDto);
 
-        if (result.hasErrors()){
-            userDto.setId(userId);
+        if (result.hasErrors() || emailExist){
+            if (emailExist) {
+                result.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
+            }
             model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
             model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
-            model.addAttribute("currentUserRole", userService.getCurrentUserRoleDescription()); // to decide to show all companies or only user's company
             return "/user/user-update";
         }
-        userService.update(userId, userDto);
+        userService.update(userDto);
         return "redirect:/users/list";
     }
 

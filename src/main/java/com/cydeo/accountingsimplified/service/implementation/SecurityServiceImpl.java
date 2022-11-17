@@ -25,8 +25,8 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-        if(user==null){
-            throw  new UsernameNotFoundException("This user does not exist");
+        if (user == null) {
+            throw new UsernameNotFoundException("This user does not exist");
         }
         return new UserPrincipal(user);
     }
@@ -35,10 +35,6 @@ public class SecurityServiceImpl implements SecurityService {
     public UserDto getLoggedInUser() {
         var currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         return userService.findByUsername(currentUsername);
-    }
-    @Override
-    public String getCurrentUserUsername(){
-        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
 }

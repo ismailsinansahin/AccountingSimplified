@@ -24,7 +24,6 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyRepository companyRepository;
     private final AddressService addressService;
     private final SecurityService securityService;
-    private final UserService userService;
     private final MapperUtil mapperUtil;
 
     public CompanyServiceImpl(CompanyRepository companyRepository, AddressService addressService,
@@ -32,7 +31,6 @@ public class CompanyServiceImpl implements CompanyService {
         this.companyRepository = companyRepository;
         this.addressService = addressService;
         this.securityService = securityService;
-        this.userService = userService;
         this.mapperUtil = mapperUtil;
     }
 
@@ -60,11 +58,12 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<CompanyDto> getFilteredCompaniesForCurrentUser() {
         return getAllCompanies().stream()
-                .filter(companyDto -> {
-                    if (userService.getCurrentUserRoleDescription().equalsIgnoreCase("root user")) {
-                        return companyDto.getCompanyStatus().equals(CompanyStatus.ACTIVE);
+                .filter(each -> {
+                    if (securityService.getLoggedInUser().getRole().getDescription().equalsIgnoreCase("root user")) {
+//                        return companyDto.getCompanyStatus().equals(CompanyStatus.ACTIVE);
+                        return true;    // if we filter by status, we have a problem to update users of passive company.
                     } else {
-                        return companyDto.getTitle().equals(userService.getCurrentUserDto().getCompany().getTitle());
+                        return each.getTitle().equals(getCompanyByLoggedInUser().getTitle());
                     }
                 })
                 .collect(Collectors.toList());

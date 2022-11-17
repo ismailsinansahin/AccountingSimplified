@@ -8,11 +8,9 @@ public interface UserService {
 
     UserDto findUserById(Long id);
     UserDto findByUsername(String username);
-    List<UserDto> getAllUsers() throws Exception;
+    List<UserDto> getFilteredUsers() throws Exception;
     UserDto create(UserDto userDto);
-    UserDto update(Long id, UserDto userDto);
+    UserDto update(UserDto userDto);
     void delete(Long id);
-    String getCurrentUserRoleDescription();
-    Boolean validateIfEmailUnique(String email);
-    UserDto getCurrentUserDto();
+    Boolean emailExist(UserDto userDto);
 }
