@@ -40,10 +40,14 @@ values
 ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1,
  'root@cydeo.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
  'Jay', 'Thunder', '+1 (852) 564-5874', 1, 1),
--- COMPANY-2 / Green Tech / ADMIN
+-- COMPANY-2 / Green Tech / ADMIN-1
 ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1,
  'admin@greentech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
  'Mary', 'Grant', '+1 (234) 345-4362', 2, 2),
+-- COMPANY-2 / Green Tech / ADMIN-2
+('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1,
+ 'admin2@greentech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
+ 'Garrison', 'Short', '+1 (234) 356-7865', 2, 2),
 -- COMPANY-2 / Green Tech / MANAGER
 ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1,
  'manager@greentech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',

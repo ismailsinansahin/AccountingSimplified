@@ -8,9 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public interface SecurityService extends UserDetailsService {
 
     @Override
-    UserDetails loadUserByUsername(String s) throws UsernameNotFoundException;
-
-    String getCurrentUserUsername();
+    UserDetails loadUserByUsername(String s);
 
     UserDto getLoggedInUser();
 

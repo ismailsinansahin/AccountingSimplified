@@ -1,8 +1,6 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
-import com.cydeo.accountingsimplified.dto.RoleDto;
 import com.cydeo.accountingsimplified.dto.UserDto;
-import com.cydeo.accountingsimplified.entity.Role;
 import com.cydeo.accountingsimplified.entity.User;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.UserRepository;
@@ -19,14 +17,12 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final RoleService roleService;
     private final SecurityService securityService;
     private final MapperUtil mapperUtil;
 
     public UserServiceImpl(UserRepository userRepository, RoleService roleService,
                            @Lazy SecurityService securityService, MapperUtil mapperUtil) {
         this.userRepository = userRepository;
-        this.roleService = roleService;
         this.securityService = securityService;
         this.mapperUtil = mapperUtil;
     }
@@ -46,12 +42,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
+    public List<UserDto> getFilteredUsers() {
         List<User> userList;
-        if (getCurrentUserRoleDescription().equals("Root User")) {
+        if (isCurrentUserRootUser()) {
             userList = userRepository.findAllByRole_Description("Admin");
         } else {
-            userList = userRepository.findAllByCompany(getCurrentUser().getCompany());
+            userList = userRepository.findAllByCompany_Title(getCurrentUserCompanyTitle());
         }
         return userList.stream()
                 .map(entity -> {
@@ -70,17 +66,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto update(Long userId, UserDto userDto) {
-        User user = userRepository.findById(userId).get();
-        user.setFirstname(userDto.getFirstname());
-        user.setLastname(userDto.getLastname());
-        user.setUsername(userDto.getUsername());
-        user.setPhone(userDto.getPhone());
-        user.setPassword(userDto.getPassword());
-        RoleDto roleDto = roleService.findRoleById(userDto.getRole().getId());
-        user.setRole(mapperUtil.convert(roleDto, new Role()));
-        userRepository.save(user);
-        return mapperUtil.convert(user, userDto);
+    public UserDto update(UserDto userDto) {
+        User updatedUser = mapperUtil.convert(userDto, new User());
+        return mapperUtil.convert(userRepository.save(updatedUser), userDto);
     }
 
     @Override
@@ -90,25 +78,11 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-
-    private User getCurrentUser() {
-        String currentUserName = securityService.getCurrentUserUsername();
-        return userRepository.findByUsername(currentUserName);
-    }
-
     @Override
-    public String getCurrentUserRoleDescription() {
-        return getCurrentUser().getRole().getDescription();
-    }
-
-    @Override
-    public Boolean validateIfEmailUnique(String email) {
-        return userRepository.existsByUsername(email);
-    }
-
-    @Override
-    public UserDto getCurrentUserDto() {
-        return mapperUtil.convert(getCurrentUser(), new UserDto());
+    public Boolean emailExist(UserDto userDto) {
+        User userWithUpdatedEmail = userRepository.findByUsername(userDto.getUsername());
+        if (userWithUpdatedEmail == null) return false;
+        return !userWithUpdatedEmail.getId().equals(userDto.getId());
     }
 
     private Boolean checkIfOnlyAdminForCompany(UserDto dto) {
@@ -117,6 +91,15 @@ public class UserServiceImpl implements UserService {
             return users.size() == 1;
         }
         return false;
+    }
+
+    private Boolean isCurrentUserRootUser() {
+        return securityService.getLoggedInUser().getRole().getDescription().equalsIgnoreCase("root user");
+    }
+
+    private String getCurrentUserCompanyTitle() {
+        String currentUserName = securityService.getLoggedInUser().getUsername();
+        return userRepository.findByUsername(currentUserName).getCompany().getTitle();
     }
 
 }

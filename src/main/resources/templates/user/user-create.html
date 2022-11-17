@@ -141,7 +141,8 @@
                                                                     <label>Role</label>
                                                                     <select id="role" name="role" class="custom-select"
                                                                             th:with="role=*{role}">
-                                                                        <option th:value="''"
+                                                                        <option th:if="${userRoles.size() > 1}"
+                                                                                th:value="''"
                                                                                 th:text="'Select'"></option>
                                                                         <option th:each="role:${userRoles}"
                                                                                 th:value="${role.id}"
@@ -163,7 +164,7 @@
                                                                     <label>Company</label>
                                                                     <select id="company" name="company" class="custom-select"
                                                                             th:field="*{company}">
-                                                                        <option th:if="'Root User'== ${currentUserRole}"
+                                                                        <option th:if="${companies.size() > 1}"
                                                                                 th:value="''"
                                                                                 th:text="'Select'"></option>
                                                                         <option th:each="company:${companies}"
