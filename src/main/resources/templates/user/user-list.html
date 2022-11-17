@@ -70,18 +70,18 @@
                                                                             Edit
                                                                         </button>
                                                                     </a>
-                                                                    <span th:if="${user.isOnlyAdmin}"
+                                                                    <span th:if="${user.isOnlyAdmin || #authentication.principal.getUsername().equals(user.username)}"
                                                                           class="d-inline-block"
                                                                           tabindex="0" data-placement="right"
                                                                           data-toggle="tooltip"
-                                                                          title="Can not be deleted! This user is only admin for this company.">
+                                                                          title="Can not be deleted! This user is only admin for this company or logged in admin.">
                                                                         <button
                                                                                 class="btn btn-danger mb-2 ml-2 mb-sm-0 mr-sm-2"
                                                                                 style="pointer-events: none;"
                                                                                 disabled>Delete
                                                                         </button>
                                                                     </span>
-                                                                    <a th:unless="${user.isOnlyAdmin}"
+                                                                    <a th:unless="${user.isOnlyAdmin || #authentication.principal.getUsername().equals(user.username)}"
                                                                        th:href="@{/users/delete/{id}(id=${user.id})}"
                                                                        type="button">
                                                                         <button class="btn btn-danger mb-2 ml-2 mb-sm-0 mr-sm-2">

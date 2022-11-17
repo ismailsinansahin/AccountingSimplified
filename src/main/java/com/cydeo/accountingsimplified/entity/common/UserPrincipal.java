@@ -55,8 +55,12 @@ public class UserPrincipal implements UserDetails {
         return true;
     }
 
-    public Long getId(){
+    public Long getId() {
         return this.user.getId();
+    }
+
+    public String getFullNameForProfile() {
+        return this.user.getFirstname() + " " + this.user.getLastname();
     }
 
 }
