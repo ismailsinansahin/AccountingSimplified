@@ -10,6 +10,7 @@ import com.cydeo.accountingsimplified.service.UserService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +51,7 @@ public class UserServiceImpl implements UserService {
             userList = userRepository.findAllByCompany_Title(getCurrentUserCompanyTitle());
         }
         return userList.stream()
+                .sorted(Comparator.comparing((User u) -> u.getCompany().getTitle()).thenComparing(u -> u.getRole().getDescription()))
                 .map(entity -> {
                     UserDto dto = mapperUtil.convert(entity, new UserDto());
                     dto.setIsOnlyAdmin(checkIfOnlyAdminForCompany(dto));
