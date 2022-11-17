@@ -68,12 +68,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto update(UserDto userDto) {
         User updatedUser = mapperUtil.convert(userDto, new User());
-        return mapperUtil.convert(userRepository.save(updatedUser), userDto);
+        User savedUser = userRepository.save(updatedUser);
+        return mapperUtil.convert(savedUser, userDto);
     }
 
     @Override
     public void delete(Long userId) {
         User user = userRepository.findUserById(userId);
+        user.setUsername(user.getUsername() + "-" + user.getId());  // without this modification, if entity has column(unique=true)
+                                                                    // and we want to create a user with same email, it throws exception.
         user.setIsDeleted(true);
         userRepository.save(user);
     }
