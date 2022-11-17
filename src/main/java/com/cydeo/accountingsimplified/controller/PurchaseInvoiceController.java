@@ -47,13 +47,8 @@ public class PurchaseInvoiceController {
 
     @PostMapping("/create")
     public String createNewPurchaseInvoice(InvoiceDto invoiceDto) {
-        invoiceService.create(invoiceDto, InvoiceType.PURCHASE);
-        return "redirect:/purchaseInvoices/list";
-    }
-
-    @PostMapping(value = "/actions/{invoiceId}", params = {"action=update"})
-    public String navigateToPurchaseInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId){
-        return "redirect:/purchaseInvoices/update/" + invoiceId;
+        var invoice = invoiceService.create(invoiceDto, InvoiceType.PURCHASE);
+        return "redirect:/purchaseInvoices/update/" + invoice.getId();
     }
 
     @GetMapping("/update/{invoiceId}")

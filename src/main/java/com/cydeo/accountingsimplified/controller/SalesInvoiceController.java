@@ -4,16 +4,15 @@ import com.cydeo.accountingsimplified.dto.InvoiceDto;
 import com.cydeo.accountingsimplified.dto.InvoiceProductDto;
 import com.cydeo.accountingsimplified.enums.ClientVendorType;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
-import com.cydeo.accountingsimplified.service.ClientVendorService;
-import com.cydeo.accountingsimplified.service.InvoiceProductService;
-import com.cydeo.accountingsimplified.service.InvoiceService;
-import com.cydeo.accountingsimplified.service.ProductService;
+import com.cydeo.accountingsimplified.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 
 @Controller
@@ -25,11 +24,16 @@ public class SalesInvoiceController {
     private final ClientVendorService clientVendorService;
     private final ProductService productService;
 
-    public SalesInvoiceController(InvoiceService invoiceService, InvoiceProductService invoiceProductService, ClientVendorService clientVendorService, ProductService productService) {
+    private final CompanyService companyService;
+
+    public SalesInvoiceController(InvoiceService invoiceService, InvoiceProductService invoiceProductService,
+                                  ClientVendorService clientVendorService, ProductService productService,
+                                  CompanyService companyService) {
         this.invoiceService = invoiceService;
         this.invoiceProductService = invoiceProductService;
         this.clientVendorService = clientVendorService;
         this.productService = productService;
+        this.companyService = companyService;
     }
 
     @GetMapping("/list")
@@ -47,13 +51,8 @@ public class SalesInvoiceController {
 
     @PostMapping("/create")
     public String createNewSalesInvoice(InvoiceDto invoiceDto) {
-        invoiceService.create(invoiceDto, InvoiceType.SALES);
-        return "redirect:/salesInvoices/list";
-    }
-
-    @PostMapping(value = "/actions/{invoiceId}", params = {"action=update"})
-    public String navigateToSalesInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId){
-        return "redirect:/salesInvoices/update/" + invoiceId;
+        var invoice = invoiceService.create(invoiceDto, InvoiceType.SALES);
+        return "redirect:/salesInvoices/update/" + invoice.getId();
     }
 
     @GetMapping("/update/{invoiceId}")
@@ -94,6 +93,18 @@ public class SalesInvoiceController {
     public String deleteSalesInvoice(@PathVariable("invoiceId") Long invoiceId){
         invoiceService.delete(invoiceId);
         return "redirect:/salesInvoices/list";
+    }
+
+    //Print functionality
+
+    @PostMapping(value = "/actions/{invoiceId}", params = {"action=print"})
+    public String print(@PathVariable("invoiceId") Long id, Model model)  {
+
+        model.addAttribute("company", companyService.getCompanyByLoggedInUser());
+        model.addAttribute("invoice", invoiceService.findInvoiceById(id));
+        model.addAttribute("invoiceProducts",invoiceProductService.getInvoiceProductsOfInvoice(id));
+
+        return "invoice/invoice_print";
     }
 
 
