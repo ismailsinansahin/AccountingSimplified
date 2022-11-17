@@ -55,6 +55,11 @@ public class SalesInvoiceController {
         return "redirect:/salesInvoices/update/" + invoice.getId();
     }
 
+    @PostMapping(value = "/actions/{invoiceId}", params = {"action=update"})
+    public String navigateToSalesInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId){
+        return "redirect:/salesInvoices/update/" + invoiceId;
+    }
+
     @GetMapping("/update/{invoiceId}")
     public String navigateToSalesInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId, Model model) throws Exception {
         model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
