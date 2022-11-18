@@ -25,12 +25,14 @@ public class User extends BaseEntity{
 
     private String phone;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
+    private boolean enabled;
+
+    @ManyToOne
+//    @JoinColumn(name = "role_id") not mandatory. by default : role_id
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "company_id")
+//    @JoinColumn(name = "company_id") not mandatory. by default : company_id
     private Company company;
 
 }

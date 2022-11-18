@@ -8,6 +8,7 @@ import com.cydeo.accountingsimplified.service.RoleService;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import com.cydeo.accountingsimplified.service.UserService;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -20,12 +21,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final SecurityService securityService;
     private final MapperUtil mapperUtil;
+    private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository, RoleService roleService,
-                           @Lazy SecurityService securityService, MapperUtil mapperUtil) {
+                           @Lazy SecurityService securityService, MapperUtil mapperUtil, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.securityService = securityService;
         this.mapperUtil = mapperUtil;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -61,8 +64,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto create(UserDto userDto) {
+    public UserDto save(UserDto userDto) {
         User user = mapperUtil.convert(userDto, new User());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEnabled(true);
         userRepository.save(user);
         return mapperUtil.convert(user, userDto);
     }
@@ -70,6 +75,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto update(UserDto userDto) {
         User updatedUser = mapperUtil.convert(userDto, new User());
+        updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         User savedUser = userRepository.save(updatedUser);
         return mapperUtil.convert(savedUser, userDto);
     }
@@ -78,7 +84,7 @@ public class UserServiceImpl implements UserService {
     public void delete(Long userId) {
         User user = userRepository.findUserById(userId);
         user.setUsername(user.getUsername() + "-" + user.getId());  // without this modification, if entity has column(unique=true)
-                                                                    // and we want to create a user with same email, it throws exception.
+                                                                    // and we want to save a user with same email, it throws exception.
         user.setIsDeleted(true);
         userRepository.save(user);
     }

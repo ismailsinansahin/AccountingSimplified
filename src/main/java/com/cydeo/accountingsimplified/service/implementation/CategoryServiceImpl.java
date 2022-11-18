@@ -25,7 +25,6 @@ public class CategoryServiceImpl implements CategoryService {
     private final SecurityService securityService;
 
     private final ProductService productService;
-    private final ProductRepository productRepository;
     private final MapperUtil mapperUtil;
 
 
