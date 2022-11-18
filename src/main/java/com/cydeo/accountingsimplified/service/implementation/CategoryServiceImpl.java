@@ -14,6 +14,7 @@ import com.cydeo.accountingsimplified.service.SecurityService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository
                 .findAllByCompany(company)
                 .stream()
+                .sorted(Comparator.comparing(Category::getDescription))
                 .map(each -> {
                     CategoryDto dto = mapperUtil.convert(each, new CategoryDto());
                     dto.setHasProduct(hasProduct(dto.getId()));
