@@ -19,7 +19,8 @@
                                 </div>
                             </form>
                         </div>
-                    </div><br>
+                    </div>
+                    <br>
                     <header class="panel-heading">
                         <h2 class="panel-title">Create New Company</h2>
                     </header>
@@ -31,16 +32,23 @@
                                         <div class="tab-content">
                                             <div class="tab-pane fade mt-2 show active" id="account" role="tabpanel"
                                                  aria-labelledby="account-tab">
-                                                <form class="needs-validation" novalidate
-                                                      th:action="@{/companies/create}"
+                                                <form th:action="@{/companies/create}"
                                                       th:method="post" th:object="${newCompany}">
                                                     <div class="row">
                                                         <div class="col-12 col-md-8">
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Title</label>
-                                                                    <input type="text" th:field="*{title}" placeholder="Title"
-                                                                           class="form-control" required="required" aria-invalid="false">
+                                                                    <input type="text" th:field="*{title}"
+                                                                           placeholder="Title"
+                                                                           class="form-control">
+                                                                    <div th:if="${#fields.hasErrors('title')}">
+                                                                        <ul>
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('title')}"
+                                                                                th:text="${err}"></li>
+                                                                        </ul>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -50,8 +58,16 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Phone</label>
-                                                                    <input type="text" th:field="*{phone}" placeholder="Phone"
-                                                                           class="form-control" required="required" aria-invalid="false">
+                                                                    <input type="text" th:field="*{phone}"
+                                                                           placeholder="Phone"
+                                                                           class="form-control">
+                                                                    <div th:if="${#fields.hasErrors('phone')}">
+                                                                        <ul>
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('phone')}"
+                                                                                th:text="${err}"></li>
+                                                                        </ul>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -59,8 +75,16 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Website</label>
-                                                                    <input type="text" th:field="*{website}" placeholder="Website"
-                                                                           class="form-control" aria-invalid="false">
+                                                                    <input type="text" th:field="*{website}"
+                                                                           placeholder="Website"
+                                                                           class="form-control">
+                                                                    <div th:if="${#fields.hasErrors('website')}">
+                                                                        <ul>
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('website')}"
+                                                                                th:text="${err}"></li>
+                                                                        </ul>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -70,8 +94,17 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Address</label>
-                                                                    <input type="text" th:field="*{address.addressLine1}" placeholder="Address"
-                                                                           class="form-control" required="required" aria-invalid="false">
+                                                                    <input type="text"
+                                                                           th:field="*{address.addressLine1}"
+                                                                           placeholder="Address"
+                                                                           class="form-control">
+                                                                    <div th:if="${#fields.hasErrors('address.addressLine1')}">
+                                                                        <ul>
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('address.addressLine1')}"
+                                                                                th:text="${err}"></li>
+                                                                        </ul>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -79,8 +112,15 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Address</label>
-                                                                    <input type="text" th:field="*{address.addressLine2}" placeholder="Address"
-                                                                           class="form-control" aria-invalid="false">
+                                                                    <input type="text"
+                                                                           th:field="*{address.addressLine2}"
+                                                                           placeholder="Address"
+                                                                           class="form-control">
+                                                                    <ul>
+                                                                        <li class="validation"
+                                                                            th:each="err : ${#fields.errors('address')}"
+                                                                            th:text="${err}"></li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -90,8 +130,14 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>City</label>
-                                                                    <input type="text" th:field="*{address.city}" placeholder="City"
-                                                                           class="form-control" required="required" aria-invalid="false">
+                                                                    <input type="text" th:field="*{address.city}"
+                                                                           placeholder="City"
+                                                                           class="form-control">
+                                                                    <ul>
+                                                                        <li class="validation"
+                                                                            th:each="err : ${#fields.errors('address.city')}"
+                                                                            th:text="${err}"></li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -99,8 +145,14 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Zip Code</label>
-                                                                    <input type="text" th:field="*{address.zipCode}" placeholder="Zip Code"
-                                                                           class="form-control" required="required" aria-invalid="false">
+                                                                    <input type="text" th:field="*{address.zipCode}"
+                                                                           placeholder="Zip Code"
+                                                                           class="form-control">
+                                                                    <ul>
+                                                                        <li class="validation"
+                                                                            th:each="err : ${#fields.errors('address.zipCode')}"
+                                                                            th:text="${err}"></li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -110,8 +162,14 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>State</label>
-                                                                    <input type="text" th:field="*{address.state}" placeholder="State"
-                                                                           class="form-control" required="required" aria-invalid="false">
+                                                                    <input type="text" th:field="*{address.state}"
+                                                                           placeholder="State"
+                                                                           class="form-control">
+                                                                    <ul>
+                                                                        <li class="validation"
+                                                                            th:each="err : ${#fields.errors('address.state')}"
+                                                                            th:text="${err}"></li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -119,8 +177,14 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Country</label>
-                                                                    <input type="text" th:field="*{address.country}" placeholder="Country"
-                                                                           class="form-control" required="required" aria-invalid="false">
+                                                                    <input type="text" th:field="*{address.country}"
+                                                                           placeholder="Country"
+                                                                           class="form-control">
+                                                                    <ul>
+                                                                        <li class="validation"
+                                                                            th:each="err : ${#fields.errors('address.country')}"
+                                                                            th:text="${err}"></li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
                                                         </div>
