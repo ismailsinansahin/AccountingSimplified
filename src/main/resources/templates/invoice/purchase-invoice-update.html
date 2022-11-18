@@ -73,7 +73,7 @@
                                                                 type="submit" name="action" value="save">Save
                                                         </button>
                                                         <button class="btn btn-danger mb-2 mb-sm-0 mr-sm-2"
-                                                                type="reset">Cancel
+                                                                type="reset">Reset
                                                         </button>
                                                     </div>
                                                 </form>
@@ -117,7 +117,7 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Quantity</label>
-                                                                    <input type="text" th:field="*{quantity}" placeholder="Quantity"
+                                                                    <input type="number" th:field="*{quantity}" placeholder="Quantity"
                                                                            class="form-control" required="required" aria-invalid="false">
                                                                 </div>
                                                             </div>
@@ -126,7 +126,7 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Price</label>
-                                                                    <input type="text" th:field="*{price}" placeholder="Price"
+                                                                    <input type="number" th:field="*{price}" placeholder="Price"
                                                                            class="form-control" required="required" aria-invalid="false">
                                                                 </div>
                                                             </div>
@@ -134,8 +134,8 @@
                                                         <div class="col-12 col-md-3">
                                                             <div class="form-group">
                                                                 <div class="controls">
-                                                                    <label>Price</label>
-                                                                    <input type="text" th:field="*{tax}" placeholder="Tax"
+                                                                    <label>Tax</label>
+                                                                    <input type="number" th:field="*{tax}" placeholder="Tax"
                                                                            class="form-control" required="required" aria-invalid="false">
                                                                 </div>
                                                             </div>

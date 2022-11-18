@@ -51,7 +51,7 @@
                                 </div>
                             </li>
                             <li class="nav-divider"></li>
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('Manager', 'Employee')">
+                            <li class="nav-item" sec:authorize="hasAnyAuthority('Admin', 'Manager', 'Employee')">
                                 <a class="nav-link active"
                                    href="#"
                                    data-toggle="collapse"
@@ -71,7 +71,7 @@
                                 </div>
                             </li>
                             <li class="nav-divider"></li>
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('Manager', 'Employee')">
+                            <li class="nav-item" sec:authorize="hasAnyAuthority('Admin', 'Manager', 'Employee')">
                                 <a class="nav-link active"
                                    href="#"
                                    data-toggle="collapse"
@@ -91,7 +91,7 @@
                                 </div>
                             </li>
                             <li class="nav-divider"></li>
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('Manager')">
+                            <li class="nav-item" sec:authorize="hasAnyAuthority('Manager', 'Admin')">
                                 <a class="nav-link active"
                                    href="#"
                                    data-toggle="collapse"

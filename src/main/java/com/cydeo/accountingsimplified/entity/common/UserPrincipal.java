@@ -54,13 +54,14 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.isEnabled();
     }
 
     public Long getId() {
         return this.user.getId();
     }
 
+    // to show logged-in user firstname and lastname in UI dropdown menu
     public String getFullNameForProfile() {
         return this.user.getFirstname() + " " + this.user.getLastname();
     }
