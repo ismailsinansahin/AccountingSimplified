@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @MappedSuperclass
-//@EntityListeners(BaseEntityListener.class)
+@EntityListeners(BaseEntityListener.class)
 public class BaseEntity implements Serializable {
 
     @Id
@@ -34,19 +34,4 @@ public class BaseEntity implements Serializable {
     public Long lastUpdateUserId;
 
     private Boolean isDeleted = false;
-
-    @PrePersist
-    private void onPrePersist(){
-        this.insertDateTime=LocalDateTime.now();
-        this.lastUpdateDateTime=LocalDateTime.now();
-        this.insertUserId=1L;
-        this.lastUpdateUserId=1L;
-    }
-
-    @PreUpdate
-    private void onPreUpdate(){
-        this.lastUpdateDateTime= LocalDateTime.now();
-        this.lastUpdateUserId=1L;
-    }
-
 }

@@ -63,7 +63,8 @@
                                                                 <td th:text="${user.lastname}"></td>
                                                                 <td th:text="${user.username}"></td>
                                                                 <td th:text="${user.phone}"></td>
-                                                                <td class="actions">
+                                                                <td th:if="${user.company.getCompanyStatus().value.equals('Active')}"
+                                                                    class="actions">
                                                                     <a th:href="@{/users/update/{id}(id=${user.id})}"
                                                                        type="button">
                                                                         <button class="btn btn-primary mb-2 mb-sm-0 mr-sm-2">
@@ -88,6 +89,10 @@
                                                                             Delete
                                                                         </button>
                                                                     </a>
+                                                                </td>
+                                                                <td th:if="${user.company.getCompanyStatus().value.equals('Passive')}"
+                                                                    style="text-align: center ; background-color: #ffeeba" >
+                                                                    Inactive User
                                                                 </td>
                                                             </tr>
                                                             </tbody>

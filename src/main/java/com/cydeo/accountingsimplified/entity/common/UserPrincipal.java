@@ -1,6 +1,8 @@
 package com.cydeo.accountingsimplified.entity.common;
 
 import com.cydeo.accountingsimplified.entity.User;
+import com.cydeo.accountingsimplified.enums.CompanyStatus;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +15,7 @@ public class UserPrincipal implements UserDetails {
 
     private final User user;
 
-    public UserPrincipal(User user) {
+    public UserPrincipal(@Lazy User user) {
         this.user = user;
     }
 
@@ -42,7 +44,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !user.getCompany().getCompanyStatus().equals(CompanyStatus.PASSIVE);
     }
 
     @Override
@@ -62,5 +64,4 @@ public class UserPrincipal implements UserDetails {
     public String getFullNameForProfile() {
         return this.user.getFirstname() + " " + this.user.getLastname();
     }
-
 }
