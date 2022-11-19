@@ -1,14 +1,13 @@
 package com.cydeo.accountingsimplified.entity;
 
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -33,4 +32,18 @@ public class InvoiceProduct extends BaseEntity{
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Override
+    public String toString() {
+        return "InvoiceProduct{" +
+                "quantity=" + quantity +
+                ", price=" + price +
+                ", tax=" + tax +
+                ", total=" + total +
+                ", profitLoss=" + profitLoss +
+                ", remainingQuantity=" + remainingQuantity +
+                ", invoice=" + invoice +
+                ", product.name=" + product.getName() +
+                ", product.quantity=" + product.getQuantityInStock() +
+                '}';
+    }
 }

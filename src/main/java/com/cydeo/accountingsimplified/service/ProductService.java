@@ -1,6 +1,5 @@
 package com.cydeo.accountingsimplified.service;
 
-import com.cydeo.accountingsimplified.dto.CategoryDto;
 import com.cydeo.accountingsimplified.dto.ProductDto;
 
 import java.util.List;
@@ -15,5 +14,4 @@ public interface ProductService {
     void delete(Long productId);
 
     List<ProductDto> findAllProductsWithCategoryId(Long categoryId);
-
 }

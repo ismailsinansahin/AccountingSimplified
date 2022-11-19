@@ -20,13 +20,15 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceProductService invoiceProductService;
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
+    private final ProductService productService;
 
     public InvoiceServiceImpl(InvoiceRepository invoiceRepository, InvoiceProductService invoiceProductService,
-                              MapperUtil mapperUtil, SecurityService securityService) {
+                              MapperUtil mapperUtil, SecurityService securityService, ProductService productService) {
         this.invoiceRepository = invoiceRepository;
         this.invoiceProductService = invoiceProductService;
         this.mapperUtil = mapperUtil;
         this.securityService = securityService;
+        this.productService = productService;
     }
 
     @Override

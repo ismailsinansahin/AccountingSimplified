@@ -70,7 +70,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         if(type==InvoiceType.SALES){
             for(InvoiceProduct salesInvoiceProduct : invoiceProductList){
                 if(checkProductQuantity(salesInvoiceProduct)){
-                    updateQuantityOfProductForSalesInvoice(salesInvoiceProduct);
+                    updateQuantityOfProduct(salesInvoiceProduct, type);
                     salesInvoiceProduct.setRemainingQuantity(salesInvoiceProduct.getQuantity());
                     invoiceProductRepository.save(salesInvoiceProduct);
                     setProfitLossOfInvoiceProductsForSalesInvoice(salesInvoiceProduct);
@@ -81,7 +81,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
             }
         }else{
             for(InvoiceProduct purchaseInvoiceProduct : invoiceProductList) {
-                updateQuantityOfProductForPurchaseInvoice(purchaseInvoiceProduct);
+                updateQuantityOfProduct(purchaseInvoiceProduct, type);
                 purchaseInvoiceProduct.setRemainingQuantity(purchaseInvoiceProduct.getQuantity());
                 invoiceProductRepository.save(purchaseInvoiceProduct);
             }
@@ -92,15 +92,13 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         return salesInvoiceProduct.getProduct().getQuantityInStock() >= salesInvoiceProduct.getQuantity();
     }
 
-    private void updateQuantityOfProductForSalesInvoice(InvoiceProduct salesInvoiceProduct) {
-        ProductDto productDto = mapperUtil.convert(salesInvoiceProduct.getProduct(), new ProductDto());
-        productDto.setQuantityInStock(productDto.getQuantityInStock() - salesInvoiceProduct.getQuantity());
-        productService.update(productDto.getId(), productDto);
-    }
-
-    private void updateQuantityOfProductForPurchaseInvoice(InvoiceProduct purchaseInvoiceProduct) {
-        ProductDto productDto = mapperUtil.convert(purchaseInvoiceProduct.getProduct(), new ProductDto());
-        productDto.setQuantityInStock(productDto.getQuantityInStock() + purchaseInvoiceProduct.getQuantity());
+    private void updateQuantityOfProduct(InvoiceProduct invoiceProduct, InvoiceType type) {
+        ProductDto productDto = mapperUtil.convert(invoiceProduct.getProduct(), new ProductDto());
+        if (type.equals(InvoiceType.SALES)){
+            productDto.setQuantityInStock(productDto.getQuantityInStock() - invoiceProduct.getQuantity());
+        } else {
+            productDto.setQuantityInStock(productDto.getQuantityInStock() + invoiceProduct.getQuantity());
+        }
         productService.update(productDto.getId(), productDto);
     }
 

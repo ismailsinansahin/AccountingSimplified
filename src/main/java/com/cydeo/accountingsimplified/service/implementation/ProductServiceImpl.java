@@ -61,13 +61,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto update(Long productId, ProductDto productDto) {
-        Product product = productRepository.findById(productId).get();
-        Category category = mapperUtil.convert(productDto.getCategory(), new Category());
-        product.setCategory(category);
-        product.setName(productDto.getName());
-        product.setLowLimitAlert(productDto.getLowLimitAlert());
-        product.setProductUnit(productDto.getProductUnit());
-        product.setQuantityInStock(product.getQuantityInStock());
+//        Product product = productRepository.findById(productId).get();
+//        Category category = mapperUtil.convert(productDto.getCategory(), new Category());
+//        product.setCategory(category);
+//        product.setName(productDto.getName());
+//        product.setLowLimitAlert(productDto.getLowLimitAlert());
+//        product.setProductUnit(productDto.getProductUnit());
+//        product.setQuantityInStock(product.getQuantityInStock());
+        Product product = mapperUtil.convert(productDto, new Product());
         return mapperUtil.convert(productRepository.save(product), productDto);
     }
 
