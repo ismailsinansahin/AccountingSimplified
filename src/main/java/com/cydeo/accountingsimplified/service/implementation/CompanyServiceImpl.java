@@ -50,7 +50,7 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepository.findAll()
                 .stream()
                 .filter(company -> company.getId() != 1)
-                .sorted(Comparator.comparing(Company::getCompanyStatus))
+                .sorted(Comparator.comparing(Company::getCompanyStatus).thenComparing(Company::getTitle))
                 .map(each -> mapperUtil.convert(each, new CompanyDto()))
                 .collect(Collectors.toList());
     }
@@ -103,6 +103,11 @@ public class CompanyServiceImpl implements CompanyService {
         company.setCompanyStatus(CompanyStatus.PASSIVE);
         companyRepository.save(company);
         return mapperUtil.convert(company, new CompanyDto());
+    }
+
+    @Override
+    public boolean isTitleExist(String title) {
+        return companyRepository.existsByTitle(title);
     }
 
     @Override
