@@ -81,18 +81,18 @@ values
 -- ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
 --  'Brown Tech', 'VENDOR', '+1 (652) 852-2055', 'https://www.browntech.com', 4, 3);
 
-('2022-09-15T00:00',1,false,'2022-09-15T00:00',1,'CLIENT','Orange','+1 (251) 321-4141','orange.com',5,2),
-('2022-09-15T00:00',1,false,'2022-09-15T00:00',1,'VENDOR','Photobug','+1 (652) 852-3246','photobug.com',6,2),
-('2022-09-15T00:00',1,false,'2022-09-15T00:00',1,'VENDOR','Wordtune','+1 (652) 852-3246','wordtune.com',7,2),
-('2022-09-15T00:00',1,false,'2022-09-15T00:00',1,'CLIENT','Reallinks','+1 (652) 852-9544','reallinks.com',3,3),
-('2022-09-15T00:00',1,false,'2022-09-15T00:00',1,'VENDOR','Livetube','+1 (652) 852-2055','livetube.com',4,3);
+('2022-09-15T00:00',1,false,'2022-09-15T00:00',1,'CLIENT','Orange','+1 (251) 321-4141','https://www.orange.com',5,2),
+('2022-09-15T00:00',1,false,'2022-09-15T00:00',1,'VENDOR','Photobug','+1 (652) 852-3246','https://www.photobug.com',6,2),
+('2022-09-15T00:00',1,false,'2022-09-15T00:00',1,'VENDOR','Wordtune','+1 (652) 852-3246','https://www.wordtune.com',7,2),
+('2022-09-15T00:00',1,false,'2022-09-15T00:00',1,'CLIENT','Reallinks','+1 (652) 852-9544','https://www.reallinks.com',3,3),
+('2022-09-15T00:00',1,false,'2022-09-15T00:00',1,'VENDOR','Livetube','+1 (652) 852-2055','https://www.livetube.com',4,3);
 
 
 
 insert into categories(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                        description, company_id)
 values
--- COMPANY-2
+-- COMPANY-2 / Green Tech
 ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
  'Computers', 2),
 ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
@@ -116,10 +116,12 @@ insert into products(insert_date_time, insert_user_id, is_deleted, last_update_d
 --        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
 --         'Samsung Galaxy S22', 20, 5, 'PCS', 3);
  VALUES
-     ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,'HP Elite 800G1 Desktop Computer Package',0,5,'PCS',1),
+-- COMPANY-2 / Green Tech
+    ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,'HP Elite 800G1 Desktop Computer Package',8,5,'PCS',1),
     ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,'2021 Apple MacBook Pro',0,5,'PCS',1),
     ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,'Apple IPhone-13',0,5,'PCS',2),
     ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,'SAMSUNG Galaxy S22',0,5,'PCS',2),
+-- COMPANY-3
     ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,'Samsung Galaxy S20 (renewed)',0,5,'PCS',3),
     ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,'Samsung Galaxy S22',0,5,'PCS',3);
 
@@ -127,8 +129,10 @@ insert into products(insert_date_time, insert_user_id, is_deleted, last_update_d
 insert into invoices(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                      date,invoice_no, invoice_type, invoice_status, client_vendor_id, company_id)
 values
+-- COMPANY-2 / Green Tech
  ('2022-09-10 00:00','1','false','2022-09-11 00:00',1,'2022-09-11','P-001','PURCHASE','APPROVED',2,2),
- ('2022-09-11 00:00','1','false','2022-09-12 00:00',1,'2022-09-12','S-001','SALES','APPROVED',1,2);
+ ('2022-09-11 00:00','1','false','2022-09-12 00:00',1,'2022-09-12','S-001','SALES','APPROVED',1,2),
+ ('2022-09-12 00:00','1','false','2022-09-13 00:00',1,'2022-09-13','S-002','SALES','AWAITING_APPROVAL',1,2);
 
 -- -- COMPANY-2
 -- ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
@@ -157,9 +161,10 @@ insert into invoice_products(insert_date_time, insert_user_id, is_deleted, last_
                               price,quantity, remaining_quantity, tax, total, profit_loss, invoice_id, product_id)
 
     values
- ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,250,10,8,10,2500,0,1,1),
- ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,300,2,0,10,600,100,2,1);
---  ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,200,5,0,10,1000,-250,3,1);
+-- COMPANY-2 / Green Tech
+ ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,227.27,10,8,10,2272.73,0,1,1),
+ ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,272.73,2,0,10,545.45,100,2,1),
+ ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,181.82,5,0,10,909.09,0,3,1);
 
 
 

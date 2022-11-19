@@ -128,13 +128,15 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 invoiceProductRepository.save(salesInvoiceProduct);
             } else {
 //                int costTotalForQty = availableProduct.getTotal() * salesInvoiceProduct.getRemainingQuantity() / availableProduct.getQuantity();
-                BigDecimal costTotalForQty = availableProduct.getTotal()
+                BigDecimal costPriceForQty = availableProduct.getTotal()
                         .multiply( BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity() / (double)availableProduct.getQuantity()));
+                BigDecimal costTaxForQty = costPriceForQty.multiply(BigDecimal.valueOf(availableProduct.getTax() / 100d));
+                BigDecimal costTotalForQty = costPriceForQty.add(costTaxForQty);
 //                int salesPriceForQty = salesInvoiceProduct.getPrice() * salesInvoiceProduct.getRemainingQuantity();
                 BigDecimal salesPriceForQty = salesInvoiceProduct.getPrice()
                         .multiply(BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity()));
 //                int salesTaxForQty = salesPriceForQty * salesInvoiceProduct.getTax() / 100;
-                BigDecimal salesTaxForQty = salesPriceForQty.multiply(BigDecimal.valueOf(salesInvoiceProduct.getTax() / 100));
+                BigDecimal salesTaxForQty = salesPriceForQty.multiply(BigDecimal.valueOf(salesInvoiceProduct.getTax() / 100d));
 //                int salesTotalForQty = salesPriceForQty + salesTaxForQty;
                 BigDecimal salesTotalForQty = salesPriceForQty.add(salesTaxForQty);
 //                int profitLoss = salesInvoiceProduct.getProfitLoss() + salesTotalForQty - costTotalForQty;
