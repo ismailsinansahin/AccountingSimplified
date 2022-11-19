@@ -116,11 +116,13 @@
                                                                            th:field="*{address.addressLine2}"
                                                                            placeholder="Address"
                                                                            class="form-control">
-                                                                    <ul>
-                                                                        <li class="validation"
-                                                                            th:each="err : ${#fields.errors('address')}"
-                                                                            th:text="${err}"></li>
-                                                                    </ul>
+                                                                    <div th:if="${#fields.hasErrors('address.addressLine2')}">
+                                                                        <ul>
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('address.addressLine2')}"
+                                                                                th:text="${err}"></li>
+                                                                        </ul>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>

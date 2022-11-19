@@ -18,7 +18,7 @@ public class CompanyDto {
     private Long id;
 
     @NotBlank(message = "Title is a required field.")
-    @Size(max = 100, min = 2, message = "Title should have 2-100 characters long.")
+    @Size(max = 100, min = 2, message = "Title should be 2-100 characters long.")
     private String title;
 
     @Pattern(regexp = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$" // +111 (202) 555-0125  +1 (202) 555-0125
