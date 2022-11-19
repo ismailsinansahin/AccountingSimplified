@@ -109,37 +109,32 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         List<InvoiceProduct> availableProductsForSale = findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType.PURCHASE, salesInvoiceProduct.getProduct(), 0);
         for (InvoiceProduct availableProduct : availableProductsForSale) {
             if (salesInvoiceProduct.getRemainingQuantity() > availableProduct.getRemainingQuantity()) {
-//                BigDecimal costTotalForQty = availableProduct.getTotal() * availableProduct.getRemainingQuantity() / availableProduct.getQuantity();
-                BigDecimal costTotalForQty = availableProduct.getTotal()
-                        .divide(BigDecimal.valueOf(availableProduct.getQuantity()), RoundingMode.HALF_UP)
+                BigDecimal costPriceForQty = availableProduct.getPrice()
                         .multiply(BigDecimal.valueOf(availableProduct.getRemainingQuantity()));
-//                BigDecimal salesPriceForQty = salesInvoiceProduct.getPrice() * availableProduct.getRemainingQuantity();
-                BigDecimal salesPriceForQty = salesInvoiceProduct.getPrice().multiply(BigDecimal.valueOf(availableProduct.getRemainingQuantity()));
-//                BigDecimal salesTaxForQty = salesPriceForQty * salesInvoiceProduct.getTax() / 100;
-                BigDecimal salesTaxForQty = salesPriceForQty.multiply(BigDecimal.valueOf(salesInvoiceProduct.getTax()/100));
-//                BigDecimal salesTotalForQty = salesPriceForQty + salesTaxForQty;
+                BigDecimal costTaxForQty = availableProduct.getPrice()
+                        .multiply(BigDecimal.valueOf(availableProduct.getTax()/100d * availableProduct.getRemainingQuantity()));
+                BigDecimal costTotalForQty = costPriceForQty.add(costTaxForQty);
+                BigDecimal salesPriceForQty = salesInvoiceProduct.getPrice()
+                        .multiply(BigDecimal.valueOf(availableProduct.getRemainingQuantity()));
+                BigDecimal salesTaxForQty = salesPriceForQty
+                        .multiply(BigDecimal.valueOf(salesInvoiceProduct.getTax()/100d));
                 BigDecimal salesTotalForQty = salesPriceForQty.add(salesTaxForQty);
-//                BigDecimal profitLoss = salesInvoiceProduct.getProfitLoss() + (salesTotalForQty - costTotalForQty);
-                BigDecimal profitLoss = salesInvoiceProduct.getProfitLoss().add(salesTotalForQty.subtract(costTotalForQty));
+                BigDecimal profitLoss = salesInvoiceProduct.getProfitLoss()
+                        .add(salesTotalForQty.subtract(costTotalForQty));
                 salesInvoiceProduct.setRemainingQuantity(salesInvoiceProduct.getRemainingQuantity() - availableProduct.getRemainingQuantity());
                 availableProduct.setRemainingQuantity(0);
                 salesInvoiceProduct.setProfitLoss(profitLoss);
                 invoiceProductRepository.save(availableProduct);
                 invoiceProductRepository.save(salesInvoiceProduct);
             } else {
-//                int costTotalForQty = availableProduct.getTotal() * salesInvoiceProduct.getRemainingQuantity() / availableProduct.getQuantity();
                 BigDecimal costPriceForQty = availableProduct.getTotal()
                         .multiply( BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity() / (double)availableProduct.getQuantity()));
                 BigDecimal costTaxForQty = costPriceForQty.multiply(BigDecimal.valueOf(availableProduct.getTax() / 100d));
                 BigDecimal costTotalForQty = costPriceForQty.add(costTaxForQty);
-//                int salesPriceForQty = salesInvoiceProduct.getPrice() * salesInvoiceProduct.getRemainingQuantity();
                 BigDecimal salesPriceForQty = salesInvoiceProduct.getPrice()
                         .multiply(BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity()));
-//                int salesTaxForQty = salesPriceForQty * salesInvoiceProduct.getTax() / 100;
                 BigDecimal salesTaxForQty = salesPriceForQty.multiply(BigDecimal.valueOf(salesInvoiceProduct.getTax() / 100d));
-//                int salesTotalForQty = salesPriceForQty + salesTaxForQty;
                 BigDecimal salesTotalForQty = salesPriceForQty.add(salesTaxForQty);
-//                int profitLoss = salesInvoiceProduct.getProfitLoss() + salesTotalForQty - costTotalForQty;
                 BigDecimal profitLoss = salesInvoiceProduct.getProfitLoss().add(salesTotalForQty.subtract( costTotalForQty));
                 availableProduct.setRemainingQuantity(availableProduct.getRemainingQuantity() - salesInvoiceProduct.getRemainingQuantity());
                 salesInvoiceProduct.setRemainingQuantity(0);
