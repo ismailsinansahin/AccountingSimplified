@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,10 +15,10 @@ public class InvoiceProductDto {
 
     private Long id;
     private Integer quantity;
-    private Integer price;
+    private BigDecimal price;
     private Integer tax;
-    private Integer total;
-    private Integer profitLoss;
+    private BigDecimal total;
+    private BigDecimal profitLoss;
     private Integer remainingQuantity;
     private InvoiceDto invoice;
     private ProductDto product;

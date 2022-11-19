@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -16,10 +17,10 @@ import javax.persistence.*;
 public class InvoiceProduct extends BaseEntity{
 
     private Integer quantity;
-    private Integer price;
+    private BigDecimal price;
     private Integer tax;
-    private Integer total;
-    private Integer profitLoss;
+    private BigDecimal total;
+    private BigDecimal profitLoss;
     private Integer remainingQuantity;
 
     @NotNull

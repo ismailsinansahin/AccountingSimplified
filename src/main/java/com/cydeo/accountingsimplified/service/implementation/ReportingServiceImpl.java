@@ -1,11 +1,11 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.enums.InvoiceStatus;
-import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import org.springframework.stereotype.Service;
 import com.cydeo.accountingsimplified.dto.InvoiceProductDto;
@@ -41,15 +41,15 @@ public class ReportingServiceImpl implements ReportingService{
     }
 
     @Override
-    public Map<String, Integer> getMonthlyProfitLossDataMap() {
-        Map<String, Integer> profitLossDataMap = new TreeMap<>();
+    public Map<String, BigDecimal> getMonthlyProfitLossDataMap() {
+        Map<String, BigDecimal> profitLossDataMap = new TreeMap<>();
         List<InvoiceProduct> salesInvoiceProducts =invoiceProductRepository.findInvoiceProductsByInvoiceInvoiceType(InvoiceType.SALES);
         for(InvoiceProduct invoiceProduct : salesInvoiceProducts) {
             int year = invoiceProduct.getInvoice().getDate().getYear();
             String month = invoiceProduct.getInvoice().getDate().getMonth().toString();
-            int profitLoss = invoiceProduct.getProfitLoss();
+            BigDecimal profitLoss = invoiceProduct.getProfitLoss();
             String timeWindow = year + " " + month;
-            profitLossDataMap.put(timeWindow, profitLossDataMap.getOrDefault(timeWindow, 0) + profitLoss);
+            profitLossDataMap.put(timeWindow, profitLossDataMap.getOrDefault(timeWindow, BigDecimal.ZERO).add(profitLoss));
         }
         return profitLossDataMap;
     }

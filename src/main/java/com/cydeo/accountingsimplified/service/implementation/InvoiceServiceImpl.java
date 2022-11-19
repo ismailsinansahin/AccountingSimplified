@@ -9,6 +9,7 @@ import com.cydeo.accountingsimplified.repository.*;
 import com.cydeo.accountingsimplified.service.*;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -119,10 +120,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceType.name().charAt(0) + "-" + String.format("%03d", newOrder);
     }
 
-    private int getTotalPriceOfInvoice(Long id){
+    private BigDecimal getTotalPriceOfInvoice(Long id){
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
-        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProductDto::getPrice).sum();
+        return invoiceProductsOfInvoice.stream()
+                .map(InvoiceProductDto::getPrice)
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
     private int getTotalTaxOfInvoice(Long id){
@@ -131,10 +134,12 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProductDto::getTax).sum();
     }
 
-    private int calculateTotalAmountOfInvoice(Long id){
+    private BigDecimal calculateTotalAmountOfInvoice(Long id){
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
-        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProductDto::getTotal).sum();
+        return invoiceProductsOfInvoice.stream()
+                .map(InvoiceProductDto::getTotal)
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
 

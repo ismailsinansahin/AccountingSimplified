@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
@@ -24,8 +25,8 @@ public class InvoiceDto {
     private CompanyDto company;
     private ClientVendorDto clientVendor;
 
-    private Integer price;
+    private BigDecimal price;
     private Integer tax;
-    private Integer total;
+    private BigDecimal total;
 
 }
