@@ -69,7 +69,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         List<InvoiceProduct> invoiceProductList = invoiceProductRepository.findInvoiceProductsByInvoice_Id(invoiceId);
         if(type==InvoiceType.SALES){
             for(InvoiceProduct salesInvoiceProduct : invoiceProductList){
-                if(checkProductQuantity(salesInvoiceProduct)){
+                if(checkProductQuantity(mapperUtil.convert(salesInvoiceProduct, new InvoiceProductDto()))){
                     updateQuantityOfProductForSalesInvoice(salesInvoiceProduct);
                     salesInvoiceProduct.setRemainingQuantity(salesInvoiceProduct.getQuantity());
                     invoiceProductRepository.save(salesInvoiceProduct);
@@ -88,7 +88,8 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         }
     }
 
-    private boolean checkProductQuantity(InvoiceProduct salesInvoiceProduct) {
+    @Override
+    public boolean checkProductQuantity(InvoiceProductDto salesInvoiceProduct) {
         return salesInvoiceProduct.getProduct().getQuantityInStock() >= salesInvoiceProduct.getQuantity();
     }
 
