@@ -108,7 +108,24 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     private void setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProduct salesInvoiceProduct) {
         List<InvoiceProduct> availableProductsForSale = findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType.PURCHASE, salesInvoiceProduct.getProduct(), 0);
         for (InvoiceProduct availableProduct : availableProductsForSale) {
-            if (salesInvoiceProduct.getRemainingQuantity() > availableProduct.getRemainingQuantity()) {
+            if (salesInvoiceProduct.getRemainingQuantity() <= availableProduct.getRemainingQuantity()) {
+                BigDecimal costPriceForQty = availableProduct.getPrice()
+                        .multiply(BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity()));
+                BigDecimal costTaxForQty = availableProduct.getPrice()
+                        .multiply(BigDecimal.valueOf(availableProduct.getTax() / 100d * salesInvoiceProduct.getRemainingQuantity()));
+                BigDecimal costTotalForQty = costPriceForQty.add(costTaxForQty);
+                BigDecimal salesPriceForQty = salesInvoiceProduct.getPrice()
+                        .multiply(BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity()));
+                BigDecimal salesTaxForQty = salesPriceForQty.multiply(BigDecimal.valueOf(salesInvoiceProduct.getTax() / 100d));
+                BigDecimal salesTotalForQty = salesPriceForQty.add(salesTaxForQty);
+                BigDecimal profitLoss = salesInvoiceProduct.getProfitLoss().add(salesTotalForQty.subtract( costTotalForQty));
+                availableProduct.setRemainingQuantity(availableProduct.getRemainingQuantity() - salesInvoiceProduct.getRemainingQuantity());
+                salesInvoiceProduct.setRemainingQuantity(0);
+                salesInvoiceProduct.setProfitLoss(profitLoss);
+                invoiceProductRepository.save(availableProduct);
+                invoiceProductRepository.save(salesInvoiceProduct);
+                break;
+            } else {
                 BigDecimal costPriceForQty = availableProduct.getPrice()
                         .multiply(BigDecimal.valueOf(availableProduct.getRemainingQuantity()));
                 BigDecimal costTaxForQty = availableProduct.getPrice()
@@ -126,26 +143,9 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 salesInvoiceProduct.setProfitLoss(profitLoss);
                 invoiceProductRepository.save(availableProduct);
                 invoiceProductRepository.save(salesInvoiceProduct);
-            } else {
-                BigDecimal costPriceForQty = availableProduct.getTotal()
-                        .multiply( BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity() / (double)availableProduct.getQuantity()));
-                BigDecimal costTaxForQty = costPriceForQty.multiply(BigDecimal.valueOf(availableProduct.getTax() / 100d));
-                BigDecimal costTotalForQty = costPriceForQty.add(costTaxForQty);
-                BigDecimal salesPriceForQty = salesInvoiceProduct.getPrice()
-                        .multiply(BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity()));
-                BigDecimal salesTaxForQty = salesPriceForQty.multiply(BigDecimal.valueOf(salesInvoiceProduct.getTax() / 100d));
-                BigDecimal salesTotalForQty = salesPriceForQty.add(salesTaxForQty);
-                BigDecimal profitLoss = salesInvoiceProduct.getProfitLoss().add(salesTotalForQty.subtract( costTotalForQty));
-                availableProduct.setRemainingQuantity(availableProduct.getRemainingQuantity() - salesInvoiceProduct.getRemainingQuantity());
-                salesInvoiceProduct.setRemainingQuantity(0);
-                salesInvoiceProduct.setProfitLoss(profitLoss);
-                invoiceProductRepository.save(availableProduct);
-                invoiceProductRepository.save(salesInvoiceProduct);
-                break;
             }
         }
     }
-
 
     private BigDecimal getAmountOfInvoiceProduct(InvoiceProductDto invoiceProductDto) {
         int quantity = invoiceProductDto.getQuantity();
