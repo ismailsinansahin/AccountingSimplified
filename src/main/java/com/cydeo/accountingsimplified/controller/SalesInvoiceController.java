@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
-
 
 @Controller
 @RequestMapping("/salesInvoices")
@@ -52,7 +50,7 @@ public class SalesInvoiceController {
 
     @PostMapping("/create")
     public String createNewSalesInvoice(InvoiceDto invoiceDto) {
-        var invoice = invoiceService.create(invoiceDto, InvoiceType.SALES);
+        var invoice = invoiceService.save(invoiceDto, InvoiceType.SALES);
         return "redirect:/salesInvoices/update/" + invoice.getId();
     }
 
@@ -62,7 +60,7 @@ public class SalesInvoiceController {
     }
 
     @GetMapping("/update/{invoiceId}")
-    public String navigateToSalesInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId, Model model) throws Exception {
+    public String navigateToSalesInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId, Model model) {
         model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
         model.addAttribute("clients", clientVendorService.getAllClientVendorsOfCompany(ClientVendorType.CLIENT));
         model.addAttribute("products", productService.getProductsOfCompany());

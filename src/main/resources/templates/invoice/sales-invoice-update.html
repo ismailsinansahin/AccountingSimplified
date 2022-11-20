@@ -59,6 +59,8 @@
                                                                 <div class="controls">
                                                                     <label>Client</label>
                                                                     <select id="role" class="form-control" th:field="*{clientVendor}" required>
+                                                                        <option th:if="${clients.size() > 1}"
+                                                                                th:value="''" th:text="'Select'" selected></option>
                                                                         <option th:each= "client:${clients}"
                                                                                 th:value="${client.id}"
                                                                                 th:text="${client.companyName}"
@@ -105,8 +107,10 @@
                                                                 <div class="controls">
                                                                     <label>Product</label>
                                                                     <select id="product" class="form-control" th:field="*{product}" required>
-                                                                        <option th:value="''" th:text="'Select'" selected></option>
+                                                                        <option th:if="${products.size() >1}"
+                                                                                th:value="''" th:text="'Select'" selected></option>
                                                                         <option th:each= "product:${products}"
+                                                                                th:if="${product.getQuantityInStock() > 0}"
                                                                                 th:value="${product.id}"
                                                                                 th:text="${product.name}"></option>
                                                                     </select>
@@ -178,7 +182,7 @@
                                                                 <th scope="col">#</th>
                                                                 <th>Product</th>
                                                                 <th>Quantity</th>
-                                                                <th>Price</th>
+                                                                <th>Unit Price</th>
                                                                 <th>Tax</th>
                                                                 <th>Total</th>
                                                                 <th>Remove</th>

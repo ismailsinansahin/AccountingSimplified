@@ -172,19 +172,20 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     }
 
     @Override
-    public int getTaxOfInvoiceProduct(Long id) {
+    public BigDecimal getTaxOfInvoiceProduct(Long id) {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(id), new Invoice());
         List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
-        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getTax).sum();
+        return invoiceProductsOfInvoice.stream()
+                .map(i-> BigDecimal.valueOf(i.getTax() / 100d * i.getQuantity()).multiply(i.getPrice()))
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
     @Override
     public BigDecimal getTotalOfInvoiceProduct(Long id) {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(id), new Invoice());
         List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
-//        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getTotal).sum();
         return invoiceProductsOfInvoice.stream()
-                .map(InvoiceProduct::getTotal)
+                .map(ip -> ip.getTotal().add(BigDecimal.valueOf((long) ip.getQuantity() * ip.getTax())))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
@@ -192,7 +193,6 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     public BigDecimal getProfitLossOfInvoiceProduct(Long id) {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(id), new Invoice());
         List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
-//        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getProfitLoss).sum();
         return invoiceProductsOfInvoice.stream()
                 .map(InvoiceProduct::getProfitLoss)
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);

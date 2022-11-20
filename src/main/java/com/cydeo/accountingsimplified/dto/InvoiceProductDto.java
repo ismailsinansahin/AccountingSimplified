@@ -14,12 +14,12 @@ import java.math.BigDecimal;
 public class InvoiceProductDto {
 
     private Long id;
-    private Integer quantity;
+    private int quantity;
     private BigDecimal price;
-    private Integer tax;
+    private int tax;
     private BigDecimal total;
     private BigDecimal profitLoss;
-    private Integer remainingQuantity;
+    private int remainingQuantity;
     private InvoiceDto invoice;
     private ProductDto product;
 

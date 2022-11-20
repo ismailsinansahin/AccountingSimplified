@@ -16,12 +16,12 @@ import java.math.BigDecimal;
 @Where(clause = "is_deleted=false")
 public class InvoiceProduct extends BaseEntity{
 
-    private Integer quantity;
+    private int quantity;
     private BigDecimal price;
-    private Integer tax;
+    private int tax;
     private BigDecimal total;
     private BigDecimal profitLoss;
-    private Integer remainingQuantity;
+    private int remainingQuantity;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

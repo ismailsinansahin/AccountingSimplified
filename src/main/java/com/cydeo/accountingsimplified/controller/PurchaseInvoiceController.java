@@ -47,7 +47,7 @@ public class PurchaseInvoiceController {
 
     @PostMapping("/create")
     public String createNewPurchaseInvoice(InvoiceDto invoiceDto) {
-        var invoice = invoiceService.create(invoiceDto, InvoiceType.PURCHASE);
+        var invoice = invoiceService.save(invoiceDto, InvoiceType.PURCHASE);
         return "redirect:/purchaseInvoices/update/" + invoice.getId();
     }
 

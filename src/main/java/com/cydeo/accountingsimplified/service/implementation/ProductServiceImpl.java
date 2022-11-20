@@ -11,6 +11,7 @@ import com.cydeo.accountingsimplified.service.ProductService;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -36,10 +37,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> getAllProducts() throws Exception {
+    public List<ProductDto> getAllProducts() {
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return productRepository.findAllByCategoryCompany(company)
                 .stream()
+                .sorted(Comparator.comparing((Product product) -> product.getCategory().getDescription())
+                        .thenComparing(Product::getName))
                 .map(each -> mapperUtil.convert(each, new ProductDto()))
                 .collect(Collectors.toList());
     }

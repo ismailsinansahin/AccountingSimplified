@@ -15,7 +15,7 @@ public interface InvoiceProductService {
     void save(Long invoiceId, InvoiceProductDto invoiceProductDto);
     void removeInvoiceProduct(Long invoiceProductId);
     BigDecimal getPriceOfInvoiceProduct(Long id);
-    int getTaxOfInvoiceProduct(Long id);
+    BigDecimal getTaxOfInvoiceProduct(Long id);
     BigDecimal getTotalOfInvoiceProduct(Long id);
     BigDecimal getProfitLossOfInvoiceProduct(Long id);
     void completeApprovalProcedures(Long invoiceId, InvoiceType type);
