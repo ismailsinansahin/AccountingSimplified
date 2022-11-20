@@ -19,6 +19,7 @@ public interface InvoiceProductService {
     BigDecimal getTotalOfInvoiceProduct(Long id);
     BigDecimal getProfitLossOfInvoiceProduct(Long id);
     void completeApprovalProcedures(Long invoiceId, InvoiceType type);
+    boolean checkProductQuantity(InvoiceProductDto salesInvoiceProduct);
     List<InvoiceProduct> findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType type, Product product, Integer remainingQuantity);
 
 }

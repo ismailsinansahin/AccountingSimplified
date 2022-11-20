@@ -61,14 +61,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto update(Long productId, ProductDto productDto) {
-//        Product product = productRepository.findById(productId).get();
+        Product product = productRepository.findById(productId).get();
 //        Category category = mapperUtil.convert(productDto.getCategory(), new Category());
 //        product.setCategory(category);
 //        product.setName(productDto.getName());
 //        product.setLowLimitAlert(productDto.getLowLimitAlert());
 //        product.setProductUnit(productDto.getProductUnit());
-//        product.setQuantityInStock(product.getQuantityInStock());
-        Product product = mapperUtil.convert(productDto, new Product());
+        final int quantityInStock = productDto.getQuantityInStock() == null ? product.getQuantityInStock() : productDto.getQuantityInStock();
+        product.setQuantityInStock(quantityInStock);
         return mapperUtil.convert(productRepository.save(product), productDto);
     }
 
