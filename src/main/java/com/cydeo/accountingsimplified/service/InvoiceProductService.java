@@ -18,6 +18,7 @@ public interface InvoiceProductService {
     int getTotalOfInvoiceProduct(Long id);
     int getProfitLossOfInvoiceProduct(Long id);
     void completeApprovalProcedures(Long invoiceId, InvoiceType type);
+    boolean checkProductQuantity(InvoiceProductDto salesInvoiceProduct);
     List<InvoiceProduct> findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType type, Product product, Integer remainingQuantity);
 
 }
