@@ -51,7 +51,7 @@ public class ProductController {
     }
 
     @GetMapping("/update/{productId}")
-    public String navigateToProductUpate(@PathVariable("productId") Long productId, Model model) throws Exception {
+    public String navigateToProductUpdate(@PathVariable("productId") Long productId, Model model) throws Exception {
         model.addAttribute("product", productService.findProductById(productId));
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));

@@ -81,11 +81,13 @@ values
 -- ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
 --  'Brown Tech', 'VENDOR', '+1 (652) 852-2055', 'https://www.browntech.com', 4, 3);
 
-('2022-09-15T00:00',1,false,'2022-09-15T00:00',1,'CLIENT','Orange','+1 (251) 321-4141','https://www.orange.com',5,2),
-('2022-09-15T00:00',1,false,'2022-09-15T00:00',1,'VENDOR','Photobug','+1 (652) 852-3246','https://www.photobug.com',6,2),
-('2022-09-15T00:00',1,false,'2022-09-15T00:00',1,'VENDOR','Wordtune','+1 (652) 852-3246','https://www.wordtune.com',7,2),
-('2022-09-15T00:00',1,false,'2022-09-15T00:00',1,'CLIENT','Reallinks','+1 (652) 852-9544','https://www.reallinks.com',3,3),
-('2022-09-15T00:00',1,false,'2022-09-15T00:00',1,'VENDOR','Livetube','+1 (652) 852-2055','https://www.livetube.com',4,3);
+-- COMPANY-2 / Green Tech
+('2022-09-15T00:00',2, false,'2022-09-15T00:00',2,'CLIENT','Orange Tech', '+1 (251) 321-4141', 'https://www.orange.com', 5, 2),
+('2022-09-15T00:00',2, false,'2022-09-15T00:00',2,'VENDOR','Photobug Tech', '+1 (652) 852-3246', 'https://www.photobug.com', 6, 2),
+('2022-09-15T00:00',2, false,'2022-09-15T00:00',2,'VENDOR','Wordtune Tech','+1 (652) 852-3246','https://www.wordtune.com', 7, 2),
+-- COMPANY-3 / Blue Tech
+('2022-09-15T00:00',3, false,'2022-09-15T00:00',3,'CLIENT', 'Reallinks Tech', '+1 (652) 852-9544','https://www.reallinks.com', 3, 3),
+('2022-09-15T00:00',3, false,'2022-09-15T00:00',3,'VENDOR', 'Livetube Tech', '+1 (652) 852-2055','https://www.livetube.com', 4, 3);
 
 
 
@@ -93,13 +95,12 @@ insert into categories(insert_date_time, insert_user_id, is_deleted, last_update
                        description, company_id)
 values
 -- COMPANY-2 / Green Tech
-('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
- 'Computers', 2),
-('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
- 'Phones', 2),
--- COMPANY-3
-('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
- 'TV', 3);
+('2022-09-15 00:00:00', 2, false, '2022-09-15 00:00:00', 2, 'Computer', 2),
+('2022-09-15 00:00:00', 2, false, '2022-09-15 00:00:00', 2, 'Phone', 2),
+-- COMPANY-3 / Blue Tech
+('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'Phone', 3),
+('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'TV', 3),
+('2022-09-15 00:00:00', 3, false, '2022-09-15 00:00:00', 3, 'Monitor', 3);
 
 insert into products(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                      name, quantity_in_stock, low_limit_alert, product_unit, category_id)
@@ -117,13 +118,13 @@ insert into products(insert_date_time, insert_user_id, is_deleted, last_update_d
 --         'Samsung Galaxy S22', 20, 5, 'PCS', 3);
  VALUES
 -- COMPANY-2 / Green Tech
-    ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,'HP Elite 800G1 Desktop Computer Package',8,5,'PCS',1),
-    ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,'2021 Apple MacBook Pro',0,5,'PCS',1),
-    ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,'Apple IPhone-13',0,5,'PCS',2),
-    ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,'SAMSUNG Galaxy S22',0,5,'PCS',2),
--- COMPANY-3
-    ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,'Samsung Galaxy S20 (renewed)',0,5,'PCS',3),
-    ('2022-09-15 00:00',1,'false','2022-09-15 00:00',1,'Samsung Galaxy S22',0,5,'PCS',3);
+    ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'HP Elite 800G1 Desktop Computer Package',8,5,'PCS',1),
+    ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, '2021 Apple MacBook Pro',0,5,'PCS',1),
+    ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'Apple IPhone-13',0,5,'PCS',2),
+    ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'SAMSUNG Galaxy S22',0,5,'PCS',2),
+-- COMPANY-3 / Blue Tech
+    ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S20 (renewed)', 0, 5, 'PCS', 3),
+    ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S22', 0, 5, 'PCS', 3);
 
 
 insert into invoices(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
@@ -134,6 +135,9 @@ values
  ('2022-09-10 00:00','1','false','2022-09-11 00:00',1,'2022-09-11','P-002','PURCHASE','APPROVED',3,2),
  ('2022-09-11 00:00','1','false','2022-09-12 00:00',1,'2022-09-12','S-001','SALES','APPROVED',1,2),
  ('2022-09-12 00:00','1','false','2022-09-13 00:00',1,'2022-09-13','S-002','SALES','AWAITING_APPROVAL',1,2);
+
+-- COMPANY-3 / Blue Tech
+
 
 -- -- COMPANY-2
 -- ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,

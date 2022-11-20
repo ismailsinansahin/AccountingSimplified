@@ -12,6 +12,7 @@ import com.cydeo.accountingsimplified.service.SecurityService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,15 +62,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto update(Long productId, ProductDto productDto) {
-        Product product = productRepository.findById(productId).get();
-//        Category category = mapperUtil.convert(productDto.getCategory(), new Category());
-//        product.setCategory(category);
-//        product.setName(productDto.getName());
-//        product.setLowLimitAlert(productDto.getLowLimitAlert());
-//        product.setProductUnit(productDto.getProductUnit());
+        productDto.setId(productId);
+        Product product = productRepository.findById(productId)
+                .orElseThrow(()-> new NoSuchElementException("Product " + productDto.getName() + "not found"));
         final int quantityInStock = productDto.getQuantityInStock() == null ? product.getQuantityInStock() : productDto.getQuantityInStock();
-        product.setQuantityInStock(quantityInStock);
-        return mapperUtil.convert(productRepository.save(product), productDto);
+        productDto.setQuantityInStock(quantityInStock);
+        product = productRepository.save(mapperUtil.convert(productDto, new Product()));
+        return mapperUtil.convert(product, productDto);
     }
 
     @Override
