@@ -60,6 +60,10 @@ values
 ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1,
  'admin@bluetech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
  'Chris', 'Brown', '+1 (356) 258-3544', 2, 3, true),
+-- COMPANY-3 / Blue Tech / MANAGER
+('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1,
+ 'manager@bluetech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
+ 'Tom', 'Hanks', '+1 (356) 258-3544', 3, 3, true),
 -- COMPANY-4 / Red Tech / ADMIN
 ('2022-09-09 00:00:00', 1, false, '2022-09-09 00:00:00', 1,
  'admin@redtech.com', '$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK',
@@ -99,8 +103,8 @@ insert into products(insert_date_time, insert_user_id, is_deleted, last_update_d
     ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'Apple iPhone-13', 0, 5,'PCS', 2),
     ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'SAMSUNG Galaxy S22',0, 5,'PCS', 2),
 -- COMPANY-3 / Blue Tech
-    ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S20 (renewed)', 10, 5, 'PCS', 3),
-    ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S22', 10, 5, 'PCS', 3);
+    ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S20 (renewed)', 30, 5, 'PCS', 3),
+    ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S22', 20, 5, 'PCS', 3);
 
 
 insert into invoices(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
@@ -123,22 +127,20 @@ values
 
 insert into invoice_products(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                               price,quantity, remaining_quantity, tax, total, profit_loss, invoice_id, product_id)
-
     values
 -- COMPANY-2 / Green Tech
---         one product enough for two sale
---  ('2022-09-15 00:00',2,'false','2022-09-15 00:00',2,227.27,10,8,10,2272.73,0,1,1),
---         second product required for second sale
- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 250, 5, 3, 10, 1250, 0, 1, 1),
- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 250, 5, 5, 10, 1250, 0, 2, 1),
- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 300, 2, 0, 10, 600, 110, 3, 1),
- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 200, 5, 0, 10, 1000, 0, 4, 1),
+ ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 250, 5, 3, 10, 1250, 0, 1, 1),     --purchase APPROVED
+ ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 250, 5, 5, 10, 1250, 0, 2, 1),     --purchase APPROVED total cost (without tax) 2500
+ ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 300, 2, 0, 10, 600, 110, 3, 1),    --sale APPROVED     total sale (without tax) 600 & profit : 110 with tax
+ ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 200, 5, 0, 10, 1000, 0, 4, 1),     --sale AWAITING_APPROVAL after approval total sale (without tax) :1600 & profit (with tax) : -165
 
 -- COMPANY-3 / Blue Tech
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 200, 20, 0, 10, 4000, 0, 5, 5),
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 200, 20, 10, 10, 4000, 0, 5, 5),
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 900, 10, 4, 10, 9000, 0, 6, 6),
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 900, 10, 10, 10, 9000, 0, 6, 6),
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 300, 10, 0, 10, 3000, 1100, 7, 5),
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 300, 20, 0, 10, 6000, 2200, 7, 5),
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 6, 0, 10, 7200, 0, 8, 6);
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 200, 20, 10, 10, 4000, 0, 5, 5),    --purchase APPROVED
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 200, 20, 20, 10, 4000, 0, 5, 5),    --purchase APPROVED
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 900, 10, 10, 10, 9000, 0, 6, 6),    --purchase APPROVED
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 900, 10, 10, 10, 9000, 0, 6, 6),    --purchase APPROVED  total cost (without tax) 26000
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 300, 10, 0, 10, 3000, 1100, 7, 5),  --sale APPROVED
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 300, 20, 0, 10, 6000, 2200, 7, 5),  --sale APPROVED     total sale (without tax): 9000 & profit : 3300 with tax
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 6, 0, 10, 7200, 0, 8, 6),     --sale AWAITING_APPROVAL after approval total sale (without tax) : 16200 without tax & profit (with tax) : 3300+1980=5280
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 5, 0, 10, 6000, 0, 9, 6),     --sale AWAITING_APPROVAL after approval total sale (without tax) : 22200 without tax & profit (with tax) : 5280+1980=6930
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 2, 0, 10, 2400, 0, 10, 6);    --sale AWAITING_APPROVAL after approval total sale (without tax) : 24600 without tax & profit (with tax) : 6930+660=7590
