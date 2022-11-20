@@ -19,10 +19,11 @@ public class Product extends BaseEntity{
     @NotNull
     private String name;
 
-    private Integer quantityInStock;
+//    @NotNull // instead of this, int primitive type can be used
+    private int quantityInStock;
 
-    @NotNull
-    private Integer lowLimitAlert;
+//    @NotNull // instead of this, int primitive type can be used
+    private int lowLimitAlert;
 
     @NotNull
     @Enumerated(EnumType.STRING)
