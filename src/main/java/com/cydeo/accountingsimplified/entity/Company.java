@@ -1,7 +1,6 @@
 package com.cydeo.accountingsimplified.entity;
 
 import com.cydeo.accountingsimplified.enums.CompanyStatus;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,15 +18,15 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=false")
 public class Company extends BaseEntity{
 
-    @NotNull
+    @Column(unique = true)
     private String title;
 
-    @NotNull
+
     private String phone;
 
     private String website;
 
-    @NotNull
+
     @Enumerated(EnumType.STRING)
     private CompanyStatus companyStatus;
 

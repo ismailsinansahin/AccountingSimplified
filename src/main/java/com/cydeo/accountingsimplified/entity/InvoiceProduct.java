@@ -1,6 +1,5 @@
 package com.cydeo.accountingsimplified.entity;
 
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,12 +22,12 @@ public class InvoiceProduct extends BaseEntity{
     private Integer profitLoss;
     private Integer remainingQuantity;
 
-    @NotNull
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_id")
     private Invoice invoice;
 
-    @NotNull
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;

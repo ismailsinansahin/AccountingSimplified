@@ -1,7 +1,6 @@
 package com.cydeo.accountingsimplified.entity;
 
 import com.cydeo.accountingsimplified.enums.ProductUnit;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,19 +16,16 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=false")
 public class Product extends BaseEntity{
 
-    @NotNull
+    @Column(unique = true)
     private String name;
 
     private Integer quantityInStock;
 
-    @NotNull
     private Integer lowLimitAlert;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private ProductUnit productUnit;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
