@@ -22,32 +22,24 @@ import java.util.List;
 @Where(clause = "is_deleted=false")
 public class Invoice extends BaseEntity{
 
-    @NotNull
     private String invoiceNo;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private InvoiceStatus invoiceStatus;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private InvoiceType invoiceType;
 
-    @NotNull
     @DateTimeFormat
     private LocalDate date;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "client_vendor_id")
     private ClientVendor clientVendor;
 
-    @OneToMany(mappedBy = "invoice", fetch = FetchType.LAZY)
-    private List<InvoiceProduct> invoiceProductList = new ArrayList<>();
 
 }

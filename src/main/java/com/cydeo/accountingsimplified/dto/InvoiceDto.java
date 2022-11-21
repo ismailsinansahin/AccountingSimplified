@@ -7,7 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -17,11 +22,17 @@ import java.time.LocalDate;
 public class InvoiceDto {
 
     private Long id;
+
     private String invoiceNo;
+
     private InvoiceStatus invoiceStatus;
+
     private InvoiceType invoiceType;
+
     private LocalDate date;
+
     private CompanyDto company;
+
     private ClientVendorDto clientVendor;
 
     private Integer price;

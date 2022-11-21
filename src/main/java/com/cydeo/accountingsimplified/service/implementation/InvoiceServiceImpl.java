@@ -100,8 +100,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setInvoiceNo(generateInvoiceNo(invoiceType));
         invoiceDto.setDate(LocalDate.now());
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        invoiceDto.setCompany(mapperUtil.convert(company, new CompanyDto()));
+        invoiceDto.setCompany(securityService.getLoggedInUser().getCompany());
         return invoiceDto;
     }
 

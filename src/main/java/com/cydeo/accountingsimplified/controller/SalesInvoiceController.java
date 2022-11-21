@@ -1,5 +1,6 @@
 package com.cydeo.accountingsimplified.controller;
 
+import com.cydeo.accountingsimplified.app_util.ErrorGenerator;
 import com.cydeo.accountingsimplified.dto.InvoiceDto;
 import com.cydeo.accountingsimplified.dto.InvoiceProductDto;
 import com.cydeo.accountingsimplified.enums.ClientVendorType;
@@ -7,12 +8,11 @@ import com.cydeo.accountingsimplified.enums.InvoiceType;
 import com.cydeo.accountingsimplified.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -51,8 +51,14 @@ public class SalesInvoiceController {
     }
 
     @PostMapping("/create")
-    public String createNewSalesInvoice(InvoiceDto invoiceDto) {
-        var invoice = invoiceService.create(invoiceDto, InvoiceType.SALES);
+    public String createNewSalesInvoice(@Valid @ModelAttribute("newSalesInvoice") InvoiceDto invoiceDto, RedirectAttributes redirAttrs) {
+
+        if (invoiceDto.getClientVendor() == null) {
+            redirAttrs.addFlashAttribute("error", "Please choose a Client");
+            return "redirect:/salesInvoices/create";
+        }
+
+        InvoiceDto invoice = invoiceService.create(invoiceDto, InvoiceType.SALES);
         return "redirect:/salesInvoices/update/" + invoice.getId();
     }
 

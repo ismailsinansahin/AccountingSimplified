@@ -21,6 +21,7 @@ public class ClientVendorDtoConverter implements Converter<String, ClientVendorD
     @SneakyThrows
     @Override
     public ClientVendorDto convert(String id){
+        if (id.isEmpty()) return null;
         return clientVendorService.findClientVendorById(Long.parseLong(id));
     }
 
