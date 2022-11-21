@@ -4,104 +4,139 @@
 
 <body>
 <div class="dashboard-main-wrapper">
-  <div th:replace="/fragments/header :: header"></div>
-  <div th:replace="/fragments/left-sidebar :: left-sidebar"></div>
-  <div class="dashboard-wrapper">
-    <div class="dashboard-ecommerce">
-      <div class="container-fluid dashboard-content">
-        <div class="ecommerce-widget">
-          <div class="input-group row">
-            <div class="col-auto">
-              <form>
-                <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
-                  <a id="productlistlink" class="btn bg-dark text-light mb-1"
-                     th:href="@{/products/list}"><i class="fa fa-list mr-1"></i>Product List</a>
-                </div>
-              </form>
-            </div>
-          </div><br>
-          <header class="panel-heading">
-            <h2 class="panel-title">Create New Product</h2>
-          </header>
-          <div class="row">
-            <div class="col-12">
-              <div class="card">
-                <div class="card-content">
-                  <div class="card-body">
-                    <div class="tab-content">
-                      <div class="tab-pane fade mt-2 show active" id="account" role="tabpanel"
-                           aria-labelledby="account-tab">
-                        <form class="needs-validation" novalidate
-                              th:action="@{/products/create}"
-                              th:method="post" th:object="${newProduct}">
-                          <div class="row">
-                            <div class="col-12 col-md-4">
-                              <div class="form-group">
-                                <div class="controls">
-                                  <label>Category</label>
-                                  <select id="category" class="form-control" th:field="*{category}" required>
-                                    <option th:value="''" th:text="'Select'" selected></option>
-                                    <option th:each= "category:${categories}"
-                                            th:value="${category.id}"
-                                            th:text="${category.description}"></option>
-                                  </select>
+    <div th:replace="/fragments/header :: header"></div>
+    <div th:replace="/fragments/left-sidebar :: left-sidebar"></div>
+    <div class="dashboard-wrapper">
+        <div class="dashboard-ecommerce">
+            <div class="container-fluid dashboard-content">
+                <div class="ecommerce-widget">
+                    <div class="input-group row">
+                        <div class="col-auto">
+                            <form>
+                                <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
+                                    <a id="staffListLink" class="btn bg-dark text-light mb-1"
+                                       th:href="@{/products/list}"><i class="fa fa-list mr-1"></i>Product List</a>
                                 </div>
-                              </div>
-                            </div>
-                            <div class="col-12 col-md-4">
-                              <div class="form-group">
-                                <div class="controls">
-                                  <label>Name</label>
-                                  <input type="text" th:field="*{name}" placeholder="Name"
-                                         class="form-control" aria-invalid="false">
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-12 col-md-4">
-                              <div class="form-group">
-                                <div class="controls">
-                                  <label>Low Limit Alert</label>
-                                  <input type="text" th:field="*{lowLimitAlert}" placeholder="Low Limit Alert"
-                                         class="form-control" required="required" aria-invalid="false">
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-12 col-md-4">
-                              <div class="form-group">
-                                <div class="controls">
-                                  <label>Product Unit</label>
-                                  <select id="productUnit" class="form-control" th:field="*{productUnit}" required>
-                                    <option th:value="''" th:text="'Select'" selected></option>
-                                    <option th:each= "productUnit:${productUnits}"
-                                            th:value="${productUnit}"
-                                            th:text="${productUnit.value}"></option>
-                                  </select>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-3 mt-sm-2">
-                            <button class="btn btn-success mb-2 mb-sm-0 mr-sm-2"
-                                    type="submit" name="action" value="save">Save
-                            </button>
-                            <button class="btn btn-danger mb-2 mb-sm-0 mr-sm-2"
-                                    type="reset">Reset
-                            </button>
-                          </div>
-                        </form>
-                      </div>
+                            </form>
+                        </div>
                     </div>
-                  </div>
+                    <br>
+                    <header class="panel-heading">
+                        <h2 class="panel-title">Create New Product</h2>
+                    </header>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-body">
+                                        <div class="tab-content">
+                                            <div class="tab-pane fade mt-2 show active" id="account" role="tabpanel"
+                                                 aria-labelledby="account-tab">
+                                                <form th:action="@{/products/create}"
+                                                      th:method="post" th:object="${newProduct}">
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-4">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label>Category</label>
+                                                                    <select id="category" name="category" class="custom-select">
+                                                                        <option th:value="''"
+                                                                                th:text="'Select'"></option>
+                                                                        <option th:each="category:${categories}"
+                                                                                th:value="${category.id}"
+                                                                                th:text="${category.description}"></option>
+
+                                                                    </select>
+                                                                    <div th:if="${#fields.hasErrors('category')}">
+                                                                        <ul>
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('category')}"
+                                                                                th:text="${err}"></li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-4">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label>Name</label>
+                                                                    <input type="text" th:field="*{name}"
+                                                                           placeholder="Name"
+                                                                           class="form-control">
+                                                                    <div th:if="${#fields.hasErrors('name')}">
+                                                                        <ul>
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('name')}"
+                                                                                th:text="${err}"></li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-4">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label>Low Limit Alert</label>
+                                                                    <input type="number" th:field="*{lowLimitAlert}"
+                                                                           placeholder="Low Limit Alert"
+                                                                           class="form-control">
+                                                                    <div th:if="${#fields.hasErrors('lowLimitAlert')}">
+                                                                        <ul>
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('lowLimitAlert')}"
+                                                                                th:text="${err}"></li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-4">
+                                                            <div class="form-group">
+                                                                <div class="controls">
+                                                                    <label>Product Unit</label>
+                                                                    <select class="custom-select"
+                                                                            th:field="*{productUnit}">
+                                                                        <option th:value="''"
+                                                                                th:text="'Select'"></option>
+                                                                        <option th:each="productUnit:${productUnits}"
+                                                                                th:value="${productUnit}"
+                                                                                th:text="${productUnit.value}"></option>
+
+                                                                    </select>
+                                                                    <div th:if="${#fields.hasErrors('productUnit')}">
+                                                                        <ul>
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('productUnit')}"
+                                                                                th:text="${err}"></li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-3 mt-sm-2">
+                                                        <button class="btn btn-success mb-2 mb-sm-0 mr-sm-2"
+                                                                type="submit" name="action" value="save">Save
+                                                        </button>
+                                                        <button class="btn btn-danger mb-2 mb-sm-0 mr-sm-2"
+                                                                type="reset">Reset
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 <div th:replace="/fragments/footer :: footer"></div>
 <div th:replace="/fragments/javascript :: js"></div>

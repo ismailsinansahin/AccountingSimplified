@@ -2,7 +2,6 @@ package com.cydeo.accountingsimplified.entity;
 
 import com.cydeo.accountingsimplified.enums.InvoiceStatus;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,27 +21,27 @@ import java.util.List;
 @Where(clause = "is_deleted=false")
 public class Invoice extends BaseEntity{
 
-    @NotNull
+
     private String invoiceNo;
 
-    @NotNull
+
     @Enumerated(EnumType.STRING)
     private InvoiceStatus invoiceStatus;
 
-    @NotNull
+
     @Enumerated(EnumType.STRING)
     private InvoiceType invoiceType;
 
-    @NotNull
+
     @DateTimeFormat
     private LocalDate date;
 
-    @NotNull
+
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @NotNull
+
     @ManyToOne
     @JoinColumn(name = "client_vendor_id")
     private ClientVendor clientVendor;

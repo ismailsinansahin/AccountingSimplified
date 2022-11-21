@@ -2,7 +2,6 @@ package com.cydeo.accountingsimplified.converter;
 
 import com.cydeo.accountingsimplified.dto.CategoryDto;
 import com.cydeo.accountingsimplified.service.CategoryService;
-import lombok.SneakyThrows;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBinding;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.converter.Converter;
@@ -18,9 +17,12 @@ public class CategoryDtoConverter  implements Converter<String, CategoryDto> {
         this.categoryService = categoryService;
     }
 
-    @SneakyThrows
+    //@SneakyThrows
     @Override
     public CategoryDto convert(String id){
+        if (id==null ||id.isBlank()){
+            return null;
+        }
         return categoryService.findCategoryById(Long.parseLong(id));
     }
 
