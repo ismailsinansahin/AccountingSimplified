@@ -2,7 +2,6 @@ package com.cydeo.accountingsimplified.service.implementation;
 
 import com.cydeo.accountingsimplified.dto.AddressDto;
 import com.cydeo.accountingsimplified.dto.ClientVendorDto;
-import com.cydeo.accountingsimplified.dto.CompanyDto;
 import com.cydeo.accountingsimplified.entity.Address;
 import com.cydeo.accountingsimplified.entity.ClientVendor;
 import com.cydeo.accountingsimplified.entity.Company;
@@ -11,7 +10,6 @@ import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.ClientVendorRepository;
 import com.cydeo.accountingsimplified.service.AddressService;
 import com.cydeo.accountingsimplified.service.ClientVendorService;
-import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import org.springframework.stereotype.Service;
 
@@ -85,6 +83,18 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         ClientVendor clientVendor = clientVendorRepository.findClientVendorById(clientVendorId);
         clientVendor.setIsDeleted(true);
         clientVendorRepository.save(clientVendor);
+    }
+
+    @Override
+    public boolean companyNameExists(String companyName) {
+        Company actualCompany = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+        return clientVendorRepository.existsClientVendorByCompanyNameAndCompany(companyName, actualCompany);
+    }
+
+    @Override
+    public boolean isCompanyNameChanged(ClientVendorDto clientVendorDto) {
+        ClientVendorDto existingClientVendor = findClientVendorById(clientVendorDto.getId());
+        return !existingClientVendor.getCompanyName().equals(clientVendorDto.getCompanyName());
     }
 
 
