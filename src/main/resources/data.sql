@@ -130,8 +130,8 @@ insert into invoice_products(insert_date_time, insert_user_id, is_deleted, last_
     values
 -- COMPANY-2 / Green Tech
  ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 275, 5, 3, 10, 1375, 0, 1, 1),     --purchase APPROVED
- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 275, 5, 5, 10, 1375, 0, 2, 1),     --purchase APPROVED total cost (without tax) 2500
- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 330, 2, 0, 10, 660, 110, 3, 1),    --sale APPROVED     total sale (without tax) 600 & profit : 110 with tax
+ ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 275, 5, 5, 10, 1375, 0, 2, 1),     --purchase APPROVED total cost (with tax) 2500
+ ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 330, 2, 0, 10, 660, 110, 3, 1),    --sale APPROVED     total sale (with tax) 660 & profit : 110 with tax
  ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 220, 5, 0, 10, 1100, 0, 4, 1),     --sale AWAITING_APPROVAL after approval total sale (without tax) :1600 & profit (with tax) : -165
 
 -- COMPANY-3 / Blue Tech
