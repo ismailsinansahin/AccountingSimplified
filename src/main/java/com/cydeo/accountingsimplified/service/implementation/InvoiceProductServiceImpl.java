@@ -106,18 +106,12 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     }
 
     private void setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProduct salesInvoiceProduct) {
-        List<InvoiceProduct> availableProductsForSale = findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType.PURCHASE, salesInvoiceProduct.getProduct(), 0);
+        List<InvoiceProduct> availableProductsForSale =
+                findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType.PURCHASE, salesInvoiceProduct.getProduct(), 0);
         for (InvoiceProduct availableProduct : availableProductsForSale) {
             if (salesInvoiceProduct.getRemainingQuantity() <= availableProduct.getRemainingQuantity()) {
-                BigDecimal costPriceForQty = availableProduct.getPrice()
-                        .multiply(BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity()));
-                BigDecimal costTaxForQty = availableProduct.getPrice()
-                        .multiply(BigDecimal.valueOf(availableProduct.getTax() / 100d * salesInvoiceProduct.getRemainingQuantity()));
-                BigDecimal costTotalForQty = costPriceForQty.add(costTaxForQty);
-                BigDecimal salesPriceForQty = salesInvoiceProduct.getPrice()
-                        .multiply(BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity()));
-                BigDecimal salesTaxForQty = salesPriceForQty.multiply(BigDecimal.valueOf(salesInvoiceProduct.getTax() / 100d));
-                BigDecimal salesTotalForQty = salesPriceForQty.add(salesTaxForQty);
+                BigDecimal costTotalForQty = availableProduct.getPrice().multiply(BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity()));
+                BigDecimal salesTotalForQty = salesInvoiceProduct.getPrice().multiply(BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity()));
                 BigDecimal profitLoss = salesInvoiceProduct.getProfitLoss().add(salesTotalForQty.subtract( costTotalForQty));
                 availableProduct.setRemainingQuantity(availableProduct.getRemainingQuantity() - salesInvoiceProduct.getRemainingQuantity());
                 salesInvoiceProduct.setRemainingQuantity(0);
@@ -126,16 +120,9 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 invoiceProductRepository.save(salesInvoiceProduct);
                 break;
             } else {
-                BigDecimal costPriceForQty = availableProduct.getPrice()
+                BigDecimal costTotalForQty = availableProduct.getPrice()
                         .multiply(BigDecimal.valueOf(availableProduct.getRemainingQuantity()));
-                BigDecimal costTaxForQty = availableProduct.getPrice()
-                        .multiply(BigDecimal.valueOf(availableProduct.getTax()/100d * availableProduct.getRemainingQuantity()));
-                BigDecimal costTotalForQty = costPriceForQty.add(costTaxForQty);
-                BigDecimal salesPriceForQty = salesInvoiceProduct.getPrice()
-                        .multiply(BigDecimal.valueOf(availableProduct.getRemainingQuantity()));
-                BigDecimal salesTaxForQty = salesPriceForQty
-                        .multiply(BigDecimal.valueOf(salesInvoiceProduct.getTax()/100d));
-                BigDecimal salesTotalForQty = salesPriceForQty.add(salesTaxForQty);
+                BigDecimal salesTotalForQty = salesInvoiceProduct.getPrice().multiply(BigDecimal.valueOf(availableProduct.getRemainingQuantity()));
                 BigDecimal profitLoss = salesInvoiceProduct.getProfitLoss()
                         .add(salesTotalForQty.subtract(costTotalForQty));
                 salesInvoiceProduct.setRemainingQuantity(salesInvoiceProduct.getRemainingQuantity() - availableProduct.getRemainingQuantity());
@@ -185,7 +172,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(id), new Invoice());
         List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
         return invoiceProductsOfInvoice.stream()
-                .map(ip -> ip.getTotal().add(BigDecimal.valueOf((long) ip.getQuantity() * (100+ip.getTax())/100d)))
+                .map(InvoiceProduct::getTotal)
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 

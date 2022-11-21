@@ -43,12 +43,9 @@ public class DashboardServiceImpl implements DashboardService {
                 .findInvoicesByCompanyAndInvoiceStatus(company, InvoiceStatus.APPROVED);
         for (Invoice invoice : allApprovedInvoicesOfCompany) {
             if (invoice.getInvoiceType() == InvoiceType.PURCHASE) {
-//                totalCost += invoiceProductService.getTotalOfInvoiceProduct(invoice.getId());
                 totalCost = totalCost.add(invoiceProductService.getTotalOfInvoiceProduct(invoice.getId()));
             } else {
-//                totalSales += invoiceProductService.getTotalOfInvoiceProduct(invoice.getId());
                 totalSales = totalSales.add(invoiceProductService.getTotalOfInvoiceProduct(invoice.getId()));
-//                profitLoss += invoiceProductService.getProfitLossOfInvoiceProduct(invoice.getId());
                 profitLoss = profitLoss.add(invoiceProductService.getProfitLossOfInvoiceProduct(invoice.getId()));
             }
         }

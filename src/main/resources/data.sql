@@ -130,17 +130,18 @@ insert into invoice_products(insert_date_time, insert_user_id, is_deleted, last_
     values
 -- COMPANY-2 / Green Tech
  ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 275, 5, 3, 10, 1375, 0, 1, 1),     --purchase APPROVED
- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 275, 5, 5, 10, 1375, 0, 2, 1),     --purchase APPROVED total cost (with tax) 2500
+ ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 275, 5, 5, 10, 1375, 0, 2, 1),     --purchase APPROVED total cost (with tax) 2750
  ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 330, 2, 0, 10, 660, 110, 3, 1),    --sale APPROVED     total sale (with tax) 660 & profit : 110 with tax
- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 220, 5, 0, 10, 1100, 0, 4, 1),     --sale AWAITING_APPROVAL after approval total sale (without tax) :1600 & profit (with tax) : -165
+ ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 220, 5, 0, 10, 1100, 0, 4, 1),     --sale AWAITING_APPROVAL after approval total sale (with tax) :1760 & profit (with tax) : -165
+--  ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 220, 2, 0, 10, 440, 0, 4, 1),     --sale AWAITING_APPROVAL after approval total sale (with tax) :1760 & profit (with tax) : -165
 
 -- COMPANY-3 / Blue Tech
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 200, 20, 10, 10, 4000, 0, 5, 5),    --purchase APPROVED
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 200, 20, 20, 10, 4000, 0, 5, 5),    --purchase APPROVED
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 900, 10, 10, 10, 9000, 0, 6, 6),    --purchase APPROVED
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 900, 10, 10, 10, 9000, 0, 6, 6),    --purchase APPROVED  total cost (without tax) 26000
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 300, 10, 0, 10, 3000, 1100, 7, 5),  --sale APPROVED
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 300, 20, 0, 10, 6000, 2200, 7, 5),  --sale APPROVED     total sale (without tax): 9000 & profit : 3300 with tax
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 6, 0, 10, 7200, 0, 8, 6),     --sale AWAITING_APPROVAL after approval total sale (without tax) : 16200 without tax & profit (with tax) : 3300+1980=5280
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 5, 0, 10, 6000, 0, 9, 6),     --sale AWAITING_APPROVAL after approval total sale (without tax) : 22200 without tax & profit (with tax) : 5280+1980=6930
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 2, 0, 10, 2400, 0, 10, 6);    --sale AWAITING_APPROVAL after approval total sale (without tax) : 24600 without tax & profit (with tax) : 6930+660=7590
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 220, 20, 0, 10, 4400, 0, 5, 5),    --purchase APPROVED
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 220, 20, 10, 10, 4400, 0, 5, 5),    --purchase APPROVED
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 990, 10, 10, 10, 9900, 0, 6, 6),    --purchase APPROVED
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1100, 10, 10, 10, 11000, 0, 6, 6),    --purchase APPROVED  total cost (with tax) 28600
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 330, 10, 0, 10, 3300, 1100, 7, 5),  --sale APPROVED     total sale (with tax) 3300 & profit : 1100 with tax
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 330, 20, 0, 10, 6600, 2200, 7, 5),  --sale APPROVED     total sale (with tax): 9900 & total profit : 3300 with tax
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1320, 6, 0, 10, 7920, 0, 8, 6),     --sale AWAITING_APPROVAL after approval total sale (with tax) : 17820 & profit (with tax) : 3300+1980=5280
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1320, 5, 0, 10, 6600, 0, 9, 6),     --sale AWAITING_APPROVAL after approval total sale (with tax) : 24420 & profit (with tax) : 5280+1540=6820
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1320, 2, 0, 10, 2400, 0, 10, 6);    --sale AWAITING_APPROVAL after approval total sale (with tax) : 27060 & profit (with tax) : 6820+440=7260
