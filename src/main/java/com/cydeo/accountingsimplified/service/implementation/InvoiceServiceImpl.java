@@ -10,6 +10,7 @@ import com.cydeo.accountingsimplified.service.*;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -124,9 +125,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
         return invoiceProductsOfInvoice.stream()
-                // price + price *
-                .map(p -> p.getPrice().multiply(BigDecimal.valueOf(p.getQuantity()))
-                        .add(p.getPrice().multiply(BigDecimal.valueOf(p.getQuantity() * p.getTax() / 100d))))
+                .map(p -> p.getPrice().multiply(BigDecimal.valueOf(100)).divide(BigDecimal.valueOf(p.getTax() + 100), RoundingMode.HALF_UP)
+                        .multiply(BigDecimal.valueOf(p.getQuantity())))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
@@ -134,7 +134,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
         return invoiceProductsOfInvoice.stream()
-                .map(t -> t.getPrice().multiply(BigDecimal.valueOf(t.getQuantity() * t.getTax() / 100d)))
+                .map(p -> p.getPrice().multiply(BigDecimal.valueOf(p.getTax())).divide(BigDecimal.valueOf(p.getTax() + 100), RoundingMode.HALF_UP)
+                        .multiply(BigDecimal.valueOf(p.getQuantity())))
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);
     }

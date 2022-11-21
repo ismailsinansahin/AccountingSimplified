@@ -185,7 +185,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(id), new Invoice());
         List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
         return invoiceProductsOfInvoice.stream()
-                .map(ip -> ip.getTotal().add(BigDecimal.valueOf((long) ip.getQuantity() * ip.getTax())))
+                .map(ip -> ip.getTotal().add(BigDecimal.valueOf((long) ip.getQuantity() * (100+ip.getTax())/100d)))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 

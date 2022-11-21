@@ -129,10 +129,10 @@ insert into invoice_products(insert_date_time, insert_user_id, is_deleted, last_
                               price,quantity, remaining_quantity, tax, total, profit_loss, invoice_id, product_id)
     values
 -- COMPANY-2 / Green Tech
- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 250, 5, 3, 10, 1250, 0, 1, 1),     --purchase APPROVED
- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 250, 5, 5, 10, 1250, 0, 2, 1),     --purchase APPROVED total cost (without tax) 2500
- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 300, 2, 0, 10, 600, 110, 3, 1),    --sale APPROVED     total sale (without tax) 600 & profit : 110 with tax
- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 200, 5, 0, 10, 1000, 0, 4, 1),     --sale AWAITING_APPROVAL after approval total sale (without tax) :1600 & profit (with tax) : -165
+ ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 275, 5, 3, 10, 1375, 0, 1, 1),     --purchase APPROVED
+ ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 275, 5, 5, 10, 1375, 0, 2, 1),     --purchase APPROVED total cost (without tax) 2500
+ ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 330, 2, 0, 10, 660, 110, 3, 1),    --sale APPROVED     total sale (without tax) 600 & profit : 110 with tax
+ ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 220, 5, 0, 10, 1100, 0, 4, 1),     --sale AWAITING_APPROVAL after approval total sale (without tax) :1600 & profit (with tax) : -165
 
 -- COMPANY-3 / Blue Tech
 ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 200, 20, 10, 10, 4000, 0, 5, 5),    --purchase APPROVED
