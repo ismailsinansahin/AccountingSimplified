@@ -100,13 +100,13 @@ values ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
         'Apple Mac Book Pro 14 inch', 20, 5, 'PCS', 1),
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
-        'Apple IPhone-13', 0, 5, 'PCS', 2),
+        'Apple IPhone-11', 0, 5, 'PCS', 2),
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
         'Samsung Galaxy S22', 20, 5, 'PCS', 2),
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
         'Apple IPhone-13', 0, 5, 'PCS', 3),
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
-        'Samsung Galaxy S22', 20, 5, 'PCS', 3);
+        'Samsung Galaxy Note-3', 20, 5, 'PCS', 3);
 
 insert into invoices(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                      invoice_no, invoice_status, invoice_type, date, company_id, client_vendor_id)

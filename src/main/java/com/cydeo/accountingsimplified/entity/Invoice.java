@@ -2,7 +2,6 @@ package com.cydeo.accountingsimplified.entity;
 
 import com.cydeo.accountingsimplified.enums.InvoiceStatus;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,6 +39,4 @@ public class Invoice extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "client_vendor_id")
     private ClientVendor clientVendor;
-
-
 }

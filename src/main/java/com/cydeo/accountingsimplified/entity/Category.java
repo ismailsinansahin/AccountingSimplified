@@ -1,6 +1,5 @@
 package com.cydeo.accountingsimplified.entity;
 
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,12 +13,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "categories")
 @Where(clause = "is_deleted=false")
-public class Category extends BaseEntity{
+public class Category extends BaseEntity {
 
-    @NotNull
+    @Column(unique = true)
     private String description;
 
-    @NotNull
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;

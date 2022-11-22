@@ -16,4 +16,6 @@ public interface ProductService {
 
     List<ProductDto> findAllProductsWithCategoryId(Long categoryId);
 
+    boolean isProductNameExist(String productName);
+
 }

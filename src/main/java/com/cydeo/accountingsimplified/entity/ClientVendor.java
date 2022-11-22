@@ -1,7 +1,6 @@
 package com.cydeo.accountingsimplified.entity;
 
 import com.cydeo.accountingsimplified.enums.ClientVendorType;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,14 +16,14 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=false")
 public class ClientVendor extends BaseEntity{
 
-    @NotNull
+   @Column(unique = true)
     private String companyName;
 
     private String phone;
 
     private String website;
 
-    @NotNull
+
     @Enumerated(EnumType.STRING)
     private ClientVendorType clientVendorType;
 
@@ -32,7 +31,7 @@ public class ClientVendor extends BaseEntity{
     @JoinColumn(name="address_id")
     private Address address;
 
-    @NotNull
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
