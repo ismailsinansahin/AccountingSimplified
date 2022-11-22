@@ -32,7 +32,7 @@ public class ClientVendorDto {
             + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$", message = "Phone is required field and may be in any valid phone number format.")
     private String phone;
 
-    @Pattern(regexp = "^$|^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%.\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%\\+.~#?&\\/=]*)$", message = "Website should have a valid format.")
+    @Pattern(regexp = "^http(s{0,1})://[a-zA-Z0-9/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9/\\&\\?\\=\\-\\.\\~\\%]*", message = "Website should have a valid format.")
     private String website;
 
     @NotNull(message = "Please select type")

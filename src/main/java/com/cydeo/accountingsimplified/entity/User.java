@@ -2,7 +2,6 @@ package com.cydeo.accountingsimplified.entity;
 
 import lombok.*;
 import org.hibernate.annotations.Where;
-
 import javax.persistence.*;
 
 @Getter

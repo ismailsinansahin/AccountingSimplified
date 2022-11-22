@@ -1,16 +1,17 @@
 package com.cydeo.accountingsimplified.controller;
 
+import com.cydeo.accountingsimplified.app_util.ErrorGenerator;
 import com.cydeo.accountingsimplified.dto.ProductDto;
 import com.cydeo.accountingsimplified.enums.ProductUnit;
 import com.cydeo.accountingsimplified.service.CategoryService;
 import com.cydeo.accountingsimplified.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 
 @Controller
@@ -40,14 +41,19 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    public String createNewProduct(ProductDto productDto) throws Exception {
+    public String createNewProduct(@Valid @ModelAttribute("newProduct") ProductDto productDto, BindingResult bindingResult, Model model) throws Exception {
+
+        if (productService.isProductNameExist(productDto.getName())) {
+            ErrorGenerator.generateErrorMessage(bindingResult, "name", "This Product Name already exists.");
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
+            return "/product/product-create";
+        }
         productService.save(productDto);
         return "redirect:/products/list";
-    }
-
-    @PostMapping(value = "/actions/{productId}", params = {"action=update"})
-    public String navigateToProductUpdate(@PathVariable("productId") Long productId){
-        return "redirect:/products/update/" + productId;
     }
 
     @GetMapping("/update/{productId}")
@@ -59,13 +65,25 @@ public class ProductController {
     }
 
     @PostMapping("/update/{productId}")
-    public String updateProduct(@PathVariable("productId") Long productId, ProductDto productDto) {
+    public String updateProduct(@Valid @ModelAttribute("product") ProductDto productDto, BindingResult bindingResult, @PathVariable("productId") Long productId, Model model) throws Exception {
+
+        boolean isProductNameSame = productService.findProductById(productId).getName().equals(productDto.getName());
+        if (productService.isProductNameExist(productDto.getName()) && !isProductNameSame) {
+            ErrorGenerator.generateErrorMessage(bindingResult, "name", "This Product Name already exists");
+        }
+
+        if (bindingResult.hasErrors()) {
+            productDto.setId(productId);
+            model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
+            return "/product/product-update";
+        }
         productService.update(productId, productDto);
         return "redirect:/products/list";
     }
 
-    @PostMapping(value = "/actions/{productId}", params = {"action=delete"})
-    public String deleteProduct(@PathVariable("productId") Long productId){
+    @GetMapping("/delete/{productId}")
+    public String deleteProduct(@PathVariable("productId") Long productId) {
         productService.delete(productId);
         return "redirect:/products/list";
     }

@@ -2,7 +2,9 @@ package com.cydeo.accountingsimplified.entity;
 
 import com.cydeo.accountingsimplified.enums.ProductUnit;
 import com.sun.istack.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;

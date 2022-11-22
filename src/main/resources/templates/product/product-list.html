@@ -59,14 +59,18 @@
                                                                 <td th:text="${product.lowLimitAlert}"></td>
                                                                 <td th:text="${product.quantityInStock}"></td>
                                                                 <td class="actions">
-                                                                    <form action="#" method="post" data-th-action="@{/products/actions/{id}(id=${product.getId()})}">
-                                                                        <button class="btn btn-primary mb-2 mb-sm-0 mr-sm-2"
-                                                                                type="submit" name="action" value="update">Edit
+                                                                    <a th:href="@{/products/update/{id}(id=${product.getId()})}"
+                                                                       type="button">
+                                                                        <button class="btn btn-primary mb-2 mb-sm-0 mr-sm-2">
+                                                                            Edit
                                                                         </button>
-                                                                        <button class="btn btn-danger mb-2 mb-sm-0 mr-sm-2"
-                                                                                type="submit" name="action" value="delete">Delete
+                                                                    </a>
+                                                                    <a th:href="@{/products/delete/{id}(id=${product.getId()})}"
+                                                                       type="button">
+                                                                        <button class="btn btn-danger mb-2 mb-sm-0 mr-sm-2">
+                                                                            Delete
                                                                         </button>
-                                                                    </form>
+                                                                    </a>
                                                                 </td>
                                                             </tr>
                                                             </tbody>

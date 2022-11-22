@@ -28,12 +28,21 @@ public class CompanyDto {
     private String phone;
 
     @NotBlank(message = "Website is a required field.")
-    @Pattern(regexp = "^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%.\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%\\+.~#?&\\/=]*)$", message = "Website should have a valid format.")
+    @Pattern(regexp = "^http(s{0,1})://[a-zA-Z0-9/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9/\\&\\?\\=\\-\\.\\~\\%]*", message = "Website should have a valid format.")
     private String website;
 
     @NotNull
     @Valid
     private AddressDto address;
     private CompanyStatus companyStatus;
+
+
+//    String urlPattern = new RegExp('^(https?:\/\/)?'+ // validate protocol
+//            '((([a-z\d]([a-z\d-][a-z\d]))\.)+[a-z]{2,}|'+ // validate domain name
+//            '((\d{1,3}\.){3}\d{1,3}))'+ // validate OR ip (v4) address
+//            '(\:\d+)?(\/[-a-z\d%.~+])'+ // validate port and path
+//            '(\?[;&a-z\d%.~+=-])?'+ // validate query string
+//            '(\#[-a-z\d_])?$','i'); // validate fragment locator
+
 
 }

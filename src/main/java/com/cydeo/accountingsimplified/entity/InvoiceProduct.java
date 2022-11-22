@@ -1,11 +1,12 @@
 package com.cydeo.accountingsimplified.entity;
 
 import com.sun.istack.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -38,7 +39,6 @@ public class InvoiceProduct extends BaseEntity{
                 "quantity=" + quantity +
                 ", price=" + price +
                 ", tax=" + tax +
-//                ", total=" + total +
                 ", profitLoss=" + profitLoss +
                 ", remainingQuantity=" + remainingQuantity +
                 ", invoice=" + invoice +
