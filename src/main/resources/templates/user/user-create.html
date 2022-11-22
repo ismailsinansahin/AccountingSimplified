@@ -46,7 +46,8 @@
                                                                            class="form-control">
                                                                     <div th:if="${#fields.hasErrors('firstname')}">
                                                                         <ul>
-                                                                            <li class="validation" th:each="err : ${#fields.errors('firstname')}"
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('firstname')}"
                                                                                 th:text="${err}"></li>
                                                                         </ul>
                                                                     </div>
@@ -61,7 +62,8 @@
                                                                            placeholder="Last Name" class="form-control">
                                                                     <div th:if="${#fields.hasErrors('lastname')}">
                                                                         <ul>
-                                                                            <li class="validation" th:each="err : ${#fields.errors('lastname')}"
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('lastname')}"
                                                                                 th:text="${err}"></li>
                                                                         </ul>
                                                                     </div>
@@ -78,7 +80,8 @@
                                                                            placeholder="e-mail" class="form-control">
                                                                     <div th:if="${#fields.hasErrors('username')}">
                                                                         <ul>
-                                                                            <li class="validation" th:each="err : ${#fields.errors('username')}"
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('username')}"
                                                                                 th:text="${err}"></li>
                                                                         </ul>
                                                                     </div>
@@ -93,7 +96,8 @@
                                                                            placeholder="Phone" class="form-control">
                                                                     <div th:if="${#fields.hasErrors('phone')}">
                                                                         <ul>
-                                                                            <li class="validation" th:each="err : ${#fields.errors('phone')}"
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('phone')}"
                                                                                 th:text="${err}"></li>
                                                                         </ul>
                                                                     </div>
@@ -110,7 +114,8 @@
                                                                            placeholder="Password" class="form-control">
                                                                     <div th:if="${#fields.hasErrors('password')}">
                                                                         <ul>
-                                                                            <li class="validation" th:each="err : ${#fields.errors('password')}"
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('password')}"
                                                                                 th:text="${err}"></li>
                                                                         </ul>
                                                                     </div>
@@ -126,7 +131,8 @@
                                                                            class="form-control">
                                                                     <div th:if="${#fields.hasErrors('confirmPassword')}">
                                                                         <ul>
-                                                                            <li class="validation" th:each="err : ${#fields.errors('confirmPassword')}"
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('confirmPassword')}"
                                                                                 th:text="${err}"></li>
                                                                         </ul>
                                                                     </div>
@@ -150,7 +156,8 @@
                                                                     </select>
                                                                     <div th:if="${#fields.hasErrors('role')}">
                                                                         <ul>
-                                                                            <li class="validation" th:each="err : ${#fields.errors('role')}"
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('role')}"
                                                                                 th:text="${err}"></li>
                                                                         </ul>
                                                                     </div>
@@ -158,11 +165,12 @@
                                                             </div>
                                                         </div>
                                                         <div
-                                                             class="col-12 col-md-4">
+                                                                class="col-12 col-md-4">
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Company</label>
-                                                                    <select id="company" name="company" class="custom-select"
+                                                                    <select id="company" name="company"
+                                                                            class="custom-select"
                                                                             th:field="*{company}">
                                                                         <option th:if="${companies.size() > 1}"
                                                                                 th:value="''"
@@ -174,7 +182,8 @@
                                                                     </select>
                                                                     <div th:if="${#fields.hasErrors('company')}">
                                                                         <ul>
-                                                                            <li class="validation" th:each="err : ${#fields.errors('company')}"
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('company')}"
                                                                                 th:text="${err}"></li>
                                                                         </ul>
                                                                     </div>
