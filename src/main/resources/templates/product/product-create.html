@@ -39,12 +39,14 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Category</label>
-                                                                    <select id="category" name="category" class="custom-select">
+                                                                    <select id="category" name="category"
+                                                                            class="custom-select">
                                                                         <option th:value="''"
                                                                                 th:text="'Select'"></option>
                                                                         <option th:each="category:${categories}"
                                                                                 th:value="${category.id}"
-                                                                                th:text="${category.description}"></option>
+                                                                                th:text="${category.description}"
+                                                                                selected></option>
 
                                                                     </select>
                                                                     <div th:if="${#fields.hasErrors('category')}">
