@@ -57,12 +57,14 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Client</label>
-                                                                    <select id="role" class="form-control" th:field="*{clientVendor}" required>
+                                                                    <select id="role" class="form-control" th:field="*{clientVendor}">
                                                                         <option th:value="''" th:text="'Select'" selected></option>
                                                                         <option th:each= "client:${clients}"
                                                                                 th:value="${client.id}"
                                                                                 th:text="${client.companyName}"></option>
                                                                     </select>
+                                                                    <div class="text-danger small" th:if="${error}" th:text="${error}">
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
