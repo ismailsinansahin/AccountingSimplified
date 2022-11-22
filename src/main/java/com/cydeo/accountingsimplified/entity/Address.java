@@ -34,6 +34,7 @@ public class Address extends BaseEntity{
     @OneToOne(mappedBy = "address")
     private Company company;
 
+
     @OneToOne(mappedBy = "address")
     private ClientVendor clientVendor;
 
