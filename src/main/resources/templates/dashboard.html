@@ -72,7 +72,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6 grid-margin">
-                                <header class="panel-heading"><h3 class="panel-title text-center">Exchange Rates</h3></header>
+                                <header class="panel-heading"><h3 class="panel-title text-center">Exchange Rates 1 USD</h3></header>
                                 <div class="card">
                                     <div class="card-body">
                                         <table id="exchangetable"
@@ -89,16 +89,20 @@
                                                 <!--<tr th:each="invoice,comStat : ${invoices}">-->
                                                 <!--<td th:text="${comStat.count}"></td>-->
                                                 <!--<td th:text="${invoice.invoiceNo}"></td>-->
-                                                <td>US Dollar</td>
-                                                <td>18.65</td>
-                                            </tr>
-                                            <tr>
                                                 <td>Euro</td>
-                                                <td>18.35</td>
+                                                <td th:text="${exchangeRates.getEuro()}"></td>
                                             </tr>
                                             <tr>
                                                 <td>British Pound</td>
-                                                <td>21.14</td>
+                                                <td th:text="${exchangeRates.getBritishPound()}"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Japanese Yen</td>
+                                                <td th:text="${exchangeRates.getJapaneseYen()}"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Indian Rupee</td>
+                                                <td th:text="${exchangeRates.getIndianRupee()}"></td>
                                             </tr>
                                             </tbody>
                                         </table>
