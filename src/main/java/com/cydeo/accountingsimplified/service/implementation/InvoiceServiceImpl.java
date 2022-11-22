@@ -94,7 +94,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .limit(3)
                 .map(each -> mapperUtil.convert(each, new InvoiceDto()))
                 .collect(Collectors.toList());
-        last3Invoices.forEach(each -> each.setPrice(invoiceProductService.getPriceOfInvoiceProduct(each.getId())));
+        last3Invoices.forEach(each -> each.setPrice(invoiceProductService.getPriceOfInvoiceProductWithoutTax(each.getId())));
         last3Invoices.forEach(each -> each.setTax(invoiceProductService.getTaxOfInvoiceProduct(each.getId())));
         last3Invoices.forEach(each -> each.setTotal(invoiceProductService.getTotalOfInvoiceProduct(each.getId())));
         return last3Invoices;
