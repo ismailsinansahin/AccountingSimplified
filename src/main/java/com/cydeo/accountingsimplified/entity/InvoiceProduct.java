@@ -19,7 +19,7 @@ public class InvoiceProduct extends BaseEntity{
     private int quantity;
     private BigDecimal price;
     private int tax;
-    private BigDecimal total;
+//    private BigDecimal total;
     private BigDecimal profitLoss;
     private int remainingQuantity;
 
@@ -39,7 +39,7 @@ public class InvoiceProduct extends BaseEntity{
                 "quantity=" + quantity +
                 ", price=" + price +
                 ", tax=" + tax +
-                ", total=" + total +
+//                ", total=" + total +
                 ", profitLoss=" + profitLoss +
                 ", remainingQuantity=" + remainingQuantity +
                 ", invoice=" + invoice +

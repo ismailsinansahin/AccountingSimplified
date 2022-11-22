@@ -57,7 +57,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(invoiceId), new Invoice());
         InvoiceProduct invoiceProduct = mapperUtil.convert(invoiceProductDto, new InvoiceProduct());
         invoiceProduct.setInvoice(invoice);
-        invoiceProduct.setTotal(getAmountOfInvoiceProduct(invoiceProductDto));
+//        invoiceProduct.setTotal(getAmountOfInvoiceProduct(invoiceProductDto));
         if (invoice.getInvoiceType() == InvoiceType.PURCHASE) {
             invoiceProduct.setProfitLoss(BigDecimal.ZERO);
         } else {
@@ -172,7 +172,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(id), new Invoice());
         List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
         return invoiceProductsOfInvoice.stream()
-                .map(InvoiceProduct::getTotal)
+                .map(p -> p.getPrice().multiply(BigDecimal.valueOf(p.getQuantity())))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 

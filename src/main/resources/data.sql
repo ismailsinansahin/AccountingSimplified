@@ -114,7 +114,8 @@ values
  ('2022-09-09 00:00', 2, 'false', '2022-09-09 00:00', 2, '2022-09-09', 'P-001', 'PURCHASE', 'APPROVED', 2, 2),
  ('2022-09-10 00:00', 2, 'false', '2022-09-10 00:00', 2, '2022-09-10', 'P-002', 'PURCHASE', 'APPROVED', 3, 2),
  ('2022-09-17 00:00', 2, 'false', '2022-09-17 00:00', 2, '2022-09-17', 'S-001', 'SALES', 'APPROVED', 1, 2),
- ('2022-11-20 00:00', 2, 'false', '2022-11-20 00:00', 2, '2022-11-20', 'S-002', 'SALES', 'AWAITING_APPROVAL', 1, 2),
+ ('2022-10-19 00:00', 2, 'false', '2022-10-19 00:00', 2, '2022-10-19', 'S-002', 'SALES', 'AWAITING_APPROVAL', 1, 2),
+ ('2022-11-20 00:00', 2, 'false', '2022-11-20 00:00', 2, '2022-11-20', 'S-003', 'SALES', 'AWAITING_APPROVAL', 1, 2),
 
 -- COMPANY-3 / Blue Tech
 ('2022-09-09 00:00', 3, 'false', '2022-09-09 00:00', 3, '2022-09-11', 'P-001', 'PURCHASE', 'APPROVED', 5, 3),
@@ -126,22 +127,43 @@ values
 ('2022-11-21 00:00', 3, 'false', '2022-11-21 00:00', 3, '2022-11-21', 'S-005', 'SALES', 'AWAITING_APPROVAL', 6, 3);
 
 insert into invoice_products(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
-                              price,quantity, remaining_quantity, tax, total, profit_loss, invoice_id, product_id)
-    values
+                             price,quantity, remaining_quantity, tax, profit_loss, invoice_id, product_id)
+values
 -- COMPANY-2 / Green Tech
- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 275, 5, 3, 10, 1375, 0, 1, 1),     --purchase APPROVED
- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 275, 5, 5, 10, 1375, 0, 2, 1),     --purchase APPROVED total cost (with tax) 2750
- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 330, 2, 0, 10, 660, 110, 3, 1),    --sale APPROVED     total sale (with tax) 660 & profit : 110 with tax
- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 220, 5, 0, 10, 1100, 0, 4, 1),     --sale AWAITING_APPROVAL after approval total sale (with tax) :1760 & profit (with tax) : -165
---  ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 220, 2, 0, 10, 440, 0, 4, 1),     --sale AWAITING_APPROVAL after approval total sale (with tax) :1760 & profit (with tax) : -165
+('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 275, 5, 3, 10, 0, 1, 1),     --purchase APPROVED
+('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 275, 5, 5, 10, 0, 2, 1),     --purchase APPROVED total cost (with tax) 2750
+('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 330, 2, 0, 10, 110, 3, 1),    --sale APPROVED     total sale (with tax) 660 & profit : 110 with tax
+('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 220, 2, 0, 10, 0, 4, 1),     --sale AWAITING_APPROVAL after approval total sale (with tax) :1100 & profit (with tax) : 0
+('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 330, 5, 0, 10, 0, 5, 1),      --sale AWAITING_APPROVAL after approval total sale (with tax) :2750 & profit (with tax) : 275
 
 -- COMPANY-3 / Blue Tech
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 220, 20, 0, 10, 4400, 0, 5, 5),    --purchase APPROVED
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 220, 20, 10, 10, 4400, 0, 5, 5),    --purchase APPROVED
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 990, 10, 10, 10, 9900, 0, 6, 6),    --purchase APPROVED
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1100, 10, 10, 10, 11000, 0, 6, 6),    --purchase APPROVED  total cost (with tax) 28600
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 330, 10, 0, 10, 3300, 1100, 7, 5),  --sale APPROVED     total sale (with tax) 3300 & profit : 1100 with tax
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 330, 20, 0, 10, 6600, 2200, 7, 5),  --sale APPROVED     total sale (with tax): 9900 & total profit : 3300 with tax
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1320, 6, 0, 10, 7920, 0, 8, 6),     --sale AWAITING_APPROVAL after approval total sale (with tax) : 17820 & profit (with tax) : 3300+1980=5280
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1320, 5, 0, 10, 6600, 0, 9, 6),     --sale AWAITING_APPROVAL after approval total sale (with tax) : 24420 & profit (with tax) : 5280+1540=6820
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1320, 2, 0, 10, 2400, 0, 10, 6);    --sale AWAITING_APPROVAL after approval total sale (with tax) : 27060 & profit (with tax) : 6820+440=7260
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 220, 20, 0, 10, 0, 6, 5),     --purchase APPROVED
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 220, 20, 10, 10, 0, 6, 5),    --purchase APPROVED
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 990, 10, 10, 10, 0, 7, 6),    --purchase APPROVED
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1100, 10, 10, 10, 0, 7, 6),  --purchase APPROVED  total cost (with tax) 29700
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 330, 10, 0, 10, 1100, 8, 5),  --sale APPROVED     total sale (with tax) 3300 & profit : 1100 with tax
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 330, 20, 0, 10, 2200, 8, 5),  --sale APPROVED     total sale (with tax): 9900 & total profit : 3300 with tax
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1320, 6, 0, 10, 0, 9, 6),     --sale AWAITING_APPROVAL after approval total sale (with tax) : 17820 & profit (with tax) : 3300+1980=5280
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1320, 5, 0, 10, 0, 10, 6),     --sale AWAITING_APPROVAL after approval total sale (with tax) : 24420 & profit (with tax) : 5280+1540=6820
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1320, 2, 0, 10, 0, 11, 6);    --sale AWAITING_APPROVAL after approval total sale (with tax) : 27060 & profit (with tax) : 6820+440=7260
+
+-- insert into invoice_products(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
+--                              price,quantity, remaining_quantity, tax, total, profit_loss, invoice_id, product_id)
+-- values
+-- -- COMPANY-2 / Green Tech
+-- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 275, 5, 3, 10, 1375, 0, 1, 1),     --purchase APPROVED
+-- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 275, 5, 5, 10, 1375, 0, 2, 1),     --purchase APPROVED total cost (with tax) 2750
+-- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 330, 2, 0, 10, 660, 110, 3, 1),    --sale APPROVED     total sale (with tax) 660 & profit : 110 with tax
+-- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 220, 2, 0, 10, 440, 0, 4, 1),     --sale AWAITING_APPROVAL after approval total sale (with tax) :1100 & profit (with tax) : 0
+-- ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 330, 5, 0, 10, 1650, 0, 5, 1),      --sale AWAITING_APPROVAL after approval total sale (with tax) :2750 & profit (with tax) : 275
+--
+-- -- COMPANY-3 / Blue Tech
+-- ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 220, 20, 0, 10, 4400, 0, 6, 5),     --purchase APPROVED
+-- ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 220, 20, 10, 10, 4400, 0, 6, 5),    --purchase APPROVED
+-- ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 990, 10, 10, 10, 9900, 0, 7, 6),    --purchase APPROVED
+-- ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1100, 10, 10, 10, 11000, 0, 7, 6),  --purchase APPROVED  total cost (with tax) 29700
+-- ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 330, 10, 0, 10, 3300, 1100, 8, 5),  --sale APPROVED     total sale (with tax) 3300 & profit : 1100 with tax
+-- ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 330, 20, 0, 10, 6600, 2200, 8, 5),  --sale APPROVED     total sale (with tax): 9900 & total profit : 3300 with tax
+-- ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1320, 6, 0, 10, 7920, 0, 9, 6),     --sale AWAITING_APPROVAL after approval total sale (with tax) : 17820 & profit (with tax) : 3300+1980=5280
+-- ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1320, 5, 0, 10, 6600, 0, 10, 6),     --sale AWAITING_APPROVAL after approval total sale (with tax) : 24420 & profit (with tax) : 5280+1540=6820
+-- ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1320, 2, 0, 10, 2400, 0, 11, 6);    --sale AWAITING_APPROVAL after approval total sale (with tax) : 27060 & profit (with tax) : 6820+440=7260

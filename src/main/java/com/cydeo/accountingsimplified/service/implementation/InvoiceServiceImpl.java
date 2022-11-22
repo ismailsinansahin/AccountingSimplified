@@ -46,7 +46,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .sorted(Comparator.comparing(Invoice::getInvoiceNo))
                 .map(each -> mapperUtil.convert(each, new InvoiceDto()))
                 .collect(Collectors.toList());
-        allInvoicesOfTheCompany.forEach(each -> each.setPrice(getTotalPriceOfInvoice(each.getId())));
+        allInvoicesOfTheCompany.forEach(each -> each.setPrice(getTotalPriceOfInvoiceWithoutTax(each.getId())));
         allInvoicesOfTheCompany.forEach(each -> each.setTax(getTotalTaxOfInvoice(each.getId())));
         allInvoicesOfTheCompany.forEach(each -> each.setTotal(calculateTotalAmountOfInvoice(each.getId())));
         return allInvoicesOfTheCompany;
@@ -121,12 +121,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceType.name().charAt(0) + "-" + String.format("%03d", newOrder);
     }
 
-    private BigDecimal getTotalPriceOfInvoice(Long id){
+    private BigDecimal getTotalPriceOfInvoiceWithoutTax(Long id){
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
         return invoiceProductsOfInvoice.stream()
-                .map(p -> p.getPrice().multiply(BigDecimal.valueOf(100)).divide(BigDecimal.valueOf(p.getTax() + 100), RoundingMode.HALF_UP)
-                        .multiply(BigDecimal.valueOf(p.getQuantity())))
+                .map(p -> p.getPrice()
+                        .multiply(BigDecimal.valueOf( p.getQuantity() * 100 / (100d + p.getTax())))
+                        .setScale(2, RoundingMode.HALF_UP))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
@@ -134,8 +135,9 @@ public class InvoiceServiceImpl implements InvoiceService {
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
         return invoiceProductsOfInvoice.stream()
-                .map(p -> p.getPrice().multiply(BigDecimal.valueOf(p.getTax())).divide(BigDecimal.valueOf(p.getTax() + 100), RoundingMode.HALF_UP)
-                        .multiply(BigDecimal.valueOf(p.getQuantity())))
+                .map(p -> p.getPrice()
+                        .multiply(BigDecimal.valueOf(p.getQuantity() * p.getTax() /(100d + p.getTax())))
+                        .setScale(2, RoundingMode.HALF_UP))
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);
     }
@@ -144,7 +146,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
         return invoiceProductsOfInvoice.stream()
-                .map(InvoiceProductDto::getTotal)
+                .map(p -> p.getPrice().multiply(BigDecimal.valueOf(p.getQuantity()))
+                        .setScale(2, RoundingMode.HALF_UP))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
