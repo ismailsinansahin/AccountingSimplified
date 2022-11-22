@@ -1,13 +1,12 @@
 package com.cydeo.accountingsimplified.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -15,7 +14,6 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=false")
 public class Category extends BaseEntity {
 
-    @Column(unique = true)
     private String description;
 
 

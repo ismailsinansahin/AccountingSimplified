@@ -60,7 +60,7 @@
                                                                     <label>Vendor</label>
                                                                     <select id="role" class="form-control" th:field="*{clientVendor}" required>
                                                                         <option th:if="${vendors.size() > 1}"
-                                                                                th:value="''" th:text="'Select'" selected></option>
+                                                                                th:value="''" th:text="'Select'"></option>
                                                                         <option th:each= "vendor:${vendors}"
                                                                                 th:value="${vendor.id}"
                                                                                 th:text="${vendor.companyName}"
