@@ -36,10 +36,10 @@ public class CategoryController {
     @PostMapping("/create")
     public String createNewCategory(@Valid @ModelAttribute("newCategory") CategoryDto categoryDto, BindingResult bindingResult) throws Exception {
 
-        boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto.getDescription());
+        boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto);
 
-        if (categoryDescriptionExist){
-            ErrorGenerator.generateErrorMessage(bindingResult,"description","This category description already exists");
+        if (categoryDescriptionExist) {
+            ErrorGenerator.generateErrorMessage(bindingResult, "description", "This category description already exists");
         }
 
         if (bindingResult.hasErrors()) {
@@ -60,14 +60,14 @@ public class CategoryController {
 
     @PostMapping("/update/{categoryId}")
     public String updateCategory(@Valid @ModelAttribute("category") CategoryDto categoryDto, BindingResult bindingResult, @PathVariable("categoryId") Long categoryId) {
-        boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto.getDescription());
+        categoryDto.setId(categoryId);
+        boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto);
 
-        if (categoryDescriptionExist){
-            ErrorGenerator.generateErrorMessage(bindingResult,"description","This category description already exists");
+        if (categoryDescriptionExist) {
+            ErrorGenerator.generateErrorMessage(bindingResult, "description", "This category description already exists");
         }
 
         if (bindingResult.hasErrors()) {
-            categoryDto.setId(categoryId);
             return "/category/category-update";
         }
 
@@ -75,7 +75,7 @@ public class CategoryController {
         return "redirect:/categories/list";
     }
 
-    @GetMapping( "/delete/{categoryId}")
+    @GetMapping("/delete/{categoryId}")
     public String activateCategory(@PathVariable("categoryId") Long categoryId) {
         categoryService.delete(categoryId);
         return "redirect:/categories/list";

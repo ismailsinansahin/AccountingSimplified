@@ -12,8 +12,10 @@ import java.util.List;
 public interface ClientVendorRepository extends JpaRepository<ClientVendor, Long> {
 
     List<ClientVendor> findAllByCompany(Company company);
-    List<ClientVendor> findAllByCompanyAndClientVendorType(Company company, ClientVendorType clientVendorType);
-    ClientVendor findClientVendorById(Long id);
-    boolean existsClientVendorByCompanyNameAndCompany(String companyName, Company company);
 
+    List<ClientVendor> findAllByCompanyAndClientVendorType(Company company, ClientVendorType clientVendorType);
+
+    ClientVendor findClientVendorById(Long id);
+
+    ClientVendor findByCompanyNameAndCompany(String companyName, Company actualCompany);
 }
