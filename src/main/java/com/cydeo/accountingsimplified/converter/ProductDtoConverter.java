@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationPropertiesBinding
-public class ProductDtoConverter implements Converter<String,ProductDto> {
+public class ProductDtoConverter implements Converter<String, ProductDto> {
 
     private final ProductService productService;
 
