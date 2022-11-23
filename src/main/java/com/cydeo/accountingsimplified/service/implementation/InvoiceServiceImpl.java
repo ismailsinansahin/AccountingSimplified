@@ -22,15 +22,13 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceProductService invoiceProductService;
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
-    private final ProductService productService;
 
     public InvoiceServiceImpl(InvoiceRepository invoiceRepository, InvoiceProductService invoiceProductService,
-                              MapperUtil mapperUtil, SecurityService securityService, ProductService productService) {
+                              MapperUtil mapperUtil, SecurityService securityService) {
         this.invoiceRepository = invoiceRepository;
         this.invoiceProductService = invoiceProductService;
         this.mapperUtil = mapperUtil;
         this.securityService = securityService;
-        this.productService = productService;
     }
 
     @Override
@@ -106,8 +104,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setInvoiceNo(generateInvoiceNo(invoiceType));
         invoiceDto.setDate(LocalDate.now());
-        CompanyDto company = securityService.getLoggedInUser().getCompany();
-        invoiceDto.setCompany(company);
+        invoiceDto.setCompany(securityService.getLoggedInUser().getCompany());
         return invoiceDto;
     }
 
