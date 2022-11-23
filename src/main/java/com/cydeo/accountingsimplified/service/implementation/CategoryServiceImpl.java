@@ -3,12 +3,9 @@ package com.cydeo.accountingsimplified.service.implementation;
 import com.cydeo.accountingsimplified.dto.CategoryDto;
 import com.cydeo.accountingsimplified.entity.Category;
 import com.cydeo.accountingsimplified.entity.Company;
-import com.cydeo.accountingsimplified.entity.Product;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.CategoryRepository;
-import com.cydeo.accountingsimplified.repository.ProductRepository;
 import com.cydeo.accountingsimplified.service.CategoryService;
-import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.ProductService;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import lombok.AllArgsConstructor;
@@ -78,9 +75,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public boolean isCategoryDescriptionExist(String categoryDescription) {
-        return getAllCategories().stream()
-                .anyMatch(categoryDto -> categoryDto.getDescription().equals(categoryDescription));
-
+    public boolean isCategoryDescriptionExist(CategoryDto categoryDTO) {
+        Company actualCompany = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+        Category existingCategory = categoryRepository.findByDescriptionAndCompany(categoryDTO.getDescription(), actualCompany);
+        if (existingCategory == null) return false;
+        return !existingCategory.getId().equals(categoryDTO.getId());
     }
 }

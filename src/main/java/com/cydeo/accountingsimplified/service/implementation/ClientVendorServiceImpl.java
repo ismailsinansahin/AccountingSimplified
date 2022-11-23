@@ -86,16 +86,11 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     }
 
     @Override
-    public boolean companyNameExists(String companyName) {
+    public boolean companyNameExists(ClientVendorDto clientVendorDto) {
         Company actualCompany = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        return clientVendorRepository.existsClientVendorByCompanyNameAndCompany(companyName, actualCompany);
+        ClientVendor existingClientVendor = clientVendorRepository.findByCompanyNameAndCompany(clientVendorDto.getCompanyName(), actualCompany);
+        if (existingClientVendor == null) return false;
+        return !existingClientVendor.getId().equals(clientVendorDto.getId());
     }
-
-    @Override
-    public boolean isCompanyNameChanged(ClientVendorDto clientVendorDto) {
-        ClientVendorDto existingClientVendor = findClientVendorById(clientVendorDto.getId());
-        return !existingClientVendor.getCompanyName().equals(clientVendorDto.getCompanyName());
-    }
-
 
 }

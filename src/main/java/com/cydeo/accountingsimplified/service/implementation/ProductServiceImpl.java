@@ -6,7 +6,6 @@ import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.entity.Product;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.ProductRepository;
-import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.ProductService;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import org.springframework.stereotype.Service;
@@ -88,8 +87,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean isProductNameExist(String productName) {
-        return productRepository.existsByName(productName);
+    public boolean isProductNameExist(ProductDto productDto) {
+        Company actualCompany = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+        Product existingProduct = productRepository.findByNameAndCategoryCompany(productDto.getName(), actualCompany);
+        if (existingProduct == null) return false;
+        return !existingProduct.getId().equals(productDto.getId());
     }
 
 

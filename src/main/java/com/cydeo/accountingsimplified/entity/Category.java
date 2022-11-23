@@ -15,9 +15,7 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=false")
 public class Category extends BaseEntity {
 
-    @Column(unique = true)
     private String description;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
