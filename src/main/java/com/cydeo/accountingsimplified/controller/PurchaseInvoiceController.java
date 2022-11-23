@@ -69,7 +69,9 @@ public class PurchaseInvoiceController {
     }
 
     @PostMapping("/addInvoiceProduct/{invoiceId}")
-    public String addInvoiceProductToPurchaseInvoice(@PathVariable("invoiceId") Long invoiceId, @Valid @ModelAttribute("newInvoiceProduct") InvoiceProductDto invoiceProductDto, BindingResult result, Model model) {
+    public String addInvoiceProductToPurchaseInvoice(@PathVariable("invoiceId") Long invoiceId,
+                                                     @Valid @ModelAttribute("newInvoiceProduct") InvoiceProductDto invoiceProductDto,
+                                                     BindingResult result, Model model) {
 
         if (result.hasErrors()){
             model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
@@ -82,7 +84,8 @@ public class PurchaseInvoiceController {
     }
 
     @GetMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
-    public String removeInvoiceProductFromPurchaseInvoice(@PathVariable("invoiceId") Long invoiceId, @PathVariable("invoiceProductId") Long invoiceProductId) {
+    public String removeInvoiceProductFromPurchaseInvoice(@PathVariable("invoiceId") Long invoiceId,
+                                                          @PathVariable("invoiceProductId") Long invoiceProductId) {
         invoiceProductService.delete(invoiceProductId);
         return "redirect:/purchaseInvoices/update/" + invoiceId;
     }
