@@ -91,8 +91,7 @@ public class SalesInvoiceController {
         if (result.hasErrors()){
             result.getAllErrors().stream()
                     .map(obj -> (FieldError)obj)
-                    .map(FieldError::getField)
-                    .forEach(str -> redirAttrs.addAttribute(str, "Enter valid input"));
+                    .forEach(err -> redirAttrs.addAttribute(err.getField(), err.getDefaultMessage()));
             return "redirect:/salesInvoices/update/" + invoiceId;
         }
 
