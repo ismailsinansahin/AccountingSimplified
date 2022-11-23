@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 
@@ -16,9 +17,15 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=false")
 public class InvoiceProduct extends BaseEntity{
 
+    @NotNull
     private Integer quantity;
+
+    @NotNull
     private Integer price;
+
+    @NotNull
     private Integer tax;
+
     private Integer total;
     private Integer profitLoss;
     private Integer remainingQuantity;
