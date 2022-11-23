@@ -34,6 +34,8 @@ public class InvoiceDto {
 
     private CompanyDto company;
 
+    @NotNull
+    @Valid
     private ClientVendorDto clientVendor;
 
     private BigDecimal price;

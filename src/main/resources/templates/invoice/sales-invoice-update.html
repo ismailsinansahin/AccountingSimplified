@@ -58,14 +58,7 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Client</label>
-<!--                                                                    <select id="client" name="client" class="form-control"-->
-<!--                                                                            th:with="client = *{clientVendor}" required>-->
-<!--                                                                        <option th:each= "client:${clients}"-->
-<!--                                                                                th:value="${client.id}"-->
-<!--                                                                                th:text="${client.companyName}"-->
-<!--                                                                                th:selected="${client.id} == ${invoice.clientVendor.id}"></option>-->
-<!--                                                                    </select>-->
-                                                                    <select id="client" class="form-control" th:field="*{clientVendor}" required>
+                                                                    <select id="client" class="form-control" th:field="*{clientVendor}">
                                                                         <option th:if="${clients.size() > 1}"
                                                                                 th:value="''" th:text="'Select'"></option>
                                                                         <option th:each= "client:${clients}"
@@ -112,7 +105,7 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Product</label>
-                                                                    <select id="product" class="form-control" th:field="*{product}" required>
+                                                                    <select id="product" class="form-control" th:field="*{product}">
                                                                         <option th:if="${products.size() >1}"
                                                                                 th:value="''" th:text="'Select'" selected></option>
                                                                         <option th:each= "product:${products}"
@@ -120,6 +113,13 @@
                                                                                 th:value="${product.id}"
                                                                                 th:text="${product.name}"></option>
                                                                     </select>
+                                                                </div>
+                                                                <div th:if="${#fields.hasErrors('product')}">
+                                                                    <ul>
+                                                                        <li class="validation"
+                                                                            th:each="err : ${#fields.errors('product')}"
+                                                                            th:text="${err}"></li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -130,7 +130,12 @@
                                                                     <input type="number" th:field="*{quantity}" placeholder="Quantity"
                                                                            class="form-control" aria-invalid="false">
                                                                 </div>
-                                                                <div th:if="${param.containsKey('quantity')}" th:text="${param.get('quantity')}" class="text-danger small">
+                                                                <div th:if="${#fields.hasErrors('quantity')}">
+                                                                    <ul>
+                                                                        <li class="validation"
+                                                                            th:each="err : ${#fields.errors('quantity')}"
+                                                                            th:text="${err}"></li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -138,11 +143,15 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Price</label>
-
                                                                     <input type="number" th:field="*{price}" placeholder="Price"
                                                                            class="form-control" aria-invalid="false">
                                                                 </div>
-                                                                <div th:if="${param.containsKey('price')}" th:text="${param.get('price')}" class="text-danger small">
+                                                                <div th:if="${#fields.hasErrors('price')}">
+                                                                    <ul>
+                                                                        <li class="validation"
+                                                                            th:each="err : ${#fields.errors('price')}"
+                                                                            th:text="${err}"></li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -153,7 +162,12 @@
                                                                     <input type="number" th:field="*{tax}" placeholder="Tax"
                                                                            class="form-control" aria-invalid="false">
                                                                 </div>
-                                                                <div th:if="${param.containsKey('tax')}" th:text="${param.get('tax')}" class="text-danger small">
+                                                                <div th:if="${#fields.hasErrors('tax')}">
+                                                                    <ul>
+                                                                        <li class="validation"
+                                                                            th:each="err : ${#fields.errors('tax')}"
+                                                                            th:text="${err}"></li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -195,7 +209,7 @@
                                                                 <th scope="col">#</th>
                                                                 <th>Product</th>
                                                                 <th>Quantity</th>
-                                                                <th>Unit Price</th>
+                                                                <th>Price</th>
                                                                 <th>Tax</th>
                                                                 <th>Total</th>
                                                                 <th>Remove</th>
@@ -209,7 +223,7 @@
                                                                 <td th:text="${invoiceProduct.price}"></td>
                                                                 <td th:text="${invoiceProduct.tax}"></td>
                                                                 <td th:text="${invoiceProduct.total}"></td>
-                                                                <td class="actions">
+                                                                <td>
                                                                     <a th:href="@{/salesInvoices/removeInvoiceProduct/{invoiceId}/{invoiceProuductId}(invoiceId=${invoice.getId()}, invoiceProuductId=${invoiceProduct.getId()})}">
                                                                         <button class="ft-minus btn-danger bg-light-primary" type="submit"></button>
                                                                     </a>
