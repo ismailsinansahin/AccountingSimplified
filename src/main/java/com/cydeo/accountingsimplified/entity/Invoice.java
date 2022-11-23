@@ -42,6 +42,4 @@ public class Invoice extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "client_vendor_id")
     private ClientVendor clientVendor;
-
-
 }
