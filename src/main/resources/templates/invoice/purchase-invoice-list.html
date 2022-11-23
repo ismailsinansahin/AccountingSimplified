@@ -76,10 +76,10 @@
                                                                            th:href ="@{/purchaseInvoices/approve/{id}(id=${invoice.getId()})}" >
                                                                             <button class="btn btn-success mb-2 mb-sm-0 mr-sm-2">Approve</button>
                                                                         </a>
-                                                                        <a th:if="${invoice.invoiceStatus.value} == 'Approved'" type="button">
+                                                                        <a th:if="${invoice.invoiceStatus.value} == 'Approved'" type="button"
+                                                                           th:href ="@{/purchaseInvoices/print/{id}(id=${invoice.getId()})}">
                                                                             <button class="btn btn-info mb-2 mb-sm-0 mr-sm-2">Print</button>
                                                                         </a>
-                                                                        </form>
                                                                     </td>
                                                                 </tr>
                                                                 </tbody>

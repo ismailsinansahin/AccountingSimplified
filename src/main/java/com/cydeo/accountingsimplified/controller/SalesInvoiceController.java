@@ -59,11 +59,6 @@ public class SalesInvoiceController {
         return "redirect:/salesInvoices/update/" + invoice.getId();
     }
 
-    @PostMapping(value = "/actions/{invoiceId}", params = {"action=update"})
-    public String navigateToSalesInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId){
-        return "redirect:/salesInvoices/update/" + invoiceId;
-    }
-
     @GetMapping("/update/{invoiceId}")
     public String navigateToSalesInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId, Model model) {
         model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
@@ -91,19 +86,19 @@ public class SalesInvoiceController {
         return "redirect:/salesInvoices/update/" + invoiceId;
     }
 
-    @PostMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
+    @GetMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
     public String removeInvoiceProductFromPurchaseInvoice(@PathVariable("invoiceId") Long invoiceId, @PathVariable("invoiceProductId") Long invoiceProductId) {
         invoiceProductService.delete(invoiceProductId);
         return "redirect:/salesInvoices/update/" + invoiceId;
     }
 
-    @PostMapping(value = "/actions/{invoiceId}", params = {"action=approve"})
+    @GetMapping(value = "/approve/{invoiceId}")
     public String approvePurchaseInvoice(@PathVariable("invoiceId") Long invoiceId){
         invoiceService.approve(invoiceId);
         return "redirect:/salesInvoices/list";
     }
 
-    @PostMapping(value = "/actions/{invoiceId}", params = {"action=delete"})
+    @GetMapping(value = "/delete/{invoiceId}")
     public String deleteSalesInvoice(@PathVariable("invoiceId") Long invoiceId){
         invoiceService.delete(invoiceId);
         return "redirect:/salesInvoices/list";
@@ -111,7 +106,7 @@ public class SalesInvoiceController {
 
     //Print functionality
 
-    @PostMapping(value = "/actions/{invoiceId}", params = {"action=print"})
+    @GetMapping(value = "/print/{invoiceId}")
     public String print(@PathVariable("invoiceId") Long id, Model model)  {
 
         model.addAttribute("company", companyService.getCompanyByLoggedInUser());

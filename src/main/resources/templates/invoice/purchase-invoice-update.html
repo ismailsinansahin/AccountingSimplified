@@ -202,11 +202,10 @@
                                                                 <td th:text="${invoiceProduct.price}"></td>
                                                                 <td th:text="${invoiceProduct.tax}"></td>
                                                                 <td th:text="${invoiceProduct.total}"></td>
-                                                                <td>
-                                                                    <form method="post"
-                                                                          data-th-action="@{/purchaseInvoices/removeInvoiceProduct/{invoiceId}/{invoiceProuductId}(invoiceId=${invoice.getId()}, invoiceProuductId=${invoiceProduct.getId()})}">
-                                                                          <button class="ft-minus btn-danger bg-light-primary" type="submit"></button>
-                                                                    </form>
+                                                                <td class="actions">
+                                                                    <a th:href="@{/purchaseInvoices/removeInvoiceProduct/{invoiceId}/{invoiceProuductId}(invoiceId=${invoice.getId()}, invoiceProuductId=${invoiceProduct.getId()})}">
+                                                                        <button class="ft-minus btn-danger bg-light-primary" type="submit"></button>
+                                                                    </a>
                                                                 </td>
                                                             </tr>
                                                             </tbody>
