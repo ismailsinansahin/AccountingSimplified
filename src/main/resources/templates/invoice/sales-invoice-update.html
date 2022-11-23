@@ -128,7 +128,9 @@
                                                                 <div class="controls">
                                                                     <label>Quantity</label>
                                                                     <input type="number" th:field="*{quantity}" placeholder="Quantity"
-                                                                           class="form-control" required="required" aria-invalid="false">
+                                                                           class="form-control" aria-invalid="false">
+                                                                </div>
+                                                                <div th:if="${param.containsKey('quantity')}" th:text="${param.get('quantity')}" class="text-danger small">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -136,8 +138,11 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Price</label>
-                                                                    <input type="number" th:field="*{price}" placeholder="Price" step=".01"
-                                                                           class="form-control" required="required" aria-invalid="false">
+
+                                                                    <input type="number" th:field="*{price}" placeholder="Price"
+                                                                           class="form-control" aria-invalid="false">
+                                                                </div>
+                                                                <div th:if="${param.containsKey('price')}" th:text="${param.get('price')}" class="text-danger small">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -146,7 +151,9 @@
                                                                 <div class="controls">
                                                                     <label>Tax</label>
                                                                     <input type="number" th:field="*{tax}" placeholder="Tax"
-                                                                           class="form-control" required="required" aria-invalid="false">
+                                                                           class="form-control" aria-invalid="false">
+                                                                </div>
+                                                                <div th:if="${param.containsKey('tax')}" th:text="${param.get('tax')}" class="text-danger small">
                                                                 </div>
                                                             </div>
                                                         </div>

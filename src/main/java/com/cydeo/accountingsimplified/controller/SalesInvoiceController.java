@@ -7,10 +7,15 @@ import com.cydeo.accountingsimplified.enums.InvoiceType;
 import com.cydeo.accountingsimplified.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Objects;
 
 
 @Controller
@@ -21,7 +26,6 @@ public class SalesInvoiceController {
     private final InvoiceProductService invoiceProductService;
     private final ClientVendorService clientVendorService;
     private final ProductService productService;
-
     private final CompanyService companyService;
 
     public SalesInvoiceController(InvoiceService invoiceService, InvoiceProductService invoiceProductService,
@@ -76,12 +80,20 @@ public class SalesInvoiceController {
     }
 
     @PostMapping("/addInvoiceProduct/{invoiceId}")
-    public String addInvoiceProductToPurchaseInvoice(@PathVariable("invoiceId") Long invoiceId, InvoiceProductDto invoiceProductDto, RedirectAttributes redirAttrs) {
+    public String addInvoiceProductToSalesInvoice(@PathVariable("invoiceId") Long invoiceId, @Valid @ModelAttribute("newInvoiceProduct") InvoiceProductDto invoiceProductDto, BindingResult result, RedirectAttributes redirAttrs) {
+
+        if (result.hasErrors()){
+            result.getAllErrors().stream()
+                    .map(obj -> (FieldError)obj)
+                    .forEach(err -> redirAttrs.addAttribute(err.getField(), err.getDefaultMessage()));
+            return "redirect:/salesInvoices/update/" + invoiceId;
+        }
 
         if (!invoiceProductService.checkProductQuantity(invoiceProductDto))  {
             redirAttrs.addFlashAttribute("error", "Not enough "+invoiceProductDto.getProduct().getName()+" quantity to sell...");
             return "redirect:/salesInvoices/update/" + invoiceId;
         }
+
         invoiceProductService.save(invoiceId, invoiceProductDto);
         return "redirect:/salesInvoices/update/" + invoiceId;
     }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Where;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -24,6 +25,7 @@ public class InvoiceProduct extends BaseEntity{
     private int tax;
     private BigDecimal profitLoss;
     private int remainingQuantity;
+
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)

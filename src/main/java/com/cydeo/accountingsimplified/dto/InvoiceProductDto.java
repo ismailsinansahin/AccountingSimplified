@@ -4,6 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Range;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
@@ -20,6 +26,7 @@ public class InvoiceProductDto {
     private BigDecimal total;
     private BigDecimal profitLoss;
     private int remainingQuantity;
+
     private InvoiceDto invoice;
     private ProductDto product;
 

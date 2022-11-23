@@ -146,3 +146,4 @@ values
 ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1320, 6, 0, 10, 0, 9, 6),     --sale AWAITING_APPROVAL after approval total sale (with tax) : 17820 & profit (with tax) : 3300+1980=5280
 ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1320, 5, 0, 10, 0, 10, 6),     --sale AWAITING_APPROVAL after approval total sale (with tax) : 24420 & profit (with tax) : 5280+1540=6820
 ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1320, 2, 0, 10, 0, 11, 6);    --sale AWAITING_APPROVAL after approval total sale (with tax) : 27060 & profit (with tax) : 6820+440=7260
+
