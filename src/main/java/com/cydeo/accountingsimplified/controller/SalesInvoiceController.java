@@ -16,7 +16,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -48,7 +50,6 @@ public class SalesInvoiceController {
     @GetMapping("/create")
     public String navigateToSalesInvoiceCreate(Model model) throws Exception {
         model.addAttribute("newSalesInvoice", invoiceService.getNewInvoice(InvoiceType.SALES));
-        model.addAttribute("clients", clientVendorService.getAllClientVendorsOfCompany(ClientVendorType.CLIENT));
         return "/invoice/sales-invoice-create";
     }
 
@@ -72,8 +73,6 @@ public class SalesInvoiceController {
     @GetMapping("/update/{invoiceId}")
     public String navigateToSalesInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId, Model model) throws Exception {
         model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
-        model.addAttribute("clients", clientVendorService.getAllClientVendorsOfCompany(ClientVendorType.CLIENT));
-        model.addAttribute("products", productService.getProductsOfCompany());
         model.addAttribute("newInvoiceProduct", new InvoiceProductDto());
         model.addAttribute("invoiceProducts", invoiceProductService.getInvoiceProductsOfInvoice(invoiceId));
         return "/invoice/sales-invoice-update";
@@ -86,17 +85,12 @@ public class SalesInvoiceController {
     }
 
     @PostMapping("/addInvoiceProduct/{invoiceId}")
-    public String addInvoiceProductToSalesInvoice(@PathVariable("invoiceId") Long invoiceId, @Valid @ModelAttribute("newInvoiceProduct") InvoiceProductDto invoiceProductDto, BindingResult result, RedirectAttributes redirAttrs) {
-
-        if (invoiceProductDto.getProduct() == null){
-            redirAttrs.addFlashAttribute("product", "Please choose a product");
-        }
+    public String addInvoiceProductToSalesInvoice(@PathVariable("invoiceId") Long invoiceId, @Valid @ModelAttribute("newInvoiceProduct") InvoiceProductDto invoiceProductDto, BindingResult result, RedirectAttributes redirAttrs, Model model) {
 
         if (result.hasErrors()){
-            result.getAllErrors().stream()
-                    .map(obj -> (FieldError)obj)
-                    .forEach(err -> redirAttrs.addAttribute(err.getField(), err.getDefaultMessage()));
-            return "redirect:/salesInvoices/update/" + invoiceId;
+            model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
+            model.addAttribute("invoiceProducts", invoiceProductService.getInvoiceProductsOfInvoice(invoiceId));
+            return "/invoice/sales-invoice-update";
         }
 
         if (!invoiceProductService.checkProductQuantity(invoiceProductDto))  {
@@ -131,11 +125,17 @@ public class SalesInvoiceController {
     @PostMapping(value = "/actions/{invoiceId}", params = {"action=print"})
     public String print(@PathVariable("invoiceId") Long id, Model model)  {
 
-        model.addAttribute("company", companyService.getCompanyByLoggedInUser());
         model.addAttribute("invoice", invoiceService.findInvoiceById(id));
         model.addAttribute("invoiceProducts",invoiceProductService.getInvoiceProductsOfInvoice(id));
 
         return "invoice/invoice_print";
+    }
+
+    @ModelAttribute
+    public void commonAttributes(Model model){
+        model.addAttribute("clients", clientVendorService.getAllClientVendorsOfCompany(ClientVendorType.CLIENT));
+        model.addAttribute("products", productService.getProductsOfCompany());
+        model.addAttribute("company", companyService.getCompanyByLoggedInUser());
     }
 
 

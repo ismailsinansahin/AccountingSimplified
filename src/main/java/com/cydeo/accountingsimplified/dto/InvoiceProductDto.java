@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -35,6 +36,9 @@ public class InvoiceProductDto {
     private Integer profitLoss;
     private Integer remainingQuantity;
     private InvoiceDto invoice;
+
+    @NotNull
+    @Valid
     private ProductDto product;
 
 }
