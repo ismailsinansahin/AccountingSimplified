@@ -1,8 +1,9 @@
 package com.cydeo.accountingsimplified.service;
 
+
 import com.cydeo.accountingsimplified.dto.CurrencyDto;
+
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
 
 public interface DashboardService {

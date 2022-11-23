@@ -1,5 +1,6 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
+
 import com.cydeo.accountingsimplified.dto.CurrencyApiResponse;
 import com.cydeo.accountingsimplified.dto.CurrencyDto;
 import com.cydeo.accountingsimplified.entity.Company;
@@ -8,10 +9,10 @@ import com.cydeo.accountingsimplified.enums.InvoiceStatus;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.InvoiceRepository;
+import com.cydeo.accountingsimplified.service.CurrencyExchangeClient;
 import com.cydeo.accountingsimplified.service.DashboardService;
 import com.cydeo.accountingsimplified.service.InvoiceProductService;
 import com.cydeo.accountingsimplified.service.SecurityService;
-import com.cydeo.accountingsimplified.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
