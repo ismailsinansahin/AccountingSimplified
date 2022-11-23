@@ -80,7 +80,7 @@ public class PurchaseInvoiceController {
 
     @PostMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
     public String removeInvoiceProductFromPurchaseInvoice(@PathVariable("invoiceId") Long invoiceId, @PathVariable("invoiceProductId") Long invoiceProductId) {
-        invoiceProductService.removeInvoiceProduct(invoiceProductId);
+        invoiceProductService.delete(invoiceProductId);
         return "redirect:/purchaseInvoices/update/" + invoiceId;
     }
 

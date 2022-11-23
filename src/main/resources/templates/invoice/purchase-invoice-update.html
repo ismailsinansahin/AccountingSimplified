@@ -58,13 +58,12 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Vendor</label>
-                                                                    <select id="role" class="form-control" th:field="*{clientVendor}" required>
-                                                                        <option th:if="${vendors.size() > 1}"
-                                                                                th:value="''" th:text="'Select'"></option>
+                                                                    <select id="vendor" name="vendor" class="custom-select"
+                                                                            th:with="vendor=*{clientVendor}" required>
                                                                         <option th:each= "vendor:${vendors}"
                                                                                 th:value="${vendor.id}"
                                                                                 th:text="${vendor.companyName}"
-                                                                                th:selected="${invoice.clientVendor.companyName}"></option>
+                                                                                th:selected="${vendor.id}==${invoice.clientVendor.id}"></option>
                                                                     </select>
                                                                 </div>
                                                             </div>

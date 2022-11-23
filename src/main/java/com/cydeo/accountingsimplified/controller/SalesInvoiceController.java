@@ -1,6 +1,5 @@
 package com.cydeo.accountingsimplified.controller;
 
-import com.cydeo.accountingsimplified.app_util.ErrorGenerator;
 import com.cydeo.accountingsimplified.dto.InvoiceDto;
 import com.cydeo.accountingsimplified.dto.InvoiceProductDto;
 import com.cydeo.accountingsimplified.enums.ClientVendorType;
@@ -8,14 +7,10 @@ import com.cydeo.accountingsimplified.enums.InvoiceType;
 import com.cydeo.accountingsimplified.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-
-import javax.validation.Valid;
-import java.util.List;
 
 
 @Controller
@@ -98,7 +93,7 @@ public class SalesInvoiceController {
 
     @PostMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
     public String removeInvoiceProductFromPurchaseInvoice(@PathVariable("invoiceId") Long invoiceId, @PathVariable("invoiceProductId") Long invoiceProductId) {
-        invoiceProductService.removeInvoiceProduct(invoiceProductId);
+        invoiceProductService.delete(invoiceProductId);
         return "redirect:/salesInvoices/update/" + invoiceId;
     }
 

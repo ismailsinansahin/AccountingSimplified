@@ -13,7 +13,7 @@ public interface InvoiceProductService {
     InvoiceProductDto findInvoiceProductById(long id);
     List<InvoiceProductDto> getInvoiceProductsOfInvoice(Long invoiceId);
     void save(Long invoiceId, InvoiceProductDto invoiceProductDto);
-    void removeInvoiceProduct(Long invoiceProductId);
+    void delete(Long invoiceProductId);
     BigDecimal getPriceOfInvoiceProductWithoutTax(Long id);
     BigDecimal getTaxOfInvoiceProduct(Long id);
     BigDecimal getTotalOfInvoiceProduct(Long id);

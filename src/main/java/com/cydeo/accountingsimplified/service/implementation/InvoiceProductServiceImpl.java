@@ -142,7 +142,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     }
 
     @Override
-    public void removeInvoiceProduct(Long invoiceProductId) {
+    public void delete(Long invoiceProductId) {
         InvoiceProduct invoiceProduct = invoiceProductRepository.findInvoiceProductById(invoiceProductId);
         invoiceProduct.setIsDeleted(true);
         invoiceProductRepository.save(invoiceProduct);
