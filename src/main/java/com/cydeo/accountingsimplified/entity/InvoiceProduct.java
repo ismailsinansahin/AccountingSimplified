@@ -26,13 +26,10 @@ public class InvoiceProduct extends BaseEntity{
     private BigDecimal profitLoss;
     private int remainingQuantity;
 
-
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_id")
     private Invoice invoice;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;

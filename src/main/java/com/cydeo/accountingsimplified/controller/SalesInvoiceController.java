@@ -53,11 +53,10 @@ public class SalesInvoiceController {
     }
 
     @PostMapping("/create")
-    public String createNewSalesInvoice(@Valid @ModelAttribute("newSalesInvoice") InvoiceDto invoiceDto, RedirectAttributes redirAttrs) {
+    public String createNewSalesInvoice(@Valid @ModelAttribute("newSalesInvoice") InvoiceDto invoiceDto, BindingResult result) {
 
-        if (invoiceDto.getClientVendor() == null) {
-            redirAttrs.addFlashAttribute("error", "Please choose a Client");
-            return "redirect:/salesInvoices/create";
+        if (result.hasErrors()) {
+            return "/invoice/sales-invoice-create";
         }
 
         var invoice = invoiceService.save(invoiceDto, InvoiceType.SALES);

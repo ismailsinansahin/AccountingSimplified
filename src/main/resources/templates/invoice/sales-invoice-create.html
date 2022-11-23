@@ -64,7 +64,12 @@
                                                                                 th:value="${client.id}"
                                                                                 th:text="${client.companyName}"></option>
                                                                     </select>
-                                                                    <div class="text-danger small" th:if="${error}" th:text="${error}">
+                                                                    <div th:if="${#fields.hasErrors('clientVendor')}">
+                                                                        <ul>
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('clientVendor')}"
+                                                                                th:text="${err}"></li>
+                                                                        </ul>
                                                                     </div>
                                                                 </div>
                                                             </div>

@@ -19,20 +19,15 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=false")
 public class Product extends BaseEntity{
 
-    @NotNull
     private String name;
 
-//    @NotNull // instead of this, int primitive type can be used
     private int quantityInStock;
 
-//    @NotNull // instead of this, int primitive type can be used
     private int lowLimitAlert;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private ProductUnit productUnit;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
