@@ -16,13 +16,10 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=false")
 public class InvoiceProduct extends BaseEntity{
 
-    @NotNull
     private Integer quantity;
 
-    @NotNull
     private Integer price;
 
-    @NotNull
     private Integer tax;
 
     private Integer total;

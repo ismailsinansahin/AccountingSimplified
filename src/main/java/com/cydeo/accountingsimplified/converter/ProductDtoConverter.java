@@ -21,6 +21,7 @@ public class ProductDtoConverter implements Converter<String, ProductDto> {
     @SneakyThrows
     @Override
     public ProductDto convert(String id){
+        if (id.isEmpty()) return null;
         return productService.findProductById(Long.parseLong(id));
     }
 

@@ -104,12 +104,14 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Product</label>
-                                                                    <select id="product" class="form-control" th:field="*{product}" required>
+                                                                    <select id="product" class="form-control" th:field="*{product}">
                                                                         <option th:value="''" th:text="'Select'" selected></option>
                                                                         <option th:each= "product:${products}"
                                                                                 th:value="${product.id}"
                                                                                 th:text="${product.name}"></option>
                                                                     </select>
+                                                                </div>
+                                                                <div th:if="${product}" th:text="${product}" class="text-danger small">
                                                                 </div>
                                                             </div>
                                                         </div>

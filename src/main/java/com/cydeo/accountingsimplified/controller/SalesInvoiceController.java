@@ -88,6 +88,10 @@ public class SalesInvoiceController {
     @PostMapping("/addInvoiceProduct/{invoiceId}")
     public String addInvoiceProductToSalesInvoice(@PathVariable("invoiceId") Long invoiceId, @Valid @ModelAttribute("newInvoiceProduct") InvoiceProductDto invoiceProductDto, BindingResult result, RedirectAttributes redirAttrs) {
 
+        if (invoiceProductDto.getProduct() == null){
+            redirAttrs.addFlashAttribute("product", "Please choose a product");
+        }
+
         if (result.hasErrors()){
             result.getAllErrors().stream()
                     .map(obj -> (FieldError)obj)
