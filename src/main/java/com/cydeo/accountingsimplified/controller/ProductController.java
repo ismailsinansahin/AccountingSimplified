@@ -26,16 +26,13 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public String navigateToProductList(Model model) throws Exception {
-        model.addAttribute("products", productService.getAllProducts());
+    public String navigateToProductList() {
         return "/product/product-list";
     }
 
     @GetMapping("/create")
     public String navigateToProductCreate(Model model) throws Exception {
         model.addAttribute("newProduct", new ProductDto());
-        model.addAttribute("categories", categoryService.getAllCategories());
-        model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
         return "/product/product-create";
     }
 
@@ -47,8 +44,6 @@ public class ProductController {
         }
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("categories", categoryService.getAllCategories());
-            model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
             return "/product/product-create";
         }
         productService.save(productDto);
@@ -58,8 +53,6 @@ public class ProductController {
     @GetMapping("/update/{productId}")
     public String navigateToProductUpdate(@PathVariable("productId") Long productId, Model model) throws Exception {
         model.addAttribute("product", productService.findProductById(productId));
-        model.addAttribute("categories", categoryService.getAllCategories());
-        model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
         return "/product/product-update";
     }
 
@@ -71,8 +64,6 @@ public class ProductController {
         }
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("categories", categoryService.getAllCategories());
-            model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
             return "/product/product-update";
         }
         productService.update(productId, productDto);
@@ -83,6 +74,13 @@ public class ProductController {
     public String deleteProduct(@PathVariable("productId") Long productId) {
         productService.delete(productId);
         return "redirect:/products/list";
+    }
+
+    @ModelAttribute
+    public void commonAttributes(Model model) throws Exception {
+        model.addAttribute("products", productService.getAllProducts());
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
     }
 
 }
