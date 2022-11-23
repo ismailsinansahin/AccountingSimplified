@@ -19,6 +19,7 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=false")
 public class Product extends BaseEntity{
 
+
     @NotNull
     private String name;
 

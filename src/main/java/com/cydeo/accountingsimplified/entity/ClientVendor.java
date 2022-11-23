@@ -16,13 +16,12 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=false")
 public class ClientVendor extends BaseEntity{
 
-   @Column(unique = true)
+
     private String companyName;
 
     private String phone;
 
     private String website;
-
 
     @Enumerated(EnumType.STRING)
     private ClientVendorType clientVendorType;

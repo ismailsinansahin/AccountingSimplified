@@ -14,7 +14,5 @@ public interface ClientVendorService {
     ClientVendorDto update(Long id, ClientVendorDto clientVendorDto) throws ClassNotFoundException, CloneNotSupportedException;
     void delete(Long id);
 
-    boolean companyNameExists(String companyName);
-
-    boolean isCompanyNameChanged(ClientVendorDto clientVendorDto);
+    boolean companyNameExists(ClientVendorDto clientVendorDto);
 }
