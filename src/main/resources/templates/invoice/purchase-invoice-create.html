@@ -57,13 +57,20 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Vendor</label>
-                                                                    <select id="vendor" class="form-control" th:field="*{clientVendor}" required>
+                                                                    <select id="vendor" class="form-control" th:field="*{clientVendor}">
                                                                         <option th:if="${vendors.size() > 1}"
                                                                                 th:value="''" th:text="'Select'" selected></option>
                                                                         <option th:each= "vendor:${vendors}"
                                                                                 th:value="${vendor.id}"
                                                                                 th:text="${vendor.companyName}"></option>
                                                                     </select>
+                                                                    <div th:if="${#fields.hasErrors('clientVendor')}">
+                                                                        <ul>
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('clientVendor')}"
+                                                                                th:text="${err}"></li>
+                                                                        </ul>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>

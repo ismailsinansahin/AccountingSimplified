@@ -58,20 +58,11 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Vendor</label>
-<!--                                                                    <select id="vendor" name="vendor" class="custom-select"-->
-<!--                                                                            th:with="vendor=*{clientVendor}" required>-->
-<!--                                                                        <option th:each= "vendor:${vendors}"-->
-<!--                                                                                th:value="${vendor.id}"-->
-<!--                                                                                th:text="${vendor.companyName}"-->
-<!--                                                                                th:selected="${vendor.id}==${invoice.clientVendor.id}"-->
-<!--                                                                        ></option>-->
-<!--                                                                    </select>-->
-                                                                    <select id="vendor" class="form-control" th:field="*{clientVendor}" required>
-                                                                        <option th:if="${vendors.size() > 1}"
-                                                                                th:value="''" th:text="'Select'"></option>
+                                                                    <select id="role" class="form-control" th:field="*{clientVendor}">
                                                                         <option th:each= "vendor:${vendors}"
                                                                                 th:value="${vendor.id}"
-                                                                                th:text="${vendor.companyName}"></option>
+                                                                                th:text="${vendor.companyName}"
+                                                                                th:selected="${invoice.clientVendor.companyName}"></option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -113,14 +104,20 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Product</label>
-                                                                    <select id="product" class="form-control" th:field="*{product}" required>
+                                                                    <select id="product" class="form-control" th:field="*{product}">
                                                                         <option th:if="${products.size() > 1}"
                                                                                 th:value="''" th:text="'Select'" selected></option>
                                                                         <option th:each= "product:${products}"
-                                                                                th:if="${product.getQuantityInStock() > 0}"
                                                                                 th:value="${product.id}"
                                                                                 th:text="${product.name}"></option>
                                                                     </select>
+                                                                </div>
+                                                                <div th:if="${#fields.hasErrors('product')}">
+                                                                    <ul>
+                                                                        <li class="validation"
+                                                                            th:each="err : ${#fields.errors('product')}"
+                                                                            th:text="${err}"></li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -129,7 +126,14 @@
                                                                 <div class="controls">
                                                                     <label>Quantity</label>
                                                                     <input type="number" th:field="*{quantity}" placeholder="Quantity"
-                                                                           class="form-control" required="required" aria-invalid="false">
+                                                                           class="form-control" aria-invalid="false">
+                                                                </div>
+                                                                <div th:if="${#fields.hasErrors('quantity')}">
+                                                                    <ul>
+                                                                        <li class="validation"
+                                                                            th:each="err : ${#fields.errors('quantity')}"
+                                                                            th:text="${err}"></li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -138,7 +142,14 @@
                                                                 <div class="controls">
                                                                     <label>Price</label>
                                                                     <input type="number" th:field="*{price}" placeholder="Price" step=".01"
-                                                                           class="form-control" required="required" aria-invalid="false">
+                                                                           class="form-control" aria-invalid="false">
+                                                                </div>
+                                                                <div th:if="${#fields.hasErrors('price')}">
+                                                                    <ul>
+                                                                        <li class="validation"
+                                                                            th:each="err : ${#fields.errors('price')}"
+                                                                            th:text="${err}"></li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -147,7 +158,14 @@
                                                                 <div class="controls">
                                                                     <label>Tax</label>
                                                                     <input type="number" th:field="*{tax}" placeholder="Tax"
-                                                                           class="form-control" required="required" aria-invalid="false">
+                                                                           class="form-control" aria-invalid="false">
+                                                                </div>
+                                                                <div th:if="${#fields.hasErrors('tax')}">
+                                                                    <ul>
+                                                                        <li class="validation"
+                                                                            th:each="err : ${#fields.errors('tax')}"
+                                                                            th:text="${err}"></li>
+                                                                    </ul>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -218,7 +236,7 @@
                                 </div>
                             </div>
                         </div>
-                </div>
+                    </div>
             </div>
         </div>
     </div>
