@@ -131,6 +131,7 @@ public class SalesInvoiceController {
         model.addAttribute("clients", clientVendorService.getAllClientVendorsOfCompany(ClientVendorType.CLIENT));
         model.addAttribute("products", productService.getAllProducts());
         model.addAttribute("company", companyService.getCompanyByLoggedInUser());
+        model.addAttribute("title", "Cydeo Accounting-Sales Invoice");
     }
 
 

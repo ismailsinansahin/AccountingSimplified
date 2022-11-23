@@ -19,7 +19,9 @@
     <link rel="stylesheet" th:href="@{https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css}"/>
     <link rel="stylesheet"
           th:href="@{https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css}"/>
-    <title>Cydeo Accounting</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/images/faviconmoney.ico}">
+    <title th:if="${title==null}">Cydeo Accounting-Login</title>
+    <title th:if="${title!=null}" th:text="${title}"></title>
     <style>
         ul li.validation {
             color: red;

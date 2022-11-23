@@ -87,4 +87,9 @@ public class UserController {
         return "redirect:/users/list";
     }
 
+    @ModelAttribute
+    public void getTitle(Model model){
+        model.addAttribute("title", "Cydeo Accounting-User");
+    }
+
 }
