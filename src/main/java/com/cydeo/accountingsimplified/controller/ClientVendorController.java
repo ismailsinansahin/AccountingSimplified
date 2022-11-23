@@ -36,7 +36,7 @@ public class ClientVendorController {
 
     @PostMapping("/create")
     public String createNewClientVendor(@Valid @ModelAttribute("newClientVendor") ClientVendorDto clientVendorDto, BindingResult result, Model model) throws Exception {
-        boolean isDuplicatedCompanyName = clientVendorService.companyNameExists(clientVendorDto.getCompanyName());
+        boolean isDuplicatedCompanyName = clientVendorService.companyNameExists(clientVendorDto);
         if (result.hasErrors() || isDuplicatedCompanyName) {
             if (isDuplicatedCompanyName) {
                 result.rejectValue("companyName", " ", "A client/vendor with this name already exists. Please try with different name.");
@@ -63,7 +63,7 @@ public class ClientVendorController {
     @PostMapping("/update/{clientVendorId}")
     public String updateClientVendor(@PathVariable("clientVendorId") Long clientVendorId, @Valid @ModelAttribute("clientVendor") ClientVendorDto clientVendorDto, BindingResult result, Model model) throws ClassNotFoundException, CloneNotSupportedException {
         clientVendorDto.setId(clientVendorId);
-        boolean isDuplicatedCompanyName = clientVendorService.isCompanyNameChanged(clientVendorDto) && clientVendorService.companyNameExists(clientVendorDto.getCompanyName());
+        boolean isDuplicatedCompanyName = clientVendorService.companyNameExists(clientVendorDto);
         if (result.hasErrors() || isDuplicatedCompanyName) {
             if (isDuplicatedCompanyName) {
                 result.rejectValue("companyName", " ", "A client/vendor with this name already exists. Please try with different name.");
