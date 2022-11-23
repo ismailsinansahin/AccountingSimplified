@@ -9,6 +9,8 @@ import com.cydeo.accountingsimplified.repository.*;
 import com.cydeo.accountingsimplified.service.*;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -20,13 +22,15 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceProductService invoiceProductService;
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
+    private final ProductService productService;
 
     public InvoiceServiceImpl(InvoiceRepository invoiceRepository, InvoiceProductService invoiceProductService,
-                              MapperUtil mapperUtil, SecurityService securityService) {
+                              MapperUtil mapperUtil, SecurityService securityService, ProductService productService) {
         this.invoiceRepository = invoiceRepository;
         this.invoiceProductService = invoiceProductService;
         this.mapperUtil = mapperUtil;
         this.securityService = securityService;
+        this.productService = productService;
     }
 
     @Override
@@ -37,19 +41,19 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public List<InvoiceDto> getAllInvoicesOfCompany(InvoiceType invoiceType){
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        List<InvoiceDto> allInvoicesOfTheCompany = invoiceRepository
-                .findInvoicesByCompanyAndInvoiceType(company, invoiceType)
+        List<InvoiceDto> allInvoicesOfTheCompany = invoiceRepository.findInvoicesByCompanyAndInvoiceType(company, invoiceType)
                 .stream()
+                .sorted(Comparator.comparing(Invoice::getInvoiceNo))
                 .map(each -> mapperUtil.convert(each, new InvoiceDto()))
                 .collect(Collectors.toList());
-        allInvoicesOfTheCompany.forEach(each -> each.setPrice(getTotalPriceOfInvoice(each.getId())));
+        allInvoicesOfTheCompany.forEach(each -> each.setPrice(getTotalPriceOfInvoiceWithoutTax(each.getId())));
         allInvoicesOfTheCompany.forEach(each -> each.setTax(getTotalTaxOfInvoice(each.getId())));
         allInvoicesOfTheCompany.forEach(each -> each.setTotal(calculateTotalAmountOfInvoice(each.getId())));
         return allInvoicesOfTheCompany;
     }
 
     @Override
-    public InvoiceDto create(InvoiceDto invoiceDto, InvoiceType invoiceType){
+    public InvoiceDto save(InvoiceDto invoiceDto, InvoiceType invoiceType){
         invoiceDto.setCompany(securityService.getLoggedInUser().getCompany());
         invoiceDto.setInvoiceType(invoiceType);
         invoiceDto.setInvoiceStatus(InvoiceStatus.AWAITING_APPROVAL);
@@ -78,6 +82,8 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public void delete(Long invoiceId) {
         Invoice invoice = invoiceRepository.findInvoiceById(invoiceId);
+        invoiceProductService.getInvoiceProductsOfInvoice(invoiceId)
+                .forEach( invoiceProductDto -> invoiceProductService.delete(invoiceProductDto.getId()));
         invoice.setIsDeleted(true);
         invoiceRepository.save(invoice);
     }
@@ -90,7 +96,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .limit(3)
                 .map(each -> mapperUtil.convert(each, new InvoiceDto()))
                 .collect(Collectors.toList());
-        last3Invoices.forEach(each -> each.setPrice(invoiceProductService.getPriceOfInvoiceProduct(each.getId())));
+        last3Invoices.forEach(each -> each.setPrice(invoiceProductService.getPriceOfInvoiceProductWithoutTax(each.getId())));
         last3Invoices.forEach(each -> each.setTax(invoiceProductService.getTaxOfInvoiceProduct(each.getId())));
         last3Invoices.forEach(each -> each.setTotal(invoiceProductService.getTotalOfInvoiceProduct(each.getId())));
         return last3Invoices;
@@ -100,38 +106,51 @@ public class InvoiceServiceImpl implements InvoiceService {
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setInvoiceNo(generateInvoiceNo(invoiceType));
         invoiceDto.setDate(LocalDate.now());
-        invoiceDto.setCompany(securityService.getLoggedInUser().getCompany());
+        CompanyDto company = securityService.getLoggedInUser().getCompany();
+        invoiceDto.setCompany(company);
         return invoiceDto;
     }
 
     private String generateInvoiceNo(InvoiceType invoiceType){
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        if (invoiceRepository.findInvoicesByCompanyAndInvoiceType(company, invoiceType).size() ==0) {
+        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceType(company, invoiceType);
+        if (invoices.size() == 0) {
             return invoiceType.name().charAt(0) + "-001";
         }
-        Invoice lastCreatedInvoiceOfTheCompany = invoiceRepository
-                .findInvoicesByCompanyAndInvoiceType(company, invoiceType)
-                .stream().max(Comparator.comparing(Invoice::getInsertDateTime)).get();
+        Invoice lastCreatedInvoiceOfTheCompany = invoices.stream()
+                .max(Comparator.comparing(Invoice::getInsertDateTime)).get();
         int newOrder = Integer.parseInt(lastCreatedInvoiceOfTheCompany.getInvoiceNo().substring(2)) + 1;
         return invoiceType.name().charAt(0) + "-" + String.format("%03d", newOrder);
     }
 
-    private int getTotalPriceOfInvoice(Long id){
+    private BigDecimal getTotalPriceOfInvoiceWithoutTax(Long id){
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
-        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProductDto::getPrice).sum();
+        return invoiceProductsOfInvoice.stream()
+                .map(p -> p.getPrice()
+                        .multiply(BigDecimal.valueOf( p.getQuantity() * 100 / (100d + p.getTax())))
+                        .setScale(2, RoundingMode.HALF_UP))
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
-    private int getTotalTaxOfInvoice(Long id){
+    private BigDecimal getTotalTaxOfInvoice(Long id){
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
-        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProductDto::getTax).sum();
+        return invoiceProductsOfInvoice.stream()
+                .map(p -> p.getPrice()
+                        .multiply(BigDecimal.valueOf(p.getQuantity() * p.getTax() /(100d + p.getTax())))
+                        .setScale(2, RoundingMode.HALF_UP))
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.ZERO);
     }
 
-    private int calculateTotalAmountOfInvoice(Long id){
+    private BigDecimal calculateTotalAmountOfInvoice(Long id){
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
-        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProductDto::getTotal).sum();
+        return invoiceProductsOfInvoice.stream()
+                .map(p -> p.getPrice().multiply(BigDecimal.valueOf(p.getQuantity()))
+                        .setScale(2, RoundingMode.HALF_UP))
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
 

@@ -10,7 +10,9 @@ import com.cydeo.accountingsimplified.service.ProductService;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,10 +36,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> getAllProducts() throws Exception {
+    public List<ProductDto> getAllProducts() {
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return productRepository.findAllByCategoryCompany(company)
                 .stream()
+                .sorted(Comparator.comparing((Product product) -> product.getCategory().getDescription())
+                        .thenComparing(Product::getName))
                 .map(each -> mapperUtil.convert(each, new ProductDto()))
                 .collect(Collectors.toList());
     }
@@ -60,15 +64,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto update(Long productId, ProductDto productDto) {
-        Product product = productRepository.findById(productId).get();
-        Category category = mapperUtil.convert(productDto.getCategory(), new Category());
-        product.setCategory(category);
-        product.setName(productDto.getName());
-        product.setLowLimitAlert(productDto.getLowLimitAlert());
-        product.setProductUnit(productDto.getProductUnit());
+        productDto.setId(productId);
+        Product product = productRepository.findById(productId)
+                .orElseThrow(()-> new NoSuchElementException("Product " + productDto.getName() + "not found"));
         final int quantityInStock = productDto.getQuantityInStock() == null ? product.getQuantityInStock() : productDto.getQuantityInStock();
-        product.setQuantityInStock(quantityInStock);
-        return mapperUtil.convert(productRepository.save(product), productDto);
+        productDto.setQuantityInStock(quantityInStock);
+        product = productRepository.save(mapperUtil.convert(productDto, new Product()));
+        return mapperUtil.convert(product, productDto);
     }
 
     @Override

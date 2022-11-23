@@ -1,15 +1,13 @@
 package com.cydeo.accountingsimplified.service;
 
-import com.cydeo.accountingsimplified.dto.CompanyDto;
-import com.cydeo.accountingsimplified.dto.CurrencyDto;
-import com.cydeo.accountingsimplified.dto.InvoiceDto;
 
-import java.util.List;
+import com.cydeo.accountingsimplified.dto.CurrencyDto;
+
+import java.math.BigDecimal;
 import java.util.Map;
 
 public interface DashboardService {
 
-    Map<String, Integer> getSummaryNumbers() throws Exception;
+    Map<String, BigDecimal> getSummaryNumbers() throws Exception;
     CurrencyDto getExchangeRates();
-
 }
