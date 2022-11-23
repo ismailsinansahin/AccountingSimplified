@@ -85,4 +85,9 @@ public class ProductController {
         return "redirect:/products/list";
     }
 
+    @ModelAttribute
+    public void getTitle(Model model){
+        model.addAttribute("title", "Cydeo Accounting-Product");
+    }
+
 }

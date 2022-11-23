@@ -80,4 +80,9 @@ public class CategoryController {
         categoryService.delete(categoryId);
         return "redirect:/categories/list";
     }
+
+    @ModelAttribute
+    public void getTitle(Model model){
+        model.addAttribute("title", "Cydeo Accounting-Category");
+    }
 }

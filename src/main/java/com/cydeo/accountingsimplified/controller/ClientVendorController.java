@@ -81,4 +81,9 @@ public class ClientVendorController {
         return "redirect:/clientVendors/list";
     }
 
+    @ModelAttribute
+    public void getTitle(Model model){
+        model.addAttribute("title", "Cydeo Accounting-Client/Vendor");
+    }
+
 }

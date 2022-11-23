@@ -131,6 +131,11 @@ public class SalesInvoiceController {
         model.addAttribute("company", companyService.getCompanyByLoggedInUser());
     }
 
+    @ModelAttribute
+    public void getTitle(Model model){
+        model.addAttribute("title", "Cydeo Accounting-Sales Invoice");
+    }
+
 
 
 

@@ -23,6 +23,7 @@ public class DashboardController {
 
     @GetMapping("/dashboard")
     public String navigateToDashboard(Model model) throws Exception {
+        model.addAttribute("title", "Cydeo Accounting-Dashboard");
         model.addAttribute("companyTitle", companyService.getCompanyByLoggedInUser().getTitle());
         model.addAttribute("summaryNumbers", dashboardService.getSummaryNumbers());
         model.addAttribute("invoices", invoiceService.getLastThreeInvoices());

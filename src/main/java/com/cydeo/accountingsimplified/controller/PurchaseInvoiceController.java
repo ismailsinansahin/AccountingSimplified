@@ -10,10 +10,7 @@ import com.cydeo.accountingsimplified.service.InvoiceService;
 import com.cydeo.accountingsimplified.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
@@ -90,6 +87,11 @@ public class PurchaseInvoiceController {
     public String deletePurchaseInvoice(@PathVariable("invoiceId") Long invoiceId){
         invoiceService.delete(invoiceId);
         return "redirect:/purchaseInvoices/list";
+    }
+
+    @ModelAttribute
+    public void getTitle(Model model){
+        model.addAttribute("title", "Cydeo Accounting-Purchase Invoice");
     }
 
 
