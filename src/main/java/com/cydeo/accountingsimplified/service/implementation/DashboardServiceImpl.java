@@ -1,5 +1,6 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
+
 import com.cydeo.accountingsimplified.dto.CurrencyApiResponse;
 import com.cydeo.accountingsimplified.dto.CurrencyDto;
 import com.cydeo.accountingsimplified.entity.Company;
@@ -8,9 +9,14 @@ import com.cydeo.accountingsimplified.enums.InvoiceStatus;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.InvoiceRepository;
-import com.cydeo.accountingsimplified.service.*;
+import com.cydeo.accountingsimplified.service.CurrencyExchangeClient;
+import com.cydeo.accountingsimplified.service.DashboardService;
+import com.cydeo.accountingsimplified.service.InvoiceProductService;
+import com.cydeo.accountingsimplified.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,20 +41,20 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public Map<String, Integer> getSummaryNumbers() {
-        Map<String, Integer> summaryNumbersMap = new HashMap<>();
-        int totalCost = 0;
-        int totalSales = 0;
-        int profitLoss = 0;
+    public Map<String, BigDecimal> getSummaryNumbers() {
+        Map<String, BigDecimal> summaryNumbersMap = new HashMap<>();
+        BigDecimal totalCost = BigDecimal.ZERO;
+        BigDecimal totalSales = BigDecimal.ZERO;
+        BigDecimal profitLoss = BigDecimal.ZERO;
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         List<Invoice> allApprovedInvoicesOfCompany = invoiceRepository
                 .findInvoicesByCompanyAndInvoiceStatus(company, InvoiceStatus.APPROVED);
         for (Invoice invoice : allApprovedInvoicesOfCompany) {
             if (invoice.getInvoiceType() == InvoiceType.PURCHASE) {
-                totalCost += invoiceProductService.getTotalOfInvoiceProduct(invoice.getId());
+                totalCost = totalCost.add(invoiceProductService.getTotalOfInvoiceProduct(invoice.getId()));
             } else {
-                totalSales += invoiceProductService.getTotalOfInvoiceProduct(invoice.getId());
-                profitLoss += invoiceProductService.getProfitLossOfInvoiceProduct(invoice.getId());
+                totalSales = totalSales.add(invoiceProductService.getTotalOfInvoiceProduct(invoice.getId()));
+                profitLoss = profitLoss.add(invoiceProductService.getProfitLossOfInvoiceProduct(invoice.getId()));
             }
         }
         summaryNumbersMap.put("totalCost", totalCost);

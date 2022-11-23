@@ -1,14 +1,18 @@
 package com.cydeo.accountingsimplified.entity;
 
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -16,27 +20,34 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=false")
 public class InvoiceProduct extends BaseEntity{
 
+    private int quantity;
+    private BigDecimal price;
+    private int tax;
+    private BigDecimal profitLoss;
+    private int remainingQuantity;
+
+
     @NotNull
-    private Integer quantity;
-
-    @NotNull
-    private Integer price;
-
-    @NotNull
-    private Integer tax;
-
-    private Integer total;
-    private Integer profitLoss;
-    private Integer remainingQuantity;
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_id")
     private Invoice invoice;
 
-
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
+    @Override
+    public String toString() {
+        return "InvoiceProduct{" +
+                "quantity=" + quantity +
+                ", price=" + price +
+                ", tax=" + tax +
+                ", profitLoss=" + profitLoss +
+                ", remainingQuantity=" + remainingQuantity +
+                ", invoice=" + invoice +
+                ", product.name=" + product.getName() +
+                ", product.quantity=" + product.getQuantityInStock() +
+                '}';
+    }
 }

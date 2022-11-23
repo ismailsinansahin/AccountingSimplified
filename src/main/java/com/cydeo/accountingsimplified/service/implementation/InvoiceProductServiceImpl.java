@@ -8,13 +8,16 @@ import com.cydeo.accountingsimplified.entity.Product;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.InvoiceProductRepository;
-import com.cydeo.accountingsimplified.service.ProductService;
-import org.springframework.context.annotation.Lazy;
 import com.cydeo.accountingsimplified.service.InvoiceProductService;
 import com.cydeo.accountingsimplified.service.InvoiceService;
+import com.cydeo.accountingsimplified.service.ProductService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,7 +46,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     public List<InvoiceProductDto> getInvoiceProductsOfInvoice(Long invoiceId) {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(invoiceId), new Invoice());
         return invoiceProductRepository
-                .findInvoiceProductsByInvoice(invoice)
+                .findAllByInvoice(invoice)
                 .stream()
                 .map(each -> mapperUtil.convert(each, new InvoiceProductDto()))
                 .collect(Collectors.toList());
@@ -54,11 +57,11 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(invoiceId), new Invoice());
         InvoiceProduct invoiceProduct = mapperUtil.convert(invoiceProductDto, new InvoiceProduct());
         invoiceProduct.setInvoice(invoice);
-        invoiceProduct.setTotal(getAmountOfInvoiceProduct(invoiceProductDto));
-        if(invoice.getInvoiceType() == InvoiceType.PURCHASE){
-            invoiceProduct.setProfitLoss(0);
-        }else{
-            invoiceProduct.setProfitLoss(0);
+//        invoiceProduct.setTotal(getAmountOfInvoiceProduct(invoiceProductDto));
+        if (invoice.getInvoiceType() == InvoiceType.PURCHASE) {
+            invoiceProduct.setProfitLoss(BigDecimal.ZERO);
+        } else {
+            invoiceProduct.setProfitLoss(BigDecimal.ZERO);
             invoiceProduct.setRemainingQuantity(0);
         }
         invoiceProductRepository.save(invoiceProduct);
@@ -66,22 +69,21 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
     @Override
     public void completeApprovalProcedures(Long invoiceId, InvoiceType type) {
-        List<InvoiceProduct> invoiceProductList = invoiceProductRepository.findInvoiceProductsByInvoice_Id(invoiceId);
-        if(type==InvoiceType.SALES){
-            for(InvoiceProduct salesInvoiceProduct : invoiceProductList){
-                if(checkProductQuantity(mapperUtil.convert(salesInvoiceProduct, new InvoiceProductDto()))){
-                    updateQuantityOfProductForSalesInvoice(salesInvoiceProduct);
+        List<InvoiceProduct> invoiceProductList = invoiceProductRepository.findAllByInvoice_Id(invoiceId);
+        if (type == InvoiceType.SALES) {
+            for (InvoiceProduct salesInvoiceProduct : invoiceProductList) {
+                if (checkProductQuantity(mapperUtil.convert(salesInvoiceProduct, new InvoiceProductDto()))) {
+                    updateQuantityOfProduct(salesInvoiceProduct, type);
                     salesInvoiceProduct.setRemainingQuantity(salesInvoiceProduct.getQuantity());
                     invoiceProductRepository.save(salesInvoiceProduct);
                     setProfitLossOfInvoiceProductsForSalesInvoice(salesInvoiceProduct);
-                }else{
-                    System.out.println("This sale cannot be completed due to insufficient quantity of the product");
-                    throw new RuntimeException(); // todo custom exception
+                } else {
+                    throw new NoSuchElementException("This sale cannot be completed due to insufficient quantity of the product"); // todo custom exception
                 }
             }
-        }else{
-            for(InvoiceProduct purchaseInvoiceProduct : invoiceProductList) {
-                updateQuantityOfProductForPurchaseInvoice(purchaseInvoiceProduct);
+        } else {
+            for (InvoiceProduct purchaseInvoiceProduct : invoiceProductList) {
+                updateQuantityOfProduct(purchaseInvoiceProduct, type);
                 purchaseInvoiceProduct.setRemainingQuantity(purchaseInvoiceProduct.getQuantity());
                 invoiceProductRepository.save(purchaseInvoiceProduct);
             }
@@ -93,96 +95,101 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         return salesInvoiceProduct.getProduct().getQuantityInStock() >= salesInvoiceProduct.getQuantity();
     }
 
-    private void updateQuantityOfProductForSalesInvoice(InvoiceProduct salesInvoiceProduct) {
-        ProductDto productDto = mapperUtil.convert(salesInvoiceProduct.getProduct(), new ProductDto());
-        productDto.setQuantityInStock(productDto.getQuantityInStock() - salesInvoiceProduct.getQuantity());
-        productService.update(productDto.getId(), productDto);
-    }
-
-    private void updateQuantityOfProductForPurchaseInvoice(InvoiceProduct purchaseInvoiceProduct) {
-        ProductDto productDto = mapperUtil.convert(purchaseInvoiceProduct.getProduct(), new ProductDto());
-        productDto.setQuantityInStock(productDto.getQuantityInStock() + purchaseInvoiceProduct.getQuantity());
+    private void updateQuantityOfProduct(InvoiceProduct invoiceProduct, InvoiceType type) {
+        ProductDto productDto = mapperUtil.convert(invoiceProduct.getProduct(), new ProductDto());
+        if (type.equals(InvoiceType.SALES)) {
+            productDto.setQuantityInStock(productDto.getQuantityInStock() - invoiceProduct.getQuantity());
+        } else {
+            productDto.setQuantityInStock(productDto.getQuantityInStock() + invoiceProduct.getQuantity());
+        }
         productService.update(productDto.getId(), productDto);
     }
 
     private void setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProduct salesInvoiceProduct) {
-        List<InvoiceProduct> notSoldPurchaseInvoiceProducts = findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType.PURCHASE, salesInvoiceProduct.getProduct(), 0);
-        for (InvoiceProduct notSoldPurchaseInvoiceProduct : notSoldPurchaseInvoiceProducts) {
-            if (salesInvoiceProduct.getRemainingQuantity() > notSoldPurchaseInvoiceProduct.getRemainingQuantity()) {
-                int costTotalForQty = notSoldPurchaseInvoiceProduct.getTotal() * notSoldPurchaseInvoiceProduct.getRemainingQuantity() / notSoldPurchaseInvoiceProduct.getQuantity();
-                int salesPriceForQty = salesInvoiceProduct.getPrice() * notSoldPurchaseInvoiceProduct.getRemainingQuantity();
-                int salesTaxForQty = salesPriceForQty * salesInvoiceProduct.getTax() / 100;
-                int salesTotalForQty = salesPriceForQty + salesTaxForQty;
-                int profitLoss = salesInvoiceProduct.getProfitLoss() + (salesTotalForQty - costTotalForQty);
-                salesInvoiceProduct.setRemainingQuantity(salesInvoiceProduct.getRemainingQuantity() - notSoldPurchaseInvoiceProduct.getRemainingQuantity());
-                notSoldPurchaseInvoiceProduct.setRemainingQuantity(0);
-                salesInvoiceProduct.setProfitLoss(profitLoss);
-                invoiceProductRepository.save(notSoldPurchaseInvoiceProduct);
-                invoiceProductRepository.save(salesInvoiceProduct);
-            } else {
-                int costTotalForQty = notSoldPurchaseInvoiceProduct.getTotal() * salesInvoiceProduct.getRemainingQuantity() / notSoldPurchaseInvoiceProduct.getQuantity();
-                int salesPriceForQty = salesInvoiceProduct.getPrice() * salesInvoiceProduct.getRemainingQuantity();
-                int salesTaxForQty = salesPriceForQty * salesInvoiceProduct.getTax() / 100;
-                int salesTotalForQty = salesPriceForQty + salesTaxForQty;
-                int profitLoss = salesInvoiceProduct.getProfitLoss() + salesTotalForQty - costTotalForQty;
-                notSoldPurchaseInvoiceProduct.setRemainingQuantity(notSoldPurchaseInvoiceProduct.getRemainingQuantity() - salesInvoiceProduct.getRemainingQuantity());
+        List<InvoiceProduct> availableProductsForSale =
+                findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType.PURCHASE, salesInvoiceProduct.getProduct(), 0);
+        for (InvoiceProduct availableProduct : availableProductsForSale) {
+            if (salesInvoiceProduct.getRemainingQuantity() <= availableProduct.getRemainingQuantity()) {
+                BigDecimal costTotalForQty = availableProduct.getPrice().multiply(BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity()));
+                BigDecimal salesTotalForQty = salesInvoiceProduct.getPrice().multiply(BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity()));
+                BigDecimal profitLoss = salesInvoiceProduct.getProfitLoss().add(salesTotalForQty.subtract( costTotalForQty));
+                availableProduct.setRemainingQuantity(availableProduct.getRemainingQuantity() - salesInvoiceProduct.getRemainingQuantity());
                 salesInvoiceProduct.setRemainingQuantity(0);
                 salesInvoiceProduct.setProfitLoss(profitLoss);
-                invoiceProductRepository.save(notSoldPurchaseInvoiceProduct);
+                invoiceProductRepository.save(availableProduct);
                 invoiceProductRepository.save(salesInvoiceProduct);
                 break;
+            } else {
+                BigDecimal costTotalForQty = availableProduct.getPrice()
+                        .multiply(BigDecimal.valueOf(availableProduct.getRemainingQuantity()));
+                BigDecimal salesTotalForQty = salesInvoiceProduct.getPrice().multiply(BigDecimal.valueOf(availableProduct.getRemainingQuantity()));
+                BigDecimal profitLoss = salesInvoiceProduct.getProfitLoss()
+                        .add(salesTotalForQty.subtract(costTotalForQty));
+                salesInvoiceProduct.setRemainingQuantity(salesInvoiceProduct.getRemainingQuantity() - availableProduct.getRemainingQuantity());
+                availableProduct.setRemainingQuantity(0);
+                salesInvoiceProduct.setProfitLoss(profitLoss);
+                invoiceProductRepository.save(availableProduct);
+                invoiceProductRepository.save(salesInvoiceProduct);
             }
         }
     }
 
-
-    private Integer getAmountOfInvoiceProduct(InvoiceProductDto invoiceProductDto) {
+    private BigDecimal getAmountOfInvoiceProduct(InvoiceProductDto invoiceProductDto) {
         int quantity = invoiceProductDto.getQuantity();
-        int price = invoiceProductDto.getPrice();
+        BigDecimal price = invoiceProductDto.getPrice();
         int tax = invoiceProductDto.getTax();
-        return (quantity * price) + (quantity * price * tax / 100);
+        return price.multiply(BigDecimal.valueOf(quantity).add(price.multiply(BigDecimal.valueOf(tax/100))));
     }
 
     @Override
-    public void removeInvoiceProduct(Long invoiceProductId) {
+    public void delete(Long invoiceProductId) {
         InvoiceProduct invoiceProduct = invoiceProductRepository.findInvoiceProductById(invoiceProductId);
         invoiceProduct.setIsDeleted(true);
         invoiceProductRepository.save(invoiceProduct);
     }
 
     @Override
-    public int getPriceOfInvoiceProduct(Long id) {
+    public BigDecimal getPriceOfInvoiceProductWithoutTax(Long id) {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(id), new Invoice());
-        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
-        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getPrice).sum();
+        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findAllByInvoice(invoice);
+        return invoiceProductsOfInvoice.stream()
+                .map(p -> p.getPrice().multiply(BigDecimal.valueOf(p.getQuantity() * 100 / (100d + p.getTax())))
+                        .setScale(2, RoundingMode.HALF_UP))
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
     @Override
-    public int getTaxOfInvoiceProduct(Long id) {
+    public BigDecimal getTaxOfInvoiceProduct(Long id) {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(id), new Invoice());
-        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
-        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getTax).sum();
+        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findAllByInvoice(invoice);
+        return invoiceProductsOfInvoice.stream()
+                .map(p -> p.getPrice().multiply(BigDecimal.valueOf(p.getQuantity() * p.getTax() / (100d + p.getTax())))
+                        .setScale(2, RoundingMode.HALF_UP))
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
     @Override
-    public int getTotalOfInvoiceProduct(Long id) {
+    public BigDecimal getTotalOfInvoiceProduct(Long id) {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(id), new Invoice());
-        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
-        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getTotal).sum();
+        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findAllByInvoice(invoice);
+        return invoiceProductsOfInvoice.stream()
+                .map(p -> p.getPrice().multiply(BigDecimal.valueOf(p.getQuantity())))
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
     @Override
-    public int getProfitLossOfInvoiceProduct(Long id) {
+    public BigDecimal getProfitLossOfInvoiceProduct(Long id) {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(id), new Invoice());
-        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findInvoiceProductsByInvoice(invoice);
-        return invoiceProductsOfInvoice.stream().mapToInt(InvoiceProduct::getProfitLoss).sum();
+        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findAllByInvoice(invoice);
+        return invoiceProductsOfInvoice.stream()
+                .map(InvoiceProduct::getProfitLoss)
+                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
 
-
     @Override
-    public List<InvoiceProduct> findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType type, Product product, Integer remainingQuantity ) {
-       return invoiceProductRepository.findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(type,product,remainingQuantity);
+    public List<InvoiceProduct> findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType type, Product product, Integer remainingQuantity) {
+        return invoiceProductRepository.findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(type, product, remainingQuantity);
     }
 
 }

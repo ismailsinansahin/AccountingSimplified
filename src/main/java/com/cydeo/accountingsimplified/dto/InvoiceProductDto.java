@@ -11,6 +11,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,22 +20,13 @@ import javax.validation.constraints.NotNull;
 public class InvoiceProductDto {
 
     private Long id;
+    private int quantity;
+    private BigDecimal price;
+    private int tax;
+    private BigDecimal total;
+    private BigDecimal profitLoss;
+    private int remainingQuantity;
 
-    @NotNull(message = "Maximum quantity is set to 10 pieces")
-    @Max(value = 10)
-    private Integer quantity;
-
-    @NotNull(message = "Please enter product price")
-    @Min(value = 10)
-    private Integer price;
-
-    @NotNull(message = "Maximum tax should be %20 ")
-    @Min(value = 10)
-    private Integer tax;
-
-    private Integer total;
-    private Integer profitLoss;
-    private Integer remainingQuantity;
     private InvoiceDto invoice;
     private ProductDto product;
 

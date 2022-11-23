@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -35,8 +36,8 @@ public class InvoiceDto {
 
     private ClientVendorDto clientVendor;
 
-    private Integer price;
-    private Integer tax;
-    private Integer total;
+    private BigDecimal price;
+    private BigDecimal tax;
+    private BigDecimal total;
 
 }
