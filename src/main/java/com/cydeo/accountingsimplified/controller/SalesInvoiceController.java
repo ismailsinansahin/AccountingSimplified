@@ -125,9 +125,9 @@ public class SalesInvoiceController {
     }
 
     @ModelAttribute
-    public void commonAttributes(Model model){
+    public void commonAttributes(Model model) {
         model.addAttribute("clients", clientVendorService.getAllClientVendorsOfCompany(ClientVendorType.CLIENT));
-        model.addAttribute("products", productService.getProductsOfCompany());
+        model.addAttribute("products", productService.getAllProducts());
         model.addAttribute("company", companyService.getCompanyByLoggedInUser());
     }
 

@@ -47,15 +47,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> getProductsOfCompany() {
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        return productRepository.findAllByCategoryCompany(company)
-                .stream()
-                .map(each -> mapperUtil.convert(each, new ProductDto()))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public ProductDto save(ProductDto productDto) {
         Product product = mapperUtil.convert(productDto, new Product());
         product.setQuantityInStock(0);
