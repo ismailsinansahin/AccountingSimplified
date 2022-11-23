@@ -18,9 +18,11 @@ public class UserDtoConverter implements Converter<String, UserDto> {
         this.userService = userService;
     }
 
-    @SneakyThrows
+//    @SneakyThrows
     @Override
     public UserDto convert(String id){
+        if (id == null || id.isBlank())
+            return null;
         return userService.findUserById(Long.parseLong(id));
     }
 

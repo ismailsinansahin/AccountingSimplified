@@ -58,12 +58,20 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Vendor</label>
-                                                                    <select id="vendor" name="vendor" class="custom-select"
-                                                                            th:with="vendor=*{clientVendor}" required>
+<!--                                                                    <select id="vendor" name="vendor" class="custom-select"-->
+<!--                                                                            th:with="vendor=*{clientVendor}" required>-->
+<!--                                                                        <option th:each= "vendor:${vendors}"-->
+<!--                                                                                th:value="${vendor.id}"-->
+<!--                                                                                th:text="${vendor.companyName}"-->
+<!--                                                                                th:selected="${vendor.id}==${invoice.clientVendor.id}"-->
+<!--                                                                        ></option>-->
+<!--                                                                    </select>-->
+                                                                    <select id="vendor" class="form-control" th:field="*{clientVendor}" required>
+                                                                        <option th:if="${vendors.size() > 1}"
+                                                                                th:value="''" th:text="'Select'"></option>
                                                                         <option th:each= "vendor:${vendors}"
                                                                                 th:value="${vendor.id}"
-                                                                                th:text="${vendor.companyName}"
-                                                                                th:selected="${vendor.id}==${invoice.clientVendor.id}"></option>
+                                                                                th:text="${vendor.companyName}"></option>
                                                                     </select>
                                                                 </div>
                                                             </div>

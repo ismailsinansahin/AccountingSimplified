@@ -51,13 +51,8 @@ public class PurchaseInvoiceController {
         return "redirect:/purchaseInvoices/update/" + invoice.getId();
     }
 
-    @PostMapping(value = "/actions/{invoiceId}", params = {"action=update"})
-    public String navigateToPurchaseInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId){
-        return "redirect:/purchaseInvoices/update/" + invoiceId;
-    }
-
     @GetMapping("/update/{invoiceId}")
-    public String navigateToPurchaseInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId, Model model) throws Exception {
+    public String navigateToPurchaseInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId, Model model) {
         model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
         model.addAttribute("vendors", clientVendorService.getAllClientVendorsOfCompany(ClientVendorType.VENDOR));
         model.addAttribute("products", productService.getProductsOfCompany());
@@ -68,6 +63,7 @@ public class PurchaseInvoiceController {
 
     @PostMapping("/update/{invoiceId}")
     public String updatePurchaseInvoice(@PathVariable("invoiceId") Long invoiceId, InvoiceDto invoiceDto) {
+        invoiceDto.setId(invoiceId);
         invoiceService.update(invoiceId, invoiceDto);
         return "redirect:/purchaseInvoices/list";
     }
@@ -78,19 +74,19 @@ public class PurchaseInvoiceController {
         return "redirect:/purchaseInvoices/update/" + invoiceId;
     }
 
-    @PostMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
+    @GetMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
     public String removeInvoiceProductFromPurchaseInvoice(@PathVariable("invoiceId") Long invoiceId, @PathVariable("invoiceProductId") Long invoiceProductId) {
         invoiceProductService.delete(invoiceProductId);
-        return "redirect:/purchaseInvoices/update/" + invoiceId;
+        return "redirect:/purchaseInvoices/list";
     }
 
-    @PostMapping(value = "/actions/{invoiceId}", params = {"action=approve"})
+    @GetMapping("/approve/{invoiceId}")
     public String approvePurchaseInvoice(@PathVariable("invoiceId") Long invoiceId){
         invoiceService.approve(invoiceId);
         return "redirect:/purchaseInvoices/list";
     }
 
-    @PostMapping(value = "/actions/{invoiceId}", params = {"action=delete"})
+    @GetMapping("/delete/{invoiceId}")
     public String deletePurchaseInvoice(@PathVariable("invoiceId") Long invoiceId){
         invoiceService.delete(invoiceId);
         return "redirect:/purchaseInvoices/list";

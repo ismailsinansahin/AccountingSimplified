@@ -63,24 +63,22 @@
                                                                     <td th:text="${invoice.tax}"></td>
                                                                     <td th:text="${invoice.total}"></td>
                                                                     <td class="actions">
-                                                                        <form action="#" method="post" data-th-action="@{/purchaseInvoices/actions/{id}(id=${invoice.getId()})}">
-                                                                            <button th:if="${invoice.invoiceStatus.value} == 'Awaiting Approval'"
-                                                                                    class="btn btn-primary mb-2 mb-sm-0 mr-sm-2"
-                                                                                    type="submit" name="action" value="update">Edit
-                                                                            </button>
-                                                                            <button th:if="${invoice.invoiceStatus.value} == 'Awaiting Approval'"
-                                                                                    class="btn btn-danger mb-2 mb-sm-0 mr-sm-2"
-                                                                                    type="submit" name="action" value="delete">Delete
-                                                                            </button>
-                                                                            <button sec:authorize="hasAnyAuthority('Manager')"
-                                                                                    th:if="${invoice.invoiceStatus.value} == 'Awaiting Approval'"
-                                                                                    class="btn btn-success mb-2 mb-sm-0 mr-sm-2"
-                                                                                    type="submit" name="action" value="approve">Approve
-                                                                            </button>
-                                                                            <button th:if="${invoice.invoiceStatus.value} == 'Approved'"
-                                                                                    class="btn btn-info mb-2 mb-sm-0 mr-sm-2"
-                                                                                    type="submit" name="action" value="print">Print
-                                                                            </button>
+                                                                        <a th:if="${invoice.invoiceStatus.value} == 'Awaiting Approval'"
+                                                                           th:href ="@{/purchaseInvoices/update/{id}(id=${invoice.getId()})}" type="button">
+                                                                            <button class="btn btn-primary mb-2 mb-sm-0 mr-sm-2">Edit</button>
+                                                                        </a>
+                                                                        <a th:if="${invoice.invoiceStatus.value} == 'Awaiting Approval'"
+                                                                           th:href ="@{/purchaseInvoices/delete/{id}(id=${invoice.getId()})}" type="button">
+                                                                            <button class="btn btn-danger mb-2 mb-sm-0 mr-sm-2">Delete</button>
+                                                                        </a>
+                                                                        <a sec:authorize="hasAnyAuthority('Manager')"
+                                                                           th:if="${invoice.invoiceStatus.value} == 'Awaiting Approval'" type="button"
+                                                                           th:href ="@{/purchaseInvoices/approve/{id}(id=${invoice.getId()})}" >
+                                                                            <button class="btn btn-success mb-2 mb-sm-0 mr-sm-2">Approve</button>
+                                                                        </a>
+                                                                        <a th:if="${invoice.invoiceStatus.value} == 'Approved'" type="button">
+                                                                            <button class="btn btn-info mb-2 mb-sm-0 mr-sm-2">Print</button>
+                                                                        </a>
                                                                         </form>
                                                                     </td>
                                                                 </tr>
