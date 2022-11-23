@@ -20,7 +20,9 @@ values ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
         'South Street', 'Times Square', 'Los Angeles', 'California', 'USA', '54782-5214'),
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
-        'SouthWest Street', 'Puzzle Square', 'Los Angeles', 'California', 'USA', '65654-8989');
+        'SouthWest Street', 'Puzzle Square', 'Los Angeles', 'California', 'USA', '65654-8989'),
+       ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
+        'OwerWest Street', 'Android Square', 'Los Angeles', 'Phoneix', 'USA', '65654-8989');;
 
 insert into companies(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                       title, phone, website, address_id, company_status)
@@ -74,6 +76,7 @@ insert into clients_vendors(insert_date_time, insert_user_id, is_deleted, last_u
 values
 -- COMPANY-2 / Green Tech
 ('2022-09-15T00:00',2, false,'2022-09-15T00:00',2,'CLIENT','Orange Tech', '+1 (251) 321-4141', 'https://www.orange.com', 5, 2),
+('2022-09-15T00:00',2, false,'2022-09-15T00:00',2,'CLIENT','Ower Tech', '+1 (251) 321-4141', 'https://www.ower.com', 8, 2),
 ('2022-09-15T00:00',2, false,'2022-09-15T00:00',2,'VENDOR','Photobug Tech', '+1 (652) 852-3246', 'https://www.photobug.com', 6, 2),
 ('2022-09-15T00:00',2, false,'2022-09-15T00:00',2,'VENDOR','Wordtune Tech','+1 (652) 852-3246','https://www.wordtune.com', 7, 2),
 -- COMPANY-3 / Blue Tech
