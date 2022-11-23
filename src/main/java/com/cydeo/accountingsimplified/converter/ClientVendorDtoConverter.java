@@ -18,10 +18,11 @@ public class ClientVendorDtoConverter implements Converter<String, ClientVendorD
         this.clientVendorService = clientVendorService;
     }
 
-    @SneakyThrows
+//    @SneakyThrows
     @Override
     public ClientVendorDto convert(String id){
-        if (id.isEmpty()) return null;
+        if (id == null || id.isBlank())
+            return null;
         return clientVendorService.findClientVendorById(Long.parseLong(id));
     }
 

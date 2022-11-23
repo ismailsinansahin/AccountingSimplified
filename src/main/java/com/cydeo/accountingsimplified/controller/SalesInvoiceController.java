@@ -1,6 +1,5 @@
 package com.cydeo.accountingsimplified.controller;
 
-import com.cydeo.accountingsimplified.app_util.ErrorGenerator;
 import com.cydeo.accountingsimplified.dto.InvoiceDto;
 import com.cydeo.accountingsimplified.dto.InvoiceProductDto;
 import com.cydeo.accountingsimplified.enums.ClientVendorType;
@@ -61,17 +60,12 @@ public class SalesInvoiceController {
             return "redirect:/salesInvoices/create";
         }
 
-        InvoiceDto invoice = invoiceService.create(invoiceDto, InvoiceType.SALES);
+        var invoice = invoiceService.save(invoiceDto, InvoiceType.SALES);
         return "redirect:/salesInvoices/update/" + invoice.getId();
     }
 
-    @PostMapping(value = "/actions/{invoiceId}", params = {"action=update"})
-    public String navigateToSalesInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId){
-        return "redirect:/salesInvoices/update/" + invoiceId;
-    }
-
     @GetMapping("/update/{invoiceId}")
-    public String navigateToSalesInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId, Model model) throws Exception {
+    public String navigateToSalesInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId, Model model) {
         model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
         model.addAttribute("newInvoiceProduct", new InvoiceProductDto());
         model.addAttribute("invoiceProducts", invoiceProductService.getInvoiceProductsOfInvoice(invoiceId));
@@ -102,19 +96,19 @@ public class SalesInvoiceController {
         return "redirect:/salesInvoices/update/" + invoiceId;
     }
 
-    @PostMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
-    public String removeInvoiceProductFromSalesInvoice(@PathVariable("invoiceId") Long invoiceId, @PathVariable("invoiceProductId") Long invoiceProductId) {
-        invoiceProductService.removeInvoiceProduct(invoiceProductId);
+    @GetMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
+    public String removeInvoiceProductFromPurchaseInvoice(@PathVariable("invoiceId") Long invoiceId, @PathVariable("invoiceProductId") Long invoiceProductId) {
+        invoiceProductService.delete(invoiceProductId);
         return "redirect:/salesInvoices/update/" + invoiceId;
     }
 
-    @PostMapping(value = "/actions/{invoiceId}", params = {"action=approve"})
-    public String approveSalesInvoice(@PathVariable("invoiceId") Long invoiceId){
+    @GetMapping(value = "/approve/{invoiceId}")
+    public String approvePurchaseInvoice(@PathVariable("invoiceId") Long invoiceId){
         invoiceService.approve(invoiceId);
         return "redirect:/salesInvoices/list";
     }
 
-    @PostMapping(value = "/actions/{invoiceId}", params = {"action=delete"})
+    @GetMapping(value = "/delete/{invoiceId}")
     public String deleteSalesInvoice(@PathVariable("invoiceId") Long invoiceId){
         invoiceService.delete(invoiceId);
         return "redirect:/salesInvoices/list";
@@ -122,7 +116,7 @@ public class SalesInvoiceController {
 
     //Print functionality
 
-    @PostMapping(value = "/actions/{invoiceId}", params = {"action=print"})
+    @GetMapping(value = "/print/{invoiceId}")
     public String print(@PathVariable("invoiceId") Long id, Model model)  {
 
         model.addAttribute("invoice", invoiceService.findInvoiceById(id));

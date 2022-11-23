@@ -21,17 +21,17 @@
                                         <div class="row report-inner-cards-wrapper">
                                             <div class=" col-md -6 col-xl report-inner-card">
                                                 <div class="inner-card-text text-center bg-danger-light">
-                                                    <h2>TOTAL COST</h2><h3 th:text="${summaryNumbers.get('totalCost')}"></h3>
+                                                    <h2>Total Cost</h2><h3 th:text="${summaryNumbers.get('totalCost')}"></h3>
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-xl report-inner-card">
                                                 <div class="inner-card-text text-center bg-success-light">
-                                                    <h2>TOTAL SALES</h2><h3 th:text="${summaryNumbers.get('totalSales')}"></h3>
+                                                    <h2>Total Sales</h2><h3 th:text="${summaryNumbers.get('totalSales')}"></h3>
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-xl report-inner-card">
                                                 <div class="inner-card-text text-center bg-info-light" >
-                                                    <h2>PROFIT / LOSS</h2><h3 th:text="${summaryNumbers.get('profitLoss')}"></h3>
+                                                    <h2>Profit/Loss (Before Income Taxes)</h2><h3 th:text="${summaryNumbers.get('profitLoss')}"></h3>
                                                 </div>
                                             </div>
                                         </div>
@@ -72,7 +72,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6 grid-margin">
-                                <header class="panel-heading"><h3 class="panel-title text-center">Exchange Rates</h3></header>
+                                <header class="panel-heading"><h3 class="panel-title text-center">Exchange Rates (1 USD)</h3></header>
                                 <div class="card">
                                     <div class="card-body">
                                         <table id="exchangetable"
@@ -89,16 +89,24 @@
                                                 <!--<tr th:each="invoice,comStat : ${invoices}">-->
                                                 <!--<td th:text="${comStat.count}"></td>-->
                                                 <!--<td th:text="${invoice.invoiceNo}"></td>-->
-                                                <td>US Dollar</td>
-                                                <td>18.65</td>
-                                            </tr>
-                                            <tr>
                                                 <td>Euro</td>
-                                                <td>18.35</td>
+                                                <td th:text="${exchangeRates.getEuro()}"></td>
                                             </tr>
                                             <tr>
                                                 <td>British Pound</td>
-                                                <td>21.14</td>
+                                                <td th:text="${exchangeRates.getBritishPound()}"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Japanese Yen</td>
+                                                <td th:text="${exchangeRates.getJapaneseYen()}"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Indian Rupee</td>
+                                                <td th:text="${exchangeRates.getIndianRupee()}"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Canadian Dollar</td>
+                                                <td>1.3384</td>
                                             </tr>
                                             </tbody>
                                         </table>

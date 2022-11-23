@@ -58,11 +58,20 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Vendor</label>
-                                                                    <select id="role" class="form-control" th:field="*{clientVendor}" required>
+<!--                                                                    <select id="vendor" name="vendor" class="custom-select"-->
+<!--                                                                            th:with="vendor=*{clientVendor}" required>-->
+<!--                                                                        <option th:each= "vendor:${vendors}"-->
+<!--                                                                                th:value="${vendor.id}"-->
+<!--                                                                                th:text="${vendor.companyName}"-->
+<!--                                                                                th:selected="${vendor.id}==${invoice.clientVendor.id}"-->
+<!--                                                                        ></option>-->
+<!--                                                                    </select>-->
+                                                                    <select id="vendor" class="form-control" th:field="*{clientVendor}" required>
+                                                                        <option th:if="${vendors.size() > 1}"
+                                                                                th:value="''" th:text="'Select'"></option>
                                                                         <option th:each= "vendor:${vendors}"
                                                                                 th:value="${vendor.id}"
-                                                                                th:text="${vendor.companyName}"
-                                                                                th:selected="${invoice.clientVendor.companyName}"></option>
+                                                                                th:text="${vendor.companyName}"></option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -105,8 +114,10 @@
                                                                 <div class="controls">
                                                                     <label>Product</label>
                                                                     <select id="product" class="form-control" th:field="*{product}" required>
-                                                                        <option th:value="''" th:text="'Select'" selected></option>
+                                                                        <option th:if="${products.size() > 1}"
+                                                                                th:value="''" th:text="'Select'" selected></option>
                                                                         <option th:each= "product:${products}"
+                                                                                th:if="${product.getQuantityInStock() > 0}"
                                                                                 th:value="${product.id}"
                                                                                 th:text="${product.name}"></option>
                                                                     </select>
@@ -126,7 +137,7 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Price</label>
-                                                                    <input type="number" th:field="*{price}" placeholder="Price"
+                                                                    <input type="number" th:field="*{price}" placeholder="Price" step=".01"
                                                                            class="form-control" required="required" aria-invalid="false">
                                                                 </div>
                                                             </div>
@@ -177,7 +188,7 @@
                                                                 <th scope="col">#</th>
                                                                 <th>Product</th>
                                                                 <th>Quantity</th>
-                                                                <th>Price</th>
+                                                                <th>Unit Price</th>
                                                                 <th>Tax</th>
                                                                 <th>Total</th>
                                                                 <th>Remove</th>
@@ -191,11 +202,10 @@
                                                                 <td th:text="${invoiceProduct.price}"></td>
                                                                 <td th:text="${invoiceProduct.tax}"></td>
                                                                 <td th:text="${invoiceProduct.total}"></td>
-                                                                <td>
-                                                                    <form method="post"
-                                                                          data-th-action="@{/purchaseInvoices/removeInvoiceProduct/{invoiceId}/{invoiceProuductId}(invoiceId=${invoice.getId()}, invoiceProuductId=${invoiceProduct.getId()})}">
-                                                                          <button class="ft-minus btn-danger bg-light-primary" type="submit"></button>
-                                                                    </form>
+                                                                <td class="actions">
+                                                                    <a th:href="@{/purchaseInvoices/removeInvoiceProduct/{invoiceId}/{invoiceProuductId}(invoiceId=${invoice.getId()}, invoiceProuductId=${invoiceProduct.getId()})}">
+                                                                        <button class="ft-minus btn-danger bg-light-primary" type="submit"></button>
+                                                                    </a>
                                                                 </td>
                                                             </tr>
                                                             </tbody>
