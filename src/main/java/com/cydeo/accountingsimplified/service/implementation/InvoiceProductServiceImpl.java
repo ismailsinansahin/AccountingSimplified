@@ -192,4 +192,9 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         return invoiceProductRepository.findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(type, product, remainingQuantity);
     }
 
+    @Override
+    public List<InvoiceProduct> findAllInvoiceProductsByProductId(Long id) {
+        return invoiceProductRepository.findAllInvoiceProductByProductId(id);
+    }
+
 }
