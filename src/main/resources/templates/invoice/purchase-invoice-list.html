@@ -13,20 +13,8 @@
             <div class="dashboard-ecommerce">
                 <div class="container-fluid dashboard-content">
                     <div class="ecommerce-widget">
-                        <div class="input-group row">
-                            <div class="col-auto">
-                                <form>
-                                    <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
-                                        <a id="companyCreateLink" class="btn bg-dark text-light mb-1"
-                                           th:href="@{/purchaseInvoices/create}"><i class="fa fa-plus mr-1"></i>
-                                           Create Purchase Invoice</a>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <br>
                         <section class="panel">
-                            <header class="panel-heading"><h2 class="panel-title">Purchase Invoice List</h2></header>
+                            <header class="panel-heading text-center"><h2 class="panel-title">Purchase Invoice List</h2></header>
                             <div class="panel-body">
                                 <div class="users-list-table">
                                     <div class="row">
@@ -98,6 +86,17 @@
                                 </div>
                             </div>
                         </section>
+                        <div class="input-group row justify-content-end">
+                            <div class="col-auto">
+                                <form>
+                                    <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
+                                        <a id="companyCreateLink" class="btn bg-dark text-light mb-1"
+                                           th:href="@{/purchaseInvoices/create}"><i class="fa fa-plus mr-1"></i>
+                                            Create Purchase Invoice</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
