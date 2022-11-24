@@ -65,9 +65,20 @@
                                                                             Edit
                                                                         </button>
                                                                     </a>
-                                                                    <a th:href="@{/products/delete/{id}(id=${product.getId()})}"
+                                                                    <span th:if="${product.getQuantityInStock()!=0}"
+                                                                          class="d-inline-block" tabindex="0"
+                                                                          data-toggle="tooltip"
+                                                                          data-placement="right"
+                                                                          title="Can not be deleted! This product has quantity in stock.">
+                                                                        <button
+                                                                                class="btn btn-danger mb-2 ml-2 mb-sm-0 mr-sm-2"
+                                                                                style="pointer-events: none;" disabled>Delete
+                                                                        </button>
+                                                                    </span>
+                                                                    <a th:unless="${product.getQuantityInStock()!=0}"
+                                                                       th:href="@{/products/delete/{id}(id=${product.getId()})}"
                                                                        type="button">
-                                                                        <button class="btn btn-danger mb-2 mb-sm-0 mr-sm-2">
+                                                                        <button class="btn btn-danger mb-2 ml-2 mb-sm-0 mr-sm-2">
                                                                             Delete
                                                                         </button>
                                                                     </a>
