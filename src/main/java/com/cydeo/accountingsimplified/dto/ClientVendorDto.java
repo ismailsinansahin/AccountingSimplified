@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -22,7 +23,7 @@ public class ClientVendorDto {
 
     @NotBlank(message = "Company Name is a required field.")
     @Size(min = 2, max = 50, message = "Company Name should have 2-50 characters long.")
-    private String companyName;
+    private String companyName; // client & vendor name
 
     //    @NotBlank // @Pattern is enough to check if it is not blank
 //    @Pattern(regexp = "^1-[0-9]{3}?-[0-9]{3}?-[0-9]{4}$")                         //  format "1-xxx-xxx-xxxx"
@@ -32,7 +33,8 @@ public class ClientVendorDto {
             + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$", message = "Phone is required field and may be in any valid phone number format.")
     private String phone;
 
-    @Pattern(regexp = "^http(s{0,1})://[a-zA-Z0-9/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9/\\&\\?\\=\\-\\.\\~\\%]*", message = "Website should have a valid format.")
+//    @Pattern(regexp = "^http(s{0,1})://[a-zA-Z0-9/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9/\\&\\?\\=\\-\\.\\~\\%]*", message = "Website should have a valid format.")
+    @URL
     private String website;
 
     @NotNull(message = "Please select type")

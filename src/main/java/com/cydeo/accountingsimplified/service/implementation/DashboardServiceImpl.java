@@ -72,9 +72,10 @@ public class DashboardServiceImpl implements DashboardService {
                 .britishPound(currency.getUsd().getGbp())
                 .indianRupee(currency.getUsd().getInr())
                 .japaneseYen(currency.getUsd().getJpy())
+                .canadianDollar(currency.getUsd().getCad())
                 .build();
 
-        log.info("Currencies are fetched for the date : "+currency.getDate());
+        log.info("Currencies are fetched for the date : "+ currency.getDate());
 
         return currencyDto;
 

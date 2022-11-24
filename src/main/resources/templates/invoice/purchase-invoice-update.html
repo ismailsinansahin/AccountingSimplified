@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
 <head th:replace="/fragments/head :: header"></head>
 
 <body>
@@ -103,7 +103,7 @@
                                                         <div class="col-12 col-md-3">
                                                             <div class="form-group">
                                                                 <div class="controls">
-                                                                    <label>Product</label>
+                                                                    <label>Product Name</label>
                                                                     <select id="product" class="form-control" th:field="*{product}">
                                                                         <option th:if="${products.size() > 1}"
                                                                                 th:value="''" th:text="'Select'" selected></option>
@@ -140,7 +140,7 @@
                                                         <div class="col-12 col-md-3">
                                                             <div class="form-group">
                                                                 <div class="controls">
-                                                                    <label>Price</label>
+                                                                    <label>Price (with tax)</label>
                                                                     <input type="number" th:field="*{price}" placeholder="Price" step=".01"
                                                                            class="form-control" aria-invalid="false">
                                                                 </div>
@@ -156,7 +156,7 @@
                                                         <div class="col-12 col-md-3">
                                                             <div class="form-group">
                                                                 <div class="controls">
-                                                                    <label>Tax</label>
+                                                                    <label>Tax Rate</label>
                                                                     <input type="number" th:field="*{tax}" placeholder="Tax"
                                                                            class="form-control" aria-invalid="false">
                                                                 </div>
@@ -204,10 +204,10 @@
                                                             <thead>
                                                             <tr>
                                                                 <th scope="col">#</th>
-                                                                <th>Product</th>
+                                                                <th>Product Name</th>
                                                                 <th>Quantity</th>
                                                                 <th>Unit Price</th>
-                                                                <th>Tax</th>
+                                                                <th>Tax Rate</th>
                                                                 <th>Total</th>
                                                                 <th>Remove</th>
                                                             </tr>
@@ -236,7 +236,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
+                </div>
             </div>
         </div>
     </div>

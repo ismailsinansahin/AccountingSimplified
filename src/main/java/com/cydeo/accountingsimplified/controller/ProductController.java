@@ -81,6 +81,7 @@ public class ProductController {
         model.addAttribute("products", productService.getAllProducts());
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("productUnits", Arrays.asList(ProductUnit.values()));
+        model.addAttribute("title", "Cydeo Accounting-Product");
     }
 
 }

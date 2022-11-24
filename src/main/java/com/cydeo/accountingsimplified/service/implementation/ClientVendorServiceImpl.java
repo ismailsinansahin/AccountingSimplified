@@ -13,6 +13,7 @@ import com.cydeo.accountingsimplified.service.ClientVendorService;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,6 +55,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         return clientVendorRepository
                 .findAllByCompanyAndClientVendorType(company, clientVendorType)
                 .stream()
+                .sorted(Comparator.comparing(ClientVendor::getCompanyName))
                 .map(each -> mapperUtil.convert(each, new ClientVendorDto()))
                 .collect(Collectors.toList());
     }

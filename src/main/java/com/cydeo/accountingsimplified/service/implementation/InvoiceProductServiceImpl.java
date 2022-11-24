@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -48,7 +49,12 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         return invoiceProductRepository
                 .findAllByInvoice(invoice)
                 .stream()
-                .map(each -> mapperUtil.convert(each, new InvoiceProductDto()))
+                .sorted(Comparator.comparing((InvoiceProduct each) -> each.getInvoice().getInvoiceNo()).reversed())
+                .map(each -> {
+                    InvoiceProductDto dto = mapperUtil.convert(each, new InvoiceProductDto());
+                    dto.setTotal(each.getPrice().multiply(BigDecimal.valueOf(each.getQuantity())));
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -57,13 +63,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(invoiceId), new Invoice());
         InvoiceProduct invoiceProduct = mapperUtil.convert(invoiceProductDto, new InvoiceProduct());
         invoiceProduct.setInvoice(invoice);
-//        invoiceProduct.setTotal(getAmountOfInvoiceProduct(invoiceProductDto));
-        if (invoice.getInvoiceType() == InvoiceType.PURCHASE) {
-            invoiceProduct.setProfitLoss(BigDecimal.ZERO);
-        } else {
-            invoiceProduct.setProfitLoss(BigDecimal.ZERO);
-            invoiceProduct.setRemainingQuantity(0);
-        }
+        invoiceProduct.setProfitLoss(BigDecimal.ZERO);
         invoiceProductRepository.save(invoiceProduct);
     }
 
@@ -190,6 +190,11 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     @Override
     public List<InvoiceProduct> findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType type, Product product, Integer remainingQuantity) {
         return invoiceProductRepository.findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(type, product, remainingQuantity);
+    }
+
+    @Override
+    public List<InvoiceProduct> findAllInvoiceProductsByProductId(Long id) {
+        return invoiceProductRepository.findAllInvoiceProductByProductId(id);
     }
 
 }
