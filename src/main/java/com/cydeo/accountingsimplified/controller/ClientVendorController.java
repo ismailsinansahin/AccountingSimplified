@@ -48,13 +48,8 @@ public class ClientVendorController {
         return "redirect:/clientVendors/list";
     }
 
-    @PostMapping(value = "/actions/{clientVendorId}", params = {"action=update"})
-    public String navigateToClientVendorUpdate(@PathVariable("clientVendorId") Long clientVendorId) {
-        return "redirect:/clientVendors/update/" + clientVendorId;
-    }
-
     @GetMapping("/update/{clientVendorId}")
-    public String navigateToClientVendorUpate(@PathVariable("clientVendorId") Long clientVendorId, Model model) {
+    public String navigateToClientVendorUpdate(@PathVariable("clientVendorId") Long clientVendorId, Model model) {
         model.addAttribute("clientVendor", clientVendorService.findClientVendorById(clientVendorId));
         model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
         return "/clientVendor/clientVendor-update";
@@ -75,7 +70,7 @@ public class ClientVendorController {
         return "redirect:/clientVendors/list";
     }
 
-    @PostMapping(value = "/actions/{clientVendorId}", params = {"action=delete"})
+    @GetMapping(value = "/delete/{clientVendorId}")
     public String activateCompany(@PathVariable("clientVendorId") Long clientVendorId) {
         clientVendorService.delete(clientVendorId);
         return "redirect:/clientVendors/list";
