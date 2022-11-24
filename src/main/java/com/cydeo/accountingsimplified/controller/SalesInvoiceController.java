@@ -78,7 +78,9 @@ public class SalesInvoiceController {
     }
 
     @PostMapping("/addInvoiceProduct/{invoiceId}")
-    public String addInvoiceProductToSalesInvoice(@PathVariable("invoiceId") Long invoiceId, @Valid @ModelAttribute("newInvoiceProduct") InvoiceProductDto invoiceProductDto, BindingResult result, RedirectAttributes redirAttrs, Model model) {
+    public String addInvoiceProductToSalesInvoice(@PathVariable("invoiceId") Long invoiceId,
+                                                  @Valid @ModelAttribute("newInvoiceProduct") InvoiceProductDto invoiceProductDto,
+                                                  BindingResult result, RedirectAttributes redirAttrs, Model model) {
 
         if (result.hasErrors()){
             model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
@@ -96,13 +98,13 @@ public class SalesInvoiceController {
     }
 
     @GetMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
-    public String removeInvoiceProductFromPurchaseInvoice(@PathVariable("invoiceId") Long invoiceId, @PathVariable("invoiceProductId") Long invoiceProductId) {
+    public String removeInvoiceProductFromSalesInvoice(@PathVariable("invoiceId") Long invoiceId, @PathVariable("invoiceProductId") Long invoiceProductId) {
         invoiceProductService.delete(invoiceProductId);
         return "redirect:/salesInvoices/update/" + invoiceId;
     }
 
     @GetMapping(value = "/approve/{invoiceId}")
-    public String approvePurchaseInvoice(@PathVariable("invoiceId") Long invoiceId){
+    public String approveSalesInvoice(@PathVariable("invoiceId") Long invoiceId){
         invoiceService.approve(invoiceId);
         return "redirect:/salesInvoices/list";
     }
@@ -125,9 +127,9 @@ public class SalesInvoiceController {
     }
 
     @ModelAttribute
-    public void commonAttributes(Model model){
+    public void commonAttributes(Model model) {
         model.addAttribute("clients", clientVendorService.getAllClientVendorsOfCompany(ClientVendorType.CLIENT));
-        model.addAttribute("products", productService.getProductsOfCompany());
+        model.addAttribute("products", productService.getAllProducts());
         model.addAttribute("company", companyService.getCompanyByLoggedInUser());
     }
 

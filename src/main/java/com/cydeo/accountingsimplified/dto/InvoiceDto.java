@@ -34,7 +34,7 @@ public class InvoiceDto {
 
     private CompanyDto company;
 
-    @NotNull(message = "Client is a required field.")
+    @NotNull(message = "This is a required field.")
     @Valid
     private ClientVendorDto clientVendor;
 

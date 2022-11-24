@@ -23,7 +23,7 @@ public class InvoiceProductDto {
     private Long id;
 
     @NotNull(message = "Quantity is a required field.")
-    @Range(min = 1, max = 10, message = "Maximum order count is 10")
+    @Range(min = 1, max = 100, message = "Maximum order count is 100")
     private Integer quantity;
 
     @NotNull(message = "Price is a required field.")

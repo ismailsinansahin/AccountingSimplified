@@ -1,32 +1,52 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
-<body>
-    <div th:fragment="header">
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-        <link rel="stylesheet" th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}"/>
-        <link th:href="@{/assets/vendor/fonts/circular-std/style.css}" rel="stylesheet"/>
-        <link rel="stylesheet" th:href="@{/assets/libs/css/style.css}"/>
-        <link rel="stylesheet" th:href="@{/assets/vendor/fonts/fontawesome/css/fontawesome-all.css}"/>
-        <link rel="stylesheet" th:href="@{/assets/vendor/charts/chartist-bundle/chartist.css}"/>
-        <link rel="stylesheet" th:href="@{/assets/vendor/charts/morris-bundle/morris.css}"/>
-        <link rel="stylesheet" th:href="@{/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css}"/>
-        <link rel="stylesheet" th:href="@{/assets/vendor/charts/c3charts/c3.css}"/>
-        <link rel="stylesheet" th:href="@{/assets/vendor/fonts/flag-icon-css/flag-icon.min.css}"/>
-        <link rel="stylesheet" th:href="@{https://pro.fontawesome.com/releases/v5.10.0/css/all.css}"
-              integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
-        <link rel="stylesheet" th:href="@{https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css}"/>
-        <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css}"/>
-        <title>Cydeo Accounting - Welcome</title>
-        <style>
-            ul li.validation {
-                color: red;
-                margin: 5px;
-                font-size: small;
-            }
-        </style>
-    </div>
-</body>
+<head th:fragment="header">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}"/>
+    <link th:href="@{/assets/vendor/fonts/circular-std/style.css}" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/assets/libs/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/fontawesome/css/fontawesome-all.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/charts/chartist-bundle/chartist.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/charts/morris-bundle/morris.css}"/>
+    <link rel="stylesheet"
+          th:href="@{/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/charts/c3charts/c3.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/flag-icon-css/flag-icon.min.css}"/>
+    <link rel="stylesheet" th:href="@{https://pro.fontawesome.com/releases/v5.10.0/css/all.css}"
+          integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" th:href="@{https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css}"/>
+    <link rel="stylesheet"
+          th:href="@{https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css}"/>
+    <title>Cydeo Accounting</title>
+    <style>
+        ul li.validation {
+            color: red;
+            margin: 5px;
+            font-size: small;
+        }
 
+        .moving-text:hover {
+            animation-play-state: paused;
+        }
+
+        /* The animation */
+        @keyframes marquee {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* media query to enable animation for only those who want it */
+        @media (prefers-reduced-motion: no-preference) {
+            .moving-text {
+                animation: marquee 15s linear infinite;
+            }
+        }
+    </style>
+</head>
 </html>

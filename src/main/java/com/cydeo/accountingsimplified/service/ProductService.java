@@ -8,9 +8,7 @@ public interface ProductService {
 
     ProductDto findProductById(Long productId);
 
-    List<ProductDto> getAllProducts() throws Exception;
-
-    List<ProductDto> getProductsOfCompany();
+    List<ProductDto> getAllProducts();
 
     ProductDto save(ProductDto productDto);
 
