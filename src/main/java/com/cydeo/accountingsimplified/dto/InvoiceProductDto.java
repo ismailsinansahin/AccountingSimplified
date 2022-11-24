@@ -24,7 +24,7 @@ public class InvoiceProductDto {
 
     @NotNull(message = "Quantity is a required field.")
     @Range(min = 1, max = 100, message = "Maximum order count is 100")
-    private int quantity;
+    private Integer quantity;
 
     @NotNull(message = "Price is a required field.")
     @Range(min = 1, message = "Price should be at least $1")
@@ -32,7 +32,7 @@ public class InvoiceProductDto {
 
     @NotNull(message = "Tax is a required field.")
     @Range(min = 5, max = 20, message = "Tax should be between %5 and %20")
-    private int tax;
+    private Integer tax;
 
     private BigDecimal total;
     private BigDecimal profitLoss;
