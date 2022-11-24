@@ -99,6 +99,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         last3Invoices.forEach(each -> each.setTotal(invoiceProductService.getTotalOfInvoiceProduct(each.getId())));
         return last3Invoices;
     }
+
     @Override
     public InvoiceDto getNewInvoice(InvoiceType invoiceType){
         InvoiceDto invoiceDto = new InvoiceDto();

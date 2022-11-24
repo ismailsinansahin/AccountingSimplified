@@ -51,6 +51,7 @@ public class ProductServiceImpl implements ProductService {
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return productRepository.findAllByCategoryCompany(company)
                 .stream()
+                .sorted(Comparator.comparing(Product::getName))
                 .map(each -> mapperUtil.convert(each, new ProductDto()))
                 .collect(Collectors.toList());
     }

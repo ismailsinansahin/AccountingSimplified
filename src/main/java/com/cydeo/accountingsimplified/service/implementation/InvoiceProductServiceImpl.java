@@ -48,7 +48,11 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         return invoiceProductRepository
                 .findAllByInvoice(invoice)
                 .stream()
-                .map(each -> mapperUtil.convert(each, new InvoiceProductDto()))
+                .map(each -> {
+                    InvoiceProductDto dto = mapperUtil.convert(each, new InvoiceProductDto());
+                    dto.setTotal(each.getPrice().multiply(BigDecimal.valueOf(each.getQuantity())));
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -57,13 +61,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(invoiceId), new Invoice());
         InvoiceProduct invoiceProduct = mapperUtil.convert(invoiceProductDto, new InvoiceProduct());
         invoiceProduct.setInvoice(invoice);
-//        invoiceProduct.setTotal(getAmountOfInvoiceProduct(invoiceProductDto));
-        if (invoice.getInvoiceType() == InvoiceType.PURCHASE) {
-            invoiceProduct.setProfitLoss(BigDecimal.ZERO);
-        } else {
-            invoiceProduct.setProfitLoss(BigDecimal.ZERO);
-            invoiceProduct.setRemainingQuantity(0);
-        }
+        invoiceProduct.setProfitLoss(BigDecimal.ZERO);
         invoiceProductRepository.save(invoiceProduct);
     }
 
