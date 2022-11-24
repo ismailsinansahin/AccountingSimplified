@@ -3,11 +3,14 @@ package com.cydeo.accountingsimplified.service.implementation;
 import com.cydeo.accountingsimplified.dto.ProductDto;
 import com.cydeo.accountingsimplified.entity.Category;
 import com.cydeo.accountingsimplified.entity.Company;
+import com.cydeo.accountingsimplified.entity.InvoiceProduct;
 import com.cydeo.accountingsimplified.entity.Product;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.ProductRepository;
+import com.cydeo.accountingsimplified.service.InvoiceProductService;
 import com.cydeo.accountingsimplified.service.ProductService;
 import com.cydeo.accountingsimplified.service.SecurityService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -20,13 +23,13 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final SecurityService securityService;
     private final MapperUtil mapperUtil;
+    private final InvoiceProductService invoiceProductService;
 
-    public ProductServiceImpl(ProductRepository productRepository,
-                              SecurityService securityService,
-                              MapperUtil mapperUtil) {
+    public ProductServiceImpl(ProductRepository productRepository, SecurityService securityService, MapperUtil mapperUtil, @Lazy InvoiceProductService invoiceProductService) {
         this.productRepository = productRepository;
         this.securityService = securityService;
         this.mapperUtil = mapperUtil;
+        this.invoiceProductService = invoiceProductService;
     }
 
     @Override
@@ -67,7 +70,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(Long productId) {
         Product product = productRepository.findById(productId).get();
-        product.setIsDeleted(true);
+        List<InvoiceProduct> invoiceProducts = invoiceProductService.findAllInvoiceProductsByProductId(product.getId());
+        if (invoiceProducts.size() == 0 || product.getQuantityInStock() == 0){
+            product.setIsDeleted(true);
+        }else System.out.println("You cannot delete this product");
         productRepository.save(product);
     }
 
