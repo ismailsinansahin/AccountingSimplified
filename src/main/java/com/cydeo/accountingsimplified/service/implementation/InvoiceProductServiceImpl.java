@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -48,6 +49,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         return invoiceProductRepository
                 .findAllByInvoice(invoice)
                 .stream()
+                .sorted(Comparator.comparing((InvoiceProduct each) -> each.getInvoice().getInvoiceNo()).reversed())
                 .map(each -> {
                     InvoiceProductDto dto = mapperUtil.convert(each, new InvoiceProductDto());
                     dto.setTotal(each.getPrice().multiply(BigDecimal.valueOf(each.getQuantity())));

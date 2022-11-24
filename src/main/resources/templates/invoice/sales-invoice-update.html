@@ -103,7 +103,7 @@
                                                         <div class="col-12 col-md-3">
                                                             <div class="form-group">
                                                                 <div class="controls">
-                                                                    <label>Product</label>
+                                                                    <label>Product Name</label>
                                                                     <select id="product" class="form-control" th:field="*{product}">
                                                                         <option th:if="${products.size() >1}"
                                                                                 th:value="''" th:text="'Select'" selected></option>
@@ -141,7 +141,7 @@
                                                         <div class="col-12 col-md-3">
                                                             <div class="form-group">
                                                                 <div class="controls">
-                                                                    <label>Price</label>
+                                                                    <label>Unit Price (with tax)</label>
                                                                     <input type="number" th:field="*{price}" placeholder="Price"
                                                                            class="form-control" aria-invalid="false">
                                                                 </div>
@@ -157,7 +157,7 @@
                                                         <div class="col-12 col-md-3">
                                                             <div class="form-group">
                                                                 <div class="controls">
-                                                                    <label>Tax</label>
+                                                                    <label>Tax Rate</label>
                                                                     <input type="number" th:field="*{tax}" placeholder="Tax"
                                                                            class="form-control" aria-invalid="false">
                                                                 </div>
@@ -203,10 +203,10 @@
                                                             <thead>
                                                             <tr>
                                                                 <th scope="col">#</th>
-                                                                <th>Product</th>
+                                                                <th>Product Name</th>
                                                                 <th>Quantity</th>
-                                                                <th>Price</th>
-                                                                <th>Tax</th>
+                                                                <th>Unit Price (with tax)</th>
+                                                                <th>Tax Rate</th>
                                                                 <th>Total</th>
                                                                 <th>Remove</th>
                                                             </tr>
