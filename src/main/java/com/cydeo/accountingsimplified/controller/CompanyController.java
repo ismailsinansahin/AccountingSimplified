@@ -86,4 +86,9 @@ public class CompanyController {
         return "redirect:/companies/list";
     }
 
+    @ModelAttribute
+    public void getTitle(Model model){
+        model.addAttribute("title", "Cydeo Accounting-Company");
+    }
+
 }

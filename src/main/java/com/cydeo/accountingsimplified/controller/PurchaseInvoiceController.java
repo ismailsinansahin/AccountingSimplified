@@ -116,6 +116,7 @@ public class PurchaseInvoiceController {
         model.addAttribute("vendors", clientVendorService.getAllClientVendorsOfCompany(ClientVendorType.VENDOR));
         model.addAttribute("products", productService.getAllProducts());
         model.addAttribute("company", companyService.getCompanyByLoggedInUser());
+        model.addAttribute("title", "Cydeo Accounting-Purchase Invoice");
     }
 
 
