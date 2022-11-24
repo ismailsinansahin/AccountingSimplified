@@ -4,6 +4,7 @@ import com.cydeo.accountingsimplified.service.ReportingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -26,6 +27,11 @@ public class ReportingController {
     public String getMonthlyProfitLossData(Model model) {
         model.addAttribute("monthlyProfitLossDataMap", reportingService.getMonthlyProfitLossDataMap());
         return "/report/profit-loss-report";
+    }
+
+    @ModelAttribute
+    public void getTitle(Model model){
+        model.addAttribute("title", "Cydeo Accounting-Report");
     }
 
 }
