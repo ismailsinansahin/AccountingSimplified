@@ -14,6 +14,8 @@ import com.cydeo.accountingsimplified.service.DashboardService;
 import com.cydeo.accountingsimplified.service.InvoiceProductService;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -65,6 +67,7 @@ public class DashboardServiceImpl implements DashboardService {
 
 
     @Override
+    @Cacheable("currency")
     public CurrencyDto getExchangeRates() {
         CurrencyApiResponse currency = client.getUsdBasedCurrencies();
         CurrencyDto currencyDto= CurrencyDto.builder()
