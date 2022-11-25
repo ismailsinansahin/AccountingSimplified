@@ -4,138 +4,138 @@
       lang="en">
 
 <body>
-    <div th:fragment="left-sidebar">
-        <div class="nav-left-sidebar bg-success-light">
-            <div class="menu-list">
-                <nav class="navbar navbar-expand-lg bg-success-light">
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav flex-column">
-                            <li class="nav-divider"></li>
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('Root User')" >
-                                <a class="nav-link active"
-                                   href="#"
-                                   data-toggle="collapse"
-                                   aria-expanded="false"
-                                   data-target="#submenu-1"
-                                   aria-controls="submenu-1">
-                                    <i class="fa fa-fw fa-list-ul"></i>CYDEO
-                                    <span class="badge badge-success"></span>
-                                </a>
-                                <div id="submenu-1" class="collapse submenu bg-success">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item" sec:authorize="hasAnyAuthority('Root User')">
-                                            <a class="nav-link" th:href="@{/companies/list}">Company Registration</a></li>
-                                        <li class="nav-item" sec:authorize="hasAnyAuthority('Root User')">
-                                            <a class="nav-link" th:href="@{/users/list}">User Registration</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="nav-divider"></li>
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('Admin', 'Manager', 'Employee')">
-                                <a class="nav-link active bg-success-light text-dark"
-                                   href="#"
-                                   data-toggle="collapse"
-                                   aria-expanded="false"
-                                   data-target="#submenu-2"
-                                   aria-controls="submenu-2">
-                                    <i class="fa fa-fw fa-list-ul"></i>Management
-                                    <span class="badge badge-success"></span>
-                                </a>
-                                <div id="submenu-2" class="collapse submenu bg-success">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item" sec:authorize="hasAnyAuthority('Admin')">
-                                            <a class="nav-link text-white" th:href="@{/users/list}">User Registration</a></li>
-                                        <li class="nav-item" sec:authorize="hasAnyAuthority('Admin', 'Manager','Employee')">
-                                            <a class="nav-link text-white" th:href="@{/clientVendors/list}">Client/Vendor Registration</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="nav-divider"></li>
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('Admin', 'Manager', 'Employee')">
-                                <a class="nav-link active bg-success-light text-dark"
-                                   href="#"
-                                   data-toggle="collapse"
-                                   aria-expanded="false"
-                                   data-target="#submenu-3"
-                                   aria-controls="submenu-3">
-                                    <i class="fa fa-fw fa-list-ul"></i>Stock Management
-                                    <span class="badge badge-success"></span>
-                                </a>
-                                <div id="submenu-3" class="collapse submenu bg-success" style="">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link text-white" th:href="@{/categories/list}">Category</a></li>
-                                        <li class="nav-item">
-                                            <a class="nav-link text-white" th:href="@{/products/list}">Product</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="nav-divider"></li>
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('Admin', 'Manager', 'Employee')">
-                                <a class="nav-link active bg-success-light text-dark"
-                                   href="#"
-                                   data-toggle="collapse"
-                                   aria-expanded="false"
-                                   data-target="#submenu-4"
-                                   aria-controls="submenu-4">
-                                    <i class="fa fa-fw fa-list-ul"></i>Invoices
-                                    <span class="badge badge-success"></span>
-                                </a>
-                                <div id="submenu-4" class="collapse submenu bg-success" style="">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link text-white" th:href="@{/purchaseInvoices/list}">Purchase Invoice</a></li>
-                                        <li class="nav-item">
-                                            <a class="nav-link text-white" th:href="@{/salesInvoices/list}">Sales Invoice</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="nav-divider"></li>
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('Manager', 'Admin')">
-                                <a class="nav-link active bg-success-light text-dark"
-                                   href="#"
-                                   data-toggle="collapse"
-                                   aria-expanded="false"
-                                   data-target="#submenu-5"
-                                   aria-controls="submenu-5">
-                                    <i class="fa fa-fw fa-list-ul"></i>Reporting
-                                    <span class="badge badge-success"></span>
-                                </a>
-                                <div id="submenu-5" class="collapse submenu bg-success" style="">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link text-white" th:href="@{/reports/profitLossData}">Profit/Loss Report</a></li>
-                                        <li class="nav-item">
-                                            <a class="nav-link text-white" th:href="@{/reports/stockData}">Stock Report</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="nav-divider"></li>
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('Admin')">
-                                <a class="nav-link active"
-                                   href="#"
-                                   data-toggle="collapse"
-                                   aria-expanded="false"
-                                   data-target="#submenu-6"
-                                   aria-controls="submenu-6">
-                                    <i class="fa fa-fw fa-list-ul"></i>Administration
-                                    <span class="badge badge-success"></span>
-                                </a>
-                                <div id="submenu-6" class="collapse submenu bg-success" style="">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link text-white" th:href="@{/payments/list}">Membership Payment</a></li>
-                                        <li class="nav-item">
-                                            <a class="nav-link text-white" th:href="@{/reports/logs}">Log Document</a></li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
+<div th:fragment="left-sidebar">
+    <div class="nav-left-sidebar bg-success-light">
+        <div class="menu-list">
+            <nav class="navbar navbar-expand-lg bg-success-light">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav flex-column">
+                        <li class="nav-divider"></li>
+                        <li class="nav-item" sec:authorize="hasAnyAuthority('Root User')" >
+                            <a class="nav-link active bg-success-light text-dark"
+                               href="#"
+                               data-toggle="collapse"
+                               aria-expanded="false"
+                               data-target="#submenu-1"
+                               aria-controls="submenu-1">
+                                <i class="fa fa-fw fa-list-ul"></i>CYDEO
+                                <span class="badge badge-success"></span>
+                            </a>
+                            <div id="submenu-1" class="collapse submenu bg-success">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item" sec:authorize="hasAnyAuthority('Root User')">
+                                        <a class="nav-link text-white" th:href="@{/companies/list}">Company Registration</a></li>
+                                    <li class="nav-item" sec:authorize="hasAnyAuthority('Root User')">
+                                        <a class="nav-link text-white" th:href="@{/users/list}">User Registration</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-divider"></li>
+                        <li class="nav-item" sec:authorize="hasAnyAuthority('Admin', 'Manager', 'Employee')">
+                            <a class="nav-link active bg-success-light text-dark"
+                               href="#"
+                               data-toggle="collapse"
+                               aria-expanded="false"
+                               data-target="#submenu-2"
+                               aria-controls="submenu-2">
+                                <i class="fa fa-fw fa-list-ul"></i>Management
+                                <span class="badge badge-success"></span>
+                            </a>
+                            <div id="submenu-2" class="collapse submenu bg-success">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item" sec:authorize="hasAnyAuthority('Admin')">
+                                        <a class="nav-link text-white" th:href="@{/users/list}">User Registration</a></li>
+                                    <li class="nav-item" sec:authorize="hasAnyAuthority('Admin', 'Manager','Employee')">
+                                        <a class="nav-link text-white" th:href="@{/clientVendors/list}">Client/Vendor Registration</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-divider"></li>
+                        <li class="nav-item" sec:authorize="hasAnyAuthority('Admin', 'Manager', 'Employee')">
+                            <a class="nav-link active bg-success-light text-dark"
+                               href="#"
+                               data-toggle="collapse"
+                               aria-expanded="false"
+                               data-target="#submenu-3"
+                               aria-controls="submenu-3">
+                                <i class="fa fa-fw fa-list-ul"></i>Stock Management
+                                <span class="badge badge-success"></span>
+                            </a>
+                            <div id="submenu-3" class="collapse submenu bg-success" style="">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" th:href="@{/categories/list}">Category</a></li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" th:href="@{/products/list}">Product</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-divider"></li>
+                        <li class="nav-item" sec:authorize="hasAnyAuthority('Admin', 'Manager', 'Employee')">
+                            <a class="nav-link active bg-success-light text-dark"
+                               href="#"
+                               data-toggle="collapse"
+                               aria-expanded="false"
+                               data-target="#submenu-4"
+                               aria-controls="submenu-4">
+                                <i class="fa fa-fw fa-list-ul"></i>Invoices
+                                <span class="badge badge-success"></span>
+                            </a>
+                            <div id="submenu-4" class="collapse submenu bg-success" style="">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" th:href="@{/purchaseInvoices/list}">Purchase Invoice</a></li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" th:href="@{/salesInvoices/list}">Sales Invoice</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-divider"></li>
+                        <li class="nav-item" sec:authorize="hasAnyAuthority('Manager', 'Admin')">
+                            <a class="nav-link active bg-success-light text-dark"
+                               href="#"
+                               data-toggle="collapse"
+                               aria-expanded="false"
+                               data-target="#submenu-5"
+                               aria-controls="submenu-5">
+                                <i class="fa fa-fw fa-list-ul"></i>Reporting
+                                <span class="badge badge-success"></span>
+                            </a>
+                            <div id="submenu-5" class="collapse submenu bg-success" style="">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" th:href="@{/reports/profitLossData}">Profit/Loss Report</a></li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" th:href="@{/reports/stockData}">Stock Report</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-divider"></li>
+                        <li class="nav-item" sec:authorize="hasAnyAuthority('Admin')">
+                            <a class="nav-link active bg-success-light text-dark"
+                               href="#"
+                               data-toggle="collapse"
+                               aria-expanded="false"
+                               data-target="#submenu-6"
+                               aria-controls="submenu-6">
+                                <i class="fa fa-fw fa-list-ul"></i>Administration
+                                <span class="badge badge-success"></span>
+                            </a>
+                            <div id="submenu-6" class="collapse submenu bg-success" style="">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" th:href="@{/payments/list}">Membership Payment</a></li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" th:href="@{/reports/logs}">Log Document</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
         </div>
     </div>
+</div>
 </body>
 
 </html>
