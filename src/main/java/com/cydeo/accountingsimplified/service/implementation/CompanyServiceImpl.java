@@ -1,13 +1,10 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
-import com.cydeo.accountingsimplified.dto.AddressDto;
 import com.cydeo.accountingsimplified.dto.CompanyDto;
-import com.cydeo.accountingsimplified.entity.Address;
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.enums.CompanyStatus;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.CompanyRepository;
-import com.cydeo.accountingsimplified.service.AddressService;
 import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import com.cydeo.accountingsimplified.service.UserService;
@@ -22,14 +19,12 @@ import java.util.stream.Collectors;
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
-    private final AddressService addressService;
     private final SecurityService securityService;
     private final MapperUtil mapperUtil;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository, AddressService addressService,
+    public CompanyServiceImpl(CompanyRepository companyRepository,
                               @Lazy SecurityService securityService, UserService userService, MapperUtil mapperUtil) {
         this.companyRepository = companyRepository;
-        this.addressService = addressService;
         this.securityService = securityService;
         this.mapperUtil = mapperUtil;
     }

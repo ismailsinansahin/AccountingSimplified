@@ -1,14 +1,11 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
-import com.cydeo.accountingsimplified.dto.AddressDto;
 import com.cydeo.accountingsimplified.dto.ClientVendorDto;
-import com.cydeo.accountingsimplified.entity.Address;
 import com.cydeo.accountingsimplified.entity.ClientVendor;
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.enums.ClientVendorType;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.ClientVendorRepository;
-import com.cydeo.accountingsimplified.service.AddressService;
 import com.cydeo.accountingsimplified.service.ClientVendorService;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import org.springframework.stereotype.Service;
@@ -23,14 +20,12 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     private final ClientVendorRepository clientVendorRepository;
     private final MapperUtil mapperUtil;
     private final SecurityService securityService;
-    private final AddressService addressService;
 
     public ClientVendorServiceImpl(ClientVendorRepository clientVendorRepository, MapperUtil mapperUtil,
-                                   SecurityService securityService, AddressService addressService) {
+                                   SecurityService securityService) {
         this.clientVendorRepository = clientVendorRepository;
         this.mapperUtil = mapperUtil;
         this.securityService = securityService;
-        this.addressService = addressService;
     }
 
     @Override
