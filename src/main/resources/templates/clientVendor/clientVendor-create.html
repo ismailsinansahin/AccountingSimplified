@@ -10,20 +10,8 @@
         <div class="dashboard-ecommerce">
             <div class="container-fluid dashboard-content">
                 <div class="ecommerce-widget">
-                    <div class="input-group row">
-                        <div class="col-auto">
-                            <form>
-                                <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
-                                    <a id="companylistlink" class="btn bg-dark text-light mb-1"
-                                       th:href="@{/clientVendors/list}"><i class="fa fa-list mr-1"></i>Client/Vendor
-                                        List</a>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <br>
-                    <header class="panel-heading">
-                        <h2 class="panel-title">Create New Client/Vendor</h2>
+                    <header class="panel-heading text-center">
+                        <h3 class="panel-title">Create New Client/Vendor</h3>
                     </header>
                     <div class="row">
                         <div class="col-12">
@@ -31,7 +19,7 @@
                                 <div class="card-content">
                                     <div class="card-body">
                                         <div class="tab-content">
-                                            <div class="tab-pane fade mt-2 show active" id="account" role="tabpanel"
+                                            <div class="tab-pane fade show active" id="account" role="tabpanel"
                                                  aria-labelledby="account-tab">
                                                 <form th:action="@{/clientVendors/create}"
                                                       th:method="post" th:object="${newClientVendor}">
@@ -236,6 +224,17 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="input-group row justify-content-end">
+                        <div class="col-auto">
+                            <form>
+                                <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
+                                    <a id="companylistlink" class="btn bg-dark text-light mb-1"
+                                       th:href="@{/clientVendors/list}"><i class="fa fa-list mr-1"></i>Client/Vendor
+                                        List</a>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
