@@ -1,4 +1,4 @@
-package com.cydeo.accountingsimplified.service;
+package com.cydeo.accountingsimplified.service.feignClients;
 
 
 import com.cydeo.accountingsimplified.dto.CurrencyApiResponse;

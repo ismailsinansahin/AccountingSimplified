@@ -2,6 +2,7 @@ package com.cydeo.accountingsimplified.controller;
 
 import com.cydeo.accountingsimplified.app_util.ErrorGenerator;
 import com.cydeo.accountingsimplified.dto.CompanyDto;
+import com.cydeo.accountingsimplified.service.AddressService;
 import com.cydeo.accountingsimplified.service.CompanyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +17,11 @@ import javax.validation.Valid;
 public class CompanyController {
 
     private final CompanyService companyService;
+    private final AddressService addressService;
 
-    public CompanyController(CompanyService companyService) {
+    public CompanyController(CompanyService companyService, AddressService addressService) {
         this.companyService = companyService;
+        this.addressService = addressService;
     }
 
     @GetMapping("/list")
@@ -34,8 +37,10 @@ public class CompanyController {
     }
 
     @PostMapping("/create")
-    public String createNewCompany(@Valid @ModelAttribute("newCompany") CompanyDto companyDto, BindingResult bindingResult) {
-
+    public String createNewCompany(@Valid @ModelAttribute("newCompany") CompanyDto companyDto, BindingResult bindingResult,Model model) {
+        model.addAttribute("countries",addressService.getCountryList() );
+        model.addAttribute("countries",addressService.getStateList(companyDto.getAddress().getCountry()) );
+        model.addAttribute("countries",addressService.getCity(companyDto.getAddress().getCity()));
         if (companyService.isTitleExist(companyDto.getTitle())) {
             ErrorGenerator.generateErrorMessage(bindingResult, "title", "This title already exists.");
         }
