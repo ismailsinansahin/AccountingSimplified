@@ -62,7 +62,6 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public ClientVendorDto create(ClientVendorDto clientVendorDto) throws Exception {
-        clientVendorDto.setAddress(addressService.save(clientVendorDto.getAddress()));
         clientVendorDto.setCompany(securityService.getLoggedInUser().getCompany());
         ClientVendor clientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());
         return mapperUtil.convert(clientVendorRepository.save(clientVendor), new ClientVendorDto());
@@ -70,14 +69,11 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public ClientVendorDto update(Long clientVendorId, ClientVendorDto clientVendorDto) throws ClassNotFoundException, CloneNotSupportedException {
-        ClientVendor clientVendor = clientVendorRepository.findById(clientVendorId).get();
-        clientVendor.setCompanyName(clientVendorDto.getCompanyName());
-        clientVendor.setClientVendorType(clientVendorDto.getClientVendorType());
-        clientVendor.setWebsite(clientVendorDto.getWebsite());
-        clientVendor.setPhone(clientVendorDto.getPhone());
-        AddressDto addressDto = addressService.update(clientVendor.getAddress().getId(), clientVendorDto.getAddress());
-        clientVendor.setAddress(mapperUtil.convert(addressDto, new Address()));
-        return mapperUtil.convert(clientVendorRepository.save(clientVendor), clientVendorDto);
+        ClientVendor savedClientVendor = clientVendorRepository.findById(clientVendorId).get();
+        clientVendorDto.getAddress().setId(savedClientVendor.getAddress().getId());     // otherwise it creates new address instead of updating existing one
+        clientVendorDto.setCompany(securityService.getLoggedInUser().getCompany());
+        ClientVendor updatedClientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());
+        return mapperUtil.convert(clientVendorRepository.save(updatedClientVendor), clientVendorDto);
     }
 
     @Override

@@ -71,22 +71,20 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDto create(CompanyDto companyDto) {
-        companyDto.setAddress(addressService.save(companyDto.getAddress()));
         companyDto.setCompanyStatus(CompanyStatus.PASSIVE);
         Company company = companyRepository.save(mapperUtil.convert(companyDto, new Company()));
         return mapperUtil.convert(company, new CompanyDto());
     }
 
     @Override
-    public CompanyDto update(Long companyId, CompanyDto companyDto) throws CloneNotSupportedException {
-        Company company = companyRepository.findById(companyId).get();
-        company.setTitle(companyDto.getTitle());
-        company.setPhone(companyDto.getPhone());
-        company.setWebsite(companyDto.getWebsite());
-        AddressDto addressDto = addressService.update(company.getAddress().getId(), companyDto.getAddress());
-        company.setAddress(mapperUtil.convert(addressDto, new Address()));
-        companyRepository.save(company);
-        return mapperUtil.convert(company, new CompanyDto());
+    public CompanyDto update(Long companyId, CompanyDto companyDto) {
+        Company savedCompany = companyRepository.findById(companyId).get();
+        companyDto.setId(companyId);
+        companyDto.setCompanyStatus(savedCompany.getCompanyStatus());
+        companyDto.getAddress().setId(savedCompany.getAddress().getId());
+        Company updatedCompany = mapperUtil.convert(companyDto, new Company());
+        companyRepository.save(updatedCompany);
+        return mapperUtil.convert(updatedCompany, new CompanyDto());
     }
 
     @Override
