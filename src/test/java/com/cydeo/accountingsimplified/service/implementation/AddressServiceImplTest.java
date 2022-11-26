@@ -2,6 +2,7 @@ package com.cydeo.accountingsimplified.service.implementation;
 
 
 import com.cydeo.accountingsimplified.dto.addressApi.Country;
+import com.cydeo.accountingsimplified.service.AddressService;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -23,17 +24,12 @@ class AddressServiceImplTest {
     AddressServiceImpl addressService;
 
     @Test
-    @DisplayName("Country List From Api ")
+    @DisplayName("country List From Api ")
     void getCountryList() {
 
         var countries = addressService.getCountryList();
         Assertions.assertThat(countries).hasSizeGreaterThan(50);
-        Assertions.assertThat(countries).contains(
-                Country.builder()
-                .countryName("United States")
-                .countryShortName("US")
-                .countryPhoneCode(1)
-                .build());
+        Assertions.assertThat(countries).contains("United States");
     }
 
     @Test
@@ -45,8 +41,8 @@ class AddressServiceImplTest {
 
     @Test
     @DisplayName("given valid state then return all cities ")
-    void getStateList() {
-        var cities = addressService.getCity("West Virginia");
+    void testGetCityList() {
+        var cities = addressService.getCity("Alabama");
         log.info("cities : " + cities);
         Assertions.assertThat(cities).hasSizeGreaterThan(10);
     }
