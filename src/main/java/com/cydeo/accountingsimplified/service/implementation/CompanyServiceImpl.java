@@ -1,13 +1,10 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
-import com.cydeo.accountingsimplified.dto.AddressDto;
 import com.cydeo.accountingsimplified.dto.CompanyDto;
-import com.cydeo.accountingsimplified.entity.Address;
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.enums.CompanyStatus;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.CompanyRepository;
-import com.cydeo.accountingsimplified.service.AddressService;
 import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import com.cydeo.accountingsimplified.service.UserService;
@@ -22,14 +19,12 @@ import java.util.stream.Collectors;
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
-    private final AddressService addressService;
     private final SecurityService securityService;
     private final MapperUtil mapperUtil;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository, AddressService addressService,
+    public CompanyServiceImpl(CompanyRepository companyRepository,
                               @Lazy SecurityService securityService, UserService userService, MapperUtil mapperUtil) {
         this.companyRepository = companyRepository;
-        this.addressService = addressService;
         this.securityService = securityService;
         this.mapperUtil = mapperUtil;
     }
@@ -71,22 +66,20 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDto create(CompanyDto companyDto) {
-        companyDto.setAddress(addressService.save(companyDto.getAddress()));
         companyDto.setCompanyStatus(CompanyStatus.PASSIVE);
         Company company = companyRepository.save(mapperUtil.convert(companyDto, new Company()));
         return mapperUtil.convert(company, new CompanyDto());
     }
 
     @Override
-    public CompanyDto update(Long companyId, CompanyDto companyDto) throws CloneNotSupportedException {
-        Company company = companyRepository.findById(companyId).get();
-        company.setTitle(companyDto.getTitle());
-        company.setPhone(companyDto.getPhone());
-        company.setWebsite(companyDto.getWebsite());
-        AddressDto addressDto = addressService.update(company.getAddress().getId(), companyDto.getAddress());
-        company.setAddress(mapperUtil.convert(addressDto, new Address()));
-        companyRepository.save(company);
-        return mapperUtil.convert(company, new CompanyDto());
+    public CompanyDto update(Long companyId, CompanyDto companyDto) {
+        Company savedCompany = companyRepository.findById(companyId).get();
+        companyDto.setId(companyId);
+        companyDto.setCompanyStatus(savedCompany.getCompanyStatus());
+        companyDto.getAddress().setId(savedCompany.getAddress().getId());
+        Company updatedCompany = mapperUtil.convert(companyDto, new Company());
+        companyRepository.save(updatedCompany);
+        return mapperUtil.convert(updatedCompany, new CompanyDto());
     }
 
     @Override

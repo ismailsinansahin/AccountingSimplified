@@ -1,14 +1,13 @@
 package com.cydeo.accountingsimplified.entity;
 
 import com.cydeo.accountingsimplified.enums.ClientVendorType;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -26,13 +25,11 @@ public class ClientVendor extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private ClientVendorType clientVendorType;
 
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="address_id")
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Address address;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id")
     private Company company;
 
 }
