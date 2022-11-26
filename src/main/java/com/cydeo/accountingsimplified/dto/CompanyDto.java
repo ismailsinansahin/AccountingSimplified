@@ -2,7 +2,6 @@ package com.cydeo.accountingsimplified.dto;
 
 import com.cydeo.accountingsimplified.enums.CompanyStatus;
 import lombok.*;
-import org.hibernate.validator.constraints.URL;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -29,8 +28,7 @@ public class CompanyDto {
     private String phone;
 
     @NotBlank(message = "Website is a required field.")
-   // @Pattern(regexp = "^http(s{0,1})://[a-zA-Z0-9/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9/\\&\\?\\=\\-\\.\\~\\%]*", message = "Website should have a valid format.")
-    @URL(message = "url validation")
+    @Pattern(regexp = "^http(s{0,1})://[a-zA-Z0-9/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9/\\&\\?\\=\\-\\.\\~\\%]*", message = "Website should have a valid format.")
     private String website;
 
     @NotNull

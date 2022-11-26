@@ -4,7 +4,6 @@ import com.cydeo.accountingsimplified.dto.addressApi.Country;
 import com.cydeo.accountingsimplified.dto.addressApi.State;
 import com.cydeo.accountingsimplified.dto.addressApi.TokenDto;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
-import com.cydeo.accountingsimplified.repository.AddressRepository;
 import com.cydeo.accountingsimplified.service.feignClients.AddressFeignClient;
 import com.cydeo.accountingsimplified.service.AddressService;
 
@@ -13,13 +12,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class AddressServiceImpl implements AddressService {
 
-    private final AddressRepository addressRepository;
-    private final MapperUtil mapper;
     private final AddressFeignClient addressFeignClient;
 
     /**
@@ -34,9 +32,7 @@ public class AddressServiceImpl implements AddressService {
     @Value("${address.api.api-token}")
     private String userToken;
 
-    public AddressServiceImpl(AddressRepository addressRepository, MapperUtil mapper, AddressFeignClient addressFeignClient) {
-        this.addressRepository = addressRepository;
-        this.mapper = mapper;
+    public AddressServiceImpl(AddressFeignClient addressFeignClient) {
         this.addressFeignClient = addressFeignClient;
     }
 
@@ -46,12 +42,14 @@ public class AddressServiceImpl implements AddressService {
         return "Bearer " + bearerToken.getAuthToken();
     }
 
-    public List<Country> getCountryList() {
+    public List<String> getCountryList() {
 
-        List<Country> countriees = addressFeignClient.getCountryList(getBearerToken());
+        List<Country> countries = addressFeignClient.getCountryList(getBearerToken());
 
-        log.info("Total Country size is :" + countriees.size());
-        return countriees;
+        log.info("Total Country size is :" + countries.size());
+        return countries.stream()
+                .map(Country::getCountryName)
+                .collect(Collectors.toList());
 
     }
 

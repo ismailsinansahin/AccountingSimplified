@@ -33,23 +33,24 @@ public class CompanyController {
     @GetMapping("/create")
     public String navigateToCompanyCreate(Model model) {
         model.addAttribute("newCompany", new CompanyDto());
+        model.addAttribute("countries",addressService.getCountryList() );
+//        model.addAttribute("countries",addressService.getStateList(companyDto.getAddress().getCountry()) );
+//        model.addAttribute("countries",addressService.getCity(companyDto.getAddress().getCity()));
         return "/company/company-create";
     }
 
     @PostMapping("/create")
     public String createNewCompany(@Valid @ModelAttribute("newCompany") CompanyDto companyDto, BindingResult bindingResult,Model model) {
         model.addAttribute("countries",addressService.getCountryList() );
-        model.addAttribute("countries",addressService.getStateList(companyDto.getAddress().getCountry()) );
-        model.addAttribute("countries",addressService.getCity(companyDto.getAddress().getCity()));
+//        model.addAttribute("countries",addressService.getStateList(companyDto.getAddress().getCountry()) );
+//        model.addAttribute("countries",addressService.getCity(companyDto.getAddress().getCity()));
         if (companyService.isTitleExist(companyDto.getTitle())) {
             ErrorGenerator.generateErrorMessage(bindingResult, "title", "This title already exists.");
         }
 
-
         if (bindingResult.hasErrors()) {
             return "/company/company-create";
         }
-
 
         companyService.create(companyDto);
         return "redirect:/companies/list";
@@ -59,11 +60,12 @@ public class CompanyController {
     @GetMapping("/update/{companyId}")
     public String navigateToCompanyUpdate(@PathVariable("companyId") Long companyId, Model model) {
         model.addAttribute("company", companyService.findCompanyById(companyId));
+        model.addAttribute("countries",addressService.getCountryList() );
         return "/company/company-update";
     }
 
     @PostMapping("/update/{companyId}")
-    public String updateCompany(@Valid @ModelAttribute("company") CompanyDto companyDto, BindingResult bindingResult, @PathVariable Long companyId) throws CloneNotSupportedException {
+    public String updateCompany(@Valid @ModelAttribute("company") CompanyDto companyDto, BindingResult bindingResult, @PathVariable Long companyId, Model model) throws CloneNotSupportedException {
 
         boolean isThisCompanyTitle = companyDto.getTitle().equals(companyService.findCompanyById(companyId).getTitle());
         if (companyService.isTitleExist(companyDto.getTitle()) && !isThisCompanyTitle) {
@@ -72,6 +74,7 @@ public class CompanyController {
 
         if (bindingResult.hasErrors()) {
             companyDto.setId(companyId);
+            model.addAttribute("countries",addressService.getCountryList() );
             return "/company/company-update";
         }
 

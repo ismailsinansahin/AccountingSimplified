@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface AddressService {
 
-    List<Country> getCountryList();
+    List<String> getCountryList();
 
     List<State> getStateList(String country);
 
