@@ -31,11 +31,12 @@ public class Address extends BaseEntity{
 
     private String zipCode;
 
-    @OneToOne(mappedBy = "address")
-    private Company company;
-
-
-    @OneToOne(mappedBy = "address")
-    private ClientVendor clientVendor;
+    // if we create bidirectional relationship, Cascade.PERSIST, Merge doesn't work properly
+//    @OneToOne(mappedBy = "address")
+//    private Company company;
+//
+//
+//    @OneToOne(mappedBy = "address")
+//    private ClientVendor clientVendor;
 
 }

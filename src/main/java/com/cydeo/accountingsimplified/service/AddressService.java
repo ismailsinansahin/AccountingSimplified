@@ -8,10 +8,6 @@ import java.util.List;
 
 public interface AddressService {
 
-    AddressDto save(AddressDto dto);
-
-    AddressDto update(Long id, AddressDto dto) throws CloneNotSupportedException;
-
     List<Country> getCountryList();
 
     List<State> getStateList(String country);
