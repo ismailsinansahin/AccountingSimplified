@@ -168,9 +168,12 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Country</label>
-                                                                    <input type="text" th:field="*{address.country}"
-                                                                           placeholder="Country"
-                                                                           class="form-control">
+                                                                    <select th:field="*{address.country}" id="country" name="country" class="custom-select">
+                                                                        <option th:value="'United States'" th:text="'United States'"></option>
+                                                                        <option th:each="country:${countries}"
+                                                                                th:value="${country}"
+                                                                                th:text="${country}"></option>
+                                                                    </select>
                                                                     <ul>
                                                                         <li class="validation"
                                                                             th:each="err : ${#fields.errors('address.country')}"

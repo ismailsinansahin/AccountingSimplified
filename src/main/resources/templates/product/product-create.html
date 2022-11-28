@@ -29,7 +29,8 @@
                                                                 <div class="controls">
                                                                     <label>Category</label>
                                                                     <select id="category" name="category" class="custom-select">
-                                                                        <option th:value="''"
+                                                                        <option th:if="${categories.size() > 1}"
+                                                                                th:value="''"
                                                                                 th:text="'Select'"></option>
                                                                         <option th:each="category:${categories}"
                                                                                 th:value="${category.id}"
@@ -88,7 +89,8 @@
                                                                     <label>Product Unit</label>
                                                                     <select class="custom-select"
                                                                             th:field="*{productUnit}">
-                                                                        <option th:value="''"
+                                                                        <option th:if="${productUnits.size() > 1}"
+                                                                                th:value="''"
                                                                                 th:text="'Select'"></option>
                                                                         <option th:each="productUnit:${productUnits}"
                                                                                 th:value="${productUnit}"

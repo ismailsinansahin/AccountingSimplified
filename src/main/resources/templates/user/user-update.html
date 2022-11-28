@@ -150,7 +150,7 @@
                                                                         <option th:each="role:${userRoles}"
                                                                                 th:value="${role.id}"
                                                                                 th:text="${role.description}"
-                                                                                th:selected="${role.id} == ${user.role.id}"></option>
+                                                                                th:selected="${role.id} == *{role.id}"></option>
                                                                     </select>
                                                                     <div th:if="${#fields.hasErrors('role')}">
                                                                         <ul>
