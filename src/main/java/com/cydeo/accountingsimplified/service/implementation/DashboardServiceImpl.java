@@ -3,16 +3,11 @@ package com.cydeo.accountingsimplified.service.implementation;
 
 import com.cydeo.accountingsimplified.dto.CurrencyApiResponse;
 import com.cydeo.accountingsimplified.dto.CurrencyDto;
-import com.cydeo.accountingsimplified.entity.Company;
-import com.cydeo.accountingsimplified.entity.Invoice;
+import com.cydeo.accountingsimplified.dto.InvoiceDto;
 import com.cydeo.accountingsimplified.enums.InvoiceStatus;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
-import com.cydeo.accountingsimplified.repository.InvoiceRepository;
-import com.cydeo.accountingsimplified.service.CurrencyExchangeClient;
-import com.cydeo.accountingsimplified.service.DashboardService;
-import com.cydeo.accountingsimplified.service.InvoiceProductService;
-import com.cydeo.accountingsimplified.service.SecurityService;
+import com.cydeo.accountingsimplified.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,19 +19,18 @@ import java.util.Map;
 @Service
 @Slf4j
 public class DashboardServiceImpl implements DashboardService {
-    private final InvoiceRepository invoiceRepository;
+
+    private final InvoiceService invoiceService;
     private final InvoiceProductService invoiceProductService;
     private final MapperUtil mapperUtil;
-    private final SecurityService securityService;
 
     private final CurrencyExchangeClient client;
 
-    public DashboardServiceImpl(InvoiceRepository invoiceRepository, InvoiceProductService invoiceProductService,
-                                MapperUtil mapperUtil, SecurityService securityService, CurrencyExchangeClient client) {
-        this.invoiceRepository = invoiceRepository;
+    public DashboardServiceImpl(InvoiceService invoiceService, InvoiceProductService invoiceProductService,
+                                MapperUtil mapperUtil, CurrencyExchangeClient client) {
+        this.invoiceService = invoiceService;
         this.invoiceProductService = invoiceProductService;
         this.mapperUtil = mapperUtil;
-        this.securityService = securityService;
         this.client = client;
     }
 
@@ -46,15 +40,13 @@ public class DashboardServiceImpl implements DashboardService {
         BigDecimal totalCost = BigDecimal.ZERO;
         BigDecimal totalSales = BigDecimal.ZERO;
         BigDecimal profitLoss = BigDecimal.ZERO;
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        List<Invoice> allApprovedInvoicesOfCompany = invoiceRepository
-                .findInvoicesByCompanyAndInvoiceStatus(company, InvoiceStatus.APPROVED);
-        for (Invoice invoice : allApprovedInvoicesOfCompany) {
+        List<InvoiceDto> allApprovedInvoicesOfCompany = invoiceService.getAllInvoicesByInvoiceStatus(InvoiceStatus.APPROVED);
+        for (InvoiceDto invoice : allApprovedInvoicesOfCompany) {
             if (invoice.getInvoiceType() == InvoiceType.PURCHASE) {
-                totalCost = totalCost.add(invoiceProductService.getTotalOfInvoiceProduct(invoice.getId()));
+                totalCost = totalCost.add(invoiceService.getTotalPriceOfInvoice(invoice.getId()));
             } else {
-                totalSales = totalSales.add(invoiceProductService.getTotalOfInvoiceProduct(invoice.getId()));
-                profitLoss = profitLoss.add(invoiceProductService.getProfitLossOfInvoiceProduct(invoice.getId()));
+                totalSales = totalSales.add(invoiceService.getTotalPriceOfInvoice(invoice.getId()));
+                profitLoss = profitLoss.add(invoiceService.getProfitLossOfInvoice(invoice.getId()));
             }
         }
         summaryNumbersMap.put("totalCost", totalCost);

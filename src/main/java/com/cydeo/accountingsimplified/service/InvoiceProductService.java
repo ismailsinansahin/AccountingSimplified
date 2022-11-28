@@ -14,10 +14,6 @@ public interface InvoiceProductService {
     List<InvoiceProductDto> getInvoiceProductsOfInvoice(Long invoiceId);
     void save(Long invoiceId, InvoiceProductDto invoiceProductDto);
     void delete(Long invoiceProductId);
-    BigDecimal getPriceOfInvoiceProductWithoutTax(Long id);
-    BigDecimal getTaxOfInvoiceProduct(Long id);
-    BigDecimal getTotalOfInvoiceProduct(Long id);
-    BigDecimal getProfitLossOfInvoiceProduct(Long id);
     void completeApprovalProcedures(Long invoiceId, InvoiceType type);
     boolean checkProductQuantity(InvoiceProductDto salesInvoiceProduct);
     List<InvoiceProduct> findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType type, Product product, Integer remainingQuantity);

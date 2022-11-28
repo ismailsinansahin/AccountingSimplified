@@ -122,7 +122,6 @@ public class SalesInvoiceController {
 
         model.addAttribute("invoice", invoiceService.findInvoiceById(id));
         model.addAttribute("invoiceProducts",invoiceProductService.getInvoiceProductsOfInvoice(id));
-
         return "invoice/invoice_print";
     }
 

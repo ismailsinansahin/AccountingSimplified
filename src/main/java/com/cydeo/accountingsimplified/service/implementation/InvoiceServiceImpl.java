@@ -39,15 +39,22 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public List<InvoiceDto> getAllInvoicesOfCompany(InvoiceType invoiceType){
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        List<InvoiceDto> allInvoicesOfTheCompany = invoiceRepository.findInvoicesByCompanyAndInvoiceType(company, invoiceType)
+        return invoiceRepository.findInvoicesByCompanyAndInvoiceType(company, invoiceType)
                 .stream()
                 .sorted(Comparator.comparing(Invoice::getInvoiceNo))
                 .map(each -> mapperUtil.convert(each, new InvoiceDto()))
+                .peek(this::calculateInvoiceDetails)
                 .collect(Collectors.toList());
-        allInvoicesOfTheCompany.forEach(each -> each.setPrice(getTotalPriceOfInvoiceWithoutTax(each.getId())));
-        allInvoicesOfTheCompany.forEach(each -> each.setTax(getTotalTaxOfInvoice(each.getId())));
-        allInvoicesOfTheCompany.forEach(each -> each.setTotal(calculateTotalAmountOfInvoice(each.getId())));
-        return allInvoicesOfTheCompany;
+    }
+
+    @Override
+    public List<InvoiceDto> getAllInvoicesByInvoiceStatus(InvoiceStatus status) {
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceStatus(company, InvoiceStatus.APPROVED);
+        return invoices
+                .stream()
+                .map(invoice -> mapperUtil.convert(invoice, new InvoiceDto()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -89,15 +96,12 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public List<InvoiceDto> getLastThreeInvoices() {
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        List<InvoiceDto> last3Invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceStatusOrderByDateDesc(company, InvoiceStatus.APPROVED)
+        return invoiceRepository.findInvoicesByCompanyAndInvoiceStatusOrderByDateDesc(company, InvoiceStatus.APPROVED)
                 .stream()
                 .limit(3)
                 .map(each -> mapperUtil.convert(each, new InvoiceDto()))
+                .peek(this::calculateInvoiceDetails)
                 .collect(Collectors.toList());
-        last3Invoices.forEach(each -> each.setPrice(invoiceProductService.getPriceOfInvoiceProductWithoutTax(each.getId())));
-        last3Invoices.forEach(each -> each.setTax(invoiceProductService.getTaxOfInvoiceProduct(each.getId())));
-        last3Invoices.forEach(each -> each.setTotal(invoiceProductService.getTotalOfInvoiceProduct(each.getId())));
-        return last3Invoices;
     }
 
     @Override
@@ -121,13 +125,19 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceType.name().charAt(0) + "-" + String.format("%03d", newOrder);
     }
 
-    private BigDecimal getTotalPriceOfInvoiceWithoutTax(Long id){
+    private void calculateInvoiceDetails(InvoiceDto invoiceDto) {
+        invoiceDto.setPrice(getTotalPriceOfInvoice(invoiceDto.getId()));
+        invoiceDto.setTax(getTotalTaxOfInvoice(invoiceDto.getId()));
+        invoiceDto.setTotal(getTotalPriceOfInvoice(invoiceDto.getId()).add(getTotalTaxOfInvoice(invoiceDto.getId())));
+
+    }
+    @Override
+    public BigDecimal getTotalPriceOfInvoice(Long id){
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
         return invoiceProductsOfInvoice.stream()
                 .map(p -> p.getPrice()
-                        .multiply(BigDecimal.valueOf( p.getQuantity() * 100 / (100d + p.getTax())))
-                        .setScale(2, RoundingMode.HALF_UP))
+                        .multiply(BigDecimal.valueOf(p.getQuantity())))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
@@ -142,14 +152,16 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .orElse(BigDecimal.ZERO);
     }
 
-    private BigDecimal calculateTotalAmountOfInvoice(Long id){
+    @Override
+    public BigDecimal getProfitLossOfInvoice(Long id) {
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
         return invoiceProductsOfInvoice.stream()
-                .map(p -> p.getPrice().multiply(BigDecimal.valueOf(p.getQuantity()))
-                        .setScale(2, RoundingMode.HALF_UP))
+                .map(InvoiceProductDto::getProfitLoss)
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
+
+
 
 
 }
