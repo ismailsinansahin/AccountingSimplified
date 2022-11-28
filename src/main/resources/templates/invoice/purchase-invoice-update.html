@@ -58,11 +58,11 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Vendor</label>
-                                                                    <select id="vendor" name="vendor" class="custom-select" th:field="*{clientVendor}">
-                                                                        <option th:each= "vendor:${vendors}"
-                                                                                th:value="${vendor.id}"
-                                                                                th:text="${vendor.companyName}"
-                                                                                th:selected="${vendor.id}==${invoice.clientVendor.id}"></option>
+                                                                    <select id="clientVendor" name="clientVendor" class="custom-select" th:with="clientVendor=*{clientVendor}">
+                                                                        <option th:each= "clientVendor:${vendors}"
+                                                                                th:value="${clientVendor.id}"
+                                                                                th:text="${clientVendor.companyName}"
+                                                                                th:selected="${clientVendor.id} == ${invoice.clientVendor.id}"></option>
                                                                     </select>
                                                                 </div>
                                                             </div>
