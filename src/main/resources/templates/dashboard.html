@@ -1,8 +1,78 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
-<head
-    th:replace="/fragments/head :: header">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}"/>
+    <link th:href="@{/assets/vendor/fonts/circular-std/style.css}" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/assets/libs/css/style.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/fontawesome/css/fontawesome-all.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/charts/chartist-bundle/chartist.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/charts/morris-bundle/morris.css}"/>
+    <link rel="stylesheet"
+          th:href="@{/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/charts/c3charts/c3.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/vendor/fonts/flag-icon-css/flag-icon.min.css}"/>
+    <link rel="stylesheet" th:href="@{https://pro.fontawesome.com/releases/v5.10.0/css/all.css}"
+          integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" th:href="@{https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css}"/>
+    <link rel="stylesheet"
+          th:href="@{https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css}"/>
+    <link rel="icon" type="image/x-icon" th:href="@{/images/faviconmoney.ico}">
+    <title th:if="${title==null}">Cydeo Accounting-Login</title>
+    <title th:if="${title!=null}" th:text="${title}"></title>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" th:inline="javascript">
+
+        // Load the Visualization API and the corechart package.
+        google.charts.load('current', {'packages':['corechart']});
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(drawChart);
+
+        // Callback that creates and populates a data table,
+        // instantiates the pie chart, passes in the data and
+        // draws it.
+        function drawChart() {
+
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Topping');
+            data.addColumn('number', 'Slices');
+            data.addRows([[${chartData}]]);
+
+            var data2 = new google.visualization.DataTable();
+            data2.addColumn('string', 'Toppin');
+            data2.addColumn('number', 'Slice');
+            data2.addRows([[${chartData2}]]);
+
+            var data3 = new google.visualization.DataTable();
+            data3.addColumn('string', 'Toppi');
+            data3.addColumn('number', 'Slic');
+            data3.addRows([[${chartData3}]]);
+
+            // Set chart options
+            var options = {
+                'width':400,
+                'height':300};
+            var options2 = {
+                'width':400,
+                'height':300};
+            var options3 = {
+                'width':400,
+                'height':300};
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+            var chart2 = new google.visualization.PieChart(document.getElementById('chart_div2'));
+            var chart3 = new google.visualization.PieChart(document.getElementById('chart_div3'));
+            chart.draw(data, options);
+            chart2.draw(data2, options2);
+            chart3.draw(data3, options3);
+        }
+    </script>
 </head>
 
 <body>

@@ -39,6 +39,8 @@ public class DashboardController {
         return "dashboard";
     }
 
+
+
     private List<List<Object>> getChartData(InvoiceType invoiceType) throws Exception {
         List<InvoiceDto> invoiceDtos = invoiceService.getAllInvoicesOfCompany(invoiceType);
         var totalPrices = invoiceDtos.stream()
