@@ -31,6 +31,7 @@
                                                                 <th scope="col">Phone</th>
                                                                 <th scope="col">City</th>
                                                                 <th scope="col">State</th>
+                                                                <th scope="col">Country</th>
                                                                 <th scope="col">Status</th>
                                                                 <th scope="col">Action</th>
                                                             </tr>
@@ -43,6 +44,7 @@
                                                                 <td th:text="${company.phone}"></td>
                                                                 <td th:text="${company.address.city}"></td>
                                                                 <td th:text="${company.address.state}"></td>
+                                                                <td th:text="${company.address.country}"></td>
                                                                 <td th:text="${company.companyStatus.value}"></td>
                                                                 <td class="actions">
                                                                     <a th:href="@{/companies/update/{id}(id=${company.getId()})}"

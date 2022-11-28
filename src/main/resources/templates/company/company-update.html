@@ -47,7 +47,7 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Phone</label>
-                                                                    <input type="text" th:field="*{phone}"
+                                                                    <input type="tel" th:field="*{phone}"
                                                                            placeholder="Phone"
                                                                            class="form-control">
                                                                     <div th:if="${#fields.hasErrors('phone')}">
@@ -64,7 +64,7 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Website</label>
-                                                                    <input type="text" th:field="*{website}"
+                                                                    <input type="url" th:field="*{website}"
                                                                            placeholder="Website"
                                                                            class="form-control">
                                                                     <div th:if="${#fields.hasErrors('website')}">
@@ -174,9 +174,12 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Country</label>
-                                                                    <input type="text" th:field="*{address.country}"
-                                                                           placeholder="Country"
-                                                                           class="form-control">
+                                                                    <select th:field="*{address.country}" id="country" name="country" class="custom-select">
+                                                                        <option th:each="country:${countries}"
+                                                                                th:value="${country}"
+                                                                                th:text="${country}"
+                                                                                th:selected="${country}==*{address.country}"></option>
+                                                                    </select>
                                                                     <div th:if="${#fields.hasErrors('address.country')}">
                                                                         <ul>
                                                                             <li class="validation"
