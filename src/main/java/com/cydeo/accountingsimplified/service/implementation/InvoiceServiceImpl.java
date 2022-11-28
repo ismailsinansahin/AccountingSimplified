@@ -75,13 +75,20 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public InvoiceDto approve(Long invoiceId) {
+    public void approve(Long invoiceId) {
         Invoice invoice = invoiceRepository.findInvoiceById(invoiceId);
         invoiceProductService.completeApprovalProcedures(invoiceId, invoice.getInvoiceType());
         invoice.setInvoiceStatus(InvoiceStatus.APPROVED);
         invoice.setDate(LocalDate.now());
         invoiceRepository.save(invoice);
-        return mapperUtil.convert(invoice, new InvoiceDto());
+        mapperUtil.convert(invoice, new InvoiceDto());
+    }
+
+    @Override
+    public InvoiceDto printInvoice(Long id) {
+        InvoiceDto invoiceDto = mapperUtil.convert(invoiceRepository.findInvoiceById(id), new InvoiceDto());
+        calculateInvoiceDetails(invoiceDto);
+        return invoiceDto;
     }
 
     @Override
@@ -125,11 +132,11 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceType.name().charAt(0) + "-" + String.format("%03d", newOrder);
     }
 
+
     private void calculateInvoiceDetails(InvoiceDto invoiceDto) {
         invoiceDto.setPrice(getTotalPriceOfInvoice(invoiceDto.getId()));
         invoiceDto.setTax(getTotalTaxOfInvoice(invoiceDto.getId()));
         invoiceDto.setTotal(getTotalPriceOfInvoice(invoiceDto.getId()).add(getTotalTaxOfInvoice(invoiceDto.getId())));
-
     }
     @Override
     public BigDecimal getTotalPriceOfInvoice(Long id){
@@ -141,7 +148,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
-    private BigDecimal getTotalTaxOfInvoice(Long id){
+    @Override
+    public BigDecimal getTotalTaxOfInvoice(Long id){
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
         return invoiceProductsOfInvoice.stream()

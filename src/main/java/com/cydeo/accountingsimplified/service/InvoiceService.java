@@ -14,11 +14,13 @@ public interface InvoiceService {
     List<InvoiceDto> getAllInvoicesByInvoiceStatus(InvoiceStatus status);
     InvoiceDto getNewInvoice(InvoiceType invoiceType) throws Exception;
     InvoiceDto save(InvoiceDto invoiceDto, InvoiceType invoiceType);
-    InvoiceDto update(Long invoiceId, InvoiceDto invoiceDto);
-    InvoiceDto approve(Long invoiceId);
-    void delete(Long invoiceId);
+    InvoiceDto update(Long id, InvoiceDto invoiceDto);
+    void approve(Long id);
+    InvoiceDto printInvoice(Long id);
+    void delete(Long id);
     List<InvoiceDto> getLastThreeInvoices();
     BigDecimal getTotalPriceOfInvoice(Long id);
+    BigDecimal getTotalTaxOfInvoice(Long id);
     BigDecimal getProfitLossOfInvoice(Long id);
 
 

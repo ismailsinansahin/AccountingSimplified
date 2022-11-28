@@ -33,17 +33,12 @@ public class CompanyController {
     @GetMapping("/create")
     public String navigateToCompanyCreate(Model model) {
         model.addAttribute("newCompany", new CompanyDto());
-        model.addAttribute("countries",addressService.getCountryList() );
-//        model.addAttribute("countries",addressService.getStateList(companyDto.getAddress().getCountry()) );
-//        model.addAttribute("countries",addressService.getCity(companyDto.getAddress().getCity()));
         return "/company/company-create";
     }
 
     @PostMapping("/create")
     public String createNewCompany(@Valid @ModelAttribute("newCompany") CompanyDto companyDto, BindingResult bindingResult,Model model) {
-        model.addAttribute("countries",addressService.getCountryList() );
-//        model.addAttribute("countries",addressService.getStateList(companyDto.getAddress().getCountry()) );
-//        model.addAttribute("countries",addressService.getCity(companyDto.getAddress().getCity()));
+
         if (companyService.isTitleExist(companyDto.getTitle())) {
             ErrorGenerator.generateErrorMessage(bindingResult, "title", "This title already exists.");
         }
@@ -60,7 +55,6 @@ public class CompanyController {
     @GetMapping("/update/{companyId}")
     public String navigateToCompanyUpdate(@PathVariable("companyId") Long companyId, Model model) {
         model.addAttribute("company", companyService.findCompanyById(companyId));
-        model.addAttribute("countries",addressService.getCountryList() );
         return "/company/company-update";
     }
 
@@ -74,7 +68,6 @@ public class CompanyController {
 
         if (bindingResult.hasErrors()) {
             companyDto.setId(companyId);
-            model.addAttribute("countries",addressService.getCountryList() );
             return "/company/company-update";
         }
 
@@ -96,6 +89,7 @@ public class CompanyController {
 
     @ModelAttribute
     public void getTitle(Model model){
+        model.addAttribute("countries",addressService.getCountryList() );
         model.addAttribute("title", "Cydeo Accounting-Company");
     }
 

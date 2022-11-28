@@ -33,8 +33,7 @@ public class ClientVendorController {
     @GetMapping("/create")
     public String navigateToClientVendorCreate(Model model) {
         model.addAttribute("newClientVendor", new ClientVendorDto());
-        model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
-        model.addAttribute("countries",addressService.getCountryList() );
+
         return "/clientVendor/clientVendor-create";
     }
 
@@ -45,8 +44,6 @@ public class ClientVendorController {
             if (isDuplicatedCompanyName) {
                 result.rejectValue("companyName", " ", "A client/vendor with this name already exists. Please try with different name.");
             }
-            model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
-            model.addAttribute("countries",addressService.getCountryList() );
             return "/clientVendor/clientVendor-create";
         }
         clientVendorService.create(clientVendorDto);
@@ -56,8 +53,6 @@ public class ClientVendorController {
     @GetMapping("/update/{clientVendorId}")
     public String navigateToClientVendorUpdate(@PathVariable("clientVendorId") Long clientVendorId, Model model) {
         model.addAttribute("clientVendor", clientVendorService.findClientVendorById(clientVendorId));
-        model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
-        model.addAttribute("countries",addressService.getCountryList() );
         return "/clientVendor/clientVendor-update";
     }
 
@@ -69,8 +64,6 @@ public class ClientVendorController {
             if (isDuplicatedCompanyName) {
                 result.rejectValue("companyName", " ", "A client/vendor with this name already exists. Please try with different name.");
             }
-            model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
-            model.addAttribute("countries",addressService.getCountryList() );
             return "/clientVendor/clientVendor-update";
         }
         clientVendorService.update(clientVendorId, clientVendorDto);
@@ -85,6 +78,8 @@ public class ClientVendorController {
 
     @ModelAttribute
     public void getTitle(Model model){
+        model.addAttribute("countries",addressService.getCountryList() );
+        model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
         model.addAttribute("title", "Cydeo Accounting-Client/Vendor");
     }
 

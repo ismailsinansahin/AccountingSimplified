@@ -34,8 +34,6 @@ public class UserController {
     @GetMapping("/create")
     public String navigateToUserCreate(Model model) {
         model.addAttribute("newUser", new UserDto());
-        model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
-        model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
         return "/user/user-create";
     }
 
@@ -47,8 +45,7 @@ public class UserController {
             if (emailExist) {
                 result.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
             }
-            model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
-            model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
+
             return "/user/user-create";
         }
 
@@ -59,8 +56,6 @@ public class UserController {
     @GetMapping("/update/{userId}")
     public String navigateToUserUpdate(@PathVariable("userId") Long userId, Model model) {
         model.addAttribute("user", userService.findUserById(userId));
-        model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
-        model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
         return "/user/user-update";
     }
 
@@ -73,8 +68,6 @@ public class UserController {
             if (emailExist) {
                 result.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
             }
-            model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
-            model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
             return "/user/user-update";
         }
         userService.update(userDto);
@@ -89,6 +82,8 @@ public class UserController {
 
     @ModelAttribute
     public void getTitle(Model model){
+        model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
+        model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
         model.addAttribute("title", "Cydeo Accounting-User");
     }
 

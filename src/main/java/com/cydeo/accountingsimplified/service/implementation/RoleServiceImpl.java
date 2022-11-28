@@ -33,12 +33,6 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleDto findByDescription(String description) {
-        Role role = roleRepository.findByDescription(description);
-        return mapperUtil.convert(role, new RoleDto());
-    }
-
-    @Override
     public List<RoleDto> getFilteredRolesForCurrentUser() {
         UserDto user = securityService.getLoggedInUser();
         if (user.getRole().getDescription().equals("Root User")) {

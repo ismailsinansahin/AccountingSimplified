@@ -7,7 +7,6 @@ import java.util.List;
 public interface RoleService {
 
     RoleDto findRoleById(Long id);
-    RoleDto findByDescription(String description);
     List<RoleDto> getFilteredRolesForCurrentUser();
 
 }
