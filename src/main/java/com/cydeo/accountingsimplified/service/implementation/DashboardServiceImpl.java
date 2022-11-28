@@ -9,11 +9,12 @@ import com.cydeo.accountingsimplified.enums.InvoiceStatus;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.InvoiceRepository;
-import com.cydeo.accountingsimplified.service.CurrencyExchangeClient;
+import com.cydeo.accountingsimplified.service.feignClients.CurrencyExchangeClient;
 import com.cydeo.accountingsimplified.service.DashboardService;
 import com.cydeo.accountingsimplified.service.InvoiceProductService;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -65,6 +66,7 @@ public class DashboardServiceImpl implements DashboardService {
 
 
     @Override
+    @Cacheable("currency")
     public CurrencyDto getExchangeRates() {
         CurrencyApiResponse currency = client.getUsdBasedCurrencies();
         CurrencyDto currencyDto= CurrencyDto.builder()
