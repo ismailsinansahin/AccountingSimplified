@@ -1,6 +1,5 @@
 package com.cydeo.accountingsimplified.controller;
 
-import com.cydeo.accountingsimplified.app_util.ErrorGenerator;
 import com.cydeo.accountingsimplified.dto.ProductDto;
 import com.cydeo.accountingsimplified.enums.ProductUnit;
 import com.cydeo.accountingsimplified.service.CategoryService;
@@ -40,7 +39,7 @@ public class ProductController {
     public String createNewProduct(@Valid @ModelAttribute("newProduct") ProductDto productDto, BindingResult bindingResult, Model model) throws Exception {
 
         if (productService.isProductNameExist(productDto)) {
-            ErrorGenerator.generateErrorMessage(bindingResult, "name", "This Product Name already exists.");
+            bindingResult.rejectValue("name", " ", "This Product Name already exists.");
         }
 
         if (bindingResult.hasErrors()) {
@@ -60,7 +59,7 @@ public class ProductController {
     public String updateProduct(@Valid @ModelAttribute("product") ProductDto productDto, BindingResult bindingResult, @PathVariable("productId") Long productId, Model model) throws Exception {
         productDto.setId(productId);
         if (productService.isProductNameExist(productDto)) {
-            ErrorGenerator.generateErrorMessage(bindingResult, "name", "This Product Name already exists");
+            bindingResult.rejectValue("name", " ", "This Product Name already exists.");
         }
 
         if (bindingResult.hasErrors()) {
