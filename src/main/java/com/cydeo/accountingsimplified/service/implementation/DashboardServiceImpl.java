@@ -8,6 +8,7 @@ import com.cydeo.accountingsimplified.enums.InvoiceStatus;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.service.*;
+import com.cydeo.accountingsimplified.service.feignClients.CurrencyExchangeClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
