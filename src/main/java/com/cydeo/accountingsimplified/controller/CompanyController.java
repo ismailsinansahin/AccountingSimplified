@@ -1,6 +1,5 @@
 package com.cydeo.accountingsimplified.controller;
 
-import com.cydeo.accountingsimplified.app_util.ErrorGenerator;
 import com.cydeo.accountingsimplified.dto.CompanyDto;
 import com.cydeo.accountingsimplified.service.CompanyService;
 import org.springframework.stereotype.Controller;
@@ -37,7 +36,7 @@ public class CompanyController {
     public String createNewCompany(@Valid @ModelAttribute("newCompany") CompanyDto companyDto, BindingResult bindingResult) {
 
         if (companyService.isTitleExist(companyDto.getTitle())) {
-            ErrorGenerator.generateErrorMessage(bindingResult, "title", "This title already exists.");
+            bindingResult.rejectValue("title", " ", "This title already exists.");
         }
 
 
@@ -62,7 +61,7 @@ public class CompanyController {
 
         boolean isThisCompanyTitle = companyDto.getTitle().equals(companyService.findCompanyById(companyId).getTitle());
         if (companyService.isTitleExist(companyDto.getTitle()) && !isThisCompanyTitle) {
-            ErrorGenerator.generateErrorMessage(bindingResult, "title", "This title already exists.");
+            bindingResult.rejectValue("title", " ", "This title already exists.");
         }
 
         if (bindingResult.hasErrors()) {

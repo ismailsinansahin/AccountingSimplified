@@ -1,6 +1,5 @@
 package com.cydeo.accountingsimplified.controller;
 
-import com.cydeo.accountingsimplified.app_util.ErrorGenerator;
 import com.cydeo.accountingsimplified.dto.CategoryDto;
 import com.cydeo.accountingsimplified.service.CategoryService;
 import org.springframework.stereotype.Controller;
@@ -39,7 +38,7 @@ public class CategoryController {
         boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto);
 
         if (categoryDescriptionExist) {
-            ErrorGenerator.generateErrorMessage(bindingResult, "description", "This category description already exists");
+            bindingResult.rejectValue("description", " ", "This category description already exists");
         }
 
         if (bindingResult.hasErrors()) {
@@ -64,7 +63,7 @@ public class CategoryController {
         boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto);
 
         if (categoryDescriptionExist) {
-            ErrorGenerator.generateErrorMessage(bindingResult, "description", "This category description already exists");
+            bindingResult.rejectValue("description", " ", "This category description already exists");
         }
 
         if (bindingResult.hasErrors()) {
