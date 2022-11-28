@@ -47,7 +47,7 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Phone</label>
-                                                                    <input type="text" th:field="*{phone}"
+                                                                    <input type="tel" th:field="*{phone}"
                                                                            placeholder="Phone"
                                                                            class="form-control">
                                                                     <div th:if="${#fields.hasErrors('phone')}">
@@ -64,7 +64,7 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Website</label>
-                                                                    <input type="text" th:field="*{website}"
+                                                                    <input type="url" th:field="*{website}"
                                                                            placeholder="Website"
                                                                            class="form-control">
                                                                     <div th:if="${#fields.hasErrors('website')}">
