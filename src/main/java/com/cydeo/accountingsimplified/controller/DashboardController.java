@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class DashboardController {
-
     private final DashboardService dashboardService;
     private final InvoiceService invoiceService;
-
     private final CompanyService companyService;
 
     public DashboardController(DashboardService dashboardService, InvoiceService invoiceService, CompanyService companyService) {

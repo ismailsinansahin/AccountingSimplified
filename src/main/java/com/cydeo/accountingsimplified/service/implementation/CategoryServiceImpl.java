@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final SecurityService securityService;
-
     private final ProductService productService;
     private final MapperUtil mapperUtil;
 

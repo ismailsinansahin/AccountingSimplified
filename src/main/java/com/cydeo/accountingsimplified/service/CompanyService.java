@@ -13,8 +13,8 @@ public interface CompanyService {
     List<CompanyDto> getFilteredCompaniesForCurrentUser();
     CompanyDto create(CompanyDto companyDto);
     CompanyDto update(Long companyId, CompanyDto companyDto) throws CloneNotSupportedException;
-    CompanyDto activate(Long companyId);
-    CompanyDto deactivate(Long companyId);
+    void activate(Long companyId);
+    void deactivate(Long companyId);
     boolean isTitleExist(String title);
 
 }

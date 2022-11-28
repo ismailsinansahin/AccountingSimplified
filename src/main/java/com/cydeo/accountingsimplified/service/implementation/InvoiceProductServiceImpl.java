@@ -134,58 +134,12 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         }
     }
 
-    private BigDecimal getAmountOfInvoiceProduct(InvoiceProductDto invoiceProductDto) {
-        int quantity = invoiceProductDto.getQuantity();
-        BigDecimal price = invoiceProductDto.getPrice();
-        int tax = invoiceProductDto.getTax();
-        return price.multiply(BigDecimal.valueOf(quantity).add(price.multiply(BigDecimal.valueOf(tax/100))));
-    }
-
     @Override
     public void delete(Long invoiceProductId) {
         InvoiceProduct invoiceProduct = invoiceProductRepository.findInvoiceProductById(invoiceProductId);
         invoiceProduct.setIsDeleted(true);
         invoiceProductRepository.save(invoiceProduct);
     }
-
-    @Override
-    public BigDecimal getPriceOfInvoiceProductWithoutTax(Long id) {
-        Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(id), new Invoice());
-        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findAllByInvoice(invoice);
-        return invoiceProductsOfInvoice.stream()
-                .map(p -> p.getPrice().multiply(BigDecimal.valueOf(p.getQuantity() * 100 / (100d + p.getTax())))
-                        .setScale(2, RoundingMode.HALF_UP))
-                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
-    }
-
-    @Override
-    public BigDecimal getTaxOfInvoiceProduct(Long id) {
-        Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(id), new Invoice());
-        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findAllByInvoice(invoice);
-        return invoiceProductsOfInvoice.stream()
-                .map(p -> p.getPrice().multiply(BigDecimal.valueOf(p.getQuantity() * p.getTax() / (100d + p.getTax())))
-                        .setScale(2, RoundingMode.HALF_UP))
-                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
-    }
-
-    @Override
-    public BigDecimal getTotalOfInvoiceProduct(Long id) {
-        Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(id), new Invoice());
-        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findAllByInvoice(invoice);
-        return invoiceProductsOfInvoice.stream()
-                .map(p -> p.getPrice().multiply(BigDecimal.valueOf(p.getQuantity())))
-                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
-    }
-
-    @Override
-    public BigDecimal getProfitLossOfInvoiceProduct(Long id) {
-        Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(id), new Invoice());
-        List<InvoiceProduct> invoiceProductsOfInvoice = invoiceProductRepository.findAllByInvoice(invoice);
-        return invoiceProductsOfInvoice.stream()
-                .map(InvoiceProduct::getProfitLoss)
-                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
-    }
-
 
     @Override
     public List<InvoiceProduct> findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType type, Product product, Integer remainingQuantity) {
