@@ -88,6 +88,7 @@ public class SalesInvoiceController {
             return "/invoice/sales-invoice-update";
         }
 
+        // TODO
         if (!invoiceProductService.checkProductQuantity(invoiceProductDto))  {
             redirAttrs.addFlashAttribute("error", "Not enough "+invoiceProductDto.getProduct().getName()+" quantity to sell...");
             return "redirect:/salesInvoices/update/" + invoiceId;
@@ -125,7 +126,7 @@ public class SalesInvoiceController {
         return "invoice/invoice_print";
     }
 
-    @ModelAttribute
+    @ModelAttribute  // TODO
     public void commonAttributes(Model model) {
         model.addAttribute("clients", clientVendorService.getAllClientVendorsOfCompany(ClientVendorType.CLIENT));
         model.addAttribute("products", productService.getAllProducts());

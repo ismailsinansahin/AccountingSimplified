@@ -116,7 +116,6 @@ public class InvoiceServiceImpl implements InvoiceService {
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setInvoiceNo(generateInvoiceNo(invoiceType));
         invoiceDto.setDate(LocalDate.now());
-        invoiceDto.setCompany(securityService.getLoggedInUser().getCompany());
         return invoiceDto;
     }
 

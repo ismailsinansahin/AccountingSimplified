@@ -6,29 +6,16 @@
 <div class="dashboard-main-wrapper">
     <div th:replace="/fragments/header :: header"></div>
     <div th:replace="/fragments/left-sidebar :: left-sidebar"></div>
-    <div class="dashboard-wrapper">
+    <div class="dashboard-wrapper mt-0">
         <div class="dashboard-ecommerce">
-            <div class="container-fluid dashboard-content">
+            <div class="container-fluid dashboard-content mt-1 pt-0">
                 <div class="ecommerce-widget">
-                    <div class="input-group row">
-                        <div class="col-auto">
-                            <form>
-                                <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
-                                    <a id="companylistlink" class="btn bg-dark text-light mb-1"
-                                       th:href="@{/purchaseInvoices/list}"><i class="fa fa-list mr-1"></i>Purchase Invoice List</a>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <br>
-                    <header class="panel-heading">
-                        <h4 class="panel-title">Edit Purchase Invoice</h4>
-                    </header>
                     <div class="row">
-                        <div class="col-12">
-                            <div class="card">
+                        <div class="col-12 pl-1 pr-1">
+                            <div class="card mb-0">
                                 <div class="card-content">
                                     <div class="card-body">
+                                        <h4 class="card-title text-center">Purchase Invoice</h4>
                                         <div class="tab-content">
                                             <div class="tab-pane fade mt-2 show active" id="account" role="tabpanel"
                                                  aria-labelledby="account-tab">
@@ -84,15 +71,12 @@
                             </div>
                         </div>
                     </div>
-                    <br>
-                    <header class="panel-heading">
-                        <h4 class="panel-title">Add Product</h4>
-                    </header>
                     <div class="row">
-                        <div class="col-12">
-                            <div class="card">
+                        <div class="col-12 pl-1 pr-1">
+                            <div class="card mt-1 mb-1 ">
                                 <div class="card-content">
                                     <div class="card-body">
+                                        <h4 class="card-title text-center">Add Product</h4>
                                         <div class="tab-content">
                                             <div class="tab-pane fade mt-2 show active" id="products" role="tabpanel"
                                                  aria-labelledby="account-tab">
@@ -183,20 +167,15 @@
                             </div>
                         </div>
                     </div>
-                    <br>
-                    <section class="panel">
-                        <header class="panel-heading">
-                            <h4 class="panel-title">Product List</h4></header>
-                        <!--                            <div class="alert alert-danger" role="alert">-->
-                        <!--                                 th:text="${deleteConfirmation}" th:if="${deleteConfirmation}"></div>-->
-                        <!--                            <a id="delete" class="btn bg-danger-light text-danger mb-1" style="color: #721c24">Delete</a>-->
+                    <section class="panel mb-0">
                         <div class="panel-body">
                             <div class="users-list-table">
                                 <div class="row">
-                                    <div class="col-12">
+                                    <div class="col-12 pl-1 pr-1">
                                         <div class="card">
                                             <div class="card-content fw-container">
                                                 <div class="card-body fw-body">
+                                                    <h4 class="card-title text-center">Product List</h4>
                                                     <div class="table-responsive content demo-html">
                                                         <table id="example"
                                                                class="table table-striped table-bordered file-export"
@@ -237,6 +216,16 @@
                             </div>
                         </div>
                     </section>
+                    <div class="input-group row justify-content-end mt-0 mr-0">
+                        <div class="col-auto">
+                            <form>
+                                <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-right">
+                                    <a id="companylistlink" class="btn bg-dark text-light mb-1"
+                                       th:href="@{/purchaseInvoices/list}"><i class="fa fa-list mr-1"></i>Purchase Invoice List</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
