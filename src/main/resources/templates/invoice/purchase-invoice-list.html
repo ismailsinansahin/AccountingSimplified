@@ -51,7 +51,7 @@
                                                                     <td th:text="${comStat.count}"></td>
                                                                     <td th:text="${invoice.invoiceNo}"></td>
                                                                     <td th:text="${invoice.clientVendor.getClientVendorName}"></td>
-                                                                    <td th:text="${invoice.date}"></td>
+                                                                    <td th:text="${#temporals.format(invoice.date, 'MMMM dd, yyyy')}"></td>
                                                                     <td th:text="${invoice.price}"></td>
                                                                     <td th:text="${invoice.tax}"></td>
                                                                     <td th:text="${invoice.total}"></td>
@@ -65,7 +65,7 @@
                                                                             <button class="btn btn-danger mb-2 mb-sm-0 mr-sm-2">Delete</button>
                                                                         </a>
                                                                         <a sec:authorize="hasAnyAuthority('Manager')"
-                                                                           th:if="${invoice.invoiceStatus.value} == 'Awaiting Approval'" type="button"
+                                                                           th:if="${invoice.invoiceStatus.value == 'Awaiting Approval' && invoice.invoiceProducts.size() > 0}" type="button"
                                                                            th:href ="@{/purchaseInvoices/approve/{id}(id=${invoice.getId()})}" >
                                                                             <button class="btn btn-success mb-2 mb-sm-0 mr-sm-2">Approve</button>
                                                                         </a>

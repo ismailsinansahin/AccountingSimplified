@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import javax.validation.Valid;
@@ -30,6 +31,7 @@ public class InvoiceDto {
 
     private InvoiceType invoiceType;
 
+    @DateTimeFormat(pattern = "MMMM dd, yyyy")
     private LocalDate date;
 
     private CompanyDto company;
@@ -41,5 +43,7 @@ public class InvoiceDto {
     private BigDecimal price;
     private BigDecimal tax;
     private BigDecimal total;
+
+    private List<InvoiceProductDto> invoiceProducts;
 
 }

@@ -40,6 +40,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         return clientVendorRepository
                 .findAllByCompany(company)
                 .stream()
+                .sorted(Comparator.comparing(ClientVendor::getClientVendorType).reversed()
+                        .thenComparing(ClientVendor::getClientVendorName))
                 .map(each -> mapperUtil.convert(each, new ClientVendorDto()))
                 .collect(Collectors.toList());
     }

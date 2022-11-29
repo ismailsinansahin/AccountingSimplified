@@ -137,13 +137,14 @@ public class InvoiceServiceImpl implements InvoiceService {
         invoiceDto.setTax(getTotalTaxOfInvoice(invoiceDto.getId()));
         invoiceDto.setTotal(getTotalPriceOfInvoice(invoiceDto.getId()).add(getTotalTaxOfInvoice(invoiceDto.getId())));
     }
+
     @Override
     public BigDecimal getTotalPriceOfInvoice(Long id){
         Invoice invoice = invoiceRepository.findInvoiceById(id);
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
         return invoiceProductsOfInvoice.stream()
                 .map(p -> p.getPrice()
-                        .multiply(BigDecimal.valueOf(p.getQuantity())))
+                        .multiply(BigDecimal.valueOf((long) p.getQuantity())))
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
@@ -153,7 +154,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
         return invoiceProductsOfInvoice.stream()
                 .map(p -> p.getPrice()
-                        .multiply(BigDecimal.valueOf(p.getQuantity() * p.getTax() /(100d + p.getTax())))
+                        .multiply(BigDecimal.valueOf(p.getQuantity() * p.getTax() /100d))
                         .setScale(2, RoundingMode.HALF_UP))
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);

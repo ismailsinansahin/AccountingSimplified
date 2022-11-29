@@ -56,16 +56,16 @@
                                                                     <td th:text="${invoice.tax}"></td>
                                                                     <td th:text="${invoice.total}"></td>
                                                                     <td class="actions">
-                                                                        <a th:if="${invoice.invoiceStatus.value} == 'Awaiting Approval'"
+                                                                        <a th:if="${invoice.invoiceStatus.value == 'Awaiting Approval'}"
                                                                            th:href ="@{/salesInvoices/update/{id}(id=${invoice.getId()})}" type="button">
                                                                             <button class="btn btn-primary mb-2 mb-sm-0 mr-sm-2">Edit</button>
                                                                         </a>
-                                                                        <a th:if="${invoice.invoiceStatus.value} == 'Awaiting Approval'"
+                                                                        <a th:if="${invoice.invoiceStatus.value == 'Awaiting Approval'}"
                                                                            th:href ="@{/salesInvoices/delete/{id}(id=${invoice.getId()})}" type="button">
                                                                             <button class="btn btn-danger mb-2 mb-sm-0 mr-sm-2">Delete</button>
                                                                         </a>
                                                                         <a sec:authorize="hasAnyAuthority('Manager')"
-                                                                           th:if="${invoice.invoiceStatus.value} == 'Awaiting Approval'" type="button"
+                                                                           th:if="${invoice.invoiceStatus.value == 'Awaiting Approval' && invoice.invoiceProducts.size() > 0}" type="button"
                                                                            th:href ="@{/salesInvoices/approve/{id}(id=${invoice.getId()})}" >
                                                                             <button class="btn btn-success mb-2 mb-sm-0 mr-sm-2">Approve</button>
                                                                         </a>
