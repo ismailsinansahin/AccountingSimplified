@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class ClientVendor extends BaseEntity{
 
 
-    private String companyName;
+    private String clientVendorName;
 
     private String phone;
 

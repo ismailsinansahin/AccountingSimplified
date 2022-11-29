@@ -49,7 +49,7 @@
                                                                 th:style="${clientVendor.clientVendorType.value} == 'Passive' ? 'background-color: #fcd7d7' : 'background-color: #eee'">
                                                                 <td th:text="${comStat.count}"></td>
                                                                 <td th:text="${clientVendor.clientVendorType.value}"></td>
-                                                                <td th:text="${clientVendor.companyName}"></td>
+                                                                <td th:text="${clientVendor.getClientVendorName}"></td>
                                                                 <td th:text="${clientVendor.phone}"></td>
                                                                 <td th:text="${clientVendor.address.city}"></td>
                                                                 <td th:text="${clientVendor.address.state}"></td>

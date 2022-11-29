@@ -32,7 +32,7 @@ public class Invoice extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private InvoiceType invoiceType;
 
-    @DateTimeFormat
+//    @DateTimeFormat
     private LocalDate date;
 
     @ManyToOne

@@ -52,7 +52,7 @@
                                                                                 th:value="''" th:text="'Select'" selected></option>
                                                                         <option th:each= "vendor:${vendors}"
                                                                                 th:value="${vendor.id}"
-                                                                                th:text="${vendor.companyName}"></option>
+                                                                                th:text="${vendor.getClientVendorName}"></option>
                                                                     </select>
                                                                     <div th:if="${#fields.hasErrors('clientVendor')}">
                                                                         <ul>

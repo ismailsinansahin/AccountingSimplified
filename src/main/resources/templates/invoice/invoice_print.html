@@ -239,7 +239,7 @@
               <div class="row contacts">
                 <div class="col invoice-to">
                   <div class="text-gray-light">INVOICE TO:</div>
-                  <h2 class="to" th:text="${invoice.getClientVendor().getCompanyName()}"></h2>
+                  <h2 class="to" th:text="${invoice.getClientVendor().getClientVendorName()}"></h2>
                   <div class="address" th:text="${invoice.getClientVendor().getAddress().getAddressLine1()}"></div>
                   <div class="address" th:text="${invoice.getClientVendor().getAddress().getZipCode()} + ' / ' + ${invoice.getClientVendor().getAddress().getState()}"></div>
                   <div class="email"><a href="mailto:john@example.com" th:text="${invoice.getClientVendor().getWebsite()}"></a></div>

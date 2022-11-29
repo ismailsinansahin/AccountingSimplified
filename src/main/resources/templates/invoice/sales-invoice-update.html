@@ -48,7 +48,7 @@
                                                                     <select id="clientVendor" name ="clientVendor" class="custom-select" th:with="clientVendor=*{clientVendor}">
                                                                         <option th:each= "clientVendor:${clients}"
                                                                                 th:value="${clientVendor.id}"
-                                                                                th:text="${clientVendor.companyName}"
+                                                                                th:text="${clientVendor.getClientVendorName}"
                                                                                 th:selected="${clientVendor.id}==${invoice.clientVendor.id}"></option>
                                                                     </select>
                                                                 </div>

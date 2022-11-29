@@ -111,7 +111,7 @@
                                             <tbody>
                                             <tr th:each="invoice:${invoices}">
                                                 <td th:text="${invoice.invoiceNo}"></td>
-                                                <td th:text="${invoice.clientVendor.companyName}"></td>
+                                                <td th:text="${invoice.clientVendor.getClientVendorName}"></td>
                                                 <td th:text="${invoice.date}"></td>
                                                 <td th:text="${invoice.price}"></td>
                                                 <td th:text="${invoice.tax}"></td>

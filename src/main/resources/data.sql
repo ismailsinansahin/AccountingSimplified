@@ -72,7 +72,7 @@ values
  'John', 'Doe', '+1 (659) 756-1265', 2, 4, true);
 
 insert into clients_vendors(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
-                            client_vendor_type, company_name, phone, website, address_id, company_id)
+                            client_vendor_type, client_vendor_name, phone, website, address_id, company_id)
 values
 -- COMPANY-2 / Green Tech
 ('2022-09-15T00:00',2, false,'2022-09-15T00:00',2,'CLIENT','Orange Tech', '+1 (251) 321-4155', 'https://www.orange.com', 5, 2),
