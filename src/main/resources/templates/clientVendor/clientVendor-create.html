@@ -27,14 +27,14 @@
                                                         <div class="col-12 col-md-4">
                                                             <div class="form-group">
                                                                 <div class="controls">
-                                                                    <label>Company Name</label>
-                                                                    <input type="text" th:field="*{companyName}"
-                                                                           placeholder="Company Name"
+                                                                    <label>Client/Vendor Name</label>
+                                                                    <input type="text" th:field="*{clientVendorName}"
+                                                                           placeholder="Client/Vendor Name"
                                                                            class="form-control">
-                                                                    <div th:if="${#fields.hasErrors('companyName')}">
+                                                                    <div th:if="${#fields.hasErrors('clientVendorName')}">
                                                                         <ul>
                                                                             <li class="validation"
-                                                                                th:each="err : ${#fields.errors('companyName')}"
+                                                                                th:each="err : ${#fields.errors('clientVendorName')}"
                                                                                 th:text="${err}"></li>
                                                                         </ul>
                                                                     </div>

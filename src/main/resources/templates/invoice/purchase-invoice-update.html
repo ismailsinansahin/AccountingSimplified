@@ -48,7 +48,7 @@
                                                                     <select id="clientVendor" name="clientVendor" class="custom-select" th:with="clientVendor=*{clientVendor}">
                                                                         <option th:each= "clientVendor:${vendors}"
                                                                                 th:value="${clientVendor.id}"
-                                                                                th:text="${clientVendor.companyName}"
+                                                                                th:text="${clientVendor.getClientVendorName}"
                                                                                 th:selected="${clientVendor.id} == ${invoice.clientVendor.id}"></option>
                                                                     </select>
                                                                 </div>
@@ -124,7 +124,7 @@
                                                         <div class="col-12 col-md-3">
                                                             <div class="form-group">
                                                                 <div class="controls">
-                                                                    <label>Price (with tax)</label>
+                                                                    <label>Price (without tax)</label>
                                                                     <input type="number" th:field="*{price}" placeholder="Price" step=".01"
                                                                            class="form-control" aria-invalid="false">
                                                                 </div>
@@ -185,9 +185,9 @@
                                                                 <th scope="col">#</th>
                                                                 <th>Product Name</th>
                                                                 <th>Quantity</th>
-                                                                <th>Unit Price</th>
+                                                                <th>Unit Price (without tax)</th>
                                                                 <th>Tax Rate</th>
-                                                                <th>Total</th>
+                                                                <th>Total (with tax)</th>
                                                                 <th>Remove</th>
                                                             </tr>
                                                             </thead>

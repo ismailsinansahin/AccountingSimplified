@@ -40,6 +40,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         return clientVendorRepository
                 .findAllByCompany(company)
                 .stream()
+                .sorted(Comparator.comparing(ClientVendor::getClientVendorType).reversed()
+                        .thenComparing(ClientVendor::getClientVendorName))
                 .map(each -> mapperUtil.convert(each, new ClientVendorDto()))
                 .collect(Collectors.toList());
     }
@@ -50,7 +52,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         return clientVendorRepository
                 .findAllByCompanyAndClientVendorType(company, clientVendorType)
                 .stream()
-                .sorted(Comparator.comparing(ClientVendor::getCompanyName))
+                .sorted(Comparator.comparing(ClientVendor::getClientVendorName))
                 .map(each -> mapperUtil.convert(each, new ClientVendorDto()))
                 .collect(Collectors.toList());
     }
@@ -81,7 +83,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     @Override
     public boolean companyNameExists(ClientVendorDto clientVendorDto) {
         Company actualCompany = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        ClientVendor existingClientVendor = clientVendorRepository.findByCompanyNameAndCompany(clientVendorDto.getCompanyName(), actualCompany);
+        ClientVendor existingClientVendor = clientVendorRepository.findByClientVendorNameAndCompany(clientVendorDto.getClientVendorName(), actualCompany);
         if (existingClientVendor == null) return false;
         return !existingClientVendor.getId().equals(clientVendorDto.getId());
     }

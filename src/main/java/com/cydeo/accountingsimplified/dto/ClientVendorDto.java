@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.URL;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -23,7 +22,7 @@ public class ClientVendorDto {
 
     @NotBlank(message = "Company Name is a required field.")
     @Size(min = 2, max = 50, message = "Company Name should have 2-50 characters long.")
-    private String companyName; // client & vendor name
+    private String clientVendorName;
 
     //    @NotBlank // @Pattern is enough to check if it is not blank
 //    @Pattern(regexp = "^1-[0-9]{3}?-[0-9]{3}?-[0-9]{4}$")                         //  format "1-xxx-xxx-xxxx"

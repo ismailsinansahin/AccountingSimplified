@@ -42,7 +42,7 @@ public class ClientVendorController {
         boolean isDuplicatedCompanyName = clientVendorService.companyNameExists(clientVendorDto);
         if (result.hasErrors() || isDuplicatedCompanyName) {
             if (isDuplicatedCompanyName) {
-                result.rejectValue("companyName", " ", "A client/vendor with this name already exists. Please try with different name.");
+                result.rejectValue("clientVendorName", " ", "A client/vendor with this name already exists. Please try with different name.");
             }
             return "/clientVendor/clientVendor-create";
         }
@@ -62,7 +62,7 @@ public class ClientVendorController {
         boolean isDuplicatedCompanyName = clientVendorService.companyNameExists(clientVendorDto);
         if (result.hasErrors() || isDuplicatedCompanyName) {
             if (isDuplicatedCompanyName) {
-                result.rejectValue("companyName", " ", "A client/vendor with this name already exists. Please try with different name.");
+                result.rejectValue("clientVendorName", " ", "A client/vendor with this name already exists. Please try with different name.");
             }
             return "/clientVendor/clientVendor-update";
         }

@@ -27,11 +27,9 @@ public class User extends BaseEntity{
     private boolean enabled;
 
     @ManyToOne
-//    @JoinColumn(name = "role_id") not mandatory. by default : role_id
     private Role role;
 
     @ManyToOne
-//    @JoinColumn(name = "company_id") not mandatory. by default : company_id
     private Company company;
 
 }

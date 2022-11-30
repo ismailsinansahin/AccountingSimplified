@@ -2,7 +2,6 @@ package com.cydeo.accountingsimplified.entity;
 
 import com.cydeo.accountingsimplified.enums.InvoiceStatus;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -32,14 +30,15 @@ public class Invoice extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private InvoiceType invoiceType;
 
-    @DateTimeFormat
     private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(name = "company_id")
     private Company company;
 
     @ManyToOne
-    @JoinColumn(name = "client_vendor_id")
     private ClientVendor clientVendor;
+
+    @OneToMany(mappedBy = "invoice")
+    private List<InvoiceProduct> invoiceProducts;
+
 }
