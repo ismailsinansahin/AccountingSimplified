@@ -33,44 +33,7 @@ public class DashboardController {
         model.addAttribute("invoices", invoiceService.getLastThreeInvoices());
         model.addAttribute("exchangeRates", dashboardService.getExchangeRates());
         model.addAttribute("title", "Cydeo Accounting-Dashboard");
-        model.addAttribute("chartData", getChartData(InvoiceType.PURCHASE));
-        model.addAttribute("chartData2", getChartData(InvoiceType.SALES));
-        model.addAttribute("chartData3", getProfitLoss());
         return "dashboard";
-    }
-
-
-
-    private List<List<Object>> getChartData(InvoiceType invoiceType) throws Exception {
-        List<InvoiceDto> invoiceDtos = invoiceService.getAllInvoicesOfCompany(invoiceType);
-        var totalPrices = invoiceDtos.stream()
-                .map(InvoiceDto::getPrice)
-                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
-        var totalTax = invoiceDtos.stream()
-                .map(InvoiceDto::getTax)
-                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
-        return List.of(
-                List.of("Products", totalPrices),
-                List.of("Tax", totalTax)
-        );
-    }
-
-    private List<List<Object>> getProfitLoss(){
-        List<InvoiceDto> invoiceDtos = invoiceService.getAllInvoicesByInvoiceStatus(InvoiceStatus.APPROVED);
-        var profit = invoiceDtos.stream()
-                .map(inv -> invoiceService.getProfitLossOfInvoice(inv.getId()))
-                .filter(value -> value.compareTo(BigDecimal.ZERO) > 0)
-                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
-        var loss = invoiceDtos.stream()
-                .map(inv -> invoiceService.getProfitLossOfInvoice(inv.getId()))
-                .filter(value -> value.compareTo(BigDecimal.ZERO) <  0)
-                .map(value -> value.abs())
-                .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
-
-        return List.of(
-                List.of("Profit", profit),
-                List.of("Loss", loss)
-        );
     }
 
 }
