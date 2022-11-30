@@ -1,59 +1,131 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
+<head th:replace="/fragments/head :: header"></head>
 <head>
-    <div th:replace="/fragments/head :: header"></div>
-    <!--     Table Related Scripts-->
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript" th:inline="javascript">
-
-        // Load the Visualization API and the corechart package.
-        google.charts.load('current', {'packages':['corechart']});
-
-        // Set a callback to run when the Google Visualization API is loaded.
-        google.charts.setOnLoadCallback(drawChart);
-
-        // Callback that creates and populates a data table,
-        // instantiates the pie chart, passes in the data and
-        // draws it.
-        function drawChart() {
-
-            // Create the data table.
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Topping');
-            data.addColumn('number', 'Slices');
-            data.addRows([[${chartData}]]);
-
-            var data2 = new google.visualization.DataTable();
-            data2.addColumn('string', 'Toppin');
-            data2.addColumn('number', 'Slice');
-            data2.addRows([[${chartData2}]]);
-
-            var data3 = new google.visualization.DataTable();
-            data3.addColumn('string', 'Toppi');
-            data3.addColumn('number', 'Slic');
-            data3.addRows([[${chartData3}]]);
-
-            // Set chart options
-            var options = {
-                'width':400,
-                'height':300};
-            var options2 = {
-                'width':400,
-                'height':300};
-            var options3 = {
-                'width':400,
-                'height':300};
-
-            // Instantiate and draw our chart, passing in some options.
-            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-            var chart2 = new google.visualization.PieChart(document.getElementById('chart_div2'));
-            var chart3 = new google.visualization.PieChart(document.getElementById('chart_div3'));
-            chart.draw(data, options);
-            chart2.draw(data2, options2);
-            chart3.draw(data3, options3);
+    <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js}"/>
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js}"/>
+    <style>
+        .progress {
+            width: 150px;
+            height: 150px !important;
+            float: left;
+            line-height: 150px;
+            background: none;
+            margin: 20px;
+            box-shadow: none;
+            position: relative;
         }
-    </script>
+        .progress:after {
+            content: "";
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 12px solid #fff;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .progress>span {
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            position: absolute;
+            top: 0;
+            z-index: 1;
+        }
+        .progress .progress-left {
+            left: 0;
+        }
+        .progress .progress-bar {
+            width: 100%;
+            height: 100%;
+            background: none;
+            border-width: 12px;
+            border-style: solid;
+            position: absolute;
+            top: 0;
+        }
+        .progress .progress-left .progress-bar {
+            left: 100%;
+            border-top-right-radius: 80px;
+            border-bottom-right-radius: 80px;
+            border-left: 0;
+            -webkit-transform-origin: center left;
+            transform-origin: center left;
+        }
+        .progress .progress-right {
+            right: 0;
+        }
+        .progress .progress-right .progress-bar {
+            left: -100%;
+            border-top-left-radius: 80px;
+            border-bottom-left-radius: 80px;
+            border-right: 0;
+            -webkit-transform-origin: center right;
+            transform-origin: center right;
+            animation: loading-1 0.8s linear forwards;
+        }
+        .progress .progress-value {
+            width: 90%;
+            height: 90%;
+            border-radius: 50%;
+            background: #000;
+            font-size: 24px;
+            color: #fff;
+            line-height: 135px;
+            text-align: center;
+            position: absolute;
+            top: 5%;
+            left: 5%;
+        }
+        .progress.blue .progress-bar {
+            border-color: #049dff;
+        }
+        .progress.blue .progress-left .progress-bar {
+            animation: loading-2 0.5s linear forwards 0.8s;
+        }
+        .progress.yellow .progress-bar {
+            border-color: #fdba04;
+        }
+        .progress.yellow .progress-right .progress-bar {
+            animation: loading-3 1.8s linear forwards;
+        }
+        .progress.yellow .progress-left .progress-bar {
+            animation: none;
+        }
+        @keyframes loading-1 {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(180deg);
+                transform: rotate(180deg);
+            }
+        }
+        @keyframes loading-2 {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(180deg);
+                transform: rotate(180deg);
+            }
+        }
+        @keyframes loading-3 {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(135deg);
+                transform: rotate(135deg);
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -64,36 +136,60 @@
             <div class="dashboard-ecommerce">
                 <div class="container-fluid dashboard-content mt-1 pt-1">
                     <div class="ecommerce-widget">
-                        <div class="row justify-content-center">
-                            <div class="col-4">
-                                <div class="card justify-content-start">
-                                    <h4 class="card-title text-center">Total Product Sales</h4>
-                                    <div class="card-body mt-0 pt-0">
-                                        <div id="chart_div"></div>
+                        <div class="row d-flex mt-1">
+                            <div class="col-md-4">
+                                <div class="card" style="width:100%;">
+                                    <h4 class="card-title text-center">Total Cost</h4>
+                                    <div class="card-body mt-0 pt-0 d-flex justify-content-center">
+                                        <div class="progress blue">
+                                            <span class="progress-left">
+                                                <span class="progress-bar"></span>
+                                            </span>
+                                            <span class="progress-right">
+                                                <span class="progress-bar"></span>
+                                            </span>
+                                            <div class="progress-value" th:text="'$ '+${summaryNumbers.get('totalCost')}">90%</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4">
-                                <div class="card justify-content-start">
-                                    <h4 class="card-title text-center">Total Product Expenses</h4>
-                                    <div class="card-body mt-0 pt-0">
-                                        <div id="chart_div2"></div>
+                            <div class="col-md-4">
+                                <div class="card" style="width:100%;">
+                                    <h4 class="card-title text-center">Total Sales</h4>
+                                    <div class="card-body mt-0 pt-0 d-flex justify-content-center">
+                                        <div class="progress blue">
+                                            <span class="progress-left">
+                                                <span class="progress-bar"></span>
+                                            </span>
+                                            <span class="progress-right">
+                                                <span class="progress-bar"></span>
+                                            </span>
+                                            <div class="progress-value" th:text="'$ '+${summaryNumbers.get('totalSales')}">90%</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4">
-                                <div class="card justify-content-start">
+                            <div class="col-md-4">
+                                <div class="card" style="width:100%;">
                                     <h4 class="card-title text-center">Profit / Loss</h4>
-                                    <div class="card-body mt-0 pt-0">
-                                        <div id="chart_div3"></div>
+                                    <div class="card-body mt-0 pt-0 d-flex justify-content-center">
+                                        <div class="progress blue">
+                                            <span class="progress-left">
+                                                <span class="progress-bar"></span>
+                                            </span>
+                                            <span class="progress-right">
+                                                <span class="progress-bar"></span>
+                                            </span>
+                                            <div class="progress-value" th:text="'$ '+${summaryNumbers.get('profitLoss')}">90%</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-8 grid-margin">
-                                <header class="panel-heading"><h3 class="panel-title text-center">Last Transactions</h3></header>
                                 <div class="card">
+                                    <h4 class="card-title text-center">Last Transactions</h4>
                                     <div class="card-body">
                                         <table id="topinvoicetable"
                                                class="table table-striped table-bordered file-export"
@@ -122,9 +218,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 grid-margin">
-                                <header class="panel-heading"><h3 class="panel-title text-center">Exchange Rates (1 USD)</h3></header>
+                            <div class="col-4 grid-margin">
                                 <div class="card">
+                                    <h4 class="card-title text-center">Exchange Rates (1 USD)</h4>
                                     <div class="card-body">
                                         <table id="exchangetable"
                                                class="table table-striped table-bordered file-export"
@@ -137,9 +233,6 @@
                                             </thead>
                                             <tbody>
                                             <tr>
-                                                <!--<tr th:each="invoice,comStat : ${invoices}">-->
-                                                <!--<td th:text="${comStat.count}"></td>-->
-                                                <!--<td th:text="${invoice.invoiceNo}"></td>-->
                                                 <td>Euro</td>
                                                 <td th:text="${exchangeRates.getEuro()}"></td>
                                             </tr>
