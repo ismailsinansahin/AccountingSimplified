@@ -71,9 +71,9 @@
             width: 90%;
             height: 90%;
             border-radius: 50%;
-            background: #000;
+            background: #fff;
             font-size: 24px;
-            color: #fff;
+            color: #000;
             line-height: 135px;
             text-align: center;
             position: absolute;
@@ -194,13 +194,19 @@
                                         <table id="topinvoicetable"
                                                class="table table-striped table-bordered file-export"
                                                style="width:100%">
+                                            <col style="width:10%">
+                                            <col style="width:20%">
+                                            <col style="width:18%">
+                                            <col style="width:14%">
+                                            <col style="width:14%">
+                                            <col style="width:14%">
                                             <thead>
                                             <tr>
-                                                <th scope="col">Invoice No</th>
+                                                <th scope="col">#</th>
                                                 <th scope="col">Client / Vendor</th>
                                                 <th scope="col">Date</th>
-                                                <th scope="col">Price (without tax)</th>
-                                                <th scope="col">Tax Amount</th>
+                                                <th scope="col">Price</th>
+                                                <th scope="col">Tax</th>
                                                 <th scope="col">Total</th>
                                             </tr>
                                             </thead>
