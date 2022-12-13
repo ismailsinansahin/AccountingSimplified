@@ -169,7 +169,11 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
 
-
+    @Override
+    public boolean checkIfInvoiceExist(Long clientVendorId) {
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+        return invoiceRepository.countAllByCompanyAndClientVendor_Id(company, clientVendorId) > 0;
+    }
 
 
 }

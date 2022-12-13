@@ -210,14 +210,8 @@
           <div style="min-width: 600px">
             <header>
               <div class="row">
-                <div class="text-end">
-                  <!--
-                  <a th:href="@{/pdf/generate/{id}(id=${invoice.id})}" target="_blank" type="button" class="btn btn-dark"><i class="fa fa-edit mr-1"  ></i>Overview</a>
-                  <a th:href="@{/pdf/download/{id}(id=${invoice.id})}"  type="button" class="btn btn-danger"><i class="fa fa-file-pdf-o mr-1" ></i> Export as PDF</a>
-                   -->
-                  <a th:href="@{/email/send/{id}(id=${invoice.id})}" target="_blank" type="button" class="btn btn-primary"><i class="fa fa-paper-plane mr-1" ></i>Send Email</a>
+                  <a target="_blank" type="button" class="btn btn-primary disabled"><i class="fa fa-paper-plane mr-1" ></i>Send Email</a>
                   <hr>
-                </div>
               </div>
               <div class="row">
                 <div class="col">
