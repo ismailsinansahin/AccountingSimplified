@@ -81,7 +81,7 @@ public class CategoryController {
     }
 
     @ModelAttribute
-    public void getTitle(Model model){
+    public void commonAttributes(Model model){
         model.addAttribute("title", "Cydeo Accounting-Category");
     }
 }

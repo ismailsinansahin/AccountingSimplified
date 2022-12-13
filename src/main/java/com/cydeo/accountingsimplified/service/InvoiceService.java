@@ -22,6 +22,5 @@ public interface InvoiceService {
     BigDecimal getTotalPriceOfInvoice(Long id);
     BigDecimal getTotalTaxOfInvoice(Long id);
     BigDecimal getProfitLossOfInvoice(Long id);
-
-
+    boolean checkIfInvoiceExist(Long clientVendorId);
 }

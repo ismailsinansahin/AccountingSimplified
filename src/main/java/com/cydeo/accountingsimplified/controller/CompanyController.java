@@ -87,7 +87,7 @@ public class CompanyController {
     }
 
     @ModelAttribute
-    public void getTitle(Model model){
+    public void commonAttributes(Model model){
         model.addAttribute("countries",addressService.getCountryList() );
         model.addAttribute("title", "Cydeo Accounting-Company");
     }
