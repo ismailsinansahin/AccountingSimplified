@@ -3,6 +3,7 @@ package com.cydeo.accountingsimplified.service.implementation;
 import com.cydeo.accountingsimplified.dto.CompanyDto;
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.enums.CompanyStatus;
+import com.cydeo.accountingsimplified.exception.AccountingException;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.CompanyRepository;
 import com.cydeo.accountingsimplified.service.CompanyService;
@@ -100,7 +101,8 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public boolean isTitleExist(String title) {
-        return companyRepository.existsByTitle(title);
+        throw new AccountingException("This company title exist");
+//        return companyRepository.existsByTitle(title);
     }
 
     @Override

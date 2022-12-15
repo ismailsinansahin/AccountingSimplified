@@ -1,6 +1,7 @@
 package com.cydeo.accountingsimplified.controller;
 
 import com.cydeo.accountingsimplified.dto.CompanyDto;
+import com.cydeo.accountingsimplified.exception.AccountingException;
 import com.cydeo.accountingsimplified.service.AddressService;
 import com.cydeo.accountingsimplified.service.CompanyService;
 import org.springframework.stereotype.Controller;
