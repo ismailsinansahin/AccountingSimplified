@@ -1,6 +1,7 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
 
+import com.cydeo.accountingsimplified.annotation.ExecutionTime;
 import com.cydeo.accountingsimplified.dto.CurrencyApiResponse;
 import com.cydeo.accountingsimplified.dto.CurrencyDto;
 import com.cydeo.accountingsimplified.dto.InvoiceDto;
@@ -49,7 +50,7 @@ public class DashboardServiceImpl implements DashboardService {
         return summaryNumbersMap;
     }
 
-
+    @ExecutionTime
     @Override
     public CurrencyDto getExchangeRates() {
         CurrencyApiResponse currency = client.getUsdBasedCurrencies();

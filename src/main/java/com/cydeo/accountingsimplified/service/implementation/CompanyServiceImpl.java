@@ -83,19 +83,19 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void activate(Long companyId) {
+    public CompanyDto activate(Long companyId) {
         Company company = companyRepository.findById(companyId).get();
         company.setCompanyStatus(CompanyStatus.ACTIVE);
         companyRepository.save(company);
-        mapperUtil.convert(company, new CompanyDto());
+        return mapperUtil.convert(company, new CompanyDto());
     }
 
     @Override
-    public void deactivate(Long companyId) {
+    public CompanyDto deactivate(Long companyId) {
         Company company = companyRepository.findById(companyId).get();
         company.setCompanyStatus(CompanyStatus.PASSIVE);
         companyRepository.save(company);
-        mapperUtil.convert(company, new CompanyDto());
+        return mapperUtil.convert(company, new CompanyDto());
     }
 
     @Override
