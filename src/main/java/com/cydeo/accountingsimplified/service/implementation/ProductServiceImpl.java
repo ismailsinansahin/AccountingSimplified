@@ -5,6 +5,7 @@ import com.cydeo.accountingsimplified.entity.Category;
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.entity.InvoiceProduct;
 import com.cydeo.accountingsimplified.entity.Product;
+import com.cydeo.accountingsimplified.exception.AccountingException;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.ProductRepository;
 import com.cydeo.accountingsimplified.service.InvoiceProductService;
@@ -71,9 +72,12 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long productId) {
         Product product = productRepository.findById(productId).get();
         List<InvoiceProduct> invoiceProducts = invoiceProductService.findAllInvoiceProductsByProductId(product.getId());
-        if (invoiceProducts.size() == 0 || product.getQuantityInStock() == 0){
+        if (invoiceProducts.size() == 0 && product.getQuantityInStock() == 0){
             product.setIsDeleted(true);
-        }else System.out.println("You cannot delete this product");
+        } else {
+            throw new AccountingException("You cannot delete this product since an invoice contains it or it is still in stock!");
+//            System.out.println("You cannot delete this product");
+        }
         productRepository.save(product);
     }
 

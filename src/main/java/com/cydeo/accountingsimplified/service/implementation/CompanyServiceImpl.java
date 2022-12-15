@@ -99,6 +99,7 @@ public class CompanyServiceImpl implements CompanyService {
         return mapperUtil.convert(company, new CompanyDto());
     }
 
+    //todo
     @Override
     public boolean isTitleExist(String title) {
         throw new AccountingException("This company title exist");
