@@ -24,13 +24,13 @@ public class GlobalExceptionHandler {
     // whenever one of these exception throws, run this method and show this ResponseEntity
     // if there is our custom annotation at any method, it'll build the response including that message,
     // otherwise it'll show "Something went wrong!" message
-    @ExceptionHandler({Exception.class, RuntimeException.class, Throwable.class, BadCredentialsException.class})
+    @ExceptionHandler({Throwable.class})
     public String genericException(Throwable exception, Model model, HandlerMethod handlerMethod) {
         String message = "Something went wrong!";
         Optional<DefaultExceptionMessageDto> defaultMessage = getMessageFromAnnotation(handlerMethod.getMethod());
         if (defaultMessage.isPresent()) {
             message = defaultMessage.get().getMessage();
-        } else if (!exception.getMessage().isEmpty()) {
+        } else if (exception.getMessage() != null) {
             message = exception.getMessage();
         }
         model.addAttribute("message", message);

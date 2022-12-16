@@ -45,7 +45,6 @@ public class UserController {
             if (emailExist) {
                 result.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
             }
-
             return "/user/user-create";
         }
 

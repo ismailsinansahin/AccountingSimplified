@@ -107,7 +107,8 @@ insert into products(insert_date_time, insert_user_id, is_deleted, last_update_d
     ('2022-09-15 00:00', 2, 'false', '2022-09-15 00:00', 2, 'SAMSUNG Galaxy S22',0, 5,'PCS', 2),
 -- COMPANY-3 / Blue Tech
     ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S20 (renewed)', 30, 5, 'PCS', 3),
-    ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S22', 20, 5, 'PCS', 3);
+    ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Samsung Galaxy S22', 20, 5, 'PCS', 3),
+    ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 'Moto G Power', 0, 5, 'PCS', 3);
 
 
 insert into invoices(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
@@ -127,7 +128,8 @@ values
 ('2022-11-18 00:00', 3, 'false', '2022-11-18 00:00', 3, '2022-11-18', 'S-002', 'SALES', 'AWAITING_APPROVAL', 4, 3),
 ('2022-11-19 00:00', 3, 'false', '2022-11-19 00:00', 3, '2022-11-19', 'S-003', 'SALES', 'AWAITING_APPROVAL', 4, 3),
 ('2022-11-20 00:00', 3, 'false', '2022-11-20 00:00', 3, '2022-11-20', 'S-004', 'SALES', 'AWAITING_APPROVAL', 6, 3),
-('2022-11-21 00:00', 3, 'false', '2022-11-21 00:00', 3, '2022-11-21', 'S-005', 'SALES', 'AWAITING_APPROVAL', 6, 3);
+('2022-11-21 00:00', 3, 'false', '2022-11-21 00:00', 3, '2022-11-21', 'S-005', 'SALES', 'AWAITING_APPROVAL', 6, 3),
+('2022-12-15 00:00', 3, 'false', '2022-12-15 00:00', 3, '2022-12-15', 'P-003', 'PURCHASE', 'AWAITING_APPROVAL', 6, 3);
 
 insert into invoice_products(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                              price,quantity, remaining_quantity, tax, profit_loss, invoice_id, product_id)
@@ -148,5 +150,6 @@ values
 ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 300, 20, 0, 10, 2200, 8, 5),  --sale APPROVED     total sale (with tax): 9900 & total profit : 3300 with tax
 ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 6, 0, 10, 0, 9, 6),     --sale AWAITING_APPROVAL after approval total sale (with tax) : 17820 & profit (with tax) : 3300+1980=5280
 ('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 5, 0, 10, 0, 10, 6),     --sale AWAITING_APPROVAL after approval total sale (with tax) : 24420 & profit (with tax) : 5280+1540=6820
-('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 2, 0, 10, 0, 11, 6);    --sale AWAITING_APPROVAL after approval total sale (with tax) : 27060 & profit (with tax) : 6820+440=7260
+('2022-09-15 00:00', 3, 'false', '2022-09-15 00:00', 3, 1200, 2, 0, 10, 0, 11, 6),    --sale AWAITING_APPROVAL after approval total sale (with tax) : 27060 & profit (with tax) : 6820+440=7260
+('2022-12-15 00:00', 3, 'false', '2022-12-15 00:00', 3, 600, 4, 0, 10, 0, 13, 7);    --purchase AWAITING_APPROVAL
 
