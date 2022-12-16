@@ -1,7 +1,6 @@
 package com.cydeo.accountingsimplified.controller;
 
 import com.cydeo.accountingsimplified.dto.CompanyDto;
-import com.cydeo.accountingsimplified.exception.AccountingException;
 import com.cydeo.accountingsimplified.service.AddressService;
 import com.cydeo.accountingsimplified.service.CompanyService;
 import org.springframework.stereotype.Controller;
@@ -37,7 +36,7 @@ public class CompanyController {
     }
 
     @PostMapping("/create")
-    public String createNewCompany(@Valid @ModelAttribute("newCompany") CompanyDto companyDto, BindingResult bindingResult,Model model) {
+    public String createNewCompany(@Valid @ModelAttribute("newCompany") CompanyDto companyDto, BindingResult bindingResult) {
 
         if (companyService.isTitleExist(companyDto.getTitle())) {
             bindingResult.rejectValue("title", " ", "This title already exists.");
@@ -59,7 +58,7 @@ public class CompanyController {
     }
 
     @PostMapping("/update/{companyId}")
-    public String updateCompany(@Valid @ModelAttribute("company") CompanyDto companyDto, BindingResult bindingResult, @PathVariable Long companyId, Model model) throws CloneNotSupportedException {
+    public String updateCompany(@Valid @ModelAttribute("company") CompanyDto companyDto, BindingResult bindingResult, @PathVariable Long companyId) throws CloneNotSupportedException {
 
         boolean isThisCompanyTitle = companyDto.getTitle().equals(companyService.findCompanyById(companyId).getTitle());
         if (companyService.isTitleExist(companyDto.getTitle()) && !isThisCompanyTitle) {

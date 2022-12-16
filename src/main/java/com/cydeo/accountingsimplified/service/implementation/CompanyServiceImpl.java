@@ -3,12 +3,10 @@ package com.cydeo.accountingsimplified.service.implementation;
 import com.cydeo.accountingsimplified.dto.CompanyDto;
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.enums.CompanyStatus;
-import com.cydeo.accountingsimplified.exception.AccountingException;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.CompanyRepository;
 import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.SecurityService;
-import com.cydeo.accountingsimplified.service.UserService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +22,7 @@ public class CompanyServiceImpl implements CompanyService {
     private final MapperUtil mapperUtil;
 
     public CompanyServiceImpl(CompanyRepository companyRepository,
-                              @Lazy SecurityService securityService, UserService userService, MapperUtil mapperUtil) {
+                              @Lazy SecurityService securityService, MapperUtil mapperUtil) {
         this.companyRepository = companyRepository;
         this.securityService = securityService;
         this.mapperUtil = mapperUtil;
@@ -99,11 +97,9 @@ public class CompanyServiceImpl implements CompanyService {
         return mapperUtil.convert(company, new CompanyDto());
     }
 
-    //todo
     @Override
     public boolean isTitleExist(String title) {
-        throw new AccountingException("This company title exist");
-//        return companyRepository.existsByTitle(title);
+        return companyRepository.existsByTitle(title);
     }
 
     @Override
