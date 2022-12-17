@@ -14,18 +14,17 @@ import java.util.Optional;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // whenever TicketingProjectException throws, run this method
     @ExceptionHandler(AccountingException.class)
     public String serviceException(AccountingException exception, Model model) {
         model.addAttribute("message", exception.getMessage());
         return "error";
     }
 
-    // whenever one of these exception throws, run this method and show this ResponseEntity
+    // whenever one of these exception throws, run this method
     // if there is our custom annotation at any method, it'll build the response including that message,
     // otherwise it'll show "Something went wrong!" message
     @ExceptionHandler({Throwable.class})
-    public String genericException(Throwable exception, Model model, HandlerMethod handlerMethod) {
+    public String genericException(Throwable exception, HandlerMethod handlerMethod, Model model) {
         String message = "Something went wrong!";
         Optional<DefaultExceptionMessageDto> defaultMessage = getMessageFromAnnotation(handlerMethod.getMethod());
         if (defaultMessage.isPresent()) {
