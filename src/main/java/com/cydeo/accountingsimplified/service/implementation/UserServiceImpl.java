@@ -2,6 +2,7 @@ package com.cydeo.accountingsimplified.service.implementation;
 
 import com.cydeo.accountingsimplified.dto.UserDto;
 import com.cydeo.accountingsimplified.entity.User;
+import com.cydeo.accountingsimplified.exception.AccountingException;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.UserRepository;
 import com.cydeo.accountingsimplified.service.RoleService;
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findUserById(Long id) {
-        User user = userRepository.findUserById(id);
+        User user = userRepository.findById(id).orElseThrow( () -> new AccountingException("User not found"));
         UserDto dto = mapperUtil.convert(user, new UserDto());
         dto.setIsOnlyAdmin(checkIfOnlyAdminForCompany(dto));
         return dto;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findByUsername(String username) {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).orElseThrow( () -> new AccountingException("User not found"));
         return mapperUtil.convert(user, new UserDto());
     }
 
@@ -92,7 +93,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean emailExist(UserDto userDto) {
-        User userWithUpdatedEmail = userRepository.findByUsername(userDto.getUsername());
+        User userWithUpdatedEmail = userRepository.findByUsername(userDto.getUsername()).orElseThrow( () -> new AccountingException("User not found"));
         if (userWithUpdatedEmail == null) return false;
         return !userWithUpdatedEmail.getId().equals(userDto.getId());
     }
@@ -111,7 +112,8 @@ public class UserServiceImpl implements UserService {
 
     private String getCurrentUserCompanyTitle() {
         String currentUserName = securityService.getLoggedInUser().getUsername();
-        return userRepository.findByUsername(currentUserName).getCompany().getTitle();
+        User user = userRepository.findByUsername(currentUserName).orElseThrow(()-> new AccountingException("User not found"));
+        return user.getCompany().getTitle();
     }
 
 }
