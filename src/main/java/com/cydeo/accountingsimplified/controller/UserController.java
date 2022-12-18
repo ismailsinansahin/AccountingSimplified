@@ -28,13 +28,13 @@ public class UserController {
     @GetMapping("/list")
     public String listUsers(Model model) throws Exception {
         model.addAttribute("users", userService.getFilteredUsers());
-        return "/user/user-list";
+        return "user/user-list";
     }
 
     @GetMapping("/create")
     public String navigateToUserCreate(Model model) {
         model.addAttribute("newUser", new UserDto());
-        return "/user/user-create";
+        return "user/user-create";
     }
 
     @PostMapping("/create")
@@ -46,7 +46,7 @@ public class UserController {
                 result.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
             }
 
-            return "/user/user-create";
+            return "user/user-create";
         }
 
         userService.save(userDto);
@@ -56,7 +56,7 @@ public class UserController {
     @GetMapping("/update/{userId}")
     public String navigateToUserUpdate(@PathVariable("userId") Long userId, Model model) {
         model.addAttribute("user", userService.findUserById(userId));
-        return "/user/user-update";
+        return "user/user-update";
     }
 
     @PostMapping("/update/{userId}")
@@ -68,7 +68,7 @@ public class UserController {
             if (emailExist) {
                 result.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
             }
-            return "/user/user-update";
+            return "user/user-update";
         }
         userService.update(userDto);
         return "redirect:/users/list";
