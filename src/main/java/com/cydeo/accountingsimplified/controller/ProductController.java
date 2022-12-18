@@ -26,7 +26,7 @@ public class ProductController {
 
     @GetMapping("/list")
     public String navigateToProductList() {
-        return "/product/product-list";
+        return "product/product-list";
     }
 
     @GetMapping("/create")
