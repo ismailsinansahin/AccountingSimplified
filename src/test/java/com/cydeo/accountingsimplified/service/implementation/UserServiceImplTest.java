@@ -6,10 +6,13 @@ import com.cydeo.accountingsimplified.exception.AccountingException;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.UserRepository;
 import com.cydeo.accountingsimplified.service.SecurityService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -17,7 +20,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,10 +28,13 @@ class UserServiceImplTest {
 
     @Mock
     UserRepository userRepository;
+
     @Mock
     SecurityService securityService;
+
     @Mock
     MapperUtil mapperUtil;
+
     @Mock
     PasswordEncoder passwordEncoder;
 
@@ -40,9 +46,9 @@ class UserServiceImplTest {
         User user = getUser("test@test.com");
         UserDto userDto = getUserDto("test@test.com");
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(mapperUtil.convert(user, new UserDto()))
+       // when(mapperUtil.convert(any(User.class), ArgumentMatchers.<Class<UserDto>>any())).thenReturn(UserDto.class);
+        when(mapperUtil.convert(user, any(UserDto.class)))
                 .thenReturn(userDto);
-
         Throwable throwable = catchThrowable(()-> userService.findUserById(1L));
         assertNull(throwable);
     }
