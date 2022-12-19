@@ -135,11 +135,13 @@
                                                                 <div class="controls">
                                                                     <label>Role</label>
                                                                     <select class="custom-select" id="role" name="role"
-                                                                            th:with="role=*{role}"  >
+                                                                            th:with="role=*{role}"
+                                                                            th:disabled="${user.isOnlyAdmin}">
                                                                         <option th:each="role:${userRoles}"
                                                                                 th:value="${role.id}"
                                                                                 th:text="${role.description}"
-                                                                                th:selected="${role.id} == *{role.id}"></option>
+                                                                                th:selected="${role.id} == *{role.id}"
+                                                                                ></option>
                                                                     </select>
                                                                     <div th:if="${#fields.hasErrors('role')}">
                                                                         <ul>
@@ -157,7 +159,8 @@
                                                                 <div class="controls">
                                                                     <label>Company</label>
                                                                     <select class="custom-select" id="company" name="company"
-                                                                            th:with="company=*{company}">
+                                                                            th:with="company=*{company}"
+                                                                            th:disabled="${user.isOnlyAdmin}">
                                                                         <option th:each="company:${companies}"
                                                                                 th:value="${company.id}"
                                                                                 th:text="${company.getTitle()}"
@@ -191,7 +194,7 @@
                                                                 <div class="controls">
                                                                     <div class="alert alert-warning" role="alert"
                                                                          th:text="'This user is the only admin of ' + ${user.getCompany().getTitle()}
-                                                                                + ' company. Please, do not change role or company.'">
+                                                                                + ' company. You cant change his/her company'">
                                                                     </div>
                                                                 </div>
                                                             </div>

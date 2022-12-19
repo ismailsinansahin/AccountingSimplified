@@ -1,6 +1,7 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
 import com.cydeo.accountingsimplified.dto.UserDto;
+import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.entity.User;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.UserRepository;
@@ -47,11 +48,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getFilteredUsers() {
+        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         List<User> userList;
         if (isCurrentUserRootUser()) {
             userList = userRepository.findAllByRole_Description("Admin");
         } else {
-            userList = userRepository.findAllByCompany_Title(getCurrentUserCompanyTitle());
+            userList = userRepository.findAllByCompany(company);
         }
         return userList.stream()
                 .sorted(Comparator.comparing((User u) -> u.getCompany().getTitle()).thenComparing(u -> u.getRole().getDescription()))
@@ -99,7 +101,7 @@ public class UserServiceImpl implements UserService {
 
     private Boolean checkIfOnlyAdminForCompany(UserDto dto) {
         if (dto.getRole().getDescription().equalsIgnoreCase("Admin")) {
-            List<User> users = userRepository.findAllByCompany_TitleAndRole_Description(dto.getCompany().getTitle(), "Admin");
+            List<User> users = userRepository.findAllByCompanyAndRole_Description(mapperUtil.convert(dto.getCompany(), new Company()), "Admin");
             return users.size() == 1;
         }
         return false;
@@ -109,9 +111,5 @@ public class UserServiceImpl implements UserService {
         return securityService.getLoggedInUser().getRole().getDescription().equalsIgnoreCase("root user");
     }
 
-    private String getCurrentUserCompanyTitle() {
-        String currentUserName = securityService.getLoggedInUser().getUsername();
-        return userRepository.findByUsername(currentUserName).getCompany().getTitle();
-    }
 
 }

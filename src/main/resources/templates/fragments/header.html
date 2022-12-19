@@ -19,7 +19,7 @@
                 </div>
                 <ul class="navbar-nav ml-auto navbar-right-top">
                     <li class="nav-item dropdown connection">
-                        <a class="nav-link" th:href="@{/dashboard}"><i class="fas fa-home"></i></a>
+                        <a class="nav-link" th:href="@{/dashboard}" sec:authorize="hasAnyAuthority('Admin', 'Manager', 'Employee')"><i class="fas fa-home"></i></a>
                     </li>
                     <li class="nav-item dropdown nav-user">
                         <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown"
