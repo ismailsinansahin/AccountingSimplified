@@ -32,7 +32,7 @@ public class ProductController {
     @GetMapping("/create")
     public String navigateToProductCreate(Model model) throws Exception {
         model.addAttribute("newProduct", new ProductDto());
-        return "/product/product-create";
+        return "product/product-create";
     }
 
     @PostMapping("/create")
@@ -43,7 +43,7 @@ public class ProductController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "/product/product-create";
+            return "product/product-create";
         }
         productService.save(productDto);
         return "redirect:/products/list";
@@ -52,7 +52,7 @@ public class ProductController {
     @GetMapping("/update/{productId}")
     public String navigateToProductUpdate(@PathVariable("productId") Long productId, Model model) throws Exception {
         model.addAttribute("product", productService.findProductById(productId));
-        return "/product/product-update";
+        return "product/product-update";
     }
 
     @PostMapping("/update/{productId}")
@@ -63,7 +63,7 @@ public class ProductController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "/product/product-update";
+            return "product/product-update";
         }
         productService.update(productId, productDto);
         return "redirect:/products/list";

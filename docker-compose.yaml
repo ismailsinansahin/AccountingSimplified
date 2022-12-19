@@ -1,21 +1,42 @@
 # Use postgres/example user/password credentials
 version: '3.1'
-
 services:
+  app:
+    networks:
+      - accounting-network
+    container_name: accounting-simple
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      DATABASE_HOST: db
+      DATABASE_PORT: 5433
+      DATABASE_NAME: cacoon
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: admin
+      DATABASE_SSL: 'false'
+      SLEEP_LENGTH: 5
+    ports:
+      - 8002:8002
+    depends_on:
+      - db
 
   db:
     image: postgres
-    restart: always
+    container_name: db
+    networks:
+      - accounting-network
+    ports:
+      - 5433:5432
+    volumes:
+      - .m2:/root/.m2
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: cacoon
-    ports:
-      - "5433:5432"
-    volumes:
-      - db:/var/lib/postgresql/data
-
+networks:
+  accounting-network:
 volumes:
   db:
-    driver: local
 

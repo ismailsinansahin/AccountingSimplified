@@ -43,20 +43,20 @@ public class SalesInvoiceController {
     @GetMapping("/list")
     public String navigateToSalesInvoiceList(Model model) throws Exception {
         model.addAttribute("invoices", invoiceService.getAllInvoicesOfCompany(InvoiceType.SALES));
-        return "/invoice/sales-invoice-list";
+        return "invoice/sales-invoice-list";
     }
 
     @GetMapping("/create")
     public String navigateToSalesInvoiceCreate(Model model) throws Exception {
         model.addAttribute("newSalesInvoice", invoiceService.getNewInvoice(InvoiceType.SALES));
-        return "/invoice/sales-invoice-create";
+        return "invoice/sales-invoice-create";
     }
 
     @PostMapping("/create")
     public String createNewSalesInvoice(@Valid @ModelAttribute("newSalesInvoice") InvoiceDto invoiceDto, BindingResult result) {
 
         if (result.hasErrors()) {
-            return "/invoice/sales-invoice-create";
+            return "invoice/sales-invoice-create";
         }
 
         var invoice = invoiceService.save(invoiceDto, InvoiceType.SALES);
@@ -68,7 +68,7 @@ public class SalesInvoiceController {
         model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
         model.addAttribute("newInvoiceProduct", new InvoiceProductDto());
         model.addAttribute("invoiceProducts", invoiceProductService.getInvoiceProductsOfInvoice(invoiceId));
-        return "/invoice/sales-invoice-update";
+        return "invoice/sales-invoice-update";
     }
 
     @PostMapping("/update/{invoiceId}")
@@ -85,7 +85,7 @@ public class SalesInvoiceController {
         if (result.hasErrors()){
             model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
             model.addAttribute("invoiceProducts", invoiceProductService.getInvoiceProductsOfInvoice(invoiceId));
-            return "/invoice/sales-invoice-update";
+            return "invoice/sales-invoice-update";
         }
 
         // TODO

@@ -31,14 +31,14 @@ public class ClientVendorController {
     @GetMapping("/list")
     public String navigateToClientVendorList(Model model) throws Exception {
         model.addAttribute("clientVendors", clientVendorService.getAllClientVendors());
-        return "/clientVendor/clientVendor-list";
+        return "clientVendor/clientVendor-list";
     }
 
     @GetMapping("/create")
     public String navigateToClientVendorCreate(Model model) {
         model.addAttribute("newClientVendor", new ClientVendorDto());
 
-        return "/clientVendor/clientVendor-create";
+        return "clientVendor/clientVendor-create";
     }
 
     @PostMapping("/create")
@@ -48,7 +48,7 @@ public class ClientVendorController {
             if (isDuplicatedCompanyName) {
                 result.rejectValue("clientVendorName", " ", "A client/vendor with this name already exists. Please try with different name.");
             }
-            return "/clientVendor/clientVendor-create";
+            return "clientVendor/clientVendor-create";
         }
         clientVendorService.create(clientVendorDto);
         return "redirect:/clientVendors/list";
@@ -57,7 +57,7 @@ public class ClientVendorController {
     @GetMapping("/update/{clientVendorId}")
     public String navigateToClientVendorUpdate(@PathVariable("clientVendorId") Long clientVendorId, Model model) {
         model.addAttribute("clientVendor", clientVendorService.findClientVendorById(clientVendorId));
-        return "/clientVendor/clientVendor-update";
+        return "clientVendor/clientVendor-update";
     }
 
     @PostMapping("/update/{clientVendorId}")
@@ -68,7 +68,7 @@ public class ClientVendorController {
             if (isDuplicatedCompanyName) {
                 result.rejectValue("clientVendorName", " ", "A client/vendor with this name already exists. Please try with different name.");
             }
-            return "/clientVendor/clientVendor-update";
+            return "clientVendor/clientVendor-update";
         }
         clientVendorService.update(clientVendorId, clientVendorDto);
         return "redirect:/clientVendors/list";

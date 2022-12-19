@@ -34,20 +34,20 @@ public class PurchaseInvoiceController {
     @GetMapping("/list")
     public String navigateToPurchaseInvoiceList(Model model) throws Exception {
         model.addAttribute("invoices", invoiceService.getAllInvoicesOfCompany(InvoiceType.PURCHASE));
-        return "/invoice/purchase-invoice-list";
+        return "invoice/purchase-invoice-list";
     }
 
     @GetMapping("/create")
     public String navigateToPurchaseInvoiceCreate(Model model) throws Exception {
         model.addAttribute("newPurchaseInvoice", invoiceService.getNewInvoice(InvoiceType.PURCHASE));
-        return "/invoice/purchase-invoice-create";
+        return "invoice/purchase-invoice-create";
     }
 
     @PostMapping("/create")
     public String createNewPurchaseInvoice(@Valid @ModelAttribute("newPurchaseInvoice") InvoiceDto invoiceDto, BindingResult result) {
 
         if (result.hasErrors()) {
-            return "/invoice/purchase-invoice-create";
+            return "invoice/purchase-invoice-create";
         }
 
         var invoice = invoiceService.save(invoiceDto, InvoiceType.PURCHASE);
@@ -59,7 +59,7 @@ public class PurchaseInvoiceController {
         model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
         model.addAttribute("newInvoiceProduct", new InvoiceProductDto());
         model.addAttribute("invoiceProducts", invoiceProductService.getInvoiceProductsOfInvoice(invoiceId));
-        return "/invoice/purchase-invoice-update";
+        return "invoice/purchase-invoice-update";
     }
 
     @PostMapping("/update/{invoiceId}")
@@ -76,7 +76,7 @@ public class PurchaseInvoiceController {
         if (result.hasErrors()){
             model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
             model.addAttribute("invoiceProducts", invoiceProductService.getInvoiceProductsOfInvoice(invoiceId));
-            return "/invoice/purchase-invoice-update";
+            return "invoice/purchase-invoice-update";
         }
 
         invoiceProductService.save(invoiceId, invoiceProductDto);

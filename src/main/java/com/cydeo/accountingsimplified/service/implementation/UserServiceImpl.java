@@ -23,8 +23,8 @@ public class UserServiceImpl implements UserService {
     private final MapperUtil mapperUtil;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, RoleService roleService,
-                           @Lazy SecurityService securityService, MapperUtil mapperUtil, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository,@Lazy SecurityService securityService,
+                           MapperUtil mapperUtil, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.securityService = securityService;
         this.mapperUtil = mapperUtil;

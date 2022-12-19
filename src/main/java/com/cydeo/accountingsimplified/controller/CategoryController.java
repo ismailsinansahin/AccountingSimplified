@@ -23,13 +23,13 @@ public class CategoryController {
     @GetMapping("/list")
     public String navigateToCategoryList(Model model) throws Exception {
         model.addAttribute("categories", categoryService.getAllCategories());
-        return "/category/category-list";
+        return "category/category-list";
     }
 
     @GetMapping("/create")
     public String navigateToCategoryCreate(Model model) {
         model.addAttribute("newCategory", new CategoryDto());
-        return "/category/category-create";
+        return "category/category-create";
     }
 
     @PostMapping("/create")
@@ -42,7 +42,7 @@ public class CategoryController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "/category/category-create";
+            return "category/category-create";
         }
 
         categoryService.create(categoryDto);
@@ -54,7 +54,7 @@ public class CategoryController {
         CategoryDto categoryById = categoryService.findCategoryById(categoryId);
         categoryById.setHasProduct(categoryService.hasProduct(categoryId));
         model.addAttribute("category", categoryById);
-        return "/category/category-update";
+        return "category/category-update";
     }
 
     @PostMapping("/update/{categoryId}")
@@ -67,7 +67,7 @@ public class CategoryController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "/category/category-update";
+            return "category/category-update";
         }
 
         categoryService.update(categoryId, categoryDto);

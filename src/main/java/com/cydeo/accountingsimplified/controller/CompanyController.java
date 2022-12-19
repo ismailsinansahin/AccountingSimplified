@@ -26,13 +26,13 @@ public class CompanyController {
     @GetMapping("/list")
     public String navigateToCompanyList(Model model) {
         model.addAttribute("companies", companyService.getAllCompanies());
-        return "/company/company-list";
+        return "company/company-list";
     }
 
     @GetMapping("/create")
     public String navigateToCompanyCreate(Model model) {
         model.addAttribute("newCompany", new CompanyDto());
-        return "/company/company-create";
+        return "company/company-create";
     }
 
     @PostMapping("/create")
@@ -43,7 +43,7 @@ public class CompanyController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "/company/company-create";
+            return "company/company-create";
         }
 
         companyService.create(companyDto);
@@ -54,7 +54,7 @@ public class CompanyController {
     @GetMapping("/update/{companyId}")
     public String navigateToCompanyUpdate(@PathVariable("companyId") Long companyId, Model model) {
         model.addAttribute("company", companyService.findCompanyById(companyId));
-        return "/company/company-update";
+        return "company/company-update";
     }
 
     @PostMapping("/update/{companyId}")
@@ -67,7 +67,7 @@ public class CompanyController {
 
         if (bindingResult.hasErrors()) {
             companyDto.setId(companyId);
-            return "/company/company-update";
+            return "company/company-update";
         }
 
         companyService.update(companyId, companyDto);
