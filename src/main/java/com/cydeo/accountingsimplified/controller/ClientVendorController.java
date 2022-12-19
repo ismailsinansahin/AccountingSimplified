@@ -29,20 +29,20 @@ public class ClientVendorController {
     }
 
     @GetMapping("/list")
-    public String navigateToClientVendorList(Model model) throws Exception {
+    public String list(Model model) throws Exception {
         model.addAttribute("clientVendors", clientVendorService.getAllClientVendors());
         return "clientVendor/clientVendor-list";
     }
 
     @GetMapping("/create")
-    public String navigateToClientVendorCreate(Model model) {
+    public String create(Model model) {
         model.addAttribute("newClientVendor", new ClientVendorDto());
 
         return "clientVendor/clientVendor-create";
     }
 
     @PostMapping("/create")
-    public String createNewClientVendor(@Valid @ModelAttribute("newClientVendor") ClientVendorDto clientVendorDto, BindingResult result, Model model) throws Exception {
+    public String create(@Valid @ModelAttribute("newClientVendor") ClientVendorDto clientVendorDto, BindingResult result, Model model) throws Exception {
         boolean isDuplicatedCompanyName = clientVendorService.companyNameExists(clientVendorDto);
         if (result.hasErrors() || isDuplicatedCompanyName) {
             if (isDuplicatedCompanyName) {
@@ -55,13 +55,13 @@ public class ClientVendorController {
     }
 
     @GetMapping("/update/{clientVendorId}")
-    public String navigateToClientVendorUpdate(@PathVariable("clientVendorId") Long clientVendorId, Model model) {
+    public String update(@PathVariable("clientVendorId") Long clientVendorId, Model model) {
         model.addAttribute("clientVendor", clientVendorService.findClientVendorById(clientVendorId));
         return "clientVendor/clientVendor-update";
     }
 
     @PostMapping("/update/{clientVendorId}")
-    public String updateClientVendor(@PathVariable("clientVendorId") Long clientVendorId, @Valid @ModelAttribute("clientVendor") ClientVendorDto clientVendorDto, BindingResult result, Model model) throws ClassNotFoundException, CloneNotSupportedException {
+    public String update(@PathVariable("clientVendorId") Long clientVendorId, @Valid @ModelAttribute("clientVendor") ClientVendorDto clientVendorDto, BindingResult result, Model model) throws ClassNotFoundException, CloneNotSupportedException {
         clientVendorDto.setId(clientVendorId);
         boolean isDuplicatedCompanyName = clientVendorService.companyNameExists(clientVendorDto);
         if (result.hasErrors() || isDuplicatedCompanyName) {
@@ -75,7 +75,7 @@ public class ClientVendorController {
     }
 
     @GetMapping(value = "/delete/{clientVendorId}")
-    public String deleteClient(@PathVariable("clientVendorId") Long clientVendorId, RedirectAttributes redirAttrs) {
+    public String delete(@PathVariable("clientVendorId") Long clientVendorId, RedirectAttributes redirAttrs) {
         if (invoiceService.checkIfInvoiceExist(clientVendorId)){
             redirAttrs.addFlashAttribute("error", "Can not be deleted...You have invoices with this client/vendor");
             return "redirect:/clientVendors/list";

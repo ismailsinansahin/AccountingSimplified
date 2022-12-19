@@ -24,19 +24,19 @@ public class CompanyController {
     }
 
     @GetMapping("/list")
-    public String navigateToCompanyList(Model model) {
+    public String list(Model model) {
         model.addAttribute("companies", companyService.getAllCompanies());
         return "company/company-list";
     }
 
     @GetMapping("/create")
-    public String navigateToCompanyCreate(Model model) {
+    public String create(Model model) {
         model.addAttribute("newCompany", new CompanyDto());
         return "company/company-create";
     }
 
     @PostMapping("/create")
-    public String createNewCompany(@Valid @ModelAttribute("newCompany") CompanyDto companyDto, BindingResult bindingResult,Model model) {
+    public String create(@Valid @ModelAttribute("newCompany") CompanyDto companyDto, BindingResult bindingResult, Model model) {
 
         if (companyService.isTitleExist(companyDto.getTitle())) {
             bindingResult.rejectValue("title", " ", "This title already exists.");
@@ -52,13 +52,13 @@ public class CompanyController {
 
 
     @GetMapping("/update/{companyId}")
-    public String navigateToCompanyUpdate(@PathVariable("companyId") Long companyId, Model model) {
+    public String update(@PathVariable("companyId") Long companyId, Model model) {
         model.addAttribute("company", companyService.findCompanyById(companyId));
         return "company/company-update";
     }
 
     @PostMapping("/update/{companyId}")
-    public String updateCompany(@Valid @ModelAttribute("company") CompanyDto companyDto, BindingResult bindingResult, @PathVariable Long companyId, Model model) throws CloneNotSupportedException {
+    public String update(@Valid @ModelAttribute("company") CompanyDto companyDto, BindingResult bindingResult, @PathVariable Long companyId, Model model) throws CloneNotSupportedException {
 
         boolean isThisCompanyTitle = companyDto.getTitle().equals(companyService.findCompanyById(companyId).getTitle());
         if (companyService.isTitleExist(companyDto.getTitle()) && !isThisCompanyTitle) {
@@ -75,13 +75,13 @@ public class CompanyController {
     }
 
     @GetMapping("/activate/{companyId}")
-    public String activateCompany(@PathVariable("companyId") Long companyId) {
+    public String activate(@PathVariable("companyId") Long companyId) {
         companyService.activate(companyId);
         return "redirect:/companies/list";
     }
 
     @GetMapping("/deactivate/{companyId}")
-    public String deactivateCompany(@PathVariable("companyId") Long companyId) {
+    public String deactivate(@PathVariable("companyId") Long companyId) {
         companyService.deactivate(companyId);
         return "redirect:/companies/list";
     }

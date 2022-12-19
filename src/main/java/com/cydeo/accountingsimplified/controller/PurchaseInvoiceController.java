@@ -32,19 +32,19 @@ public class PurchaseInvoiceController {
     }
 
     @GetMapping("/list")
-    public String navigateToPurchaseInvoiceList(Model model) throws Exception {
+    public String list(Model model) throws Exception {
         model.addAttribute("invoices", invoiceService.getAllInvoicesOfCompany(InvoiceType.PURCHASE));
         return "invoice/purchase-invoice-list";
     }
 
     @GetMapping("/create")
-    public String navigateToPurchaseInvoiceCreate(Model model) throws Exception {
+    public String create(Model model) throws Exception {
         model.addAttribute("newPurchaseInvoice", invoiceService.getNewInvoice(InvoiceType.PURCHASE));
         return "invoice/purchase-invoice-create";
     }
 
     @PostMapping("/create")
-    public String createNewPurchaseInvoice(@Valid @ModelAttribute("newPurchaseInvoice") InvoiceDto invoiceDto, BindingResult result) {
+    public String create(@Valid @ModelAttribute("newPurchaseInvoice") InvoiceDto invoiceDto, BindingResult result) {
 
         if (result.hasErrors()) {
             return "invoice/purchase-invoice-create";
@@ -55,7 +55,7 @@ public class PurchaseInvoiceController {
     }
 
     @GetMapping("/update/{invoiceId}")
-    public String navigateToPurchaseInvoiceUpdate(@PathVariable("invoiceId") Long invoiceId, Model model) {
+    public String update(@PathVariable("invoiceId") Long invoiceId, Model model) {
         model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
         model.addAttribute("newInvoiceProduct", new InvoiceProductDto());
         model.addAttribute("invoiceProducts", invoiceProductService.getInvoiceProductsOfInvoice(invoiceId));
@@ -63,15 +63,15 @@ public class PurchaseInvoiceController {
     }
 
     @PostMapping("/update/{invoiceId}")
-    public String updatePurchaseInvoice(@PathVariable("invoiceId") Long invoiceId, InvoiceDto invoiceDto) {
+    public String update(@PathVariable("invoiceId") Long invoiceId, InvoiceDto invoiceDto) {
         invoiceService.update(invoiceId, invoiceDto);
         return "redirect:/purchaseInvoices/list";
     }
 
     @PostMapping("/addInvoiceProduct/{invoiceId}")
-    public String addInvoiceProductToPurchaseInvoice(@PathVariable("invoiceId") Long invoiceId,
-                                                     @Valid @ModelAttribute("newInvoiceProduct") InvoiceProductDto invoiceProductDto,
-                                                     BindingResult result, Model model) {
+    public String addInvoiceProduct(@PathVariable("invoiceId") Long invoiceId,
+                                    @Valid @ModelAttribute("newInvoiceProduct") InvoiceProductDto invoiceProductDto,
+                                    BindingResult result, Model model) {
 
         if (result.hasErrors()){
             model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
@@ -84,20 +84,20 @@ public class PurchaseInvoiceController {
     }
 
     @GetMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
-    public String removeInvoiceProductFromPurchaseInvoice(@PathVariable("invoiceId") Long invoiceId,
-                                                          @PathVariable("invoiceProductId") Long invoiceProductId) {
+    public String removeInvoiceProduct(@PathVariable("invoiceId") Long invoiceId,
+                                       @PathVariable("invoiceProductId") Long invoiceProductId) {
         invoiceProductService.delete(invoiceProductId);
         return "redirect:/purchaseInvoices/update/" + invoiceId;
     }
 
     @GetMapping("/approve/{invoiceId}")
-    public String approvePurchaseInvoice(@PathVariable("invoiceId") Long invoiceId){
+    public String approve(@PathVariable("invoiceId") Long invoiceId){
         invoiceService.approve(invoiceId);
         return "redirect:/purchaseInvoices/list";
     }
 
     @GetMapping("/delete/{invoiceId}")
-    public String deletePurchaseInvoice(@PathVariable("invoiceId") Long invoiceId){
+    public String delete(@PathVariable("invoiceId") Long invoiceId){
         invoiceService.delete(invoiceId);
         return "redirect:/purchaseInvoices/list";
     }
