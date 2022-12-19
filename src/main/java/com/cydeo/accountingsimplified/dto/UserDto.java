@@ -3,6 +3,7 @@ package com.cydeo.accountingsimplified.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.*;
 
@@ -10,6 +11,7 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class UserDto {
 
     private Long id;

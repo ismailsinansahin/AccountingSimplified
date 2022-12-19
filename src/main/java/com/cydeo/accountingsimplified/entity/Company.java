@@ -2,6 +2,7 @@ package com.cydeo.accountingsimplified.entity;
 
 import com.cydeo.accountingsimplified.enums.CompanyStatus;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 @Entity
 @Table(name = "companies")
 @Where(clause = "is_deleted=false")

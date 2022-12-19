@@ -4,6 +4,7 @@ import com.cydeo.accountingsimplified.dto.UserDto;
 import com.cydeo.accountingsimplified.entity.User;
 import com.cydeo.accountingsimplified.exception.AccountingException;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
+import com.cydeo.accountingsimplified.mapper.UserMapper;
 import com.cydeo.accountingsimplified.repository.UserRepository;
 import com.cydeo.accountingsimplified.service.RoleService;
 import com.cydeo.accountingsimplified.service.SecurityService;
@@ -23,19 +24,22 @@ public class UserServiceImpl implements UserService {
     private final SecurityService securityService;
     private final MapperUtil mapperUtil;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     public UserServiceImpl(UserRepository userRepository, RoleService roleService,
-                           @Lazy SecurityService securityService, MapperUtil mapperUtil, PasswordEncoder passwordEncoder) {
+                           @Lazy SecurityService securityService, MapperUtil mapperUtil, PasswordEncoder passwordEncoder, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.securityService = securityService;
         this.mapperUtil = mapperUtil;
         this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
     }
 
     @Override
     public UserDto findUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow( () -> new AccountingException("User not found"));
         UserDto dto = mapperUtil.convert(user, new UserDto());
+//        UserDto dto = userMapper.convertToDto(user);
         dto.setIsOnlyAdmin(checkIfOnlyAdminForCompany(dto));
         return dto;
     }
