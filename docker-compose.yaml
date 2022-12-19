@@ -4,7 +4,7 @@ services:
   app:
     networks:
       - accounting-network
-    container_name: accounting-simple
+    container_name: accounting
     build:
       context: .
       dockerfile: Dockerfile

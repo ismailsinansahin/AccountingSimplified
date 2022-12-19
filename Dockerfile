@@ -9,10 +9,10 @@ RUN mvn package -Dmaven.test.skip
 
 FROM adoptopenjdk/openjdk11
 
-COPY --from=builder /app/target/AccountingSimplified*.jar /AccountingSimplified.jar
+COPY --from=builder /app/target/accounting.jar /accounting.jar
 
-ENTRYPOINT ["java","-jar","AccountingSimplified.jar"]
+ENTRYPOINT ["java","-jar","accounting.jar"]
   ## Run the web service on container startup.
-CMD ["java","-Dcom.sun.net.ssl.checkRevocation=false", "-Dserver.port=8002","-jar","AccountingSimplified.jar"]
+CMD ["java","-Dcom.sun.net.ssl.checkRevocation=false", "-Dserver.port=8002","-jar","accounting.jar"]
 
 ARG JAR_FILE=target/*.jar
