@@ -26,19 +26,19 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    public String listUsers(Model model) throws Exception {
+    public String list(Model model) throws Exception {
         model.addAttribute("users", userService.getFilteredUsers());
         return "user/user-list";
     }
 
     @GetMapping("/create")
-    public String navigateToUserCreate(Model model) {
+    public String create(Model model) {
         model.addAttribute("newUser", new UserDto());
         return "user/user-create";
     }
 
     @PostMapping("/create")
-    public String createNewUser(@Valid @ModelAttribute("newUser") UserDto userDto, BindingResult result, Model model) {
+    public String create(@Valid @ModelAttribute("newUser") UserDto userDto, BindingResult result, Model model) {
         boolean emailExist = userService.emailExist(userDto);
 
         if (result.hasErrors() || emailExist){
@@ -54,13 +54,13 @@ public class UserController {
     }
 
     @GetMapping("/update/{userId}")
-    public String navigateToUserUpdate(@PathVariable("userId") Long userId, Model model) {
+    public String update(@PathVariable("userId") Long userId, Model model) {
         model.addAttribute("user", userService.findUserById(userId));
         return "user/user-update";
     }
 
     @PostMapping("/update/{userId}")
-    public String updateUser(@PathVariable("userId") Long userId, @Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
+    public String update(@PathVariable("userId") Long userId, @Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
         userDto.setId(userId);  // spring cannot set id since it is not seen in UI and we need to check if updated email is used by different user.
         boolean emailExist = userService.emailExist(userDto);
 
@@ -75,7 +75,7 @@ public class UserController {
     }
 
     @GetMapping("/delete/{userId}")
-    public String deleteUser(@PathVariable("userId") Long userId){
+    public String delete(@PathVariable("userId") Long userId){
         userService.delete(userId);
         return "redirect:/users/list";
     }

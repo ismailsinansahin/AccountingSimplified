@@ -38,5 +38,7 @@ public class Invoice extends BaseEntity{
     @ManyToOne
     private ClientVendor clientVendor;
 
+    @OneToMany(mappedBy = "invoice")
+    private List<InvoiceProduct> invoiceProducts;
 
 }
