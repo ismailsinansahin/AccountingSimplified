@@ -50,8 +50,6 @@ public class UserDto {
     private Boolean isOnlyAdmin;
 
 
-
-
     public Long getId() {
         return id;
     }

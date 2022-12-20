@@ -5,7 +5,6 @@ import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.entity.User;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.UserRepository;
-import com.cydeo.accountingsimplified.service.RoleService;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import com.cydeo.accountingsimplified.service.UserService;
 import org.springframework.context.annotation.Lazy;
@@ -34,8 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findUserById(Long id) {
-        User user = userRepository.findUserById(id);
-        UserDto dto = mapperUtil.convert(user, new UserDto());
+        UserDto dto = mapperUtil.convert(userRepository.findUserById(id), new UserDto());
         dto.setIsOnlyAdmin(checkIfOnlyAdminForCompany(dto));
         return dto;
     }
@@ -48,20 +46,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getFilteredUsers() {
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
+        User currentUser = mapperUtil.convert(securityService.getLoggedInUser(), new User());
         List<User> userList;
-        if (isCurrentUserRootUser()) {
+        if (currentUser.getRole().getDescription().equals("Root User")) {
             userList = userRepository.findAllByRole_Description("Admin");
         } else {
-            userList = userRepository.findAllByCompany(company);
+            userList = userRepository.findAllByCompany(currentUser.getCompany());
         }
         return userList.stream()
                 .sorted(Comparator.comparing((User u) -> u.getCompany().getTitle()).thenComparing(u -> u.getRole().getDescription()))
-                .map(entity -> {
-                    UserDto dto = mapperUtil.convert(entity, new UserDto());
-                    dto.setIsOnlyAdmin(checkIfOnlyAdminForCompany(dto));
-                    return dto;
-                })
+                .map(entity -> mapperUtil.convert(entity, new UserDto()))
+                .peek(dto -> dto.setIsOnlyAdmin(this.checkIfOnlyAdminForCompany(dto)))
                 .collect(Collectors.toList());
     }
 
@@ -99,16 +94,9 @@ public class UserServiceImpl implements UserService {
         return !userWithUpdatedEmail.getId().equals(userDto.getId());
     }
 
-    private Boolean checkIfOnlyAdminForCompany(UserDto dto) {
-        if (dto.getRole().getDescription().equalsIgnoreCase("Admin")) {
-            List<User> users = userRepository.findAllByCompanyAndRole_Description(mapperUtil.convert(dto.getCompany(), new Company()), "Admin");
-            return users.size() == 1;
-        }
-        return false;
-    }
 
-    private Boolean isCurrentUserRootUser() {
-        return securityService.getLoggedInUser().getRole().getDescription().equalsIgnoreCase("root user");
+    private Boolean checkIfOnlyAdminForCompany(UserDto dto) {
+        return userRepository.countAllByCompanyAndRole_Description(mapperUtil.convert(dto.getCompany(), new Company()), "Admin") == 1;
     }
 
 
