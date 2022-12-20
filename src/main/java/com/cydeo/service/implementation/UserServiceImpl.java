@@ -1,12 +1,11 @@
 package com.cydeo.service.implementation;
 
 import com.cydeo.dto.UserDto;
+import com.cydeo.entity.Company;
 import com.cydeo.entity.User;
 import com.cydeo.exception.AccountingException;
 import com.cydeo.mapper.MapperUtil;
-import com.cydeo.mapper.UserMapper;
 import com.cydeo.repository.UserRepository;
-import com.cydeo.service.RoleService;
 import com.cydeo.service.SecurityService;
 import com.cydeo.service.UserService;
 import org.springframework.context.annotation.Lazy;
@@ -24,7 +23,6 @@ public class UserServiceImpl implements UserService {
     private final SecurityService securityService;
     private final MapperUtil mapperUtil;
     private final PasswordEncoder passwordEncoder;
-    private final UserMapper userMapper;
 
     public UserServiceImpl(UserRepository userRepository,@Lazy SecurityService securityService,
                            MapperUtil mapperUtil, PasswordEncoder passwordEncoder) {
@@ -32,14 +30,12 @@ public class UserServiceImpl implements UserService {
         this.securityService = securityService;
         this.mapperUtil = mapperUtil;
         this.passwordEncoder = passwordEncoder;
-        this.userMapper = userMapper;
     }
 
     @Override
     public UserDto findUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow( () -> new AccountingException("User not found"));
         UserDto dto = mapperUtil.convert(user, new UserDto());
-//        UserDto dto = userMapper.convertToDto(user);
         dto.setIsOnlyAdmin(checkIfOnlyAdminForCompany(dto));
         return dto;
     }
@@ -102,7 +98,8 @@ public class UserServiceImpl implements UserService {
 
 
     private Boolean checkIfOnlyAdminForCompany(UserDto dto) {
-        return userRepository.countAllByCompanyAndRole_Description(mapperUtil.convert(dto.getCompany(), new Company()), "Admin") == 1;
+        Company company = mapperUtil.convert(dto.getCompany(), new Company());
+        return userRepository.countAllByCompanyAndRole_Description(company,"Admin") == 1;
     }
 
 
