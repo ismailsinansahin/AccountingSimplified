@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -50,11 +49,8 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 .findAllByInvoice(invoice)
                 .stream()
                 .sorted(Comparator.comparing((InvoiceProduct each) -> each.getInvoice().getInvoiceNo()).reversed())
-                .map(each -> {
-                    InvoiceProductDto dto = mapperUtil.convert(each, new InvoiceProductDto());
-                    dto.setTotal(each.getPrice().multiply(BigDecimal.valueOf(each.getQuantity() * (each.getTax()+100)/100d)));
-                    return dto;
-                })
+                .map(each -> mapperUtil.convert(each, new InvoiceProductDto()))
+                .peek(dto -> dto.setTotal(dto.getPrice().multiply(BigDecimal.valueOf(dto.getQuantity() * (dto.getTax()+100)/100d))))
                 .collect(Collectors.toList());
     }
 
@@ -106,32 +102,31 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     }
 
     private void setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProduct salesInvoiceProduct) {
-        List<InvoiceProduct> availableProductsForSale =
-                findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType.PURCHASE, salesInvoiceProduct.getProduct(), 0);
-        for (InvoiceProduct availableProduct : availableProductsForSale) {
-            if (salesInvoiceProduct.getRemainingQuantity() <= availableProduct.getRemainingQuantity()) {
-                BigDecimal costTotalForQty = availableProduct.getPrice().multiply(
-                        BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity() * (availableProduct.getTax() +100)/100d));
+        List<InvoiceProduct> unSoldProducts = findNotSoldProducts(salesInvoiceProduct.getProduct());
+        for (InvoiceProduct product : unSoldProducts) {
+            if (salesInvoiceProduct.getRemainingQuantity() <= product.getRemainingQuantity()) {
+                BigDecimal costTotalForQty = product.getPrice().multiply(
+                        BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity() * (product.getTax() +100)/100d));
                 BigDecimal salesTotalForQty = salesInvoiceProduct.getPrice().multiply(
                         BigDecimal.valueOf(salesInvoiceProduct.getRemainingQuantity() * (salesInvoiceProduct.getTax() +100)/100d));
                 BigDecimal profitLoss = salesInvoiceProduct.getProfitLoss().add(salesTotalForQty.subtract( costTotalForQty));
-                availableProduct.setRemainingQuantity(availableProduct.getRemainingQuantity() - salesInvoiceProduct.getRemainingQuantity());
+                product.setRemainingQuantity(product.getRemainingQuantity() - salesInvoiceProduct.getRemainingQuantity());
                 salesInvoiceProduct.setRemainingQuantity(0);
                 salesInvoiceProduct.setProfitLoss(profitLoss);
-                invoiceProductRepository.save(availableProduct);
+                invoiceProductRepository.save(product);
                 invoiceProductRepository.save(salesInvoiceProduct);
                 break;
             } else {
-                BigDecimal costTotalForQty = availableProduct.getPrice()
-                        .multiply(BigDecimal.valueOf(availableProduct.getRemainingQuantity() * (availableProduct.getTax() +100)/100d));
+                BigDecimal costTotalForQty = product.getPrice()
+                        .multiply(BigDecimal.valueOf(product.getRemainingQuantity() * (product.getTax() +100)/100d));
                 BigDecimal salesTotalForQty = salesInvoiceProduct.getPrice().multiply(
-                        BigDecimal.valueOf(availableProduct.getRemainingQuantity() * (salesInvoiceProduct.getTax() +100)/100d));
+                        BigDecimal.valueOf(product.getRemainingQuantity() * (salesInvoiceProduct.getTax() +100)/100d));
                 BigDecimal profitLoss = salesInvoiceProduct.getProfitLoss()
                         .add(salesTotalForQty.subtract(costTotalForQty));
-                salesInvoiceProduct.setRemainingQuantity(salesInvoiceProduct.getRemainingQuantity() - availableProduct.getRemainingQuantity());
-                availableProduct.setRemainingQuantity(0);
+                salesInvoiceProduct.setRemainingQuantity(salesInvoiceProduct.getRemainingQuantity() - product.getRemainingQuantity());
+                product.setRemainingQuantity(0);
                 salesInvoiceProduct.setProfitLoss(profitLoss);
-                invoiceProductRepository.save(availableProduct);
+                invoiceProductRepository.save(product);
                 invoiceProductRepository.save(salesInvoiceProduct);
             }
         }
@@ -145,8 +140,8 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     }
 
     @Override
-    public List<InvoiceProduct> findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType type, Product product, Integer remainingQuantity) {
-        return invoiceProductRepository.findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(type, product, remainingQuantity);
+    public List<InvoiceProduct> findNotSoldProducts(Product product) {
+        return invoiceProductRepository.findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(InvoiceType.PURCHASE, product, 0);
     }
 
     @Override

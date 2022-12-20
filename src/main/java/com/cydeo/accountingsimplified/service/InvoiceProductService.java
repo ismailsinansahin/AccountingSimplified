@@ -5,7 +5,6 @@ import com.cydeo.accountingsimplified.entity.InvoiceProduct;
 import com.cydeo.accountingsimplified.entity.Product;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public interface InvoiceProductService {
@@ -16,6 +15,6 @@ public interface InvoiceProductService {
     void delete(Long invoiceProductId);
     void completeApprovalProcedures(Long invoiceId, InvoiceType type);
     boolean checkProductQuantity(InvoiceProductDto salesInvoiceProduct);
-    List<InvoiceProduct> findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType type, Product product, Integer remainingQuantity);
+    List<InvoiceProduct> findNotSoldProducts(Product product);
     List<InvoiceProduct> findAllInvoiceProductsByProductId(Long id);
 }
