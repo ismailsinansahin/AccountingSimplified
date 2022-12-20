@@ -113,7 +113,7 @@ public class PurchaseInvoiceController {
 
     @ModelAttribute
     public void commonAttributes(Model model) {
-        model.addAttribute("vendors", clientVendorService.getAllClientVendorsOfCompany(ClientVendorType.VENDOR));
+        model.addAttribute("vendors", clientVendorService.getAllClientVendors(ClientVendorType.VENDOR));
         model.addAttribute("products", productService.getAllProducts());
         model.addAttribute("company", companyService.getCompanyByLoggedInUser());   // for printing functionality
         model.addAttribute("title", "Cydeo Accounting-Purchase Invoice");

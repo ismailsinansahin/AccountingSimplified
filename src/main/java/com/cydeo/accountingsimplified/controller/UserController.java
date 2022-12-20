@@ -82,7 +82,7 @@ public class UserController {
 
     @ModelAttribute
     public void commonAttributes(Model model){
-        model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
+        model.addAttribute("companies", companyService.getAllCompanies());
         model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
         model.addAttribute("title", "Cydeo Accounting-User");
     }

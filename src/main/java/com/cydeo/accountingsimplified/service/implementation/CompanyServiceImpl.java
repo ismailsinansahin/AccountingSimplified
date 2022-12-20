@@ -36,31 +36,14 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public CompanyDto findCompanyByTitle(String title) {
-        return mapperUtil.convert(companyRepository.findCompanyByTitle(title), new CompanyDto());
-    }
-
-    @Override
     public List<CompanyDto> getAllCompanies() {
+        boolean isRootUser = securityService.getLoggedInUser().getRole().getDescription().equalsIgnoreCase("root user");
         return companyRepository.findAll()
                 .stream()
                 .filter(company -> company.getId() != 1)
+                .filter(each -> isRootUser ? true : each.getTitle().equals(getCompanyByLoggedInUser().getTitle()))
                 .sorted(Comparator.comparing(Company::getCompanyStatus).thenComparing(Company::getTitle))
                 .map(each -> mapperUtil.convert(each, new CompanyDto()))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<CompanyDto> getFilteredCompaniesForCurrentUser() {
-        return getAllCompanies().stream()
-                .filter(each -> {
-                    if (securityService.getLoggedInUser().getRole().getDescription().equalsIgnoreCase("root user")) {
-//                        return companyDto.getCompanyStatus().equals(CompanyStatus.ACTIVE);
-                        return true;    // if we filter by status, we have a problem to update users of passive company.
-                    } else {
-                        return each.getTitle().equals(getCompanyByLoggedInUser().getTitle());
-                    }
-                })
                 .collect(Collectors.toList());
     }
 
@@ -78,8 +61,7 @@ public class CompanyServiceImpl implements CompanyService {
         companyDto.setCompanyStatus(savedCompany.getCompanyStatus());
         companyDto.getAddress().setId(savedCompany.getAddress().getId());
         Company updatedCompany = mapperUtil.convert(companyDto, new Company());
-        companyRepository.save(updatedCompany);
-        return mapperUtil.convert(updatedCompany, new CompanyDto());
+        return mapperUtil.convert(companyRepository.save(updatedCompany), new CompanyDto());
     }
 
     @Override

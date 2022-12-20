@@ -37,7 +37,6 @@ public class ClientVendorController {
     @GetMapping("/create")
     public String create(Model model) {
         model.addAttribute("newClientVendor", new ClientVendorDto());
-
         return "clientVendor/clientVendor-create";
     }
 
@@ -61,7 +60,7 @@ public class ClientVendorController {
     }
 
     @PostMapping("/update/{clientVendorId}")
-    public String update(@PathVariable("clientVendorId") Long clientVendorId, @Valid @ModelAttribute("clientVendor") ClientVendorDto clientVendorDto, BindingResult result, Model model) throws ClassNotFoundException, CloneNotSupportedException {
+    public String update(@PathVariable("clientVendorId") Long clientVendorId, @Valid @ModelAttribute("clientVendor") ClientVendorDto clientVendorDto, BindingResult result) throws ClassNotFoundException, CloneNotSupportedException {
         clientVendorDto.setId(clientVendorId);
         boolean isDuplicatedCompanyName = clientVendorService.companyNameExists(clientVendorDto);
         if (result.hasErrors() || isDuplicatedCompanyName) {

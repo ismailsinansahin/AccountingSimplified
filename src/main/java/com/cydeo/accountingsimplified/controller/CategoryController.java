@@ -52,7 +52,6 @@ public class CategoryController {
     @GetMapping("/update/{categoryId}")
     public String update(@PathVariable("categoryId") Long categoryId, Model model) {
         CategoryDto categoryById = categoryService.findCategoryById(categoryId);
-        categoryById.setHasProduct(categoryService.hasProduct(categoryId));
         model.addAttribute("category", categoryById);
         return "category/category-update";
     }
@@ -75,7 +74,7 @@ public class CategoryController {
     }
 
     @GetMapping("/delete/{categoryId}")
-    public String activate(@PathVariable("categoryId") Long categoryId) {
+    public String delete(@PathVariable("categoryId") Long categoryId) {
         categoryService.delete(categoryId);
         return "redirect:/categories/list";
     }
