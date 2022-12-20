@@ -21,14 +21,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final InvoiceProductService invoiceProductService;
     private final MapperUtil mapperUtil;
-    private final SecurityService securityService;
+    private final CompanyService companyService;
 
     public InvoiceServiceImpl(InvoiceRepository invoiceRepository, InvoiceProductService invoiceProductService,
-                              MapperUtil mapperUtil, SecurityService securityService) {
+                              MapperUtil mapperUtil, SecurityService securityService, CompanyService companyService) {
         this.invoiceRepository = invoiceRepository;
         this.invoiceProductService = invoiceProductService;
         this.mapperUtil = mapperUtil;
-        this.securityService = securityService;
+        this.companyService = companyService;
     }
 
     @Override
@@ -38,8 +38,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public List<InvoiceDto> getAllInvoicesOfCompany(InvoiceType invoiceType){
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        return invoiceRepository.findInvoicesByCompanyAndInvoiceType(company, invoiceType)
+        return invoiceRepository.findInvoicesByCompanyAndInvoiceType(getLoggedInUsersCompany(), invoiceType)
                 .stream()
                 .sorted(Comparator.comparing(Invoice::getInvoiceNo))
                 .map(each -> mapperUtil.convert(each, new InvoiceDto()))
@@ -49,8 +48,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public List<InvoiceDto> getAllInvoicesByInvoiceStatus(InvoiceStatus status) {
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceStatus(company, InvoiceStatus.APPROVED);
+        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceStatus(getLoggedInUsersCompany(), InvoiceStatus.APPROVED);
         return invoices
                 .stream()
                 .map(invoice -> mapperUtil.convert(invoice, new InvoiceDto()))
@@ -59,7 +57,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public InvoiceDto save(InvoiceDto invoiceDto, InvoiceType invoiceType){
-        invoiceDto.setCompany(securityService.getLoggedInUser().getCompany());
+        invoiceDto.setCompany(companyService.getCompanyByLoggedInUser());
         invoiceDto.setInvoiceType(invoiceType);
         invoiceDto.setInvoiceStatus(InvoiceStatus.AWAITING_APPROVAL);
         Invoice invoice = mapperUtil.convert(invoiceDto, new Invoice());
@@ -102,8 +100,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public List<InvoiceDto> getLastThreeInvoices() {
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        return invoiceRepository.findInvoicesByCompanyAndInvoiceStatusOrderByDateDesc(company, InvoiceStatus.APPROVED)
+        return invoiceRepository.findInvoicesByCompanyAndInvoiceStatusOrderByDateDesc(getLoggedInUsersCompany(), InvoiceStatus.APPROVED)
                 .stream()
                 .limit(3)
                 .map(each -> mapperUtil.convert(each, new InvoiceDto()))
@@ -120,8 +117,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     private String generateInvoiceNo(InvoiceType invoiceType){
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceType(company, invoiceType);
+        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceType(getLoggedInUsersCompany(), invoiceType);
         if (invoices.size() == 0) {
             return invoiceType.name().charAt(0) + "-001";
         }
@@ -171,9 +167,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public boolean checkIfInvoiceExist(Long clientVendorId) {
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        return invoiceRepository.countAllByCompanyAndClientVendor_Id(company, clientVendorId) > 0;
+        return invoiceRepository.countAllByCompanyAndClientVendor_Id(getLoggedInUsersCompany(), clientVendorId) > 0;
     }
 
+    private Company getLoggedInUsersCompany(){
+        return mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+    }
 
 }

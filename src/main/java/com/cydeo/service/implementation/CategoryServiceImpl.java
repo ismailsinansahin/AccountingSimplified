@@ -6,6 +6,7 @@ import com.cydeo.entity.Company;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.CategoryRepository;
 import com.cydeo.service.CategoryService;
+import com.cydeo.service.CompanyService;
 import com.cydeo.service.ProductService;
 import com.cydeo.service.SecurityService;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
-    private final SecurityService securityService;
+    private final CompanyService companyService;
     private final ProductService productService;
     private final MapperUtil mapperUtil;
 
@@ -33,9 +34,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getAllCategories() {
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return categoryRepository
-                .findAllByCompany(company)
+                .findAllByCompany(getLoggedInUsersCompany())
                 .stream()
                 .sorted(Comparator.comparing(Category::getDescription))
                 .map(each -> mapperUtil.convert(each, new CategoryDto()))
@@ -46,8 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto create(CategoryDto categoryDto) throws Exception {
         Category category = mapperUtil.convert(categoryDto, new Category());
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        category.setCompany(company);
+        category.setCompany(getLoggedInUsersCompany());
         return mapperUtil.convert(categoryRepository.save(category), new CategoryDto());
     }
 
@@ -72,9 +71,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public boolean isCategoryDescriptionExist(CategoryDto categoryDTO) {
-        Company actualCompany = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        Category existingCategory = categoryRepository.findByDescriptionAndCompany(categoryDTO.getDescription(), actualCompany);
+        Category existingCategory = categoryRepository.findByDescriptionAndCompany(categoryDTO.getDescription(), getLoggedInUsersCompany());
         if (existingCategory == null) return false;
         return !existingCategory.getId().equals(categoryDTO.getId());
+    }
+
+    private Company getLoggedInUsersCompany(){
+        return mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
     }
 }

@@ -7,6 +7,7 @@ import com.cydeo.entity.Product;
 import com.cydeo.exception.AccountingException;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.ProductRepository;
+import com.cydeo.service.CompanyService;
 import com.cydeo.service.InvoiceProductService;
 import com.cydeo.service.ProductService;
 import com.cydeo.service.SecurityService;
@@ -21,13 +22,13 @@ import java.util.stream.Collectors;
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final SecurityService securityService;
+    private final CompanyService companyService;
     private final MapperUtil mapperUtil;
     private final InvoiceProductService invoiceProductService;
 
-    public ProductServiceImpl(ProductRepository productRepository, SecurityService securityService, MapperUtil mapperUtil, @Lazy InvoiceProductService invoiceProductService) {
+    public ProductServiceImpl(ProductRepository productRepository, SecurityService securityService, CompanyService companyService, MapperUtil mapperUtil, @Lazy InvoiceProductService invoiceProductService) {
         this.productRepository = productRepository;
-        this.securityService = securityService;
+        this.companyService = companyService;
         this.mapperUtil = mapperUtil;
         this.invoiceProductService = invoiceProductService;
     }
@@ -47,8 +48,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getAllProducts() {
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        return productRepository.findAllByCategoryCompany(company)
+        return productRepository.findAllByCategoryCompany(getLoggedInUsersCompany())
                 .stream()
                 .sorted(Comparator.comparing((Product product) -> product.getCategory().getDescription())
                 .thenComparing(Product::getName))
@@ -90,11 +90,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean isProductNameExist(ProductDto productDto) {
-        Company actualCompany = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        Product existingProduct = productRepository.findByNameAndCategoryCompany(productDto.getName(), actualCompany);
+        Product existingProduct = productRepository.findByNameAndCategoryCompany(productDto.getName(), getLoggedInUsersCompany());
         if (existingProduct == null) return false;
         return !existingProduct.getId().equals(productDto.getId());
     }
 
+    private Company getLoggedInUsersCompany(){
+        return mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+    }
 
 }

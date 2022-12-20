@@ -7,7 +7,7 @@ import com.cydeo.enums.ClientVendorType;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.ClientVendorRepository;
 import com.cydeo.service.ClientVendorService;
-import com.cydeo.service.SecurityService;
+import com.cydeo.service.CompanyService;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -19,13 +19,13 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     private final ClientVendorRepository clientVendorRepository;
     private final MapperUtil mapperUtil;
-    private final SecurityService securityService;
+    private final CompanyService companyService;
 
     public ClientVendorServiceImpl(ClientVendorRepository clientVendorRepository, MapperUtil mapperUtil,
-                                   SecurityService securityService) {
+                                   CompanyService companyService) {
         this.clientVendorRepository = clientVendorRepository;
         this.mapperUtil = mapperUtil;
-        this.securityService = securityService;
+        this.companyService = companyService;
     }
 
     @Override
@@ -36,9 +36,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public List<ClientVendorDto> getAllClientVendors() {
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return clientVendorRepository
-                .findAllByCompany(company).stream()
+                .findAllByCompany(getLoggedInUsersCompany()).stream()
                 .sorted(Comparator.comparing(ClientVendor::getClientVendorType)
                 .reversed()
                 .thenComparing(ClientVendor::getClientVendorName))
@@ -48,9 +47,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public List<ClientVendorDto> getAllClientVendors(ClientVendorType clientVendorType) {
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return clientVendorRepository
-                .findAllByCompanyAndClientVendorType(company, clientVendorType)
+                .findAllByCompanyAndClientVendorType(getLoggedInUsersCompany(), clientVendorType)
                 .stream()
                 .sorted(Comparator.comparing(ClientVendor::getClientVendorName))
                 .map(each -> mapperUtil.convert(each, new ClientVendorDto()))
@@ -59,7 +57,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public ClientVendorDto create(ClientVendorDto clientVendorDto) throws Exception {
-        clientVendorDto.setCompany(securityService.getLoggedInUser().getCompany());
+        clientVendorDto.setCompany(companyService.getCompanyByLoggedInUser());
         ClientVendor clientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());
         return mapperUtil.convert(clientVendorRepository.save(clientVendor), new ClientVendorDto());
     }
@@ -68,7 +66,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     public ClientVendorDto update(Long clientVendorId, ClientVendorDto clientVendorDto) throws ClassNotFoundException, CloneNotSupportedException {
         ClientVendor savedClientVendor = clientVendorRepository.findById(clientVendorId).get();
         clientVendorDto.getAddress().setId(savedClientVendor.getAddress().getId());     // otherwise it creates new address instead of updating existing one
-        clientVendorDto.setCompany(securityService.getLoggedInUser().getCompany());
+        clientVendorDto.setCompany(companyService.getCompanyByLoggedInUser());
         ClientVendor updatedClientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());
         return mapperUtil.convert(clientVendorRepository.save(updatedClientVendor), new ClientVendorDto());
     }
@@ -83,10 +81,14 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public boolean companyNameExists(ClientVendorDto clientVendorDto) {
-        Company actualCompany = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        ClientVendor existingClientVendor = clientVendorRepository.findByClientVendorNameAndCompany(clientVendorDto.getClientVendorName(), actualCompany);
+        ClientVendor existingClientVendor = clientVendorRepository
+                .findByClientVendorNameAndCompany(clientVendorDto.getClientVendorName(), getLoggedInUsersCompany());
         if (existingClientVendor == null) return false;
         return !existingClientVendor.getId().equals(clientVendorDto.getId());
+    }
+
+    private Company getLoggedInUsersCompany(){
+        return mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
     }
 
 }
