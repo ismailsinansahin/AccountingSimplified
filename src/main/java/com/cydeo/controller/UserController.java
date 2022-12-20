@@ -26,26 +26,26 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    public String listUsers(Model model) throws Exception {
+    public String list(Model model) throws Exception {
         model.addAttribute("users", userService.getFilteredUsers());
-        return "/user/user-list";
+        return "user/user-list";
     }
 
     @GetMapping("/create")
-    public String navigateToUserCreate(Model model) {
+    public String create(Model model) {
         model.addAttribute("newUser", new UserDto());
-        return "/user/user-create";
+        return "user/user-create";
     }
 
     @PostMapping("/create")
-    public String createNewUser(@Valid @ModelAttribute("newUser") UserDto userDto, BindingResult result, Model model) {
+    public String create(@Valid @ModelAttribute("newUser") UserDto userDto, BindingResult result, Model model) {
         boolean emailExist = userService.emailExist(userDto);
 
         if (result.hasErrors() || emailExist){
             if (emailExist) {
                 result.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
             }
-            return "/user/user-create";
+            return "user/user-create";
         }
 
         userService.save(userDto);
@@ -53,13 +53,13 @@ public class UserController {
     }
 
     @GetMapping("/update/{userId}")
-    public String navigateToUserUpdate(@PathVariable("userId") Long userId, Model model) {
+    public String update(@PathVariable("userId") Long userId, Model model) {
         model.addAttribute("user", userService.findUserById(userId));
-        return "/user/user-update";
+        return "user/user-update";
     }
 
     @PostMapping("/update/{userId}")
-    public String updateUser(@PathVariable("userId") Long userId, @Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
+    public String update(@PathVariable("userId") Long userId, @Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
         userDto.setId(userId);  // spring cannot set id since it is not seen in UI and we need to check if updated email is used by different user.
         boolean emailExist = userService.emailExist(userDto);
 
@@ -67,21 +67,21 @@ public class UserController {
             if (emailExist) {
                 result.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
             }
-            return "/user/user-update";
+            return "user/user-update";
         }
         userService.update(userDto);
         return "redirect:/users/list";
     }
 
     @GetMapping("/delete/{userId}")
-    public String deleteUser(@PathVariable("userId") Long userId){
+    public String delete(@PathVariable("userId") Long userId){
         userService.delete(userId);
         return "redirect:/users/list";
     }
 
     @ModelAttribute
     public void commonAttributes(Model model){
-        model.addAttribute("companies", companyService.getFilteredCompaniesForCurrentUser());
+        model.addAttribute("companies", companyService.getAllCompanies());
         model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
         model.addAttribute("title", "Cydeo Accounting-User");
     }

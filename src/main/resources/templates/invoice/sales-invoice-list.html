@@ -3,12 +3,12 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       lang="en">
 
-<head th:replace="/fragments/head :: header"></head>
+<head th:replace="fragments/head :: header"></head>
 
 <body>
     <div class="dashboard-main-wrapper">
-        <div th:replace="/fragments/header :: header"></div>
-        <div th:replace="/fragments/left-sidebar :: left-sidebar"></div>
+        <div th:replace="fragments/header :: header"></div>
+        <div th:replace="fragments/left-sidebar :: left-sidebar"></div>
         <div class="dashboard-wrapper">
             <div class="dashboard-ecommerce">
                 <div class="container-fluid dashboard-content">
@@ -65,7 +65,7 @@
                                                                             <button class="btn btn-danger mb-2 mb-sm-0 mr-sm-2">Delete</button>
                                                                         </a>
                                                                         <a sec:authorize="hasAnyAuthority('Manager')"
-                                                                           th:if="${invoice.invoiceStatus.value == 'Awaiting Approval' && invoice.invoiceProducts.size() > 0}" type="button"
+                                                                           th:if="${invoice.invoiceStatus.value == 'Awaiting Approval' && invoice.getTotal() != 0}" type="button"
                                                                            th:href ="@{/salesInvoices/approve/{id}(id=${invoice.getId()})}" >
                                                                             <button class="btn btn-success mb-2 mb-sm-0 mr-sm-2">Approve</button>
                                                                         </a>
@@ -102,8 +102,8 @@
             </div>
         </div>
     </div>
-    <div th:replace="/fragments/footer :: footer"></div>
-    <div th:replace="/fragments/javascript :: js"></div>
+    <div th:replace="fragments/footer :: footer"></div>
+    <div th:replace="fragments/javascript :: js"></div>
 </body>
 
 </html>

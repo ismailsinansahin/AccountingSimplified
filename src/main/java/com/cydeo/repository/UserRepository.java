@@ -13,6 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findUserById(Long id);
     Optional<User> findByUsername(String username);
     List<User> findAllByRole_Description(String roleDescription);
-    List<User> findAllByCompany_Title(String companyName);
-    List<User> findAllByCompany_TitleAndRole_Description(String companyTitle, String role);
+    List<User> findAllByCompany(Company company);
+    Integer countAllByCompanyAndRole_Description(Company company, String role);
 }

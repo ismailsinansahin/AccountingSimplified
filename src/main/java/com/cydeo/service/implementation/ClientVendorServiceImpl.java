@@ -38,16 +38,16 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     public List<ClientVendorDto> getAllClientVendors() {
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return clientVendorRepository
-                .findAllByCompany(company)
-                .stream()
-                .sorted(Comparator.comparing(ClientVendor::getClientVendorType).reversed()
-                        .thenComparing(ClientVendor::getClientVendorName))
+                .findAllByCompany(company).stream()
+                .sorted(Comparator.comparing(ClientVendor::getClientVendorType)
+                .reversed()
+                .thenComparing(ClientVendor::getClientVendorName))
                 .map(each -> mapperUtil.convert(each, new ClientVendorDto()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ClientVendorDto> getAllClientVendorsOfCompany(ClientVendorType clientVendorType) {
+    public List<ClientVendorDto> getAllClientVendors(ClientVendorType clientVendorType) {
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return clientVendorRepository
                 .findAllByCompanyAndClientVendorType(company, clientVendorType)
@@ -70,13 +70,14 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         clientVendorDto.getAddress().setId(savedClientVendor.getAddress().getId());     // otherwise it creates new address instead of updating existing one
         clientVendorDto.setCompany(securityService.getLoggedInUser().getCompany());
         ClientVendor updatedClientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());
-        return mapperUtil.convert(clientVendorRepository.save(updatedClientVendor), clientVendorDto);
+        return mapperUtil.convert(clientVendorRepository.save(updatedClientVendor), new ClientVendorDto());
     }
 
     @Override
     public void delete(Long clientVendorId) {
         ClientVendor clientVendor = clientVendorRepository.findClientVendorById(clientVendorId);
         clientVendor.setIsDeleted(true);
+        clientVendor.setClientVendorName(clientVendor.getClientVendorName() + "-" + clientVendor.getId());
         clientVendorRepository.save(clientVendor);
     }
 

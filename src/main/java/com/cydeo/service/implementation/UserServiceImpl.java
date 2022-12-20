@@ -26,8 +26,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository, RoleService roleService,
-                           @Lazy SecurityService securityService, MapperUtil mapperUtil, PasswordEncoder passwordEncoder, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository,@Lazy SecurityService securityService,
+                           MapperUtil mapperUtil, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.securityService = securityService;
         this.mapperUtil = mapperUtil;
@@ -52,19 +52,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getFilteredUsers() {
+        User currentUser = mapperUtil.convert(securityService.getLoggedInUser(), new User());
         List<User> userList;
-        if (isCurrentUserRootUser()) {
+        if (currentUser.getRole().getDescription().equals("Root User")) {
             userList = userRepository.findAllByRole_Description("Admin");
         } else {
-            userList = userRepository.findAllByCompany_Title(getCurrentUserCompanyTitle());
+            userList = userRepository.findAllByCompany(currentUser.getCompany());
         }
         return userList.stream()
                 .sorted(Comparator.comparing((User u) -> u.getCompany().getTitle()).thenComparing(u -> u.getRole().getDescription()))
-                .map(entity -> {
-                    UserDto dto = mapperUtil.convert(entity, new UserDto());
-                    dto.setIsOnlyAdmin(checkIfOnlyAdminForCompany(dto));
-                    return dto;
-                })
+                .map(entity -> mapperUtil.convert(entity, new UserDto()))
+                .peek(dto -> dto.setIsOnlyAdmin(this.checkIfOnlyAdminForCompany(dto)))
                 .collect(Collectors.toList());
     }
 
@@ -102,22 +100,10 @@ public class UserServiceImpl implements UserService {
         return !userWithUpdatedEmail.getId().equals(userDto.getId());
     }
 
+
     private Boolean checkIfOnlyAdminForCompany(UserDto dto) {
-        if (dto.getRole().getDescription().equalsIgnoreCase("Admin")) {
-            List<User> users = userRepository.findAllByCompany_TitleAndRole_Description(dto.getCompany().getTitle(), "Admin");
-            return users.size() == 1;
-        }
-        return false;
+        return userRepository.countAllByCompanyAndRole_Description(mapperUtil.convert(dto.getCompany(), new Company()), "Admin") == 1;
     }
 
-    private Boolean isCurrentUserRootUser() {
-        return securityService.getLoggedInUser().getRole().getDescription().equalsIgnoreCase("root user");
-    }
-
-    private String getCurrentUserCompanyTitle() {
-        String currentUserName = securityService.getLoggedInUser().getUsername();
-        User user = userRepository.findByUsername(currentUserName).orElseThrow(()-> new AccountingException("User not found"));
-        return user.getCompany().getTitle();
-    }
 
 }

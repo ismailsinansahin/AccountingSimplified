@@ -25,52 +25,52 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public String navigateToProductList() {
+    public String list() {
         return "/product/product-list";
     }
 
     @GetMapping("/create")
-    public String navigateToProductCreate(Model model) throws Exception {
+    public String create(Model model) throws Exception {
         model.addAttribute("newProduct", new ProductDto());
-        return "/product/product-create";
+        return "product/product-create";
     }
 
     @PostMapping("/create")
-    public String createNewProduct(@Valid @ModelAttribute("newProduct") ProductDto productDto, BindingResult bindingResult, Model model) throws Exception {
+    public String create(@Valid @ModelAttribute("newProduct") ProductDto productDto, BindingResult bindingResult, Model model) throws Exception {
 
         if (productService.isProductNameExist(productDto)) {
             bindingResult.rejectValue("name", " ", "This Product Name already exists.");
         }
 
         if (bindingResult.hasErrors()) {
-            return "/product/product-create";
+            return "product/product-create";
         }
         productService.save(productDto);
         return "redirect:/products/list";
     }
 
     @GetMapping("/update/{productId}")
-    public String navigateToProductUpdate(@PathVariable("productId") Long productId, Model model) throws Exception {
+    public String update(@PathVariable("productId") Long productId, Model model) throws Exception {
         model.addAttribute("product", productService.findProductById(productId));
-        return "/product/product-update";
+        return "product/product-update";
     }
 
     @PostMapping("/update/{productId}")
-    public String updateProduct(@Valid @ModelAttribute("product") ProductDto productDto, BindingResult bindingResult, @PathVariable("productId") Long productId, Model model) throws Exception {
+    public String update(@Valid @ModelAttribute("product") ProductDto productDto, BindingResult bindingResult, @PathVariable("productId") Long productId, Model model) throws Exception {
         productDto.setId(productId);
         if (productService.isProductNameExist(productDto)) {
             bindingResult.rejectValue("name", " ", "This Product Name already exists.");
         }
 
         if (bindingResult.hasErrors()) {
-            return "/product/product-update";
+            return "product/product-update";
         }
         productService.update(productId, productDto);
         return "redirect:/products/list";
     }
 
     @GetMapping("/delete/{productId}")
-    public String deleteProduct(@PathVariable("productId") Long productId) {
+    public String delete(@PathVariable("productId") Long productId) {
         productService.delete(productId);
         return "redirect:/products/list";
     }

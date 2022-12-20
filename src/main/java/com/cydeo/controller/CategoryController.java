@@ -21,19 +21,19 @@ public class CategoryController {
     }
 
     @GetMapping("/list")
-    public String navigateToCategoryList(Model model) throws Exception {
+    public String list(Model model) throws Exception {
         model.addAttribute("categories", categoryService.getAllCategories());
-        return "/category/category-list";
+        return "category/category-list";
     }
 
     @GetMapping("/create")
-    public String navigateToCategoryCreate(Model model) {
+    public String create(Model model) {
         model.addAttribute("newCategory", new CategoryDto());
-        return "/category/category-create";
+        return "category/category-create";
     }
 
     @PostMapping("/create")
-    public String createNewCategory(@Valid @ModelAttribute("newCategory") CategoryDto categoryDto, BindingResult bindingResult) throws Exception {
+    public String create(@Valid @ModelAttribute("newCategory") CategoryDto categoryDto, BindingResult bindingResult) throws Exception {
 
         boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto);
 
@@ -42,7 +42,7 @@ public class CategoryController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "/category/category-create";
+            return "category/category-create";
         }
 
         categoryService.create(categoryDto);
@@ -50,15 +50,14 @@ public class CategoryController {
     }
 
     @GetMapping("/update/{categoryId}")
-    public String navigateToCategoryUpdate(@PathVariable("categoryId") Long categoryId, Model model) {
+    public String update(@PathVariable("categoryId") Long categoryId, Model model) {
         CategoryDto categoryById = categoryService.findCategoryById(categoryId);
-        categoryById.setHasProduct(categoryService.hasProduct(categoryId));
         model.addAttribute("category", categoryById);
-        return "/category/category-update";
+        return "category/category-update";
     }
 
     @PostMapping("/update/{categoryId}")
-    public String updateCategory(@Valid @ModelAttribute("category") CategoryDto categoryDto, BindingResult bindingResult, @PathVariable("categoryId") Long categoryId) {
+    public String update(@Valid @ModelAttribute("category") CategoryDto categoryDto, BindingResult bindingResult, @PathVariable("categoryId") Long categoryId) {
         categoryDto.setId(categoryId);
         boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto);
 
@@ -67,7 +66,7 @@ public class CategoryController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "/category/category-update";
+            return "category/category-update";
         }
 
         categoryService.update(categoryId, categoryDto);
@@ -75,7 +74,7 @@ public class CategoryController {
     }
 
     @GetMapping("/delete/{categoryId}")
-    public String activateCategory(@PathVariable("categoryId") Long categoryId) {
+    public String delete(@PathVariable("categoryId") Long categoryId) {
         categoryService.delete(categoryId);
         return "redirect:/categories/list";
     }

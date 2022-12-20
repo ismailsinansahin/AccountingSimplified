@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                     .antMatchers("/users/**").hasAnyAuthority("Root User","Admin")
                     .antMatchers("/companies/**").hasAnyAuthority("Root User")
-                    .antMatchers("/", "/login", "/fragments", "/assets/**", "/img/**")
+                    .antMatchers("/", "/login", "fragments", "/assets/**", "/img/**")
                     .permitAll()
                     .anyRequest().authenticated()
                 .and()

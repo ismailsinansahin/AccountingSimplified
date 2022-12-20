@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="/fragments/head :: header"></head>
+<head th:replace="fragments/head :: header"></head>
 
 <body>
 <div class="dashboard-main-wrapper">
-    <div th:replace="/fragments/header :: header"></div>
-    <div th:replace="/fragments/left-sidebar :: left-sidebar"></div>
+    <div th:replace="fragments/header :: header"></div>
+    <div th:replace="fragments/left-sidebar :: left-sidebar"></div>
     <div class="dashboard-wrapper">
         <div class="dashboard-ecommerce">
             <div class="container-fluid dashboard-content">
@@ -135,11 +135,13 @@
                                                                 <div class="controls">
                                                                     <label>Role</label>
                                                                     <select class="custom-select" id="role" name="role"
-                                                                            th:with="role=*{role}"  >
+                                                                            th:with="role=*{role}"
+                                                                            th:disabled="${user.isOnlyAdmin}">
                                                                         <option th:each="role:${userRoles}"
                                                                                 th:value="${role.id}"
                                                                                 th:text="${role.description}"
-                                                                                th:selected="${role.id} == *{role.id}"></option>
+                                                                                th:selected="${role.id} == *{role.id}"
+                                                                                ></option>
                                                                     </select>
                                                                     <div th:if="${#fields.hasErrors('role')}">
                                                                         <ul>
@@ -157,7 +159,8 @@
                                                                 <div class="controls">
                                                                     <label>Company</label>
                                                                     <select class="custom-select" id="company" name="company"
-                                                                            th:with="company=*{company}">
+                                                                            th:with="company=*{company}"
+                                                                            th:disabled="${user.isOnlyAdmin}">
                                                                         <option th:each="company:${companies}"
                                                                                 th:value="${company.id}"
                                                                                 th:text="${company.getTitle()}"
@@ -185,13 +188,13 @@
                                                             Reset
                                                         </button>
                                                     </div>
-                                                    <div th:if="${user.isOnlyAdmin}" class="row">
+                                                    <div th:if="${ user.isOnlyAdmin }" class="row">
                                                         <div class="col-12 col-md-8">
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <div class="alert alert-warning" role="alert"
                                                                          th:text="'This user is the only admin of ' + ${user.getCompany().getTitle()}
-                                                                                + ' company. Please, do not change role or company.'">
+                                                                                + ' company. You cant change his/her company'">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -220,8 +223,8 @@
         </div>
     </div>
 </div>
-<div th:replace="/fragments/footer :: footer"></div>
-<div th:replace="/fragments/javascript :: js"></div>
+<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="fragments/javascript :: js"></div>
 </body>
 
 </html>

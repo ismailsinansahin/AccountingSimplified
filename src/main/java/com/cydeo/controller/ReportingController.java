@@ -20,13 +20,13 @@ public class ReportingController {
     @GetMapping("/stockData")
     public String getStockData(Model model) throws Exception {
         model.addAttribute("invoiceProducts", reportingService.getStockData());
-        return "/report/stock-report";
+        return "report/stock-report";
     }
 
     @GetMapping("/profitLossData")
     public String getMonthlyProfitLossData(Model model) {
         model.addAttribute("monthlyProfitLossDataMap", reportingService.getMonthlyProfitLossDataMap());
-        return "/report/profit-loss-report";
+        return "report/profit-loss-report";
     }
 
     @ModelAttribute

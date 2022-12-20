@@ -26,8 +26,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto findCategoryById(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId).get();
-        return mapperUtil.convert(category, new CategoryDto());
+        CategoryDto dto = mapperUtil.convert(categoryRepository.findById(categoryId).get(), new CategoryDto());
+        dto.setHasProduct(hasProduct(dto.getId()));
+        return dto;
     }
 
     @Override
@@ -37,11 +38,9 @@ public class CategoryServiceImpl implements CategoryService {
                 .findAllByCompany(company)
                 .stream()
                 .sorted(Comparator.comparing(Category::getDescription))
-                .map(each -> {
-                    CategoryDto dto = mapperUtil.convert(each, new CategoryDto());
-                    dto.setHasProduct(hasProduct(dto.getId()));
-                    return dto;
-                }).collect(Collectors.toList());
+                .map(each -> mapperUtil.convert(each, new CategoryDto()))
+                .peek(dto -> dto.setHasProduct(hasProduct(dto.getId())))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -62,14 +61,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void delete(Long categoryId) {
         Category category = categoryRepository.findById(categoryId).get();
-
         category.setIsDeleted(true);
-        category.setDescription(category.getDescription() + " " + category.getId());
+        category.setDescription(category.getDescription() + "-" + category.getId());
         categoryRepository.save(category);
     }
 
-    @Override
-    public boolean hasProduct(Long categoryId) {
+    private boolean hasProduct(Long categoryId) {
         return productService.findAllProductsWithCategoryId(categoryId).size() > 0;
     }
 
