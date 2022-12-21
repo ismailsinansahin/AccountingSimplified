@@ -13,6 +13,7 @@ import com.cydeo.service.InvoiceService;
 import com.cydeo.service.ProductService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -104,7 +105,8 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         productService.update(productDto.getId(), productDto);
     }
 
-    private void setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProduct salesInvoiceProduct) {
+    @Transactional
+    void setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProduct salesInvoiceProduct) {
         List<InvoiceProduct> availableProductsForSale =
                 findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType.PURCHASE, salesInvoiceProduct.getProduct(), 0);
         for (InvoiceProduct availableProduct : availableProductsForSale) {

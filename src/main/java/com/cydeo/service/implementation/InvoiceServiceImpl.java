@@ -8,6 +8,7 @@ import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.*;
 import com.cydeo.service.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -72,6 +73,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         return mapperUtil.convert(invoice, invoiceDto);
     }
 
+    @Transactional
     @Override
     public void approve(Long invoiceId) {
         Invoice invoice = invoiceRepository.findInvoiceById(invoiceId);
