@@ -1,5 +1,6 @@
 package com.cydeo.controller;
 
+
 import com.cydeo.service.CompanyService;
 import com.cydeo.service.DashboardService;
 import com.cydeo.service.InvoiceService;
@@ -21,12 +22,13 @@ public class DashboardController {
 
     @GetMapping("/dashboard")
     public String navigateToDashboard(Model model) throws Exception {
-        model.addAttribute("companyTitle", companyService.getCompanyDtoByLoggedInUser().getTitle());
-        model.addAttribute("summaryNumbers", dashboardService.getSummaryNumbers());
-        model.addAttribute("invoices", invoiceService.getLastThreeInvoices());
-        model.addAttribute("exchangeRates", dashboardService.getExchangeRates());
-        model.addAttribute("title", "Cydeo Accounting-Dashboard");
-        return "dashboard";
+        throw new RuntimeException("teseeet");
+//        model.addAttribute("companyTitle", companyService.getCompanyDtoByLoggedInUser().getTitle());
+//        model.addAttribute("summaryNumbers", dashboardService.getSummaryNumbers());
+//        model.addAttribute("invoices", invoiceService.getLastThreeInvoices());
+//        model.addAttribute("exchangeRates", dashboardService.getExchangeRates());
+//        model.addAttribute("title", "Cydeo Accounting-Dashboard");
+//        return "dashboard";
     }
 
 }
