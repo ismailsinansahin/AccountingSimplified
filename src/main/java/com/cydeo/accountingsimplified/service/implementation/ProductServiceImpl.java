@@ -39,13 +39,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> findAllProductsWithCategoryId(Long categoryId) {
-        return productRepository.findByCategoryId(categoryId).stream()
-                .map(product -> mapperUtil.convert(product, new ProductDto()))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<ProductDto> getAllProducts() {
         Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return productRepository.findAllByCategoryCompany(company)
@@ -53,6 +46,13 @@ public class ProductServiceImpl implements ProductService {
                 .sorted(Comparator.comparing((Product product) -> product.getCategory().getDescription())
                 .thenComparing(Product::getName))
                 .map(each -> mapperUtil.convert(each, new ProductDto()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductDto> findAllProductsWithCategoryId(Long categoryId) {
+        return productRepository.findByCategoryId(categoryId).stream()
+                .map(product -> mapperUtil.convert(product, new ProductDto()))
                 .collect(Collectors.toList());
     }
 
