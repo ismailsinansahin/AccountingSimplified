@@ -96,7 +96,7 @@ class UserServiceImplTest {
         List<User> userList = getUsers();
         List<UserDto> userDtos = getUserDTOs();
 //        when(userRepository.findAllByRole_Description(anyString())).thenReturn(userList);
-        when(userRepository.findAllByCompany_Title(anyString())).thenReturn(userList);
+//        when(userRepository.findAllByCompany_Title(anyString())).thenReturn(userList);
 //        when(userRepository.findAllByCompany_Title(anyString())).then(returnsFirstArg());
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(userList.get(0)));
         when(mapperUtil.convert(any(User.class), any(UserDto.class)))
@@ -140,7 +140,7 @@ class UserServiceImplTest {
         List<UserDto> userDtos = getUserDTOs();
         userDtos.get(0).getRole().setDescription(role);
         when(userRepository.findAllByRole_Description(anyString())).thenReturn(userList);
-        when(userRepository.findAllByCompany_Title(anyString())).thenReturn(userList);
+//        when(userRepository.findAllByCompany_Title(anyString())).thenReturn(userList);
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(userList.get(0)));
         when(mapperUtil.convert(any(User.class), any(UserDto.class)))
                 .thenReturn(userDtos.get(0));
