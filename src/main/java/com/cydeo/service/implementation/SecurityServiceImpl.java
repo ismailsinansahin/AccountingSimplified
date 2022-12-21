@@ -16,16 +16,18 @@ import org.springframework.stereotype.Service;
 public class SecurityServiceImpl implements SecurityService {
 
     private final UserService userService;
-    private final MapperUtil mapperUtil;
+    private final UserRepository userRepository;
 
-    public SecurityServiceImpl(UserRepository userRepository, UserService userService, MapperUtil mapperUtil) {
-        this.mapperUtil = mapperUtil;
+
+    public SecurityServiceImpl(UserRepository userRepository, UserService userService, UserRepository userRepository1, MapperUtil mapperUtil) {
+        this.userRepository = userRepository1;
         this.userService = userService;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = mapperUtil.convert(userService.findByUsername(username), new User());
+        User user = userRepository.findByUsername(username)
+                .orElseThrow( ()-> new UsernameNotFoundException("Username not found"));
         return new UserPrincipal(user);
     }
 

@@ -13,27 +13,27 @@ import java.util.Optional;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(AccountingException.class)
-    public String serviceException(AccountingException exception, Model model) {
-        model.addAttribute("message", exception.getMessage());
-        return "error";
-    }
-
-    // whenever one of these exception throws, run this method
-    // if there is our custom annotation at any method, it'll build the response including that message,
-    // otherwise it'll show "Something went wrong!" message
-    @ExceptionHandler({Throwable.class})
-    public String genericException(Throwable exception, HandlerMethod handlerMethod, Model model) {
-        String message = "Something went wrong!";
-        Optional<DefaultExceptionMessageDto> defaultMessage = getMessageFromAnnotation(handlerMethod.getMethod());
-        if (defaultMessage.isPresent()) {
-            message = defaultMessage.get().getMessage();
-        } else if (exception.getMessage() != null) {
-            message = exception.getMessage();
-        }
-        model.addAttribute("message", message);
-        return "error";
-    }
+//    @ExceptionHandler(AccountingException.class)
+//    public String serviceException(AccountingException exception, Model model) {
+//        model.addAttribute("message", exception.getMessage());
+//        return "error";
+//    }
+//
+//    // whenever one of these exception throws, run this method
+//    // if there is our custom annotation at any method, it'll build the response including that message,
+//    // otherwise it'll show "Something went wrong!" message
+//    @ExceptionHandler({Throwable.class})
+//    public String genericException(Throwable exception, HandlerMethod handlerMethod, Model model) {
+//        String message = "Something went wrong!";
+//        Optional<DefaultExceptionMessageDto> defaultMessage = getMessageFromAnnotation(handlerMethod.getMethod());
+//        if (defaultMessage.isPresent()) {
+//            message = defaultMessage.get().getMessage();
+//        } else if (exception.getMessage() != null) {
+//            message = exception.getMessage();
+//        }
+//        model.addAttribute("message", message);
+//        return "error";
+//    }
 
     private Optional<DefaultExceptionMessageDto> getMessageFromAnnotation(Method method) {
         AccountingExceptionMessage defaultExceptionMessage = method
