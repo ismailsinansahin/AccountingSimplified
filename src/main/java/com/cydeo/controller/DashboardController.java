@@ -21,7 +21,7 @@ public class DashboardController {
 
     @GetMapping("/dashboard")
     public String navigateToDashboard(Model model) throws Exception {
-        model.addAttribute("companyTitle", companyService.getCompanyByLoggedInUser().getTitle());
+        model.addAttribute("companyTitle", companyService.getCompanyDtoByLoggedInUser().getTitle());
         model.addAttribute("summaryNumbers", dashboardService.getSummaryNumbers());
         model.addAttribute("invoices", invoiceService.getLastThreeInvoices());
         model.addAttribute("exchangeRates", dashboardService.getExchangeRates());

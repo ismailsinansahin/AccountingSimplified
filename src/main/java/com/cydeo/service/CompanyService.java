@@ -7,7 +7,7 @@ import java.util.List;
 public interface CompanyService {
 
     CompanyDto findCompanyById(Long id);
-    CompanyDto getCompanyByLoggedInUser();
+    CompanyDto getCompanyDtoByLoggedInUser();
     List<CompanyDto> getAllCompanies();
     CompanyDto create(CompanyDto companyDto);
     CompanyDto update(Long companyId, CompanyDto companyDto) throws CloneNotSupportedException;

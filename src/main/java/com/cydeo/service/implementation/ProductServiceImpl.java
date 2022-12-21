@@ -48,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getAllProducts() {
-        return productRepository.findAllByCategoryCompany(getLoggedInUsersCompany())
+        return productRepository.findAllByCategoryCompany(getCompanyOfLoggedInUsers())
                 .stream()
                 .sorted(Comparator.comparing((Product product) -> product.getCategory().getDescription())
                 .thenComparing(Product::getName))
@@ -90,13 +90,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean isProductNameExist(ProductDto productDto) {
-        Product existingProduct = productRepository.findByNameAndCategoryCompany(productDto.getName(), getLoggedInUsersCompany());
+        Product existingProduct = productRepository.findByNameAndCategoryCompany(productDto.getName(), getCompanyOfLoggedInUsers());
         if (existingProduct == null) return false;
         return !existingProduct.getId().equals(productDto.getId());
     }
 
-    private Company getLoggedInUsersCompany(){
-        return mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+    private Company getCompanyOfLoggedInUsers(){
+        return mapperUtil.convert(companyService.getCompanyDtoByLoggedInUser(), new Company());
     }
 
 }

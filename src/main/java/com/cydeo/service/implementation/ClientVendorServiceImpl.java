@@ -37,7 +37,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     @Override
     public List<ClientVendorDto> getAllClientVendors() {
         return clientVendorRepository
-                .findAllByCompany(getLoggedInUsersCompany()).stream()
+                .findAllByCompany(getCompanyOfLoggedInUsers()).stream()
                 .sorted(Comparator.comparing(ClientVendor::getClientVendorType)
                 .reversed()
                 .thenComparing(ClientVendor::getClientVendorName))
@@ -48,7 +48,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     @Override
     public List<ClientVendorDto> getAllClientVendors(ClientVendorType clientVendorType) {
         return clientVendorRepository
-                .findAllByCompanyAndClientVendorType(getLoggedInUsersCompany(), clientVendorType)
+                .findAllByCompanyAndClientVendorType(getCompanyOfLoggedInUsers(), clientVendorType)
                 .stream()
                 .sorted(Comparator.comparing(ClientVendor::getClientVendorName))
                 .map(each -> mapperUtil.convert(each, new ClientVendorDto()))
@@ -57,7 +57,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public ClientVendorDto create(ClientVendorDto clientVendorDto) throws Exception {
-        clientVendorDto.setCompany(companyService.getCompanyByLoggedInUser());
+        clientVendorDto.setCompany(companyService.getCompanyDtoByLoggedInUser());
         ClientVendor clientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());
         return mapperUtil.convert(clientVendorRepository.save(clientVendor), new ClientVendorDto());
     }
@@ -66,7 +66,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     public ClientVendorDto update(Long clientVendorId, ClientVendorDto clientVendorDto) throws ClassNotFoundException, CloneNotSupportedException {
         ClientVendor savedClientVendor = clientVendorRepository.findById(clientVendorId).get();
         clientVendorDto.getAddress().setId(savedClientVendor.getAddress().getId());     // otherwise it creates new address instead of updating existing one
-        clientVendorDto.setCompany(companyService.getCompanyByLoggedInUser());
+        clientVendorDto.setCompany(companyService.getCompanyDtoByLoggedInUser());
         ClientVendor updatedClientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());
         return mapperUtil.convert(clientVendorRepository.save(updatedClientVendor), new ClientVendorDto());
     }
@@ -82,13 +82,13 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     @Override
     public boolean companyNameExists(ClientVendorDto clientVendorDto) {
         ClientVendor existingClientVendor = clientVendorRepository
-                .findByClientVendorNameAndCompany(clientVendorDto.getClientVendorName(), getLoggedInUsersCompany());
+                .findByClientVendorNameAndCompany(clientVendorDto.getClientVendorName(), getCompanyOfLoggedInUsers());
         if (existingClientVendor == null) return false;
         return !existingClientVendor.getId().equals(clientVendorDto.getId());
     }
 
-    private Company getLoggedInUsersCompany(){
-        return mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+    private Company getCompanyOfLoggedInUsers(){
+        return mapperUtil.convert(companyService.getCompanyDtoByLoggedInUser(), new Company());
     }
 
 }

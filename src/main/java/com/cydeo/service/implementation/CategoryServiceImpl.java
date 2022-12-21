@@ -8,7 +8,6 @@ import com.cydeo.repository.CategoryRepository;
 import com.cydeo.service.CategoryService;
 import com.cydeo.service.CompanyService;
 import com.cydeo.service.ProductService;
-import com.cydeo.service.SecurityService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryDto> getAllCategories() {
         return categoryRepository
-                .findAllByCompany(getLoggedInUsersCompany())
+                .findAllByCompany(getCompanyOfLoggedInUsers())
                 .stream()
                 .sorted(Comparator.comparing(Category::getDescription))
                 .map(each -> mapperUtil.convert(each, new CategoryDto()))
@@ -46,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto create(CategoryDto categoryDto) throws Exception {
         Category category = mapperUtil.convert(categoryDto, new Category());
-        category.setCompany(getLoggedInUsersCompany());
+        category.setCompany(getCompanyOfLoggedInUsers());
         return mapperUtil.convert(categoryRepository.save(category), new CategoryDto());
     }
 
@@ -71,12 +70,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public boolean isCategoryDescriptionExist(CategoryDto categoryDTO) {
-        Category existingCategory = categoryRepository.findByDescriptionAndCompany(categoryDTO.getDescription(), getLoggedInUsersCompany());
+        Category existingCategory = categoryRepository.findByDescriptionAndCompany(categoryDTO.getDescription(), getCompanyOfLoggedInUsers());
         if (existingCategory == null) return false;
         return !existingCategory.getId().equals(categoryDTO.getId());
     }
 
-    private Company getLoggedInUsersCompany(){
-        return mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+    private Company getCompanyOfLoggedInUsers(){
+        return mapperUtil.convert(companyService.getCompanyDtoByLoggedInUser(), new Company());
     }
 }

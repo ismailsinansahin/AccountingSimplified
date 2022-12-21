@@ -40,7 +40,7 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepository.findAll()
                 .stream()
                 .filter(company -> company.getId() != 1)
-                .filter(each -> isRootUser ? true : each.getTitle().equals(getCompanyByLoggedInUser().getTitle()))
+                .filter(each -> isRootUser ? true : each.getTitle().equals(getCompanyDtoByLoggedInUser().getTitle()))
                 .sorted(Comparator.comparing(Company::getCompanyStatus).thenComparing(Company::getTitle))
                 .map(each -> mapperUtil.convert(each, new CompanyDto()))
                 .collect(Collectors.toList());
@@ -85,7 +85,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public CompanyDto getCompanyByLoggedInUser() {
+    public CompanyDto getCompanyDtoByLoggedInUser() {
         return securityService.getLoggedInUser().getCompany();
     }
 

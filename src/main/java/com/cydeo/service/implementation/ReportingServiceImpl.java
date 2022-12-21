@@ -37,7 +37,7 @@ public class ReportingServiceImpl implements ReportingService {
     @Override
     public List<InvoiceProductDto> getStockData() {
         return invoiceProductRepository
-                .findAllByInvoice_InvoiceStatusAndInvoice_Company(InvoiceStatus.APPROVED, getLoggedInUsersCompany())
+                .findAllByInvoice_InvoiceStatusAndInvoice_Company(InvoiceStatus.APPROVED, getCompanyOfLoggedInUsers())
                 .stream()
                 .sorted(Comparator.comparing(InvoiceProduct::getId).reversed())
                 .map(each -> mapperUtil.convert(each, new InvoiceProductDto()))
@@ -48,7 +48,7 @@ public class ReportingServiceImpl implements ReportingService {
     public Map<String, BigDecimal> getMonthlyProfitLossDataMap() {
         Map<String, BigDecimal> profitLossDataMap = new TreeMap<>();
         List<InvoiceProduct> salesInvoiceProducts = invoiceProductRepository
-                .findAllByInvoice_InvoiceTypeAndInvoice_Company(InvoiceType.SALES, getLoggedInUsersCompany());
+                .findAllByInvoice_InvoiceTypeAndInvoice_Company(InvoiceType.SALES, getCompanyOfLoggedInUsers());
         for (InvoiceProduct invoiceProduct : salesInvoiceProducts) {
             int year = invoiceProduct.getInvoice().getDate().getYear();
             String month = invoiceProduct.getInvoice().getDate().getMonth().toString();
@@ -59,8 +59,8 @@ public class ReportingServiceImpl implements ReportingService {
         return profitLossDataMap;
     }
 
-    private Company getLoggedInUsersCompany(){
-        return mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+    private Company getCompanyOfLoggedInUsers(){
+        return mapperUtil.convert(companyService.getCompanyDtoByLoggedInUser(), new Company());
     }
 
 }

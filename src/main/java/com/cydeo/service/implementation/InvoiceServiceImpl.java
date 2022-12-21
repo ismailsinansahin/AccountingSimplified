@@ -38,7 +38,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public List<InvoiceDto> getAllInvoicesOfCompany(InvoiceType invoiceType){
-        return invoiceRepository.findInvoicesByCompanyAndInvoiceType(getLoggedInUsersCompany(), invoiceType)
+        return invoiceRepository.findInvoicesByCompanyAndInvoiceType(getCompanyOfLoggedInUsers(), invoiceType)
                 .stream()
                 .sorted(Comparator.comparing(Invoice::getInvoiceNo))
                 .map(each -> mapperUtil.convert(each, new InvoiceDto()))
@@ -48,7 +48,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public List<InvoiceDto> getAllInvoicesByInvoiceStatus(InvoiceStatus status) {
-        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceStatus(getLoggedInUsersCompany(), InvoiceStatus.APPROVED);
+        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceStatus(getCompanyOfLoggedInUsers(), InvoiceStatus.APPROVED);
         return invoices
                 .stream()
                 .map(invoice -> mapperUtil.convert(invoice, new InvoiceDto()))
@@ -57,7 +57,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public InvoiceDto save(InvoiceDto invoiceDto, InvoiceType invoiceType){
-        invoiceDto.setCompany(companyService.getCompanyByLoggedInUser());
+        invoiceDto.setCompany(companyService.getCompanyDtoByLoggedInUser());
         invoiceDto.setInvoiceType(invoiceType);
         invoiceDto.setInvoiceStatus(InvoiceStatus.AWAITING_APPROVAL);
         Invoice invoice = mapperUtil.convert(invoiceDto, new Invoice());
@@ -100,7 +100,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public List<InvoiceDto> getLastThreeInvoices() {
-        return invoiceRepository.findInvoicesByCompanyAndInvoiceStatusOrderByDateDesc(getLoggedInUsersCompany(), InvoiceStatus.APPROVED)
+        return invoiceRepository.findInvoicesByCompanyAndInvoiceStatusOrderByDateDesc(getCompanyOfLoggedInUsers(), InvoiceStatus.APPROVED)
                 .stream()
                 .limit(3)
                 .map(each -> mapperUtil.convert(each, new InvoiceDto()))
@@ -117,7 +117,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     private String generateInvoiceNo(InvoiceType invoiceType){
-        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceType(getLoggedInUsersCompany(), invoiceType);
+        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceType(getCompanyOfLoggedInUsers(), invoiceType);
         if (invoices.size() == 0) {
             return invoiceType.name().charAt(0) + "-001";
         }
@@ -167,11 +167,11 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public boolean checkIfInvoiceExist(Long clientVendorId) {
-        return invoiceRepository.countAllByCompanyAndClientVendor_Id(getLoggedInUsersCompany(), clientVendorId) > 0;
+        return invoiceRepository.countAllByCompanyAndClientVendor_Id(getCompanyOfLoggedInUsers(), clientVendorId) > 0;
     }
 
-    private Company getLoggedInUsersCompany(){
-        return mapperUtil.convert(companyService.getCompanyByLoggedInUser(), new Company());
+    private Company getCompanyOfLoggedInUsers(){
+        return mapperUtil.convert(companyService.getCompanyDtoByLoggedInUser(), new Company());
     }
 
 }
