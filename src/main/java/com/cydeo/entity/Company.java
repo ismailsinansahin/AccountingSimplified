@@ -1,5 +1,6 @@
 package com.cydeo.entity;
 
+import com.cydeo.entity.common.BaseEntity;
 import com.cydeo.enums.CompanyStatus;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -15,7 +16,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "companies")
 @Where(clause = "is_deleted=false")
-public class Company extends BaseEntity{
+public class Company extends BaseEntity {
 
     @Column(unique = true)
     private String title;

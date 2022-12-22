@@ -1,5 +1,6 @@
 package com.cydeo.entity;
 
+import com.cydeo.entity.common.BaseEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Where;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 @Where(clause = "is_deleted=false")
-public class User extends BaseEntity{
+public class User extends BaseEntity {
 
     @Column(unique = true)
     private String username;

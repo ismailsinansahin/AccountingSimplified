@@ -6,18 +6,27 @@ import com.cydeo.dto.UserDto;
 import com.cydeo.service.CompanyService;
 import com.cydeo.service.RoleService;
 import com.cydeo.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static org.springframework.test.web.servlet.result.StatusResultMatchers.*;
 
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.http.ResponseEntity.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(UserController.class)
 class UserControllerTest {
 
@@ -40,6 +49,7 @@ class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/users/list")
                         .header("username", "root@cydeo.com")
                         .header("password", "Abc1"))
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized())
                 .andDo(print());
     }
 
@@ -76,5 +86,17 @@ class UserControllerTest {
                         .phone("123456789")
                         .build()
         );
+    }
+
+    // converts any object to Json
+    private static String toJsonString(final Object obj) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+            objectMapper.registerModule(new JavaTimeModule());
+            return objectMapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

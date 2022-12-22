@@ -1,5 +1,6 @@
 package com.cydeo.entity;
 
+import com.cydeo.entity.common.BaseEntity;
 import com.cydeo.enums.ProductUnit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "products")
 @Where(clause = "is_deleted=false")
-public class Product extends BaseEntity{
+public class Product extends BaseEntity {
 
     private String name;
 

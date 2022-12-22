@@ -1,5 +1,6 @@
 package com.cydeo.entity;
 
+import com.cydeo.entity.common.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "invoice_products")
 @Where(clause = "is_deleted=false")
-public class InvoiceProduct extends BaseEntity{
+public class InvoiceProduct extends BaseEntity {
 
     private int quantity;
     private BigDecimal price;
