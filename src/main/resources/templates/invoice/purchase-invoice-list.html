@@ -65,7 +65,7 @@
                                                                             <button class="btn btn-danger mb-2 mb-sm-0 mr-sm-2">Delete</button>
                                                                         </a>
                                                                         <a sec:authorize="hasAnyAuthority('Manager')"
-                                                                           th:if="${invoice.invoiceStatus.value == 'Awaiting Approval' && invoice.invoiceProducts.size() > 0}" type="button"
+                                                                           th:if="${invoice.invoiceStatus.value == 'Awaiting Approval' && invoice.getTotal() != 0}" type="button"
                                                                            th:href ="@{/purchaseInvoices/approve/{id}(id=${invoice.getId()})}" >
                                                                             <button class="btn btn-success mb-2 mb-sm-0 mr-sm-2">Approve</button>
                                                                         </a>
