@@ -22,13 +22,12 @@ public class DashboardController {
 
     @GetMapping("/dashboard")
     public String navigateToDashboard(Model model) throws Exception {
-        throw new RuntimeException("teseeet");
-//        model.addAttribute("companyTitle", companyService.getCompanyDtoByLoggedInUser().getTitle());
-//        model.addAttribute("summaryNumbers", dashboardService.getSummaryNumbers());
-//        model.addAttribute("invoices", invoiceService.getLastThreeInvoices());
-//        model.addAttribute("exchangeRates", dashboardService.getExchangeRates());
-//        model.addAttribute("title", "Cydeo Accounting-Dashboard");
-//        return "dashboard";
+        model.addAttribute("companyTitle", companyService.getCompanyDtoByLoggedInUser().getTitle());
+        model.addAttribute("summaryNumbers", dashboardService.getSummaryNumbers());
+        model.addAttribute("invoices", invoiceService.getLastThreeInvoices());
+        model.addAttribute("exchangeRates", dashboardService.getExchangeRates());
+        model.addAttribute("title", "Cydeo Accounting-Dashboard");
+        return "dashboard";
     }
 
 }
