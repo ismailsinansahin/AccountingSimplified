@@ -1,5 +1,6 @@
 package com.cydeo.controller;
 
+import com.cydeo.config.SecurityConfig;
 import com.cydeo.dto.CompanyDto;
 import com.cydeo.dto.RoleDto;
 import com.cydeo.dto.UserDto;
@@ -14,19 +15,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.springframework.test.web.servlet.result.StatusResultMatchers.*;
-
 import java.util.List;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.http.ResponseEntity.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc(addFilters = false)
+//@Import(SecurityConfig.class)
 @WebMvcTest(UserController.class)
 class UserControllerTest {
 
@@ -46,10 +49,13 @@ class UserControllerTest {
     void listUsers() throws Exception {
         when(userService.getFilteredUsers()).thenReturn(getUsers());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/users/list")
-                        .header("username", "root@cydeo.com")
-                        .header("password", "Abc1"))
-                .andExpect(MockMvcResultMatchers.status().isUnauthorized())
+        mockMvc.perform(get("/users/list")
+//                        .header("username", "root@cydeo.com")
+//                        .header("password", "Abc1")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("user-list"))
+                .andExpect(model().attributeExists("users"))
                 .andDo(print());
     }
 
@@ -63,11 +69,22 @@ class UserControllerTest {
         when(userService.emailExist(getUsers().get(0))).thenReturn(false);
         when(userService.save(getUsers().get(0))).thenReturn(getUsers().get(0));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/users/create"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/users/create")
+                        .param("firstname", "duke")
+                        .param("lastname", "duke")
+                        .param("username", "C0124@gmail.com")
+                        .param("phone", "+111 123 456 789")
+                        .param("password", "Abc1")
+                        .param("confirmPassword", "Abc1")
+//                        .param("role", String.valueOf(new RoleDto(1L, "Admin")))
+//                        .param("company", "Blue Tech")
+                        .with(csrf()))
+//                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/users/list"))
                 .andDo(print());
     }
 
-    private List<UserDto> getUsers(){
+    private List<UserDto> getUsers() {
         return List.of(
                 UserDto.builder()
                         .company(CompanyDto.builder().title("Blue Tech").build())
@@ -76,6 +93,7 @@ class UserControllerTest {
                         .lastname("Brown")
                         .username("admin@bluetech.com")
                         .phone("123456789")
+                        .isOnlyAdmin(false)
                         .build(),
                 UserDto.builder()
                         .company(CompanyDto.builder().title("Green Tech").build())
@@ -84,6 +102,7 @@ class UserControllerTest {
                         .lastname("Grant")
                         .username("admin@bluetech.com")
                         .phone("123456789")
+                        .isOnlyAdmin(false)
                         .build()
         );
     }

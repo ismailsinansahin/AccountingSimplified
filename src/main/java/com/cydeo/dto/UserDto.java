@@ -45,13 +45,13 @@ public class UserDto {
             + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$")                     // +111 123 45 67 89
     private String phone;
 
-    @NotNull
+//    @NotNull
     private RoleDto role;
 
-    @NotNull
+//    @NotNull
     private CompanyDto company;
 
-    private Boolean isOnlyAdmin;
+    private boolean isOnlyAdmin;
 
 
     public Long getId() {
