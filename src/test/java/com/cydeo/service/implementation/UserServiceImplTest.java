@@ -200,20 +200,20 @@ class UserServiceImplTest {
     private List<User> getUsers(){
         return List.of(
                 User.builder()
-                        .company(Company.builder().title("Blue Tech").build())
+                        .company(Company.builder().title("Blue Tech").id(1L).build())
                         .role(new Role("Admin"))
                         .firstname("Chris")
                         .lastname("Brown")
                         .username("admin@bluetech.com")
                         .phone("123456789")
-//                        .build(),
-//                User.builder()
-//                        .company(Company.builder().title("Green Tech").build())
-//                        .role(new Role("Admin"))
-//                        .firstname("Mary")
-//                        .lastname("Grant")
-//                        .username("admin@bluetech.com")
-//                        .phone("123456789")
+                        .build(),
+                User.builder()
+                        .company(Company.builder().title("Green Tech").id(1L).build())
+                        .role(new Role("Admin"))
+                        .firstname("Mary")
+                        .lastname("Grant")
+                        .username("admin@bluetech.com")
+                        .phone("123456789")
                         .build()
         );
     }
@@ -221,20 +221,20 @@ class UserServiceImplTest {
     private List<UserDto> getUserDTOs(){
         return List.of(
                 UserDto.builder()
-                        .company(CompanyDto.builder().title("Blue Tech").build())
+                        .company(CompanyDto.builder().title("Blue Tech").id(1L).build())
                         .role(new RoleDto(1L, "Admin"))
                         .firstname("Chris")
                         .lastname("Brown")
                         .username("admin@bluetech.com")
                         .phone("123456789")
-//                        .build(),
-//                UserDto.builder()
-//                        .company(CompanyDto.builder().title("Green Tech").build())
-//                        .role(new RoleDto(1L, "Admin"))
-//                        .firstname("Mary")
-//                        .lastname("Grant")
-//                        .username("admin@bluetech.com")
-//                        .phone("123456789")
+                        .build(),
+                UserDto.builder()
+                        .company(CompanyDto.builder().title("Green Tech").id(1L).build())
+                        .role(new RoleDto(1L, "Admin"))
+                        .firstname("Mary")
+                        .lastname("Grant")
+                        .username("admin@bluetech.com")
+                        .phone("123456789")
                         .build()
         );
     }
