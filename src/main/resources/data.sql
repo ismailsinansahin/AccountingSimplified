@@ -10,19 +10,19 @@ insert into addresses(insert_date_time, insert_user_id, is_deleted, last_update_
 values ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
         '7925 Jones Branch Dr, #3300', 'Tysons', 'Virginia', 'VA', 'United States', '22102-1234'),
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
-        'Future Street', 'Times Square', 'Atlanta', 'Alabama', 'United States', '54321-4321'),
+        'Future Street', 'Times Square', 'Atlanta', 'Georgia', 'United States', '30310-4321'),
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
-        'North Street', 'Circle Square', 'San Francisco', 'California', 'United States', '65245-8546'),
+        'North Street', 'Circle Square', 'San Francisco', 'California', 'United States', '94117-8546'),
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
-        'West Street', 'Triangle Square', 'Los Angeles', 'California', 'United States', '54782-5214'),
+        'West Street', 'Triangle Square', 'Los Angeles', 'California', 'United States', '90002-5214'),
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
-        'East Street', 'Cube Square', 'Los Angeles', 'California', 'United States', '54782-5214'),
+        'East Street', 'Cube Square', 'Los Angeles', 'California', 'United States', '90004-8426'),
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
-        'South Street', 'Times Square', 'Los Angeles', 'California', 'United States', '54782-5214'),
+        'South Street', 'Times Square', 'Los Angeles', 'California', 'United States', '90004-6985'),
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
-        'SouthWest Street', 'Puzzle Square', 'Los Angeles', 'California', 'United States', '65654-8989'),
+        'SouthWest Street', 'Puzzle Square', 'Los Angeles', 'California', 'United States', '90002-8989'),
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
-        'OwerWest Street', 'Android Square', 'Los Angeles', 'Phoneix', 'United States', '65654-8989');;
+        'OwerWest Street', 'Android Square', 'Phoneix', 'Arizona', 'United States', '85034-8989');
 
 insert into companies(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                       title, phone, website, address_id, company_status)
