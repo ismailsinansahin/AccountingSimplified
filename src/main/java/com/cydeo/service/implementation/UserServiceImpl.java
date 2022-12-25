@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -75,14 +76,17 @@ public class UserServiceImpl implements UserService {
     public UserDto update(UserDto userDto) {
         User updatedUser = mapperUtil.convert(userDto, new User());
         updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
-        updatedUser.setEnabled(userRepository.findUserById(userDto.getId()).isEnabled());
+        User user = userRepository.findById(userDto.getId())
+                .orElseThrow(()-> new NoSuchElementException("this user does not exist"));
+        updatedUser.setEnabled(user.isEnabled());
         User savedUser = userRepository.save(updatedUser);
         return mapperUtil.convert(savedUser, userDto);
     }
 
     @Override
     public void delete(Long userId) {
-        User user = userRepository.findUserById(userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new NoSuchElementException("this user does not exist"));
         user.setUsername(user.getUsername() + "-" + user.getId());  // without this modification, if entity has column(unique=true)
                                                                     // and we want to save a user with same email, it throws exception.
         user.setIsDeleted(true);
@@ -91,7 +95,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean emailExist(UserDto userDto) {
-        User userWithUpdatedEmail = userRepository.findByUsername(userDto.getUsername()).orElseThrow( () -> new AccountingException("User not found"));
+        User userWithUpdatedEmail = userRepository.findByUsername(userDto.getUsername())
+                .orElse(null);
         if (userWithUpdatedEmail == null) return false;
         return !userWithUpdatedEmail.getId().equals(userDto.getId());
     }

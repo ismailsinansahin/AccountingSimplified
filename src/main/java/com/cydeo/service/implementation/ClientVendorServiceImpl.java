@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,7 +31,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public ClientVendorDto findClientVendorById(Long id) {
-        ClientVendor clientVendor = clientVendorRepository.findClientVendorById(id);
+        ClientVendor clientVendor = clientVendorRepository.findById(id)
+                .orElseThrow( ()-> new NoSuchElementException("This client or vendor does not exist"));
         return mapperUtil.convert(clientVendor, new ClientVendorDto());
     }
 
@@ -64,7 +66,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public ClientVendorDto update(Long clientVendorId, ClientVendorDto clientVendorDto) throws ClassNotFoundException, CloneNotSupportedException {
-        ClientVendor savedClientVendor = clientVendorRepository.findById(clientVendorId).get();
+        ClientVendor savedClientVendor = clientVendorRepository.findById(clientVendorId)
+                .orElseThrow(()-> new NoSuchElementException("This client or vendor does not exist"));
         clientVendorDto.getAddress().setId(savedClientVendor.getAddress().getId());     // otherwise it creates new address instead of updating existing one
         clientVendorDto.setCompany(companyService.getCompanyDtoByLoggedInUser());
         ClientVendor updatedClientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());
@@ -73,7 +76,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public void delete(Long clientVendorId) {
-        ClientVendor clientVendor = clientVendorRepository.findClientVendorById(clientVendorId);
+        ClientVendor clientVendor = clientVendorRepository.findById(clientVendorId)
+                .orElseThrow(()-> new NoSuchElementException("This client or vendor does not exist"));
         clientVendor.setIsDeleted(true);
         clientVendor.setClientVendorName(clientVendor.getClientVendorName() + "-" + clientVendor.getId());
         clientVendorRepository.save(clientVendor);
