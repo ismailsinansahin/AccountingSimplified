@@ -9,7 +9,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationPropertiesBinding
 public class InvoiceProductDtoConverter implements Converter<String, InvoiceProductDto> {
     private final InvoiceProductService invoiceProductService;
 
@@ -18,9 +17,10 @@ public class InvoiceProductDtoConverter implements Converter<String, InvoiceProd
         this.invoiceProductService = invoiceProductService;
     }
 
-    @SneakyThrows
     @Override
     public InvoiceProductDto convert(String id){
+        if (id == null || id.isBlank())
+            return null;
         return invoiceProductService.findInvoiceProductById(Long.parseLong(id));
     }
 

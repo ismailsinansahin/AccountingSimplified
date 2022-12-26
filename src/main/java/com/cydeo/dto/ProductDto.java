@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class ProductDto {
 
-    private Long id;
+    private long id;
 
     @NotBlank(message = "Product Name is a required field.")
     @Size(max = 100, min = 2, message = "Product Name should be 2-100 characters long.")

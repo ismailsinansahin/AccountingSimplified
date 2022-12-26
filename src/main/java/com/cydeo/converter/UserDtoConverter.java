@@ -8,7 +8,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationPropertiesBinding
 public class UserDtoConverter implements Converter<String, UserDto> {
 
     private final UserService userService;
@@ -17,7 +16,6 @@ public class UserDtoConverter implements Converter<String, UserDto> {
         this.userService = userService;
     }
 
-//    @SneakyThrows
     @Override
     public UserDto convert(String id){
         if (id == null || id.isBlank())

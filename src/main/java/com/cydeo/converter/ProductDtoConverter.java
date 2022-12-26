@@ -8,7 +8,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationPropertiesBinding
 public class ProductDtoConverter implements Converter<String, ProductDto> {
 
     private final ProductService productService;
@@ -17,7 +16,6 @@ public class ProductDtoConverter implements Converter<String, ProductDto> {
         this.productService = productService;
     }
 
-//    @SneakyThrows
     @Override
     public ProductDto convert(String id){
         if (id == null || id.isBlank())

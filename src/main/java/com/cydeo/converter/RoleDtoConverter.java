@@ -8,7 +8,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationPropertiesBinding
 public class RoleDtoConverter implements Converter<String, RoleDto> {
 
     private final RoleService roleService;
@@ -17,7 +16,6 @@ public class RoleDtoConverter implements Converter<String, RoleDto> {
         this.roleService = roleService;
     }
 
-//    @SneakyThrows
     @Override
     public RoleDto convert(String id){
         // it throws error if user selects "Select" even with @SneakyThrows

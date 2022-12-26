@@ -8,7 +8,6 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationPropertiesBinding
 public class ClientVendorDtoConverter implements Converter<String, ClientVendorDto> {
 
     private final ClientVendorService clientVendorService;
