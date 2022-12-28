@@ -71,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long productId) {
         Product product = productRepository.findById(productId).get();
         List<InvoiceProduct> invoiceProducts = invoiceProductService.findAllInvoiceProductsByProductId(product.getId());
-        if (invoiceProducts.size() == 0 || product.getQuantityInStock() == 0){
+        if (invoiceProducts.size() == 0 && product.getQuantityInStock() == 0){
             product.setIsDeleted(true);
         }else System.out.println("You cannot delete this product");
         productRepository.save(product);
