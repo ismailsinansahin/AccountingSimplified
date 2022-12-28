@@ -2,12 +2,12 @@ package com.cydeo.accountingsimplified.service.implementation;
 
 import com.cydeo.accountingsimplified.dto.ClientVendorDto;
 import com.cydeo.accountingsimplified.entity.ClientVendor;
-import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.enums.ClientVendorType;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.ClientVendorRepository;
 import com.cydeo.accountingsimplified.service.ClientVendorService;
 import com.cydeo.accountingsimplified.service.SecurityService;
+import com.cydeo.accountingsimplified.service.common.CommonService;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;

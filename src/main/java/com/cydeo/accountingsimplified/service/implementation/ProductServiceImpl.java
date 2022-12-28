@@ -1,8 +1,6 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
 import com.cydeo.accountingsimplified.dto.ProductDto;
-import com.cydeo.accountingsimplified.entity.Category;
-import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.entity.InvoiceProduct;
 import com.cydeo.accountingsimplified.entity.Product;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
@@ -10,6 +8,7 @@ import com.cydeo.accountingsimplified.repository.ProductRepository;
 import com.cydeo.accountingsimplified.service.InvoiceProductService;
 import com.cydeo.accountingsimplified.service.ProductService;
 import com.cydeo.accountingsimplified.service.SecurityService;
+import com.cydeo.accountingsimplified.service.common.CommonService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 

@@ -7,6 +7,7 @@ import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.UserRepository;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import com.cydeo.accountingsimplified.service.UserService;
+import com.cydeo.accountingsimplified.service.common.CommonService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

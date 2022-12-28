@@ -1,7 +1,6 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
 import com.cydeo.accountingsimplified.dto.InvoiceProductDto;
-import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.entity.InvoiceProduct;
 import com.cydeo.accountingsimplified.enums.InvoiceStatus;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
@@ -9,6 +8,7 @@ import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.InvoiceProductRepository;
 import com.cydeo.accountingsimplified.service.ReportingService;
 import com.cydeo.accountingsimplified.service.SecurityService;
+import com.cydeo.accountingsimplified.service.common.CommonService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

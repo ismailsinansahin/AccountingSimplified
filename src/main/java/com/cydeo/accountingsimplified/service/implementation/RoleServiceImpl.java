@@ -1,13 +1,11 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
 import com.cydeo.accountingsimplified.dto.RoleDto;
-import com.cydeo.accountingsimplified.dto.UserDto;
-import com.cydeo.accountingsimplified.entity.Role;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.RoleRepository;
 import com.cydeo.accountingsimplified.service.RoleService;
 import com.cydeo.accountingsimplified.service.SecurityService;
-import org.springframework.context.annotation.Lazy;
+import com.cydeo.accountingsimplified.service.common.CommonService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

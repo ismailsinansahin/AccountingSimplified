@@ -7,6 +7,7 @@ import com.cydeo.accountingsimplified.enums.InvoiceType;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.*;
 import com.cydeo.accountingsimplified.service.*;
+import com.cydeo.accountingsimplified.service.common.CommonService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

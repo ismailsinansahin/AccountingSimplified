@@ -2,13 +2,12 @@ package com.cydeo.accountingsimplified.service.implementation;
 
 import com.cydeo.accountingsimplified.dto.CategoryDto;
 import com.cydeo.accountingsimplified.entity.Category;
-import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.CategoryRepository;
 import com.cydeo.accountingsimplified.service.CategoryService;
 import com.cydeo.accountingsimplified.service.ProductService;
 import com.cydeo.accountingsimplified.service.SecurityService;
-import lombok.AllArgsConstructor;
+import com.cydeo.accountingsimplified.service.common.CommonService;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;

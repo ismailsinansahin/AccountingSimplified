@@ -1,4 +1,4 @@
-package com.cydeo.accountingsimplified.service.implementation;
+package com.cydeo.accountingsimplified.service.common;
 
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.entity.User;
