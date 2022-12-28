@@ -77,10 +77,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(Long productId) {
         Product product = productRepository.findById(productId).get();
-        List<InvoiceProduct> invoiceProducts = invoiceProductService.findAllInvoiceProductsByProductId(product.getId());
-        if (invoiceProducts.size() == 0 || product.getQuantityInStock() == 0){
-            product.setIsDeleted(true);
-        }else System.out.println("You cannot delete this product");
+        product.setIsDeleted(true);
         productRepository.save(product);
     }
 
@@ -91,6 +88,15 @@ public class ProductServiceImpl implements ProductService {
         Product existingProduct = productRepository.findByNameAndCategoryCompany(productDto.getName(), actualCompany);
         if (existingProduct == null) return false;
         return !existingProduct.getId().equals(productDto.getId());
+    }
+    @Override
+    public boolean checkProductQuantity(Long productId){
+        Product product = productRepository.findById(productId).get();
+        List<InvoiceProduct> invoiceProducts = invoiceProductService.findAllInvoiceProductsByProductId(product.getId());
+        if (invoiceProducts.size() == 0 && product.getQuantityInStock() == 0){
+            return true;
+        }
+        return false;
     }
 
 
