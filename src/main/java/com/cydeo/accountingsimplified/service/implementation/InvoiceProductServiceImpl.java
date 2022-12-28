@@ -150,6 +150,8 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                         .add(salesTotalForQty.subtract(costTotalForQty));
                 // Set remaining quantity of that purchasedInvoice to zero, means we are selling all we purchased in that Invoice...
                 purchasedProduct.setRemainingQuantity(0);
+                //
+                toBeSoldProduct.setRemainingQuantity(0);
                 // Set profit/Loss of the saleInvoiceProduct
                 toBeSoldProduct.setProfitLoss(profitLoss);
                 // Save purchaseInvoiceProduct and salesInvoiceProduct to database... Because we made some changes...
