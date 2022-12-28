@@ -17,18 +17,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class InvoiceServiceImpl implements InvoiceService {
+public class InvoiceServiceImpl extends CommonService implements InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final InvoiceProductService invoiceProductService;
-    private final MapperUtil mapperUtil;
-    private final SecurityService securityService;
 
-    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, InvoiceProductService invoiceProductService,
-                              MapperUtil mapperUtil, SecurityService securityService) {
+    public InvoiceServiceImpl(SecurityService securityService, MapperUtil mapperUtil, InvoiceRepository invoiceRepository, InvoiceProductService invoiceProductService) {
+        super(securityService, mapperUtil);
         this.invoiceRepository = invoiceRepository;
         this.invoiceProductService = invoiceProductService;
-        this.mapperUtil = mapperUtil;
-        this.securityService = securityService;
     }
 
     @Override
@@ -38,8 +34,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public List<InvoiceDto> getAllInvoicesOfCompany(InvoiceType invoiceType){
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        return invoiceRepository.findInvoicesByCompanyAndInvoiceType(company, invoiceType)
+        return invoiceRepository.findInvoicesByCompanyAndInvoiceType(getCompany(), invoiceType)
                 .stream()
                 .sorted(Comparator.comparing(Invoice::getInvoiceNo))
                 .map(each -> mapperUtil.convert(each, new InvoiceDto()))
@@ -49,8 +44,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public List<InvoiceDto> getAllInvoicesByInvoiceStatus(InvoiceStatus status) {
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceStatus(company, InvoiceStatus.APPROVED);
+        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceStatus(getCompany(), InvoiceStatus.APPROVED);
         return invoices
                 .stream()
                 .map(invoice -> mapperUtil.convert(invoice, new InvoiceDto()))
@@ -102,8 +96,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public List<InvoiceDto> getLastThreeInvoices() {
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        return invoiceRepository.findInvoicesByCompanyAndInvoiceStatusOrderByDateDesc(company, InvoiceStatus.APPROVED)
+        return invoiceRepository.findInvoicesByCompanyAndInvoiceStatusOrderByDateDesc(getCompany(), InvoiceStatus.APPROVED)
                 .stream()
                 .limit(3)
                 .map(each -> mapperUtil.convert(each, new InvoiceDto()))
@@ -120,8 +113,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     private String generateInvoiceNo(InvoiceType invoiceType){
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceType(company, invoiceType);
+        List<Invoice> invoices = invoiceRepository.findInvoicesByCompanyAndInvoiceType(getCompany(), invoiceType);
         if (invoices.size() == 0) {
             return invoiceType.name().charAt(0) + "-001";
         }
@@ -171,8 +163,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public boolean checkIfInvoiceExist(Long clientVendorId) {
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        return invoiceRepository.countAllByCompanyAndClientVendor_Id(company, clientVendorId) > 0;
+        return invoiceRepository.countAllByCompanyAndClientVendor_Id(getCompany(), clientVendorId) > 0;
     }
 
 

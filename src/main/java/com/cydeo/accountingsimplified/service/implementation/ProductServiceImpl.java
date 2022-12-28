@@ -19,16 +19,13 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl extends CommonService implements ProductService {
     private final ProductRepository productRepository;
-    private final SecurityService securityService;
-    private final MapperUtil mapperUtil;
     private final InvoiceProductService invoiceProductService;
 
-    public ProductServiceImpl(ProductRepository productRepository, SecurityService securityService, MapperUtil mapperUtil, @Lazy InvoiceProductService invoiceProductService) {
+    public ProductServiceImpl(SecurityService securityService, MapperUtil mapperUtil, ProductRepository productRepository, @Lazy InvoiceProductService invoiceProductService) {
+        super(securityService, mapperUtil);
         this.productRepository = productRepository;
-        this.securityService = securityService;
-        this.mapperUtil = mapperUtil;
         this.invoiceProductService = invoiceProductService;
     }
 
@@ -40,8 +37,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getAllProducts() {
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        return productRepository.findAllByCategoryCompany(company)
+        return productRepository.findAllByCategoryCompany(getCompany())
                 .stream()
                 .sorted(Comparator.comparing((Product product) -> product.getCategory().getDescription())
                 .thenComparing(Product::getName))
@@ -84,8 +80,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean isProductNameExist(ProductDto productDto) {
-        Company actualCompany = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        Product existingProduct = productRepository.findByNameAndCategoryCompany(productDto.getName(), actualCompany);
+        Product existingProduct = productRepository.findByNameAndCategoryCompany(productDto.getName(),getCompany());
         if (existingProduct == null) return false;
         return !existingProduct.getId().equals(productDto.getId());
     }

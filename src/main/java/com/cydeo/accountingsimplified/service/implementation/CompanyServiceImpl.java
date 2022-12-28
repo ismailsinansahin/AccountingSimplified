@@ -16,17 +16,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CompanyServiceImpl implements CompanyService {
+public class CompanyServiceImpl extends CommonService implements CompanyService {
 
     private final CompanyRepository companyRepository;
-    private final SecurityService securityService;
-    private final MapperUtil mapperUtil;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository,
-                              @Lazy SecurityService securityService, UserService userService, MapperUtil mapperUtil) {
+    public CompanyServiceImpl(@Lazy SecurityService securityService, MapperUtil mapperUtil, CompanyRepository companyRepository) {
+        super(securityService, mapperUtil);
         this.companyRepository = companyRepository;
-        this.securityService = securityService;
-        this.mapperUtil = mapperUtil;
     }
 
     @Override
@@ -37,11 +33,11 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public List<CompanyDto> getAllCompanies() {
-        boolean isRootUser = securityService.getLoggedInUser().getRole().getDescription().equalsIgnoreCase("root user");
+        boolean isRootUser = getCurrentUser().getRole().getDescription().equalsIgnoreCase("root user");
         return companyRepository.findAll()
                 .stream()
                 .filter(company -> company.getId() != 1)
-                .filter(each -> isRootUser ? true : each.getTitle().equals(getCompanyByLoggedInUser().getTitle()))
+                .filter(each -> isRootUser ? true : each.getTitle().equals(getCompany().getTitle()))
                 .sorted(Comparator.comparing(Company::getCompanyStatus).thenComparing(Company::getTitle))
                 .map(each -> mapperUtil.convert(each, new CompanyDto()))
                 .collect(Collectors.toList());
@@ -87,7 +83,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDto getCompanyByLoggedInUser() {
-        return securityService.getLoggedInUser().getCompany();
+        return mapperUtil.convert(getCompany(),new CompanyDto());
     }
 
 }

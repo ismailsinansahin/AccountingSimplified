@@ -19,24 +19,18 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 @Service
-public class ReportingServiceImpl implements ReportingService {
+public class ReportingServiceImpl extends CommonService implements ReportingService {
 
     private final InvoiceProductRepository invoiceProductRepository;
-    private final SecurityService securityService;
-    private final MapperUtil mapperUtil;
 
-    public ReportingServiceImpl(InvoiceProductRepository invoiceProductRepository,
-                                SecurityService securityService,
-                                MapperUtil mapperUtil) {
+    public ReportingServiceImpl(SecurityService securityService, MapperUtil mapperUtil, InvoiceProductRepository invoiceProductRepository) {
+        super(securityService, mapperUtil);
         this.invoiceProductRepository = invoiceProductRepository;
-        this.securityService = securityService;
-        this.mapperUtil = mapperUtil;
     }
 
     @Override
     public List<InvoiceProductDto> getStockData() {
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        return invoiceProductRepository.findAllByInvoice_InvoiceStatusAndInvoice_Company(InvoiceStatus.APPROVED, company)
+        return invoiceProductRepository.findAllByInvoice_InvoiceStatusAndInvoice_Company(InvoiceStatus.APPROVED, getCompany())
                 .stream()
                 .sorted(Comparator.comparing(InvoiceProduct::getId).reversed())
                 .map(each -> mapperUtil.convert(each, new InvoiceProductDto()))
@@ -46,8 +40,7 @@ public class ReportingServiceImpl implements ReportingService {
     @Override
     public Map<String, BigDecimal> getMonthlyProfitLossDataMap() {
         Map<String, BigDecimal> profitLossDataMap = new TreeMap<>();
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        List<InvoiceProduct> salesInvoiceProducts = invoiceProductRepository.findAllByInvoice_InvoiceTypeAndInvoice_Company(InvoiceType.SALES, company);
+        List<InvoiceProduct> salesInvoiceProducts = invoiceProductRepository.findAllByInvoice_InvoiceTypeAndInvoice_Company(InvoiceType.SALES, getCompany());
         for (InvoiceProduct invoiceProduct : salesInvoiceProducts) {
             int year = invoiceProduct.getInvoice().getDate().getYear();
             String month = invoiceProduct.getInvoice().getDate().getMonth().toString();

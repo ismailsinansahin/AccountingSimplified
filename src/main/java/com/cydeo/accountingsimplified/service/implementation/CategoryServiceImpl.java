@@ -15,14 +15,17 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
-@Service
-public class CategoryServiceImpl implements CategoryService {
-    private final CategoryRepository categoryRepository;
-    private final SecurityService securityService;
-    private final ProductService productService;
-    private final MapperUtil mapperUtil;
 
+@Service
+public class CategoryServiceImpl extends CommonService implements CategoryService {
+    private final CategoryRepository categoryRepository;
+    private final ProductService productService;
+
+    public CategoryServiceImpl(SecurityService securityService, MapperUtil mapperUtil, CategoryRepository categoryRepository, ProductService productService) {
+        super(securityService, mapperUtil);
+        this.categoryRepository = categoryRepository;
+        this.productService = productService;
+    }
 
     @Override
     public CategoryDto findCategoryById(Long categoryId) {
@@ -33,9 +36,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDto> getAllCategories() {
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return categoryRepository
-                .findAllByCompany(company)
+                .findAllByCompany(getCompany())
                 .stream()
                 .sorted(Comparator.comparing(Category::getDescription))
                 .map(each -> mapperUtil.convert(each, new CategoryDto()))
@@ -46,8 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto create(CategoryDto categoryDto) throws Exception {
         Category category = mapperUtil.convert(categoryDto, new Category());
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        category.setCompany(company);
+        category.setCompany(getCompany());
         return mapperUtil.convert(categoryRepository.save(category), new CategoryDto());
     }
 
@@ -72,8 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public boolean isCategoryDescriptionExist(CategoryDto categoryDTO) {
-        Company actualCompany = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        Category existingCategory = categoryRepository.findByDescriptionAndCompany(categoryDTO.getDescription(), actualCompany);
+        Category existingCategory = categoryRepository.findByDescriptionAndCompany(categoryDTO.getDescription(), getCompany());
         if (existingCategory == null) return false;
         return !existingCategory.getId().equals(categoryDTO.getId());
     }

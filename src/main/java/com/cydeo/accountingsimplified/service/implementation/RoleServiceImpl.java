@@ -15,16 +15,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class RoleServiceImpl implements RoleService {
+public class RoleServiceImpl extends CommonService implements RoleService {
 
     private final RoleRepository roleRepository;
-    private final SecurityService securityService;
-    private final MapperUtil mapperUtil;
 
-    public RoleServiceImpl(RoleRepository roleRepository, @Lazy SecurityService securityService, MapperUtil mapperUtil) {
+    public RoleServiceImpl(SecurityService securityService, MapperUtil mapperUtil, RoleRepository roleRepository) {
+        super(securityService, mapperUtil);
         this.roleRepository = roleRepository;
-        this.securityService = securityService;
-        this.mapperUtil = mapperUtil;
     }
 
     @Override
@@ -34,8 +31,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RoleDto> getFilteredRolesForCurrentUser() {
-        UserDto user = securityService.getLoggedInUser();
-        if (user.getRole().getDescription().equals("Root User")) {
+        if (getCurrentUser().getRole().getDescription().equals("Root User")) {
             List<RoleDto> list = new ArrayList<>();
             list.add(mapperUtil.convert(roleRepository.findByDescription("Admin"), new RoleDto()));
             return list;

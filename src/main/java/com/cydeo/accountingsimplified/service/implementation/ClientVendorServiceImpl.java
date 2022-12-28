@@ -15,17 +15,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ClientVendorServiceImpl implements ClientVendorService {
+public class ClientVendorServiceImpl extends CommonService implements ClientVendorService {
 
     private final ClientVendorRepository clientVendorRepository;
-    private final MapperUtil mapperUtil;
-    private final SecurityService securityService;
 
-    public ClientVendorServiceImpl(ClientVendorRepository clientVendorRepository, MapperUtil mapperUtil,
-                                   SecurityService securityService) {
+    public ClientVendorServiceImpl(SecurityService securityService, MapperUtil mapperUtil, ClientVendorRepository clientVendorRepository) {
+        super(securityService, mapperUtil);
         this.clientVendorRepository = clientVendorRepository;
-        this.mapperUtil = mapperUtil;
-        this.securityService = securityService;
     }
 
     @Override
@@ -36,9 +32,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public List<ClientVendorDto> getAllClientVendors() {
-        Company company = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
         return clientVendorRepository
-                .findAllByCompany(company).stream()
+                .findAllByCompany(getCompany()).stream()
                 .sorted(Comparator.comparing(ClientVendor::getClientVendorType)
                 .reversed()
                 .thenComparing(ClientVendor::getClientVendorName))
@@ -80,8 +75,7 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public boolean companyNameExists(ClientVendorDto clientVendorDto) {
-        Company actualCompany = mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company());
-        ClientVendor existingClientVendor = clientVendorRepository.findByClientVendorNameAndCompany(clientVendorDto.getClientVendorName(), actualCompany);
+        ClientVendor existingClientVendor = clientVendorRepository.findByClientVendorNameAndCompany(clientVendorDto.getClientVendorName(), getCompany());
         if (existingClientVendor == null) return false;
         return !existingClientVendor.getId().equals(clientVendorDto.getId());
     }
