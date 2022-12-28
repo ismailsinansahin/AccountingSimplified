@@ -15,6 +15,9 @@ public class MapperUtil {
     }
 
     public <T> T convert(Object objectToBeConverted, T convertedObject) {
+        // http://modelmapper.org/user-manual/configuration/
+        // Ambiguity ignored: Determines whether destination properties that match more than one source property should be ignored
+        // Default Value: false
         modelMapper.getConfiguration().setAmbiguityIgnored(true);
         return modelMapper.map(objectToBeConverted, (Type) convertedObject.getClass());
     }
