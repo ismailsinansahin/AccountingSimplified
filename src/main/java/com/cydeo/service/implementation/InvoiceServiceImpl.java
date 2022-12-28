@@ -84,6 +84,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         mapperUtil.convert(invoice, new InvoiceDto());
     }
 
+
     @Override
     public InvoiceDto printInvoice(Long id) {
         InvoiceDto invoiceDto = mapperUtil.convert(invoiceRepository.findInvoiceById(id), new InvoiceDto());
