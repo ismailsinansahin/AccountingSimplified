@@ -73,7 +73,7 @@ public class ProductController {
     @GetMapping("/delete/{productId}")
     public String delete(@PathVariable("productId") Long productId, RedirectAttributes redirAttrs) {
         if (productService.checkProductQuantity(productId))  {
-            redirAttrs.addFlashAttribute("error", "This product can not be deleted");
+            redirAttrs.addFlashAttribute("error", "This product can not be deleted, You have Invoice/s with that product...");
             return "redirect:/products/list";
         }
         productService.delete(productId);
