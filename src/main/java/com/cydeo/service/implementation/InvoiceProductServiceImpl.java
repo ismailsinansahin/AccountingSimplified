@@ -145,7 +145,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     @Transactional
     void setProfitLossOfInvoiceProductsForSalesInvoice(InvoiceProduct salesInvoiceProduct) {
         List<InvoiceProduct> availableProductsForSale =
-                findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType.PURCHASE, salesInvoiceProduct.getProduct(), 0);
+                findAvailableProductsForSale(salesInvoiceProduct.getProduct());
         for (InvoiceProduct availableProduct : availableProductsForSale) {
             if (salesInvoiceProduct.getRemainingQuantity() <= availableProduct.getRemainingQuantity()) {
                 BigDecimal costTotalForQty = availableProduct.getPrice().multiply(
@@ -175,53 +175,53 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         }
     }
 
-//    private void setProfitLossOfInvoiceProductsForSalesInvoice2(InvoiceProduct toBeSoldProduct) {
-//        // Get all previous Purchase_Invoice_Products which remaining quantity is not ZERO...
-//        List<InvoiceProduct> purchasedProducts = findNotSoldProducts(toBeSoldProduct.getProduct());
-//        // We'll start looking from latest dated InvoiceProduct...Let s say 'purchasedProduct'
-//        for (InvoiceProduct purchasedProduct : purchasedProducts) {
-//            // If the remaining quantity of the latest purchasedProduct, is smaller than the quantity we want to sell
-//            if (toBeSoldProduct.getRemainingQuantity() <= purchasedProduct.getRemainingQuantity()) {
-//                // How much money I spent to buy that much for this very same product before?...
-//                BigDecimal costTotalForQty = purchasedProduct.getPrice().multiply(
-//                        BigDecimal.valueOf(toBeSoldProduct.getRemainingQuantity() * (purchasedProduct.getTax() +100)/100d));
-//                // How much money I will earn from that sale?
-//                BigDecimal salesTotalForQty = toBeSoldProduct.getPrice().multiply(
-//                        BigDecimal.valueOf(toBeSoldProduct.getRemainingQuantity() * (toBeSoldProduct.getTax() +100)/100d));
-//                // Subtract above values and reach your Profit/Loss...
-//                BigDecimal profitLoss = toBeSoldProduct.getProfitLoss().add(salesTotalForQty.subtract( costTotalForQty));
-//                // Update remaining quantity of purchaseInvoiceProduct, so we can calculate this remained products next time..
-//                purchasedProduct.setRemainingQuantity(purchasedProduct.getRemainingQuantity() - toBeSoldProduct.getRemainingQuantity());
-//                // Set profitLoss to the field of saleInvoiceProduct..
-//                toBeSoldProduct.setProfitLoss(profitLoss);
-//                // We need to set it to zero, because we have a condition at the begining of this for loop...
-//                toBeSoldProduct.setRemainingQuantity(0);
-//                // Save purchaseInvoiceProduct and salesInvoiceProduct to database... Because we made some changes...
-//                invoiceProductRepository.save(purchasedProduct);
-//                invoiceProductRepository.save(toBeSoldProduct);
-//                break;
-//            } else {
-//                // How much money I spent to buy that much for this very same product before?...
-//                BigDecimal costTotalForQty = purchasedProduct.getPrice()
-//                        .multiply(BigDecimal.valueOf(purchasedProduct.getRemainingQuantity() * (purchasedProduct.getTax() +100)/100d));
-//                // How much money I will earn from that sale?
-//                BigDecimal salesTotalForQty = toBeSoldProduct.getPrice().multiply(
-//                        BigDecimal.valueOf(purchasedProduct.getRemainingQuantity() * (toBeSoldProduct.getTax() +100)/100d));
-//                // Add new Profit/Loss to previous one.. Because formerly we made some sale, but not all the products from that purchase..
-//                BigDecimal profitLoss = toBeSoldProduct.getProfitLoss()
-//                        .add(salesTotalForQty.subtract(costTotalForQty));
-//                // Set remaining quantity of that purchasedInvoice to zero, means we are selling all we purchased in that Invoice...
-//                purchasedProduct.setRemainingQuantity(0);
-//                // We need to setRemainingQuantity of saleInvoiceProduct in order to control for loop we are in... There is a condition..
-//                toBeSoldProduct.setRemainingQuantity(toBeSoldProduct.getRemainingQuantity() - purchasedProduct.getRemainingQuantity());
-//                // Set profit/Loss of the saleInvoiceProduct
-//                toBeSoldProduct.setProfitLoss(profitLoss);
-//                // Save purchaseInvoiceProduct and salesInvoiceProduct to database... Because we made some changes...
-//                invoiceProductRepository.save(purchasedProduct);
-//                invoiceProductRepository.save(toBeSoldProduct);
-//            }
-//        }
-//    }
+    private void setProfitLossOfInvoiceProductsForSalesInvoice2(InvoiceProduct toBeSoldProduct) {
+        // Get all previous Purchase_Invoice_Products which remaining quantity is not ZERO...
+        List<InvoiceProduct> purchasedProducts = findNotSoldProducts(toBeSoldProduct.getProduct());
+        // We'll start looking from latest dated InvoiceProduct...Let s say 'purchasedProduct'
+        for (InvoiceProduct purchasedProduct : purchasedProducts) {
+            // If the remaining quantity of the latest purchasedProduct, is smaller than the quantity we want to sell
+            if (toBeSoldProduct.getRemainingQuantity() <= purchasedProduct.getRemainingQuantity()) {
+                // How much money I spent to buy that much for this very same product before?...
+                BigDecimal costTotalForQty = purchasedProduct.getPrice().multiply(
+                        BigDecimal.valueOf(toBeSoldProduct.getRemainingQuantity() * (purchasedProduct.getTax() +100)/100d));
+                // How much money I will earn from that sale?
+                BigDecimal salesTotalForQty = toBeSoldProduct.getPrice().multiply(
+                        BigDecimal.valueOf(toBeSoldProduct.getRemainingQuantity() * (toBeSoldProduct.getTax() +100)/100d));
+                // Subtract above values and reach your Profit/Loss...
+                BigDecimal profitLoss = toBeSoldProduct.getProfitLoss().add(salesTotalForQty.subtract( costTotalForQty));
+                // Update remaining quantity of purchaseInvoiceProduct, so we can calculate this remained products next time..
+                purchasedProduct.setRemainingQuantity(purchasedProduct.getRemainingQuantity() - toBeSoldProduct.getRemainingQuantity());
+                // Set profitLoss to the field of saleInvoiceProduct..
+                toBeSoldProduct.setProfitLoss(profitLoss);
+                // We need to set it to zero, because we have a condition at the beginning of this for loop...
+                toBeSoldProduct.setRemainingQuantity(0);
+                // Save purchaseInvoiceProduct and salesInvoiceProduct to database... Because we made some changes...
+                invoiceProductRepository.save(purchasedProduct);
+                invoiceProductRepository.save(toBeSoldProduct);
+                break;
+            } else {
+                // How much money I spent to buy that much for this very same product before?...
+                BigDecimal costTotalForQty = purchasedProduct.getPrice()
+                        .multiply(BigDecimal.valueOf(purchasedProduct.getRemainingQuantity() * (purchasedProduct.getTax() +100)/100d));
+                // How much money I will earn from that sale?
+                BigDecimal salesTotalForQty = toBeSoldProduct.getPrice().multiply(
+                        BigDecimal.valueOf(purchasedProduct.getRemainingQuantity() * (toBeSoldProduct.getTax() +100)/100d));
+                // Add new Profit/Loss to previous one.. Because formerly we made some sale, but not all the products from that purchase..
+                BigDecimal profitLoss = toBeSoldProduct.getProfitLoss()
+                        .add(salesTotalForQty.subtract(costTotalForQty));
+                // Set remaining quantity of that purchasedInvoice to zero, means we are selling all we purchased in that Invoice...
+                purchasedProduct.setRemainingQuantity(0);
+                // We need to setRemainingQuantity of saleInvoiceProduct in order to control for loop we are in... There is a condition..
+                toBeSoldProduct.setRemainingQuantity(toBeSoldProduct.getRemainingQuantity() - purchasedProduct.getRemainingQuantity());
+                // Set profit/Loss of the saleInvoiceProduct
+                toBeSoldProduct.setProfitLoss(profitLoss);
+                // Save purchaseInvoiceProduct and salesInvoiceProduct to database... Because we made some changes...
+                invoiceProductRepository.save(purchasedProduct);
+                invoiceProductRepository.save(toBeSoldProduct);
+            }
+        }
+    }
 
     @Override
     public void delete(Long invoiceProductId) {
@@ -230,9 +230,12 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         invoiceProductRepository.save(invoiceProduct);
     }
 
-    @Override
-    public List<InvoiceProduct> findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType type, Product product, Integer remainingQuantity) {
-        return invoiceProductRepository.findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(type, product, remainingQuantity);
+    public List<InvoiceProduct> findAvailableProductsForSale(Product product) {
+        return invoiceProductRepository.findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(InvoiceType.PURCHASE, product, 0);
+    }
+
+    public List<InvoiceProduct> findNotSoldProducts(Product product) {
+        return invoiceProductRepository.findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(InvoiceType.PURCHASE, product, 0);
     }
 
     @Override

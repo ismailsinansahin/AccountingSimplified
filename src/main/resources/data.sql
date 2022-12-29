@@ -22,7 +22,7 @@ values ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
         'SouthWest Street', 'Puzzle Square', 'Los Angeles', 'California', 'United States', '90002-8989'),
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
-        'OwerWest Street', 'Android Square', 'Phoneix', 'Arizona', 'United States', '85034-8989');
+        'OwerWest Street', 'Android Square', 'Phoenix', 'Arizona', 'United States', '85034-8989');
 
 insert into companies(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                       title, phone, website, address_id, company_status)
@@ -33,7 +33,11 @@ values ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
         'Blue Tech','+1 (215) 654-5268', 'https://www.bluetech.com', 3, 'ACTIVE'),
        ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
-        'Red Tech','+1 (215) 846-2642', 'https://www.redtech.com', 4, 'PASSIVE');
+        'Red Tech','+1 (215) 846-2642', 'https://www.redtech.com', 4, 'PASSIVE'),
+       ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
+        'Orange Tech','+1 (215) 486-3695', 'https://www.orangetech.com', 5, 'PASSIVE'),
+       ('2022-09-15 00:00:00', 1, false, '2022-09-15 00:00:00', 1,
+        'Active Tech','+1 (215) 245-3687', 'https://www.activetech.com', 6, 'PASSIVE');
 
 insert into users(insert_date_time, insert_user_id, is_deleted, last_update_date_time, last_update_user_id,
                   username, password, firstname, lastname, phone, role_id, company_id, enabled)

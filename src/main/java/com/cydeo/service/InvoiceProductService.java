@@ -15,6 +15,5 @@ public interface InvoiceProductService {
     void delete(Long invoiceProductId);
     void completeApprovalProcedures(Long invoiceId, InvoiceType type);
     boolean checkProductQuantity(InvoiceProductDto salesInvoiceProduct);
-    List<InvoiceProduct> findInvoiceProductsByInvoiceTypeAndProductRemainingQuantity(InvoiceType type, Product product, Integer remainingQuantity);
     List<InvoiceProduct> findAllInvoiceProductsByProductId(Long id);
 }
