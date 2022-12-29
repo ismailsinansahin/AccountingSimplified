@@ -57,7 +57,8 @@ public class UserServiceImpl implements UserService {
             userList = userRepository.findAllByCompany(currentUser.getCompany());
         }
         return userList.stream()
-                .sorted(Comparator.comparing((User u) -> u.getCompany().getTitle()).thenComparing(u -> u.getRole().getDescription()))
+                .sorted(Comparator.comparing((User u) -> u.getCompany().getTitle())
+                        .thenComparing(u -> u.getRole().getDescription()))
                 .map(entity -> mapperUtil.convert(entity, new UserDto()))
                 .peek(dto -> dto.setIsOnlyAdmin(this.checkIfOnlyAdminForCompany(dto)))
                 .collect(Collectors.toList());
@@ -102,7 +103,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    private Boolean checkIfOnlyAdminForCompany(UserDto dto) {
+    protected Boolean checkIfOnlyAdminForCompany(UserDto dto) {
         Company company = mapperUtil.convert(dto.getCompany(), new Company());
         return userRepository.countAllByCompanyAndRole_Description(company,"Admin") == 1;
     }
