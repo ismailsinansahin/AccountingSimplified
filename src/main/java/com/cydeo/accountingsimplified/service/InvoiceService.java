@@ -1,6 +1,7 @@
 package com.cydeo.accountingsimplified.service;
 
 import com.cydeo.accountingsimplified.dto.InvoiceDto;
+import com.cydeo.accountingsimplified.dto.InvoiceProductDto;
 import com.cydeo.accountingsimplified.enums.InvoiceStatus;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
 
@@ -19,8 +20,10 @@ public interface InvoiceService {
     InvoiceDto printInvoice(Long id);
     void delete(Long id);
     List<InvoiceDto> getLastThreeInvoices();
-    BigDecimal getTotalPriceOfInvoice(Long id);
-    BigDecimal getTotalTaxOfInvoice(Long id);
-    BigDecimal getProfitLossOfInvoice(Long id);
+    BigDecimal getTotalPriceOfInvoice(InvoiceDto invoiceDto);
+    BigDecimal getTotalTaxOfInvoice(InvoiceDto invoiceDto);
+    BigDecimal getProfitLossOfInvoice(InvoiceDto dto);
+
+    void calculateInvoiceDetails(InvoiceDto invoiceDto);
     boolean checkIfInvoiceExist(Long clientVendorId);
 }

@@ -69,16 +69,16 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         List<InvoiceProduct> invoiceProductList = invoiceProductRepository.findAllByInvoice_Id(invoiceId);
         // If type of invoice is SALES
         if (type == InvoiceType.SALES) {
-            // Then Loop through all invoiceProducts...
+            // Then Loop through all sale invoiceProducts...
             for (InvoiceProduct each : invoiceProductList) {
                 // If You have enough quantity of that product in your stock then move to next step
                 if (each.getProduct().getQuantityInStock() >= each.getQuantity()) {
-                    // Update Product QuantityInStock values to after sale value...
+                    // Update Product-QuantityInStock value...
                     updateQuantityOfProduct(each, type);
-                    // Set remainingQuantity of each InvoiceProduct to its quantity to Zero because this is saleInvoice
+                    // Set remainingQuantity of each InvoiceProduct to its quantity.. We're gonna use it later to control our loop..
                     // Note that this is the first time we assign a value to remainingQuantity...
-                    each.setRemainingQuantity(0);
-                    // Save each Invoice Repository to database - actually update...
+                    each.setRemainingQuantity(each.getQuantity());
+                    // Save each InvoiceProduct to database - actually update...
                     invoiceProductRepository.save(each);
                     // Write a method to set ProfitLoss field of each sales InvoiceProduct...
                     setProfitLossOfInvoiceProductsForSalesInvoice(each);
@@ -134,6 +134,8 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                 purchasedProduct.setRemainingQuantity(purchasedProduct.getRemainingQuantity() - toBeSoldProduct.getRemainingQuantity());
                 // Set profitLoss to the field of saleInvoiceProduct..
                 toBeSoldProduct.setProfitLoss(profitLoss);
+                // We need to set it to zero, because we have a condition at the begining of this for loop...
+                toBeSoldProduct.setRemainingQuantity(0);
                 // Save purchaseInvoiceProduct and salesInvoiceProduct to database... Because we made some changes...
                 invoiceProductRepository.save(purchasedProduct);
                 invoiceProductRepository.save(toBeSoldProduct);
@@ -150,8 +152,8 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
                         .add(salesTotalForQty.subtract(costTotalForQty));
                 // Set remaining quantity of that purchasedInvoice to zero, means we are selling all we purchased in that Invoice...
                 purchasedProduct.setRemainingQuantity(0);
-                //
-                toBeSoldProduct.setRemainingQuantity(0);
+                // We need to setRemainingQuantity of saleInvoiceProduct in order to control for loop we are in... There is a condition..
+                toBeSoldProduct.setRemainingQuantity(toBeSoldProduct.getRemainingQuantity() - purchasedProduct.getRemainingQuantity());
                 // Set profit/Loss of the saleInvoiceProduct
                 toBeSoldProduct.setProfitLoss(profitLoss);
                 // Save purchaseInvoiceProduct and salesInvoiceProduct to database... Because we made some changes...

@@ -14,7 +14,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -124,17 +126,18 @@ public class InvoiceServiceImpl extends CommonService implements InvoiceService 
         return invoiceType.name().charAt(0) + "-" + String.format("%03d", newOrder);
     }
 
-
-    private void calculateInvoiceDetails(InvoiceDto invoiceDto) {
-        invoiceDto.setPrice(getTotalPriceOfInvoice(invoiceDto.getId()));
-        invoiceDto.setTax(getTotalTaxOfInvoice(invoiceDto.getId()));
-        invoiceDto.setTotal(getTotalPriceOfInvoice(invoiceDto.getId()).add(getTotalTaxOfInvoice(invoiceDto.getId())));
+    @Override
+    public void calculateInvoiceDetails(InvoiceDto invoiceDto) {
+        BigDecimal price = getTotalPriceOfInvoice(invoiceDto);
+        BigDecimal tax = getTotalTaxOfInvoice(invoiceDto);
+        invoiceDto.setPrice(price);
+        invoiceDto.setTax(tax);
+        invoiceDto.setTotal(price.add(tax));
     }
 
     @Override
-    public BigDecimal getTotalPriceOfInvoice(Long id){
-        Invoice invoice = invoiceRepository.findInvoiceById(id);
-        List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
+    public BigDecimal getTotalPriceOfInvoice(InvoiceDto invoiceDto){
+        List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoiceDto.getId());
         return invoiceProductsOfInvoice.stream()
                 .map(p -> p.getPrice()
                         .multiply(BigDecimal.valueOf((long) p.getQuantity())))
@@ -142,9 +145,8 @@ public class InvoiceServiceImpl extends CommonService implements InvoiceService 
     }
 
     @Override
-    public BigDecimal getTotalTaxOfInvoice(Long id){
-        Invoice invoice = invoiceRepository.findInvoiceById(id);
-        List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
+    public BigDecimal getTotalTaxOfInvoice(InvoiceDto invoiceDto){
+        List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoiceDto.getId());
         return invoiceProductsOfInvoice.stream()
                 .map(p -> p.getPrice()
                         .multiply(BigDecimal.valueOf(p.getQuantity() * p.getTax() /100d))
@@ -154,9 +156,8 @@ public class InvoiceServiceImpl extends CommonService implements InvoiceService 
     }
 
     @Override
-    public BigDecimal getProfitLossOfInvoice(Long id) {
-        Invoice invoice = invoiceRepository.findInvoiceById(id);
-        List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoice.getId());
+    public BigDecimal getProfitLossOfInvoice(InvoiceDto invoiceDto) {
+        List<InvoiceProductDto> invoiceProductsOfInvoice = invoiceProductService.getInvoiceProductsOfInvoice(invoiceDto.getId());
         return invoiceProductsOfInvoice.stream()
                 .map(InvoiceProductDto::getProfitLoss)
                 .reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
