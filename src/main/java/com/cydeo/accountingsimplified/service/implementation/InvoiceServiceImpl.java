@@ -126,8 +126,8 @@ public class InvoiceServiceImpl extends CommonService implements InvoiceService 
         return invoiceType.name().charAt(0) + "-" + String.format("%03d", newOrder);
     }
 
-    @Override
-    public void calculateInvoiceDetails(InvoiceDto invoiceDto) {
+
+    private void calculateInvoiceDetails(InvoiceDto invoiceDto) {
         BigDecimal price = getTotalPriceOfInvoice(invoiceDto);
         BigDecimal tax = getTotalTaxOfInvoice(invoiceDto);
         invoiceDto.setPrice(price);
