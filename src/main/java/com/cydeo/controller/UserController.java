@@ -38,8 +38,8 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String create(@Valid @ModelAttribute("newUser") UserDto userDto, BindingResult result, Model model) {
-        boolean emailExist = userService.emailExist(userDto);
+    public String create(@Valid @ModelAttribute("newUser") UserDto userDto, BindingResult result) {
+        boolean emailExist = userService.isEmailExist(userDto);
 
         if (result.hasErrors() || emailExist){
             if (emailExist) {
@@ -58,10 +58,11 @@ public class UserController {
         return "user/user-update";
     }
 
-    @PostMapping("/update/{userId}")
-    public String update(@PathVariable("userId") Long userId, @Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
-        userDto.setId(userId);  // spring cannot set id since it is not seen in UI and we need to check if updated email is used by different user.
-        boolean emailExist = userService.emailExist(userDto);
+    @PostMapping("/update/{id}")
+    public String update(@PathVariable("id") Long id, @Valid @ModelAttribute("user") UserDto userDto, BindingResult result) {
+        // if path variable name and object field name matches, spring assigns id to userDto.id automatically
+//        userDto.setId(id);  // spring cannot set id since it is not seen in UI and we need to check if updated email is used by different user.
+        boolean emailExist = userService.isEmailExist(userDto);
 
         if (result.hasErrors() || emailExist){
             if (emailExist) {

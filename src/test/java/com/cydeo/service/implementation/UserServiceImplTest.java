@@ -10,12 +10,10 @@ import com.cydeo.exception.AccountingException;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.UserRepository;
 import com.cydeo.service.SecurityService;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
@@ -31,7 +29,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -44,7 +42,7 @@ class UserServiceImplTest {
     @Mock
     SecurityService securityService;
 
-    //    @Mock
+    //    @Mock çalışmıyor
     @Spy
     MapperUtil mapperUtil = new MapperUtil(new ModelMapper());
 
@@ -60,7 +58,6 @@ class UserServiceImplTest {
     @Test
     void should_find_user_by_id_happy_path() {
         User user = getUser();
-        UserDto userDto = getUserDto("Root User");
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 //        when(mapperUtil.convert(any(User.class), any(UserDto.class))).thenReturn(userDto);
 //        when(mapperUtil.convert(any(User.class), ArgumentMatchers.<Class<UserDto>>any())).thenReturn(UserDto.class);
@@ -107,33 +104,21 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getFilteredUsers_forAnyUserExceptRootUser() {
+    void getFilteredUsers_given_logged_in_as_Admin() {
         List<User> userList = getUsers();
-        List<UserDto> userDtos = getUserDTOs();
-//        when(userRepository.findAllByRole_Description(anyString())).thenReturn(userList);
-//        when(userRepository.findAllByCompany_Title(anyString())).thenReturn(userList);
-        when(securityService.getLoggedInUser()).thenReturn(userDtos.get(0));
-//        when(mapperUtil.convert(userList.get(0), new UserDto())).thenReturn(userDtos.get(0));
+        when(securityService.getLoggedInUser()).thenReturn(getUserDto("Admin"));
         when(userRepository.findAllByCompany(any(Company.class))).thenReturn(userList);
-
-        //    when(userRepository.findByUsername(userDtos.get(0).getUsername())).thenReturn(Optional.of(userList.get(0)));
-//        when(mapperUtil.convert(any(User.class), any(UserDto.class))).thenReturn(userDtos.get(0));
-
-        // checkIfOnlyAdminForCompany :
-//        when(mapperUtil.convert(userDtos.get(0).getCompany(), new Company())).thenReturn(userList.get(0).getCompany());
-//        when(userRepository.countAllByCompanyAndRole_Description(userList.get(0).getCompany(),"admin"))
-//                .thenReturn(2);
 
         Throwable throwable = catchThrowable(() -> {
             List<UserDto> actualUsers = userService.getFilteredUsers();
-            assertEquals("admin@bluetech.com", actualUsers.get(0).getUsername());
+            assertEquals("Active Tech", actualUsers.get(0).getCompany().getTitle());    // checks sorting
         });
         assertNull(throwable);
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"Root User", "admin"})
-    void getFilteredUsers_happyPath(String role) {
+    void getFilteredUsers_given_logged_in_as_root_user_or_admin(String role) {
         List<User> userList = getUsers();
         when(securityService.getLoggedInUser()).thenReturn(getUserDto(role));
         lenient().when(userRepository.findAllByRole_Description("Admin")).thenReturn(userList);
@@ -141,7 +126,7 @@ class UserServiceImplTest {
 
         Throwable throwable = catchThrowable(() -> {
             List<UserDto> actualUsers = userService.getFilteredUsers();
-            assertEquals("Active Tech", actualUsers.get(0).getCompany().getTitle());
+            assertEquals("Active Tech", actualUsers.get(0).getCompany().getTitle());    // checks sorting
         });
 
         if (role.equals("Root User")) verify(userRepository).findAllByRole_Description("Admin");
@@ -150,6 +135,93 @@ class UserServiceImplTest {
         assertNull(throwable);
     }
 
+    @Test
+    void save_happyPath(){
+        User user = getUser();
+        when(passwordEncoder.encode(anyString())).thenReturn("Abc1");
+        when(userRepository.save(any(User.class))).thenReturn(user);
+
+        Throwable throwable = catchThrowable(() -> {
+            UserDto actualUser = userService.save(getUserDto("Admin"));
+            assertEquals(user.getUsername(), actualUser.getUsername());
+        });
+        assertNull(throwable);
+    }
+
+    @Test
+    void save_null_dto_throws_exception(){
+        // only checks exception which comes from mapperUtil
+        assertThrows(IllegalArgumentException.class, ()->userService.save(null));
+
+        // check exception and message
+        Throwable throwable = catchThrowable(() -> userService.save(null));
+        assertInstanceOf(IllegalArgumentException.class, throwable);
+        assertEquals("source cannot be null", throwable.getMessage());
+
+        //validation of username, password, etc. should be done on controller side. that's why no test case is written here
+    }
+
+    @Test
+    void update_happyPath(){
+        User user = getUser();
+        when(passwordEncoder.encode(anyString())).thenReturn("Abc1");
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+        when(userRepository.save(any(User.class))).thenReturn(user);
+
+        Throwable throwable = catchThrowable(() -> {
+            UserDto actualUser = userService.update(getUserDto("Admin"));
+            assertEquals(user.getUsername(), actualUser.getUsername());
+        });
+        assertNull(throwable);
+        // since we tested
+    }
+
+    @Test
+    void update_null_dto_throws_exception(){
+        // only checks exception which comes from mapperUtil
+        assertThrows(IllegalArgumentException.class, ()->userService.update(null));
+
+        // check exception and message
+        Throwable throwable = catchThrowable(() -> userService.update(null));
+        assertInstanceOf(IllegalArgumentException.class, throwable);
+        assertEquals("source cannot be null", throwable.getMessage());
+
+        //validation of username, password, etc. should be done on controller side. that's why no test case is written here
+    }
+
+    @Test
+    void delete_happyPath(){
+        User user = getUser();
+        // todo : can we mock a method which belongs to code under test class?
+        //  can we test setUsername, setIsDeleted method?
+        //  can we have negative test?
+//        when(userService.findUserById(anyLong())).thenReturn(getUserDto("Admin"));
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+        when(userRepository.save(any(User.class))).thenReturn(user);
+
+        Throwable throwable = catchThrowable(() -> {
+            userService.delete(anyLong());
+        });
+        assertNull(throwable);
+    }
+
+    @Test
+    void isEmailExist_return_false(){
+        User user = getUser();
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+
+        assertFalse(userService.isEmailExist(getUserDto("admin")));
+    }
+
+    @Test
+    void isEmailExist_return_true(){
+        User user = getUser();
+        user.setId(2L);
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+        assertTrue(userService.isEmailExist(getUserDto("admin")));
+    }
+
+    // todo : private methodlar test edilemiyor, kullanmalımıyız
     @ParameterizedTest
     @MethodSource(value = "input")
     void checkIfOnlyAdminForCompany_happyPath(int number, boolean expected) {
@@ -157,62 +229,14 @@ class UserServiceImplTest {
         assertEquals(expected, userService.checkIfOnlyAdminForCompany(getUserDto("Admin")));
     }
 
-    static Stream<Arguments> input(){
+    static Stream<Arguments> input() {
         return Stream.of(
-          Arguments.of(1, true),
-                Arguments.of(2, false),
-                Arguments.of(3, false)
+                arguments(1, true),
+                arguments(2, false),
+                arguments(3, false),
+                arguments(0, false)
         );
     }
-
-//    @Test
-//    void getFilteredUsers_forRootUser() {
-//        List<User> userList = getUsers();
-//        userList.get(0).getRole().setDescription("root user");
-//        List<UserDto> userDtos = getUserDTOs();
-//        userDtos.get(0).getRole().setDescription("root user");
-//        when(userRepository.findAllByRole_Description(anyString())).thenReturn(userList);
-//        when(mapperUtil.convert(any(User.class), any(UserDto.class)))
-//                .thenReturn(userDtos.get(0));
-//        when(securityService.getLoggedInUser()).thenReturn(userDtos.get(0));
-//        when(userRepository.countAllByCompanyAndRole_Description(
-//                Company.builder().title("Blue Tech").build(),"root user")).thenReturn(2);
-//        when(mapperUtil.convert(any(CompanyDto.class), any(Company.class)))
-//                .thenReturn(new Company());
-//
-//        Throwable throwable = catchThrowable(()-> userService.getFilteredUsers());
-//        assertNull(throwable);
-//        List<UserDto> result = userService.getFilteredUsers();
-//        assertEquals("admin@bluetech.com", result.get(0).getUsername());
-//    }
-
-    // birleştirince hata veriyor:
-    // Unnecessary stubbings detected.
-    // Clean & maintainable test code requires zero unnecessary code.
-    // Following stubbings are unnecessary (click to navigate to relevant line of code):
-    //   1. -> at com.cydeo.service.implementation.UserServiceImplTest.getFilteredUsers_forRootUser(UserServiceImplTest.java:144)
-    //   2. -> at com.cydeo.service.implementation.UserServiceImplTest.getFilteredUsers_forRootUser(UserServiceImplTest.java:145)
-//    @ParameterizedTest
-//    @ValueSource(strings = {"root user", "Admin"})
-//    void get_filtered_users_for_root_user(String role) {
-//        List<User> userList = getUsers();
-//        userList.get(0).getRole().setDescription(role);
-//        List<UserDto> userDtos = getUserDTOs();
-//        userDtos.get(0).getRole().setDescription(role);
-//        when(userRepository.findAllByRole_Description(anyString())).thenReturn(userList);
-//        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(userList.get(0)));
-//        when(mapperUtil.convert(any(User.class), any(UserDto.class)))
-//                .thenReturn(userDtos.get(0));
-//        when(userRepository.countAllByCompanyAndRole_Description(new Company(),anyString())).thenReturn(2);
-//        when(mapperUtil.convert(any(CompanyDto.class), any(Company.class)))
-//                .thenReturn(new Company());
-//        when(securityService.getLoggedInUser()).thenReturn(userDtos.get(0));
-//
-//        Throwable throwable = catchThrowable(()-> userService.getFilteredUsers());
-//        assertNull(throwable);
-//        List<UserDto> result = userService.getFilteredUsers();
-//        assertEquals("admin@bluetech.com", result.get(0).getUsername());
-//    }
 
     private User getUser() {
         return User.builder()
@@ -220,6 +244,7 @@ class UserServiceImplTest {
                 .username("test@test.com")
                 .firstname("Tom")
                 .lastname("Hanks")
+                .password("Abc1")
                 .company(Company.builder().title("Blue Tech").id(1L).build())
                 .role(new Role("Admin"))
                 .build();
@@ -231,6 +256,7 @@ class UserServiceImplTest {
                 .username("test@test.com")
                 .firstname("Tom")
                 .lastname("Hanks")
+                .password("Abc1")
                 .company(CompanyDto.builder().title("Blue Tech").id(1L).build())
                 .role(new RoleDto(1L, role))
                 .company(CompanyDto.builder().build())

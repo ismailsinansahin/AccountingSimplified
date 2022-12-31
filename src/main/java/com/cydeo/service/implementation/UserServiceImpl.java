@@ -86,8 +86,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new NoSuchElementException("this user does not exist"));
+        //todo : cannot test with below line
+//        User user = mapperUtil.convert(findUserById(userId), new User());
+        User user = userRepository.findById(userId).orElseThrow();
         user.setUsername(user.getUsername() + "-" + user.getId());  // without this modification, if entity has column(unique=true)
                                                                     // and we want to save a user with same email, it throws exception.
         user.setIsDeleted(true);
@@ -95,13 +96,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean emailExist(UserDto userDto) {
+    public Boolean isEmailExist(UserDto userDto) {
         User userWithUpdatedEmail = userRepository.findByUsername(userDto.getUsername())
                 .orElse(null);
         if (userWithUpdatedEmail == null) return false;
         return !userWithUpdatedEmail.getId().equals(userDto.getId());
     }
-
 
     protected Boolean checkIfOnlyAdminForCompany(UserDto dto) {
         Company company = mapperUtil.convert(dto.getCompany(), new Company());

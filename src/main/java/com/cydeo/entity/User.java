@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Where;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -16,9 +17,11 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=false")
 public class User extends BaseEntity {
 
-    @Column(unique = true)
+    //@NotBlank controller'da varsa, burada gerek yok bence
+    @Column(unique = true, nullable = false)
     private String username;
 
+    //@NotBlank controller'da varsa, burada gerek yok bence
     @Column(nullable = false)
     private String password;
 

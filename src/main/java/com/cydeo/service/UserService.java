@@ -12,6 +12,6 @@ public interface UserService {
     UserDto save(UserDto userDto);
     UserDto update(UserDto userDto);
     void delete(Long id);
-    Boolean emailExist(UserDto userDto);
+    Boolean isEmailExist(UserDto userDto);
 
 }
