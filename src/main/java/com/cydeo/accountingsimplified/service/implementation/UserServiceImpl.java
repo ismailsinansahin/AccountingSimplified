@@ -3,6 +3,7 @@ package com.cydeo.accountingsimplified.service.implementation;
 import com.cydeo.accountingsimplified.dto.UserDto;
 import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.entity.User;
+import com.cydeo.accountingsimplified.exception.UserDoesNotExistException;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.UserRepository;
 import com.cydeo.accountingsimplified.service.SecurityService;
@@ -75,7 +76,7 @@ public class UserServiceImpl extends CommonService implements UserService {
     }
 
     @Override
-    public void delete(Long userId) {
+    public void delete(Long userId) throws UserDoesNotExistException {
         User user = userRepository.findUserById(userId);
         user.setUsername(user.getUsername() + "-" + user.getId());  // without this modification, if entity has column(unique=true)
                                                                     // and we want to save a user with same email, it throws exception.
