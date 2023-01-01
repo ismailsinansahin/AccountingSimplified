@@ -1,5 +1,6 @@
 package com.cydeo.accountingsimplified.service.implementation;
 
+import com.cydeo.accountingsimplified.dto.addressApi.City;
 import com.cydeo.accountingsimplified.dto.addressApi.Country;
 import com.cydeo.accountingsimplified.dto.addressApi.State;
 import com.cydeo.accountingsimplified.dto.addressApi.TokenDto;
@@ -7,6 +8,8 @@ import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.service.feignClients.AddressFeignClient;
 import com.cydeo.accountingsimplified.service.AddressService;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -57,7 +60,7 @@ public class AddressServiceImpl implements AddressService {
         return addressFeignClient.getStateList(getBearerToken(), country);
     }
 
-    public List<State> getCity(String state) {
+    public List<City> getCity(String state) {
         return addressFeignClient.getCityList(getBearerToken(), state);
     }
 }

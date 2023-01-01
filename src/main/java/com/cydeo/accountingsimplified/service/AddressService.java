@@ -1,6 +1,7 @@
 package com.cydeo.accountingsimplified.service;
 
 import com.cydeo.accountingsimplified.dto.AddressDto;
+import com.cydeo.accountingsimplified.dto.addressApi.City;
 import com.cydeo.accountingsimplified.dto.addressApi.Country;
 import com.cydeo.accountingsimplified.dto.addressApi.State;
 
@@ -12,7 +13,7 @@ public interface AddressService {
 
     List<State> getStateList(String country);
 
-    List<State> getCity(String state);
+    List<City> getCity(String state);
 
 
 }

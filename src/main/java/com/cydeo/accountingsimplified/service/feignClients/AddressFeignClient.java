@@ -1,6 +1,7 @@
 package com.cydeo.accountingsimplified.service.feignClients;
 
 
+import com.cydeo.accountingsimplified.dto.addressApi.City;
 import com.cydeo.accountingsimplified.dto.addressApi.Country;
 import com.cydeo.accountingsimplified.dto.addressApi.State;
 import com.cydeo.accountingsimplified.dto.addressApi.TokenDto;
@@ -24,5 +25,5 @@ public interface AddressFeignClient {
     List<State> getStateList(@RequestHeader("Authorization") String bearerToken,@PathVariable String country);
 
     @GetMapping(value = "/cities/{state}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    List<State> getCityList(@RequestHeader("Authorization") String bearerToken,@PathVariable String state);
+    List<City> getCityList(@RequestHeader("Authorization") String bearerToken, @PathVariable String state);
 }
