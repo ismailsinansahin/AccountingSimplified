@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head th:replace="fragments/head :: header"></head>
+
+<body>
+<div class="dashboard-main-wrapper">
+    <div th:replace="fragments/header :: header"></div>
+    <div th:replace="fragments/left-sidebar :: left-sidebar"></div>
+    <div class="dashboard-wrapper">
+        <div class="dashboard-ecommerce">
+            <div class="container-fluid dashboard-content">
+                <div class="ecommerce-widget">
+                    <section id="login" class="auth-height">
+                        <div class="row full-height-vh m-0">
+                            <div class="col-12 d-flex align-items-center justify-content-center">
+                                <div class="card overflow-hidden">
+                                    <div class="card-content">
+                                        <div class="card-body auth-img">
+                                            <div class="row m-0">
+                                                <div class="col-lg-6 d-none d-lg-flex justify-content-center align-items-center auth-img-bg p-3">
+                                                    <img th:src="@{/images/open-banking.png}" alt="open-banking" class="img-fluid"
+                                                         width="300" height="230">
+                                                </div>
+                                                <div class="col-lg-6 col-12 px-4 py-3">
+                                                    <h4 class="mb-1 card-title"><p class="login-page-title">
+                                                        Payment</p>
+                                                    </h4>
+                                                    <p>Thank you for using Stripe...</p>
+                                                    <form th:action="@{/payments/charge/{id}(id=${modelId})}" method='POST' id='checkout-form'>
+                                                        <input type='hidden' th:value='${modelId}' name='modelId'/>
+                                                        <input type='hidden' th:value='${amount}' name='amount'/>
+                                                        <label>Price: $ <span th:text='${amount/100}'></span></label>
+                                                        <script
+                                                                src='https://checkout.stripe.com/checkout.js'
+                                                                class='stripe-button'
+                                                                th:attr='data-key=${stripePublicKey},
+                                                                    data-amount=${amount},
+                                                                    data-currency=${currency}'
+                                                                    data-name='TheGoGetters'
+                                                                    data-description='Usage Fee'
+                                                                    data-image="@{/images/go_getters.png"
+                                                                    data-locale='auto'
+                                                                    data-zip-code='false'>
+                                                        </script>
+                                                    </form>
+                                                    <hr>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/footer :: footer"></div>
+<div th:replace="fragments/javascript :: js"></div>
+</body>
+
+</html>
