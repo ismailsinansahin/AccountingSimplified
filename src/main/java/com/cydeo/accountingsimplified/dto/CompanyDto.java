@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder(access = AccessLevel.PUBLIC)
 public class CompanyDto {
 
     private Long id;

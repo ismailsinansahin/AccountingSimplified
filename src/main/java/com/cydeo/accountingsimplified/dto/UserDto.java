@@ -1,6 +1,7 @@
 package com.cydeo.accountingsimplified.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
@@ -8,6 +9,7 @@ import javax.validation.constraints.*;
 // we don't use lombok getter setter to be able to validate confirm password field.
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder()
 public class UserDto {
 
     private Long id;
