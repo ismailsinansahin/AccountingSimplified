@@ -5,7 +5,10 @@ import com.cydeo.service.SecurityService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -36,4 +39,12 @@ public class LoggingAspect {
                 securityService.getLoggedInUser().getUsername());
     }
 
+    @Pointcut("execution(* com.cydeo..*(..))")
+    private void anyRuntimeException() {
+    }
+
+    @AfterThrowing(pointcut = "anyRuntimeException()", throwing = "exception")
+    public void afterThrowingControllerAdvice(JoinPoint joinPoint, RuntimeException exception){
+        log.error("After Throwing -> Method: {} - Exception: {} - Message: {}", joinPoint.getSignature().toShortString(), exception.getClass().getSimpleName(), exception.getMessage());
+    }
 }

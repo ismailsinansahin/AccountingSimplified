@@ -49,19 +49,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getFilteredUsers() {
-        User currentUser = mapperUtil.convert(securityService.getLoggedInUser(), new User());
-        List<User> userList;
-        if (currentUser.getRole().getDescription().equals("Root User")) {
-            userList = userRepository.findAllByRole_Description("Admin");
-        } else {
-            userList = userRepository.findAllByCompany(currentUser.getCompany());
-        }
-        return userList.stream()
-                .sorted(Comparator.comparing((User u) -> u.getCompany().getTitle())
-                        .thenComparing(u -> u.getRole().getDescription()))
-                .map(entity -> mapperUtil.convert(entity, new UserDto()))
-                .peek(dto -> dto.setIsOnlyAdmin(this.checkIfOnlyAdminForCompany(dto)))
-                .collect(Collectors.toList());
+        throw new RuntimeException("test runtime");
+//        User currentUser = mapperUtil.convert(securityService.getLoggedInUser(), new User());
+//        List<User> userList;
+//        if (currentUser.getRole().getDescription().equals("Root User")) {
+//            userList = userRepository.findAllByRole_Description("Admin");
+//        } else {
+//            userList = userRepository.findAllByCompany(currentUser.getCompany());
+//        }
+//        return userList.stream()
+//                .sorted(Comparator.comparing((User u) -> u.getCompany().getTitle())
+//                        .thenComparing(u -> u.getRole().getDescription()))
+//                .map(entity -> mapperUtil.convert(entity, new UserDto()))
+//                .peek(dto -> dto.setIsOnlyAdmin(this.checkIfOnlyAdminForCompany(dto)))
+//                .collect(Collectors.toList());
     }
 
     @Override

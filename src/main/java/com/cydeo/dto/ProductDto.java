@@ -1,10 +1,7 @@
 package com.cydeo.dto;
 
 import com.cydeo.enums.ProductUnit;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotBlank;
@@ -15,9 +12,10 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class ProductDto {
 
-    private long id;
+    private Long id;
 
     @NotBlank(message = "Product Name is a required field.")
     @Size(max = 100, min = 2, message = "Product Name should be 2-100 characters long.")

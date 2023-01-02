@@ -14,29 +14,34 @@ public class BaseEntityListener extends AuditingEntityListener {
 
     @PrePersist
     public void onPrePersist(BaseEntity baseEntity) {
-
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        baseEntity.setInsertDateTime(LocalDateTime.now());
+        baseEntity.setLastUpdateDateTime(LocalDateTime.now());
 
-        baseEntity.insertDateTime = LocalDateTime.now();
-        baseEntity.lastUpdateDateTime = LocalDateTime.now();
-
-        if (authentication != null && !authentication.getName().equals("anonymousUser")) {
-            UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
-            baseEntity.insertUserId = principal.getId();
-            baseEntity.lastUpdateUserId = principal.getId();
+        if (authentication != null && !authentication.getName().equals("anonymousUser")) {  // checks for valid user
+            try {
+                UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+                baseEntity.setInsertUserId(principal.getId());
+                baseEntity.setLastUpdateUserId(principal.getId());
+            } catch (Exception e){
+                baseEntity.setInsertUserId(1L);
+                baseEntity.setLastUpdateUserId(1L);
+            }
         }
     }
 
     @PreUpdate
     public void onPreUpdate(BaseEntity baseEntity) {
-
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        baseEntity.setLastUpdateDateTime(LocalDateTime.now());
 
-        baseEntity.lastUpdateDateTime = LocalDateTime.now();
-
-        if (authentication != null && !authentication.getName().equals("anonymousUser")) {
-            UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
-            baseEntity.lastUpdateUserId = principal.getId();
+        if (authentication != null && !authentication.getName().equals("anonymousUser")) {  // checks for valid user
+            try {
+                UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+                baseEntity.setLastUpdateUserId(principal.getId());
+            } catch (Exception e){
+                baseEntity.setLastUpdateUserId(1L);
+            }
         }
     }
 }

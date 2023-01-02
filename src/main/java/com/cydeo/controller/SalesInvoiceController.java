@@ -76,17 +76,19 @@ public class SalesInvoiceController {
                                     @Valid @ModelAttribute("newInvoiceProduct") InvoiceProductDto invoiceProductDto,
                                     BindingResult result, RedirectAttributes redirAttrs, Model model) {
 
-        if (result.hasErrors()){
+//        if (!invoiceProductService.checkProductQuantity(invoiceProductDto))  {
+////            redirAttrs.addAttribute("error", "Not enough "+invoiceProductDto.getProduct().getName()+" quantity to sell...");
+//            redirAttrs.addFlashAttribute("error", "Not enough "+invoiceProductDto.getProduct().getName()+" quantity to sell...");
+//            return "redirect:/salesInvoices/update/" + invoiceId;
+//        }
+        if (result.hasErrors()||(!invoiceProductService.checkProductQuantity(invoiceProductDto))){
             model.addAttribute("invoice", invoiceService.findInvoiceById(invoiceId));
             model.addAttribute("invoiceProducts", invoiceProductService.getInvoiceProductsOfInvoice(invoiceId));
+            if (!invoiceProductService.checkProductQuantity(invoiceProductDto)){
+                result.rejectValue("quantity", " ", "Not enough " + invoiceProductDto.getProduct().getName() + " quantity to sell...");
+            }
             return "invoice/sales-invoice-update";
         }
-
-        if (!invoiceProductService.checkProductQuantity(invoiceProductDto))  {
-            redirAttrs.addFlashAttribute("error", "Not enough "+invoiceProductDto.getProduct().getName()+" quantity to sell...");
-            return "redirect:/salesInvoices/update/" + invoiceId;
-        }
-
         invoiceProductService.save(invoiceId, invoiceProductDto);
         return "redirect:/salesInvoices/update/" + invoiceId;
     }

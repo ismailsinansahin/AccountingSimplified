@@ -34,7 +34,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceImplTest {
+class UserServiceImpl_UnitTest {
 
     @Mock
     UserRepository userRepository;
@@ -192,6 +192,7 @@ class UserServiceImplTest {
     @Test
     void delete_happyPath(){
         User user = getUser();
+        user.setIsDeleted(false);
         // todo : can we mock a method which belongs to code under test class?
         //  can we test setUsername, setIsDeleted method?
         //  can we have negative test?
@@ -200,8 +201,10 @@ class UserServiceImplTest {
         when(userRepository.save(any(User.class))).thenReturn(user);
 
         Throwable throwable = catchThrowable(() -> {
-            userService.delete(anyLong());
+            userService.delete(user.getId());
         });
+        assertTrue(user.getIsDeleted());
+        assertNotEquals("test@test.com", user.getUsername());
         assertNull(throwable);
     }
 

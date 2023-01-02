@@ -30,6 +30,16 @@ public class UserDto {
 //    @Pattern("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@(?!-)[a-zA-Z0-9.-]+$")    // email validation permitted by RFC 5322
     private String username;
 
+
+    /*
+      @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])" +
+                    "(?=.*([ -/]|[:-@]|[Z-_]|[{-~]))(?=\\S+$).{4,}$",
+            message = "Password must contain at least: " +
+                    "1 lowercase, " +
+                    "1 uppercase, " +
+                    "1 special, " +
+                    "1 digit")
+     */
 //    @NotBlank   // @Pattern is enough to check if it is not blank
     @Pattern(regexp = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}")
     private String password;

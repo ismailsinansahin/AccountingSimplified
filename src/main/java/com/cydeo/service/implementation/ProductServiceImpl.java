@@ -80,13 +80,11 @@ public class ProductServiceImpl implements ProductService {
         List<InvoiceProduct> invoiceProducts = invoiceProductService.findAllInvoiceProductsByProductId(product.getId());
         if (invoiceProducts.size() == 0 && product.getQuantityInStock() == 0){
             product.setIsDeleted(true);
+            productRepository.save(product);
         } else {
             throw new AccountingException("You cannot delete this product since an invoice contains it or it is still in stock!");
-//            System.out.println("You cannot delete this product");
         }
-        productRepository.save(product);
     }
-
 
     @Override
     public boolean isProductNameExist(ProductDto productDto) {
