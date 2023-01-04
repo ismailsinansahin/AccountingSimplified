@@ -194,12 +194,9 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Country</label>
-                                                                    <select th:field="*{address.country}" id="country" name="country" class="custom-select">
-                                                                        <option th:each="country:${countries}"
-                                                                                th:value="${country}"
-                                                                                th:text="${country}"
-                                                                                th:selected="${country}==*{address.country}"></option>
-                                                                    </select>
+                                                                    <input type="text" th:field="*{address.country}"
+                                                                           placeholder="State"
+                                                                           class="form-control">
                                                                     <div th:if="${#fields.hasErrors('address.country')}">
                                                                         <ul>
                                                                             <li class="validation"
