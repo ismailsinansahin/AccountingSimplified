@@ -46,10 +46,12 @@
                                                             <tr th:each="product,comStat : ${products}">
                                                                 <td th:text="${comStat.count}"></td>
                                                                 <td th:text="${product.category.description}"></td>
-                                                                <td th:text="${product.name}"></td>
+                                                                <td th:text="${product.name}"
+                                                                    th:style="${product.quantityInStock <= product.lowLimitAlert} ? 'color: #EE4B2B' : 'color: #000000'"></td>
                                                                 <td th:text="${product.productUnit.value}"></td>
                                                                 <td th:text="${product.lowLimitAlert}"></td>
-                                                                <td th:text="${product.quantityInStock}"></td>
+                                                                <td th:text="${product.quantityInStock}"
+                                                                    th:style="${product.quantityInStock <= product.lowLimitAlert} ? 'color: #EE4B2B' : 'color: #000000'"></td>
                                                                 <td class="actions">
                                                                     <a th:href="@{/products/update/{id}(id=${product.getId()})}"
                                                                        type="button">
@@ -57,17 +59,17 @@
                                                                             Edit
                                                                         </button>
                                                                     </a>
-                                                                    <span th:if="${product.getQuantityInStock()!=0}"
+                                                                    <span th:if="${product.invoiceProducts.size()>0}"
                                                                           class="d-inline-block" tabindex="0"
                                                                           data-toggle="tooltip"
                                                                           data-placement="right"
-                                                                          title="Can not be deleted! This product has quantity in stock.">
+                                                                          title="Can not be deleted! This product has invoice(s).">
                                                                         <button
                                                                                 class="btn btn-danger mb-2 ml-2 mb-sm-0 mr-sm-2"
                                                                                 style="pointer-events: none;" disabled>Delete
                                                                         </button>
                                                                     </span>
-                                                                    <a th:unless="${product.getQuantityInStock()!=0}"
+                                                                    <a th:unless="${product.invoiceProducts.size()>0}"
                                                                        th:href="@{/products/delete/{id}(id=${product.getId()})}"
                                                                        type="button">
                                                                         <button class="btn btn-danger mb-2 ml-2 mb-sm-0 mr-sm-2">

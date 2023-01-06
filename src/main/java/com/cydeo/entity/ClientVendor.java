@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,7 +17,7 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=false")
 public class ClientVendor extends BaseEntity {
 
-
+    @Column(nullable = false)
     private String clientVendorName;
 
     private String phone;
@@ -32,5 +33,8 @@ public class ClientVendor extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
+
+    @OneToMany(mappedBy = "clientVendor")
+    private List<Invoice> invoices;
 
 }

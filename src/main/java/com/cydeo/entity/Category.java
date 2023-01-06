@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,4 +21,6 @@ public class Category extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
 
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
 }

@@ -27,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto findCategoryById(Long categoryId) {
         CategoryDto dto = mapperUtil.convert(categoryRepository.findById(categoryId).get(), new CategoryDto());
-        dto.setHasProduct(hasProduct(dto.getId()));
+//        dto.setHasProduct(hasProduct(dto.getId()));
         return dto;
     }
 
@@ -38,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .stream()
                 .sorted(Comparator.comparing(Category::getDescription))
                 .map(each -> mapperUtil.convert(each, new CategoryDto()))
-                .peek(dto -> dto.setHasProduct(hasProduct(dto.getId())))
+//                .peek(dto -> dto.setHasProduct(hasProduct(dto.getId())))
                 .collect(Collectors.toList());
     }
 
@@ -64,9 +64,9 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.save(category);
     }
 
-    private boolean hasProduct(Long categoryId) {
-        return productService.findAllProductsWithCategoryId(categoryId).size() > 0;
-    }
+//    private boolean hasProduct(Long categoryId) {
+//        return productService.findAllProductsWithCategoryId(categoryId).size() > 0;
+//    }
 
     @Override
     public boolean isCategoryDescriptionExist(CategoryDto categoryDTO) {

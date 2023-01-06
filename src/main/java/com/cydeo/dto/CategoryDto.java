@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,5 +19,7 @@ public class CategoryDto {
     private String description;
 
     private CompanyDto company;
-    private boolean hasProduct;
+//    private boolean hasProduct;
+
+    List<ProductDto> products;
 }

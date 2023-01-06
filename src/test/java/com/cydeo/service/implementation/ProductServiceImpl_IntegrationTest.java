@@ -40,13 +40,13 @@ class ProductServiceImpl_IntegrationTest {
         assertNotNull(productDto);
     }
 
-    @Test
-    @Transactional
-    @Order(1)
-    void findAllProductsWithCategoryId() {
-        List<ProductDto> dtos = productService.findAllProductsWithCategoryId(1L);
-        assertNotNull(dtos);
-    }
+//    @Test
+//    @Transactional
+//    @Order(1)
+//    void findAllProductsWithCategoryId() {
+//        List<ProductDto> dtos = productService.findAllProductsWithCategoryId(1L);
+//        assertNotNull(dtos);
+//    }
 
     @Test
     void getAllProducts() {
@@ -99,6 +99,6 @@ class ProductServiceImpl_IntegrationTest {
 //        companyDto.setId(1L);
         CategoryDto categoryDto = new CategoryDto();
         categoryDto.setId(1L);
-        return new ProductDto(null, "test", 0, 3, ProductUnit.KG, categoryDto);
+        return new ProductDto(null, "test", 0, 3, ProductUnit.KG, categoryDto, List.of());
     }
 }

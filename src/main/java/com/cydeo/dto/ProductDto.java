@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,5 +33,7 @@ public class ProductDto {
 
     @NotNull(message = "Category is a required field.")
     private CategoryDto category;
+
+    private List<InvoiceProductDto> invoiceProducts;
 
 }

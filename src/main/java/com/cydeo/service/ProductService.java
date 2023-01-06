@@ -16,7 +16,7 @@ public interface ProductService {
 
     void delete(Long productId);
 
-    List<ProductDto> findAllProductsWithCategoryId(Long categoryId);
+//    List<ProductDto> findAllProductsWithCategoryId(Long categoryId);
 
     boolean isProductNameExist(ProductDto productDto);
 
