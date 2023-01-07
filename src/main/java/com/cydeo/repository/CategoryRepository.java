@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    List<Category> findAllByCompany(Company company);
+    List<Category> findAllByCompany_Title(String currentCompanyTitle);
 
-    Category findByDescriptionAndCompany(String description, Company actualCompany);
+    Category findByDescriptionAndCompany_Title(String description, String currentCompanyTitle);
 }

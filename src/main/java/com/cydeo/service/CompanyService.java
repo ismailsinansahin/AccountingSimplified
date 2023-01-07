@@ -13,6 +13,6 @@ public interface CompanyService {
     CompanyDto update(Long companyId, CompanyDto companyDto) throws CloneNotSupportedException;
     CompanyDto activate(Long companyId);
     CompanyDto deactivate(Long companyId);
-    boolean isTitleExist(String title);
+    boolean isTitleExist(CompanyDto companyDto);
 
 }

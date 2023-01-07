@@ -36,7 +36,7 @@ public class ClientVendorDto {
     @Pattern(regexp = "^http(s{0,1})://[a-zA-Z0-9/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9/\\&\\?\\=\\-\\.\\~\\%]*", message = "Website should have a valid format.")
     private String website;
 
-    @NotNull(message = "Please select type")
+    @NotNull(message = "Please select a type")
     private ClientVendorType clientVendorType;
 
     @NotNull

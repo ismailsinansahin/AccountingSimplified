@@ -38,7 +38,7 @@ public class CompanyController {
     @PostMapping("/create")
     public String create(@Valid @ModelAttribute("newCompany") CompanyDto companyDto, BindingResult bindingResult) {
 
-        if (companyService.isTitleExist(companyDto.getTitle())) {
+        if (companyService.isTitleExist(companyDto)) {
             bindingResult.rejectValue("title", " ", "This title already exists.");
         }
 
@@ -60,8 +60,7 @@ public class CompanyController {
     @PostMapping("/update/{companyId}")
     public String update(@Valid @ModelAttribute("company") CompanyDto companyDto, BindingResult bindingResult, @PathVariable Long companyId) throws CloneNotSupportedException {
 
-        boolean isThisCompanyTitle = companyDto.getTitle().equals(companyService.findCompanyById(companyId).getTitle());
-        if (companyService.isTitleExist(companyDto.getTitle()) && !isThisCompanyTitle) {
+        if (companyService.isTitleExist(companyDto)) {
             bindingResult.rejectValue("title", " ", "This title already exists.");
         }
 

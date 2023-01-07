@@ -58,8 +58,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public InvoiceDto save(InvoiceDto invoiceDto, InvoiceType invoiceType){
-        invoiceDto.setCompany(companyService.getCompanyDtoByLoggedInUser());
         invoiceDto.setInvoiceType(invoiceType);
+        invoiceDto.setCompany(companyService.getCompanyDtoByLoggedInUser());
         invoiceDto.setInvoiceStatus(InvoiceStatus.AWAITING_APPROVAL);
         Invoice invoice = mapperUtil.convert(invoiceDto, new Invoice());
         return mapperUtil.convert(invoiceRepository.save(invoice), new InvoiceDto());

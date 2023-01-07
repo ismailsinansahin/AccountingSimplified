@@ -3,7 +3,6 @@ package com.cydeo.service.implementation;
 import com.cydeo.dto.CompanyDto;
 import com.cydeo.entity.Company;
 import com.cydeo.enums.CompanyStatus;
-import com.cydeo.exception.AccountingException;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.CompanyRepository;
 import com.cydeo.service.CompanyService;
@@ -49,10 +48,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyDto create(CompanyDto companyDto) {
-        throw new AccountingException("accountig");
-//        companyDto.setCompanyStatus(CompanyStatus.PASSIVE);
-//        Company company = companyRepository.save(mapperUtil.convert(companyDto, new Company()));
-//        return mapperUtil.convert(company, new CompanyDto());
+        companyDto.setCompanyStatus(CompanyStatus.PASSIVE);
+        Company company = companyRepository.save(mapperUtil.convert(companyDto, new Company()));
+        return mapperUtil.convert(company, new CompanyDto());
     }
 
     @Override
@@ -82,8 +80,10 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public boolean isTitleExist(String title) {
-        return companyRepository.existsByTitle(title);
+    public boolean isTitleExist(CompanyDto dto) {
+        Company company = companyRepository.findCompanyByTitle(dto.getTitle());
+        if (company == null) return false;
+        return dto.getId() != company.getId();
     }
 
     @Override

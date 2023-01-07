@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 //        if (currentUser.getRole().getDescription().equals("Root User")) {
 //            userList = userRepository.findAllByRole_Description("Admin");
 //        } else {
-//            userList = userRepository.findAllByCompany(currentUser.getCompany());
+//            userList = userRepository.findAllByCompany_Title(currentUser.getCompany());
 //        }
 //        return userList.stream()
 //                .sorted(Comparator.comparing((User u) -> u.getCompany().getTitle())

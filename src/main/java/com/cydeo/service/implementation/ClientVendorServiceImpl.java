@@ -59,8 +59,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
 
     @Override
     public ClientVendorDto create(ClientVendorDto clientVendorDto) throws Exception {
-        clientVendorDto.setCompany(companyService.getCompanyDtoByLoggedInUser());
         ClientVendor clientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());
+        clientVendor.setCompany(getCompanyOfLoggedInUsers());
         return mapperUtil.convert(clientVendorRepository.save(clientVendor), new ClientVendorDto());
     }
 
@@ -69,8 +69,8 @@ public class ClientVendorServiceImpl implements ClientVendorService {
         ClientVendor savedClientVendor = clientVendorRepository.findById(clientVendorId)
                 .orElseThrow(()-> new NoSuchElementException("This client or vendor does not exist"));
         clientVendorDto.getAddress().setId(savedClientVendor.getAddress().getId());     // otherwise it creates new address instead of updating existing one
-        clientVendorDto.setCompany(companyService.getCompanyDtoByLoggedInUser());
         ClientVendor updatedClientVendor = mapperUtil.convert(clientVendorDto, new ClientVendor());
+        updatedClientVendor.setCompany(getCompanyOfLoggedInUsers());
         return mapperUtil.convert(clientVendorRepository.save(updatedClientVendor), new ClientVendorDto());
     }
 
@@ -86,7 +86,10 @@ public class ClientVendorServiceImpl implements ClientVendorService {
     @Override
     public boolean companyNameExists(ClientVendorDto clientVendorDto) {
         ClientVendor existingClientVendor = clientVendorRepository
-                .findByClientVendorNameAndCompany(clientVendorDto.getClientVendorName(), getCompanyOfLoggedInUsers());
+                .findByClientVendorNameAndClientVendorTypeAndCompany_Title(
+                        clientVendorDto.getClientVendorName(),
+                        clientVendorDto.getClientVendorType(),
+                        getCompanyOfLoggedInUsers().getTitle());
         if (existingClientVendor == null) return false;
         return !existingClientVendor.getId().equals(clientVendorDto.getId());
     }
