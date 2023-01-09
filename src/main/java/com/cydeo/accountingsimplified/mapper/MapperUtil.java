@@ -1,5 +1,6 @@
 package com.cydeo.accountingsimplified.mapper;
 
+import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

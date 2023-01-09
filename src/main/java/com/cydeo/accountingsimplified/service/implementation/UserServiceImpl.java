@@ -18,15 +18,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl extends CommonService implements UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final SecurityService securityService;
+    private final MapperUtil mapperUtil;
 
-    public UserServiceImpl(@Lazy SecurityService securityService, MapperUtil mapperUtil, UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        super(securityService, mapperUtil);
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, SecurityService securityService1, MapperUtil mapperUtil1) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.securityService = securityService1;
+        this.mapperUtil = mapperUtil1;
     }
 
     @Override
@@ -45,10 +48,10 @@ public class UserServiceImpl extends CommonService implements UserService {
     @Override
     public List<UserDto> getFilteredUsers() {
         List<User> userList;
-        if (getCurrentUser().getRole().getDescription().equals("Root User")) {
+        if (securityService.getLoggedInUser().getRole().getDescription().equals("Root User")) {
             userList = userRepository.findAllByRole_Description("Admin");
         } else {
-            userList = userRepository.findAllByCompany(getCompany());
+            userList = userRepository.findAllByCompany(mapperUtil.convert(securityService.getLoggedInUser().getCompany(), new Company()));
         }
         return userList.stream()
                 .sorted(Comparator.comparing((User u) -> u.getCompany().getTitle()).thenComparing(u -> u.getRole().getDescription()))

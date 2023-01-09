@@ -1,10 +1,7 @@
 package com.cydeo.accountingsimplified.dto;
 
 import com.cydeo.accountingsimplified.enums.ClientVendorType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -16,6 +13,7 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ClientVendorDto {
 
     private Long id;
