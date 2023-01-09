@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
         return !userWithUpdatedEmail.getId().equals(userDto.getId());
     }
 
-    protected Boolean checkIfOnlyAdminForCompany(UserDto dto) {
+    public Boolean checkIfOnlyAdminForCompany(UserDto dto) {
         Company company = mapperUtil.convert(dto.getCompany(), new Company());
         return userRepository.countAllByCompanyAndRole_Description(company,"Admin") == 1;
     }

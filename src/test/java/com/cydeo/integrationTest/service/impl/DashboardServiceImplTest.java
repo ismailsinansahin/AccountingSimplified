@@ -1,4 +1,4 @@
-package com.cydeo.service.implementation;
+package com.cydeo.integrationTest.service.impl;
 
 
 import com.cydeo.dto.CurrencyDto;

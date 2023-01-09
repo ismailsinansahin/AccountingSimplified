@@ -1,4 +1,4 @@
-package com.cydeo.service.implementation;
+package com.cydeo.unitTest.service.impl;
 
 import com.cydeo.dto.CompanyDto;
 import com.cydeo.dto.RoleDto;
@@ -10,6 +10,7 @@ import com.cydeo.exception.AccountingException;
 import com.cydeo.mapper.MapperUtil;
 import com.cydeo.repository.UserRepository;
 import com.cydeo.service.SecurityService;
+import com.cydeo.service.implementation.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -224,7 +225,7 @@ class UserServiceImpl_UnitTest {
         assertTrue(userService.isEmailExist(getUserDto("admin")));
     }
 
-    // todo : private methodlar test edilemiyor, kullanmalımıyız
+    // todo : private methodlar test edilemiyor, kullanmalı mıyız
     @ParameterizedTest
     @MethodSource(value = "input")
     void checkIfOnlyAdminForCompany_happyPath(int number, boolean expected) {

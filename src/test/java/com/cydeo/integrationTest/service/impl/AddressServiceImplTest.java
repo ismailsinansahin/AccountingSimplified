@@ -1,6 +1,7 @@
-package com.cydeo.service.implementation;
+package com.cydeo.integrationTest.service.impl;
 
 
+import com.cydeo.service.implementation.AddressServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

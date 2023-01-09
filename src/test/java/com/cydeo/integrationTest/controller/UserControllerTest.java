@@ -1,4 +1,4 @@
-package com.cydeo.controller;
+package com.cydeo.integrationTest.controller;
 
 import com.cydeo.dto.CompanyDto;
 import com.cydeo.dto.RoleDto;

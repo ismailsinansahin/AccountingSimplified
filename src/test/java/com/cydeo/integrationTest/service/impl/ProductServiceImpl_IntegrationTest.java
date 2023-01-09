@@ -1,10 +1,11 @@
-package com.cydeo.service.implementation;
+package com.cydeo.integrationTest.service.impl;
 
 import com.cydeo.dto.CategoryDto;
 import com.cydeo.dto.ProductDto;
 import com.cydeo.entity.Product;
 import com.cydeo.enums.ProductUnit;
 import com.cydeo.repository.ProductRepository;
+import com.cydeo.service.implementation.ProductServiceImpl;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
