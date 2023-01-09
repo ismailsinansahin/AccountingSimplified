@@ -168,17 +168,16 @@
                                                             <div class="form-group">
                                                                 <div class="controls">
                                                                     <label>Country</label>
-                                                                    <select th:field="*{address.country}" id="country" name="country" class="custom-select">
-                                                                        <option th:value="'United States'" th:text="'United States'"></option>
-                                                                        <option th:each="country:${countries}"
-                                                                                th:value="${country}"
-                                                                                th:text="${country}"></option>
-                                                                    </select>
-                                                                    <ul>
-                                                                        <li class="validation"
-                                                                            th:each="err : ${#fields.errors('address.country')}"
-                                                                            th:text="${err}"></li>
-                                                                    </ul>
+                                                                    <input type="text" th:field="*{address.country}"
+                                                                           placeholder="State"
+                                                                           class="form-control">
+                                                                    <div th:if="${#fields.hasErrors('address.country')}">
+                                                                        <ul>
+                                                                            <li class="validation"
+                                                                                th:each="err : ${#fields.errors('address.country')}"
+                                                                                th:text="${err}"></li>
+                                                                        </ul>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
