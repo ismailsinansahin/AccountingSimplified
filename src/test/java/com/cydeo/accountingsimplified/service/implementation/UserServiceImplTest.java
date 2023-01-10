@@ -86,12 +86,31 @@ class UserServiceImplTest {
         // Given
         String testPassword = "$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK";
         UserDto userDto = TestDocumentInitializer.getUser("Admin");
-        User user = mapperUtil.convert(userDto, new User());
         doReturn(testPassword).when(passwordEncoder).encode(anyString());
         // When
         var resultUser = service.save(userDto);
         // Then
        assertThat(resultUser.getPassword().equals(testPassword));
+
+    }
+
+    @Test
+    @DisplayName("Given UserDto when update then success")
+    public void GIVEN_USER_DTO_WHEN_UPDATE_THEN_SUCCESS(){
+        // Given
+        String testPassword = "$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK";
+        UserDto userDto = TestDocumentInitializer.getUser("Admin");
+        User user = mapperUtil.convert(userDto, new User());
+        UserDto updateUserDto = TestDocumentInitializer.getUser("Manager");
+        User updateUser = mapperUtil.convert(updateUserDto, new User());
+        // When
+        doReturn(testPassword).when(passwordEncoder).encode(anyString());
+        doReturn(user).when(repository).findUserById(anyLong());
+        doReturn(updateUser).when(repository).save(any(User.class));
+
+        var resultUser = service.update(updateUserDto);
+        // Then
+        assertThat(resultUser.getRole().getDescription().equals("Manager"));
 
     }
 
