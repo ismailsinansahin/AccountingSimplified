@@ -42,12 +42,13 @@ class UserServiceImplTest {
     public void GIVEN_ID_WHEN_FIND_BY_ID_THEN_SUCCESS(){
         // Given
         UserDto userDto = TestDocumentInitializer.getUser("Admin");
+        User user = mapperUtil.convert(userDto, new User());
         // When
-        when(repository.findUserById(userDto.getId())).thenReturn(new User());
+        when(repository.findUserById(userDto.getId())).thenReturn(user);
         //when(mapperUtil.convert(any(User.class), any(UserDto.class))).thenReturn(userDto);
-        var user = service.findUserById(userDto.getId());
+        var returnedUser = service.findUserById(userDto.getId());
         // Then
-        assertThat(user.getCompany().getTitle().equals(userDto.getCompany().getTitle()));
+        assertThat(returnedUser.getFirstname().equals(userDto.getFirstname()));
     }
 
 

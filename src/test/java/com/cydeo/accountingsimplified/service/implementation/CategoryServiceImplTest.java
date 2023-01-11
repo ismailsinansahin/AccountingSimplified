@@ -30,9 +30,6 @@ class CategoryServiceImplTest {
     SecurityService securityService;
 
     @Mock
-    ProductService productService;
-
-    @Mock
     MapperUtil mapperUtil;
 
     @InjectMocks
