@@ -114,5 +114,19 @@ class UserServiceImplTest {
 
     }
 
+    @Test
+    @DisplayName("Given id when delete then success")
+    public void GIVEN_ID_WHEN_DELETE_THEN_SUCCESS(){
+        // Given
+        UserDto userDto = TestDocumentInitializer.getUser("Admin");
+        User user = mapperUtil.convert(userDto, new User());
+        // When
+        doReturn(user).when(repository).findUserById(anyLong());
+
+        service.delete(anyLong());
+        // Then
+        verify(repository).save(any(User.class));
+    }
+
 
 }
