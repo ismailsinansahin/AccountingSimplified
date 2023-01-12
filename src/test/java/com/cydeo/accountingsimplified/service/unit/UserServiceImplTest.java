@@ -2,6 +2,7 @@ package com.cydeo.accountingsimplified.service.unit;
 
 import com.cydeo.accountingsimplified.TestDocumentInitializer;
 import com.cydeo.accountingsimplified.dto.UserDto;
+import com.cydeo.accountingsimplified.entity.Company;
 import com.cydeo.accountingsimplified.entity.User;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.UserRepository;
@@ -47,10 +48,23 @@ class UserServiceImplTest {
         User user = mapperUtil.convert(userDto, new User());
         // When
         when(repository.findUserById(userDto.getId())).thenReturn(user);
-        //when(mapperUtil.convert(any(User.class), any(UserDto.class))).thenReturn(userDto);
         var returnedUser = service.findUserById(userDto.getId());
         // Then
         assertThat(returnedUser.getFirstname().equals(user.getFirstname()));
+    }
+
+    @Test
+    @DisplayName("Given_only_admin_When_find_by_id_then_success")
+    public void GIVEN_ONLY_ADMIN_ID_WHEN_FIND_BY_ID_THEN_SUCCESS(){
+        // Given
+        UserDto userDto = TestDocumentInitializer.getUser("Admin");
+        User user = mapperUtil.convert(userDto, new User());
+        // When
+        when(repository.findUserById(userDto.getId())).thenReturn(user);
+        when(repository.countAllByCompanyAndRole_Description(any(Company.class), any())).thenReturn(1);
+        var returnedUser = service.findUserById(userDto.getId());
+        // Then
+        assertThat(returnedUser.getIsOnlyAdmin());
     }
 
     @Test
