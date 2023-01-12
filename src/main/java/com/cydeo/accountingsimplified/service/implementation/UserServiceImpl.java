@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +35,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findUserById(Long id) {
-        UserDto dto = mapperUtil.convert(userRepository.findUserById(id), new UserDto());
+        User user = userRepository.findUserById(id);
+        if (user == null){
+            throw new NoSuchElementException("There is no user with given id");
+        }
+        UserDto dto = mapperUtil.convert(user, new UserDto());
         dto.setIsOnlyAdmin(checkIfOnlyAdminForCompany(dto));
         return dto;
     }

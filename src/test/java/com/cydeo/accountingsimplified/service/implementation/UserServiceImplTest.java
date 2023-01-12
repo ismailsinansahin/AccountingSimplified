@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,7 +49,14 @@ class UserServiceImplTest {
         //when(mapperUtil.convert(any(User.class), any(UserDto.class))).thenReturn(userDto);
         var returnedUser = service.findUserById(userDto.getId());
         // Then
-        assertThat(returnedUser.getFirstname().equals(userDto.getFirstname()));
+        assertThat(returnedUser.getFirstname().equals(user.getFirstname()));
+    }
+
+    @Test
+    @DisplayName("When_given_non_existing_id_then_fail")
+    public void GIVEN_NON_EXISTING_ID_WHEN_FIND_BY_ID_THEN_FAIL(){
+        when(repository.findUserById(anyLong())).thenThrow(NoSuchElementException.class);
+        assertThrows(NoSuchElementException.class, () -> service.findUserById(anyLong()));
     }
 
 
@@ -57,12 +65,13 @@ class UserServiceImplTest {
     public void GIVEN_USERNAME_WHEN_FIND_BY_USERNAME_THEN_SUCCESS(){
         // Given
         UserDto userDto = TestDocumentInitializer.getUser("Admin");
+        User user = mapperUtil.convert(userDto, new User());
         // When
-        when(repository.findByUsername(userDto.getUsername())).thenReturn(new User());
+        when(repository.findByUsername(userDto.getUsername())).thenReturn(user);
         //when(mapperUtil.convert(any(User.class), any(UserDto.class))).thenReturn(userDto);
-        var user = service.findByUsername(userDto.getUsername());
+        var returedUser = service.findByUsername(userDto.getUsername());
         // Then
-        assertThat(user.getCompany().getTitle().equals(userDto.getCompany().getTitle()));
+        assertThat(returedUser.getFirstname().equals(user.getFirstname()));
     }
 
     @Test
@@ -91,7 +100,7 @@ class UserServiceImplTest {
         // When
         var resultUser = service.save(userDto);
         // Then
-       assertThat(resultUser.getPassword().equals(testPassword));
+        assertThat(resultUser.getPassword().equals(testPassword));
 
     }
 
