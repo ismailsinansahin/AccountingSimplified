@@ -1,4 +1,4 @@
-package com.cydeo.accountingsimplified.service.implementation;
+package com.cydeo.accountingsimplified.service.unit;
 
 
 import com.cydeo.accountingsimplified.dto.CurrencyDto;

@@ -1,8 +1,9 @@
-package com.cydeo.accountingsimplified.service.implementation;
+package com.cydeo.accountingsimplified.service.unit;
 
 
 import com.cydeo.accountingsimplified.dto.addressApi.Country;
 import com.cydeo.accountingsimplified.service.AddressService;
+import com.cydeo.accountingsimplified.service.implementation.AddressServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package com.cydeo.accountingsimplified.integration;
+package com.cydeo.accountingsimplified.service.integration;
 
 import com.cydeo.accountingsimplified.TestDocumentInitializer;
 import com.cydeo.accountingsimplified.dto.UserDto;
@@ -8,6 +8,7 @@ import com.cydeo.accountingsimplified.repository.UserRepository;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import com.cydeo.accountingsimplified.service.UserService;
 import com.cydeo.accountingsimplified.service.implementation.UserServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
@@ -39,43 +41,44 @@ class UserServiceImplTest {
     @Autowired
     MapperUtil mapperUtil;
 
+    User user;
+
+    @BeforeEach
+    public void initTest(){
+        UserDto userDto = TestDocumentInitializer.getUser("Admin");
+        user = mapperUtil.convert(userDto, new User());
+        user.setEnabled(true);
+        user.setInsertUserId(1L);
+        user.setLastUpdateUserId(1L);
+        user.setInsertDateTime(LocalDateTime.now());
+        user.setLastUpdateDateTime(LocalDateTime.now());
+        user = repository.save(user);
+    }
+
 
     @Test
     @DisplayName("When_find_by_id_then_success")
     public void GIVEN_ID_WHEN_FIND_BY_ID_THEN_SUCCESS(){
-        // Given
-        UserDto userDto = TestDocumentInitializer.getUser("Admin");
-        User user = repository.save(mapperUtil.convert(userDto, new User()));
-        int sizeBefore = repository.findAllByRole_Description("Admin").size();
         // When
-        var returnedUser = userService.findUserById(userDto.getId());
-        int sizeAfter = repository.findAllByRole_Description("Admin").size();
+        var returnedUser = userService.findUserById(user.getId());
         // Then
         assertThat(returnedUser.getFirstname().equals(user.getFirstname()));
-        assertThat(sizeBefore + 1 == sizeAfter);
     }
 
-//    @Test
-//    @DisplayName("When_given_non_existing_id_then_fail")
-//    public void GIVEN_NON_EXISTING_ID_WHEN_FIND_BY_ID_THEN_FAIL(){
-//        when(repository.findUserById(anyLong())).thenThrow(NoSuchElementException.class);
-//        assertThrows(NoSuchElementException.class, () -> service.findUserById(anyLong()));
-//    }
-//
-//
-//    @Test
-//    @DisplayName("When_find_by_user_name_then_success")
-//    public void GIVEN_USERNAME_WHEN_FIND_BY_USERNAME_THEN_SUCCESS(){
-//        // Given
-//        UserDto userDto = TestDocumentInitializer.getUser("Admin");
-//        User user = mapperUtil.convert(userDto, new User());
-//        // When
-//        when(repository.findByUsername(userDto.getUsername())).thenReturn(user);
-//        //when(mapperUtil.convert(any(User.class), any(UserDto.class))).thenReturn(userDto);
-//        var returedUser = service.findByUsername(userDto.getUsername());
-//        // Then
-//        assertThat(returedUser.getFirstname().equals(user.getFirstname()));
-//    }
+    @Test
+    @DisplayName("When_given_non_existing_id_then_fail")
+    public void GIVEN_NON_EXISTING_ID_WHEN_FIND_BY_ID_THEN_FAIL(){
+        assertThrows(NoSuchElementException.class, () -> userService.findUserById(null));
+    }
+
+    @Test
+    @DisplayName("When_find_by_user_name_then_success")
+    public void GIVEN_USERNAME_WHEN_FIND_BY_USERNAME_THEN_SUCCESS(){
+        // When
+        var returedUser = userService.findByUsername(user.getUsername());
+        // Then
+        assertThat(returedUser.getFirstname().equals(user.getFirstname()));
+    }
 //
 //    @Test
 //    @DisplayName("When_get_filtered_users_then_success")

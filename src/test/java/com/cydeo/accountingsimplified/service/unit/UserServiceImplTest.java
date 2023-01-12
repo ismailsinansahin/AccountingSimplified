@@ -1,4 +1,4 @@
-package com.cydeo.accountingsimplified.service.implementation;
+package com.cydeo.accountingsimplified.service.unit;
 
 import com.cydeo.accountingsimplified.TestDocumentInitializer;
 import com.cydeo.accountingsimplified.dto.UserDto;
@@ -6,6 +6,7 @@ import com.cydeo.accountingsimplified.entity.User;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.UserRepository;
 import com.cydeo.accountingsimplified.service.SecurityService;
+import com.cydeo.accountingsimplified.service.implementation.UserServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

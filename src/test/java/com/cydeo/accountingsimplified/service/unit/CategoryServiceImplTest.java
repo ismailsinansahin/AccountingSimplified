@@ -1,4 +1,4 @@
-package com.cydeo.accountingsimplified.service.implementation;
+package com.cydeo.accountingsimplified.service.unit;
 
 import com.cydeo.accountingsimplified.dto.CategoryDto;
 import com.cydeo.accountingsimplified.dto.CompanyDto;
@@ -9,6 +9,7 @@ import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.CategoryRepository;
 import com.cydeo.accountingsimplified.service.ProductService;
 import com.cydeo.accountingsimplified.service.SecurityService;
+import com.cydeo.accountingsimplified.service.implementation.CategoryServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
