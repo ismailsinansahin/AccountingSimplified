@@ -122,8 +122,7 @@ public class InvoiceProductServiceImpl_UnitTest {
         verify(invoiceProductRepository, times(invoiceProducts.size())).save(any());
         verify(productService, times(invoiceProducts.size())).update(any(), any());
         invoiceProducts.forEach(
-                invoiceProduct -> assertEquals(10,invoiceProduct.getRemainingQuantity())
-        );
+                invoiceProduct -> assertEquals(10,invoiceProduct.getRemainingQuantity()));
 
         // decrease of quantity in stock cannot be tracked since it is done inside another method and object changes and java is pass-by-value
 //        dtoList.forEach(
@@ -134,67 +133,73 @@ public class InvoiceProductServiceImpl_UnitTest {
     @Test
     void completeApprovalProcedures_SALES_happyPath_with_ProfitLoss(){
         // given
-        List<InvoiceProductDto> dtoList = Arrays.asList(
+        // sales invoice consists two invoiceProduct :
+        List<InvoiceProductDto> salesDtoList = Arrays.asList(
                 TestDocumentInitializer.getInvoiceProduct(),
                 TestDocumentInitializer.getInvoiceProduct());
-        dtoList.get(0).getInvoice().setInvoiceType(InvoiceType.SALES);
-        dtoList.get(0).getProduct().setName("first");
-        dtoList.get(0).setProfitLoss(BigDecimal.ZERO);
-        dtoList.get(1).setProfitLoss(BigDecimal.ZERO);
-        dtoList.get(1).getProduct().setName("second");
-        dtoList.get(1).getProduct().setQuantityInStock(25);
-        dtoList.get(1).getInvoice().setInvoiceType(InvoiceType.SALES);
-        dtoList.get(1).setQuantity(15);
-        List<InvoiceProduct> soldInvoiceProducts = dtoList.stream()
+        salesDtoList.get(0).getInvoice().setInvoiceType(InvoiceType.SALES);
+        salesDtoList.get(0).getProduct().setName("first");
+        salesDtoList.get(0).setProfitLoss(BigDecimal.ZERO);
+        salesDtoList.get(0).setPrice(BigDecimal.valueOf(15L));
+
+        salesDtoList.get(1).setPrice(BigDecimal.valueOf(20));
+        salesDtoList.get(1).setProfitLoss(BigDecimal.ZERO);
+        salesDtoList.get(1).getProduct().setName("second");
+        salesDtoList.get(1).getProduct().setQuantityInStock(25);
+        salesDtoList.get(1).getInvoice().setInvoiceType(InvoiceType.SALES);
+        salesDtoList.get(1).setQuantity(15);
+        List<InvoiceProduct> soldInvoiceProducts = salesDtoList.stream()
                 .map(invoiceProductDto -> mapperUtil.convert(invoiceProductDto, new InvoiceProduct()))
                 .collect(Collectors.toList());
 
-        //  purchase list for first item
+        //  purchase list / available invoiceProducts for first item in salesInvoice
         List<InvoiceProductDto> dtoListPurchase1 = Arrays.asList(
-                TestDocumentInitializer.getInvoiceProduct()
-        );
+                TestDocumentInitializer.getInvoiceProduct());
+
         dtoListPurchase1.get(0).getInvoice().setInvoiceType(InvoiceType.PURCHASE);
-        dtoListPurchase1.get(0).setProduct(dtoList.get(0).getProduct());
+        dtoListPurchase1.get(0).setProduct(salesDtoList.get(0).getProduct());
         dtoListPurchase1.get(0).setRemainingQuantity(10);
 
-        List<InvoiceProduct> availableProductsForSale1 = dtoList.stream()
+        List<InvoiceProduct> availableProductsForSale1 = dtoListPurchase1.stream()
                 .map(invoiceProductDto -> mapperUtil.convert(invoiceProductDto, new InvoiceProduct()))
                 .collect(Collectors.toList());
 
-        // purchase list for second item
+        // purchase list / available invoiceProducts for second item in salesInvoice
         List<InvoiceProductDto> dtoListPurchase2 = Arrays.asList(
                 TestDocumentInitializer.getInvoiceProduct(),
                 TestDocumentInitializer.getInvoiceProduct()
         );
         dtoListPurchase2.get(0).getInvoice().setInvoiceType(InvoiceType.PURCHASE);
-        dtoListPurchase2.get(0).setProduct(dtoList.get(1).getProduct());
+        dtoListPurchase2.get(0).setProduct(salesDtoList.get(1).getProduct());
         dtoListPurchase2.get(0).setRemainingQuantity(10);
         dtoListPurchase2.get(1).getInvoice().setInvoiceType(InvoiceType.PURCHASE);
         dtoListPurchase2.get(1).setRemainingQuantity(10);
-        dtoListPurchase2.get(1).setProduct(dtoList.get(1).getProduct());
+        dtoListPurchase2.get(1).setProduct(salesDtoList.get(1).getProduct());
 
-        List<InvoiceProduct> availableProductsForSale2 = dtoList.stream()
+        List<InvoiceProduct> availableProductsForSale2 = dtoListPurchase2.stream()
                 .map(invoiceProductDto -> mapperUtil.convert(invoiceProductDto, new InvoiceProduct()))
                 .collect(Collectors.toList());
 
         // when
-        when(invoiceProductRepository.findAllByInvoice_Id(1L)).thenReturn(soldInvoiceProducts);
+        when(invoiceProductRepository.findAllByInvoice_Id(2L)).thenReturn(soldInvoiceProducts);
         when(invoiceProductRepository.findInvoiceProductsByInvoiceInvoiceTypeAndProductAndRemainingQuantityNotOrderByIdAsc(any(),any(),any()))
                 .thenReturn(availableProductsForSale1)
                 .thenReturn(availableProductsForSale2);
 
-        invoiceProductService.completeApprovalProcedures(1L, InvoiceType.SALES);
+        invoiceProductService.completeApprovalProcedures(2L, InvoiceType.SALES);
 
         // then
         assertEquals(0, availableProductsForSale1.get(0).getRemainingQuantity());
+
         assertEquals(0, availableProductsForSale2.get(0).getRemainingQuantity());
         assertEquals(5, availableProductsForSale2.get(1).getRemainingQuantity());
 
-
-        // decrease of quantity in stock cannot be tracked since it is done inside another method and object changes and java is pass-by-value
-//        dtoList.forEach(
-//                dto -> assertEquals(0, dto.getProduct().getQuantityInStock())
-//        );
+        // first item purchase : price = 10, tax = 10, quantity = 10 -> total cost = 110
+        // first item sale : price = 15, tax = 10, quantity = 10 -> total cost = 165    profit/loss = 55
+        assertEquals(BigDecimal.valueOf(55.0), soldInvoiceProducts.get(0).getProfitLoss());
+        // second item purchase : price = 10, tax = 10, quantity = 15 -> total cost = 165
+        // second item sale : price = 20, tax = 10, quantity = 15 -> total cost = 330    profit/loss = 165
+        assertEquals(BigDecimal.valueOf(165.0), soldInvoiceProducts.get(1).getProfitLoss());
     }
 
     @Test
