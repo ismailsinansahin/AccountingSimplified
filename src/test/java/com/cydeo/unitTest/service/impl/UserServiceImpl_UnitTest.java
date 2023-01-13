@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
@@ -62,11 +63,10 @@ class UserServiceImpl_UnitTest {
 //        when(mapperUtil.convert(user, new UserDto())).thenReturn(userDto); // mockito.exceptions.misusing.PotentialStubbingProblem
 //        when(userMapper.convertToDto(user)).thenReturn(userDto);
 
-        Throwable throwable = catchThrowable(() -> {
-            UserDto actualUser = userService.findUserById(anyLong());
-            assertEquals("test@test.com", actualUser.getUsername());
-        });
-        assertNull(throwable);
+        UserDto actualUser = userService.findUserById(1L);
+        assertThat(actualUser).usingRecursiveComparison()
+                .isEqualTo(user);
+
     }
 
     @Test
@@ -150,7 +150,7 @@ class UserServiceImpl_UnitTest {
     }
 
     @Test
-    void save_happyPath(){
+    void save_happyPath() {
         User user = getUser();
         when(passwordEncoder.encode(anyString())).thenReturn("Abc1");
         when(userRepository.save(any(User.class))).thenReturn(user);
@@ -163,9 +163,9 @@ class UserServiceImpl_UnitTest {
     }
 
     @Test
-    void save_null_dto_throws_exception(){
+    void save_null_dto_throws_exception() {
         // only checks exception which comes from mapperUtil
-        assertThrows(IllegalArgumentException.class, ()->userService.save(null));
+        assertThrows(IllegalArgumentException.class, () -> userService.save(null));
 
         // check exception and message
         Throwable throwable = catchThrowable(() -> userService.save(null));
@@ -176,7 +176,7 @@ class UserServiceImpl_UnitTest {
     }
 
     @Test
-    void update_happyPath(){
+    void update_happyPath() {
         User user = getUser();
         when(passwordEncoder.encode(anyString())).thenReturn("Abc1");
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
@@ -191,9 +191,9 @@ class UserServiceImpl_UnitTest {
     }
 
     @Test
-    void update_null_dto_throws_exception(){
+    void update_null_dto_throws_exception() {
         // only checks exception which comes from mapperUtil
-        assertThrows(IllegalArgumentException.class, ()->userService.update(null));
+        assertThrows(IllegalArgumentException.class, () -> userService.update(null));
 
         // check exception and message
         Throwable throwable = catchThrowable(() -> userService.update(null));
@@ -204,7 +204,7 @@ class UserServiceImpl_UnitTest {
     }
 
     @Test
-    void delete_happyPath(){
+    void delete_happyPath() {
         User user = getUser();
         user.setIsDeleted(false);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
@@ -219,7 +219,7 @@ class UserServiceImpl_UnitTest {
     }
 
     @Test
-    void isEmailExist_return_false(){
+    void isEmailExist_return_false() {
         User user = getUser();
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 
@@ -227,7 +227,7 @@ class UserServiceImpl_UnitTest {
     }
 
     @Test
-    void isEmailExist_return_true(){
+    void isEmailExist_return_true() {
         User user = getUser();
         user.setId(2L);
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
