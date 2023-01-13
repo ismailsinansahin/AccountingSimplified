@@ -78,7 +78,7 @@ public class TestDocumentInitializer {
                 .clientVendor(getClientVendor(ClientVendorType.CLIENT))
                 .invoiceStatus(status)
                 .invoiceType(type)
-                .date(LocalDate.of(2022,01,01))
+                .date(LocalDate.of(2023, 1, 1))
                 .company(getCompany(CompanyStatus.ACTIVE))
                 .price(BigDecimal.valueOf(1000))
                 .tax(BigDecimal.TEN)
