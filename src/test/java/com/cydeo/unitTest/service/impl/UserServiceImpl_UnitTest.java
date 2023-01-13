@@ -1,5 +1,6 @@
 package com.cydeo.unitTest.service.impl;
 
+import com.cydeo.TestDocumentInitializer;
 import com.cydeo.dto.CompanyDto;
 import com.cydeo.dto.RoleDto;
 import com.cydeo.dto.UserDto;
@@ -24,8 +25,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -55,8 +59,11 @@ class UserServiceImpl_UnitTest {
 
     @Test
     void should_find_user_by_id_happy_path() {
-        User user = getUser();
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+        // given
+        UserDto userDto = TestDocumentInitializer.getUser("Admin");
+        User user = mapperUtil.convert(userDto, new User());
+        // when
+        when(userRepository.findById(userDto.getId())).thenReturn(Optional.of(user));
 //        when(mapperUtil.convert(any(User.class), any(UserDto.class))).thenReturn(userDto);
 //        when(mapperUtil.convert(any(User.class), ArgumentMatchers.<Class<UserDto>>any())).thenReturn(UserDto.class);
 //        when(mapperUtil.convert(user, any(UserDto.class))).thenReturn(userDto); // exceptions.misusing.InvalidUseOfMatchersException
@@ -64,110 +71,137 @@ class UserServiceImpl_UnitTest {
 //        when(userMapper.convertToDto(user)).thenReturn(userDto);
 
         UserDto actualUser = userService.findUserById(1L);
-        assertThat(actualUser).usingRecursiveComparison()
-                .isEqualTo(user);
 
+        // then
+        assertThat(actualUser).usingRecursiveComparison()
+                .ignoringFields("password", "confirmPassword")
+                .isEqualTo(userDto);
     }
 
     @Test
     void findUserById_should_throw_accounting_exception_with_user_not_found_text() {
+        // when
         // it throws exception since no mock of userRepository and userRepository.findById(1L) returns null
         Throwable throwable = catchThrowable(() -> userService.findUserById(1L));
         // assertThrows also works, but we can also assert message with catchThrowable
         // assertThrows(AccountingException.class, ()-> userService.findUserById(1L));
+
+        // then
         assertInstanceOf(AccountingException.class, throwable);
         assertEquals("User not found", throwable.getMessage());
     }
 
     @Test
     void should_find_by_username_happy_path() {
-        User user = getUser();
-        UserDto userDto = getUserDto("Root User");
+        // given
+        UserDto userDto = TestDocumentInitializer.getUser("Admin");
+        User user = mapperUtil.convert(userDto, new User());
+        // when
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
-//        when(mapperUtil.convert(any(User.class), any(UserDto.class))).thenReturn(userDto);
-
-        Throwable throwable = catchThrowable(() -> {
-            UserDto actualUser = userService.findByUsername(anyString());
-            assertEquals(user.getUsername(), actualUser.getUsername());
-        });
-        assertNull(throwable);
+        UserDto actualUser = userService.findByUsername(userDto.getUsername());
+        // then
+        assertThat(actualUser).usingRecursiveComparison()
+                .ignoringFields("password", "confirmPassword")
+                .isEqualTo(userDto);
     }
 
     @Test
     void findByUsername_should_throw_accounting_exception_with_user_not_found_text() {
+        // when
         Throwable throwable = catchThrowable(() -> userService.findByUsername(anyString()));
+        // then
         assertInstanceOf(AccountingException.class, throwable);
         assertEquals("User not found", throwable.getMessage());
     }
 
     @Test
-    void getFilteredUsers_given_logged_in_as_Admin() {
-        List<User> userList = getUsers();
-        when(securityService.getLoggedInUser()).thenReturn(getUserDto("Admin"));
-        when(userRepository.findAllByCompany(any(Company.class))).thenReturn(userList);
+    void getFilteredUsers_given_logged_in_as_Root_and_all_users_onlyAdmi_sorts_by_CompanyTitle_then_RoleDescription() {
+        // given
+        List<UserDto> userDtos = Arrays.asList(
+                TestDocumentInitializer.getUser("Admin"),
+                TestDocumentInitializer.getUser("Admin"),
+                TestDocumentInitializer.getUser("Admin"));
+        userDtos.get(0).getCompany().setTitle("Zet");
+        userDtos.get(1).getCompany().setTitle("Abc");
+        userDtos.get(2).getCompany().setTitle("Ower");
+        List<User> userList = userDtos.stream()
+                .map(userDto -> mapperUtil.convert(userDto, new User()))
+                .collect(Collectors.toList());
+        List<UserDto> expectedList = userDtos.stream()
+                .sorted(Comparator.comparing((UserDto u) -> u.getCompany().getTitle())
+                        .thenComparing(u -> u.getRole().getDescription()))
+                        .collect(Collectors.toList());
 
-        Throwable throwable = catchThrowable(() -> {
-            List<UserDto> actualUsers = userService.getFilteredUsers();
-            assertEquals("Active Tech", actualUsers.get(0).getCompany().getTitle());    // checks sorting
-        });
-        assertNull(throwable);
-    }
+        // when
+        when(securityService.getLoggedInUser()).thenReturn(userDtos.get(0));
+        when(userRepository.findAllByCompany(any())).thenReturn(userList);
+        when(userRepository.countAllByCompany_TitleAndRole_Description(anyString(), anyString())).thenReturn(1);
+        List<UserDto> actualList = userService.getFilteredUsers();
 
-    // todo : private methodlar test edilemiyor, kullanmalı mıyız
-    @ParameterizedTest
-    @MethodSource(value = "input")
-    void checkIfOnlyAdminForCompany_happyPath(int number, boolean expected) {
-        when(userRepository.countAllByCompany_TitleAndRole_Description(anyString(), anyString())).thenReturn(number);
-//        assertEquals(expected, userService.checkIfOnlyAdminForCompany(getUserDto("Admin")));
-    }
-
-    static Stream<Arguments> input() {
-        return Stream.of(
-                arguments(1, true),
-                arguments(2, false),
-                arguments(3, false),
-                arguments(0, false)
+        // then
+        assertThat(actualList).usingRecursiveComparison()
+                .ignoringFields("password", "confirmPassword", "isOnlyAdmin")
+                .isEqualTo(expectedList);
+        actualList.forEach(
+                userDto -> assertTrue(userDto.getIsOnlyAdmin())
         );
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"Root User", "admin"})
-    void getFilteredUsers_given_logged_in_as_root_user_or_admin(String role) {
-        List<User> userList = getUsers();
-        when(securityService.getLoggedInUser()).thenReturn(getUserDto(role));
-        lenient().when(userRepository.findAllByRole_Description("Admin")).thenReturn(userList);
-        lenient().when(userRepository.findAllByCompany(any(Company.class))).thenReturn(userList);
+    @Test
+    void getFilteredUsers_given_logged_in_as_Admin_and_all_user_not_only_admin_sorts_by_CompanyTitle_then_RoleDescription() {
+        // given
+        List<UserDto> userDtos = Arrays.asList(
+                TestDocumentInitializer.getUser("Admin"),
+                TestDocumentInitializer.getUser("Manager"),
+                TestDocumentInitializer.getUser("Employee"));
+        userDtos.get(0).getCompany().setTitle("Zet");
+        userDtos.get(1).getCompany().setTitle("Abc");
+        userDtos.get(2).getCompany().setTitle("Ower");
+        List<User> userList = userDtos.stream()
+                .map(userDto -> mapperUtil.convert(userDto, new User()))
+                .collect(Collectors.toList());
+        List<UserDto> expectedList = userDtos.stream()
+                .sorted(Comparator.comparing((UserDto u) -> u.getCompany().getTitle())
+                        .thenComparing(u -> u.getRole().getDescription()))
+                .collect(Collectors.toList());
 
-        Throwable throwable = catchThrowable(() -> {
-            List<UserDto> actualUsers = userService.getFilteredUsers();
-            assertEquals("Active Tech", actualUsers.get(0).getCompany().getTitle());    // checks sorting
-        });
+        // when
+        when(securityService.getLoggedInUser()).thenReturn(userDtos.get(0));
+        when(userRepository.findAllByCompany(any(Company.class))).thenReturn(userList);
+        when(userRepository.countAllByCompany_TitleAndRole_Description(anyString(), anyString())).thenReturn(2);
+        List<UserDto> actualList = userService.getFilteredUsers();
 
-        if (role.equals("Root User")) verify(userRepository).findAllByRole_Description("Admin");
-        else verify(userRepository).findAllByCompany(any());
-
-        assertNull(throwable);
+        // then
+        assertThat(actualList).usingRecursiveComparison()
+                .ignoringFields("password", "confirmPassword")
+                .isEqualTo(expectedList);
     }
 
     @Test
     void save_happyPath() {
-        User user = getUser();
-        when(passwordEncoder.encode(anyString())).thenReturn("Abc1");
+        // given
+        UserDto userDto = TestDocumentInitializer.getUser("Admin");
+        User user = mapperUtil.convert(userDto, new User());
+        // when
         when(userRepository.save(any(User.class))).thenReturn(user);
 
-        Throwable throwable = catchThrowable(() -> {
-            UserDto actualUser = userService.save(getUserDto("Admin"));
-            assertEquals(user.getUsername(), actualUser.getUsername());
-        });
-        assertNull(throwable);
+        UserDto actualUser = userService.save(userDto);
+        // then
+        verify(passwordEncoder).encode(anyString());
+        assertThat(actualUser).usingRecursiveComparison()
+                .ignoringFields("password", "confirmPassword")
+                .isEqualTo(userDto);
+        // we cannot test implementation of setEnabled() since user is not mocked and UserDto does not have this field.
     }
 
+    //todo should we test this and update null
     @Test
     void save_null_dto_throws_exception() {
+        // option 1:
         // only checks exception which comes from mapperUtil
         assertThrows(IllegalArgumentException.class, () -> userService.save(null));
 
-        // check exception and message
+        // option 2 : better - check exception and message
         Throwable throwable = catchThrowable(() -> userService.save(null));
         assertInstanceOf(IllegalArgumentException.class, throwable);
         assertEquals("source cannot be null", throwable.getMessage());
@@ -177,17 +211,19 @@ class UserServiceImpl_UnitTest {
 
     @Test
     void update_happyPath() {
-        User user = getUser();
-        when(passwordEncoder.encode(anyString())).thenReturn("Abc1");
+        // given
+        UserDto userDto = TestDocumentInitializer.getUser("Admin");
+        User user = mapperUtil.convert(userDto, new User());
+        // when
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
 
-        Throwable throwable = catchThrowable(() -> {
-            UserDto actualUser = userService.update(getUserDto("Admin"));
-            assertEquals(user.getUsername(), actualUser.getUsername());
-        });
-        assertNull(throwable);
-        // since we tested
+        UserDto actualUser = userService.update(userDto);
+        // then
+        verify(passwordEncoder).encode(anyString());
+        assertThat(actualUser).usingRecursiveComparison()
+                .ignoringFields("password", "confirmPassword")
+                .isEqualTo(userDto);
     }
 
     @Test
@@ -205,8 +241,11 @@ class UserServiceImpl_UnitTest {
 
     @Test
     void delete_happyPath() {
-        User user = getUser();
+        // given
+        UserDto userDto = TestDocumentInitializer.getUser("Admin");
+        User user = mapperUtil.convert(userDto, new User());
         user.setIsDeleted(false);
+        // when
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
 
@@ -214,90 +253,30 @@ class UserServiceImpl_UnitTest {
             userService.delete(user.getId());
         });
         assertTrue(user.getIsDeleted());
-        assertNotEquals("test@test.com", user.getUsername());
+        assertNotEquals(userDto.getUsername(), user.getUsername());
         assertNull(throwable);
     }
 
-    @Test
-    void isEmailExist_return_false() {
-        User user = getUser();
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
-
-        assertFalse(userService.isEmailExist(getUserDto("admin")));
+    @ParameterizedTest
+    @MethodSource(value = "email")
+    void isEmailExist(UserDto userDto, User user, boolean expected) {
+        // when
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.ofNullable(user));
+        // then
+        assertEquals(expected, userService.isEmailExist(userDto));
     }
 
-    @Test
-    void isEmailExist_return_true() {
-        User user = getUser();
+    static Stream<Arguments> email(){
+        // given
+        UserDto userDto = TestDocumentInitializer.getUser("Admin");
+        User user = new MapperUtil(new ModelMapper())
+                .convert(userDto, new User());
         user.setId(2L);
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
-        assertTrue(userService.isEmailExist(getUserDto("admin")));
-    }
-
-    private User getUser() {
-        return User.builder()
-                .id(1L)
-                .username("test@test.com")
-                .firstname("Tom")
-                .lastname("Hanks")
-                .password("Abc1")
-                .company(Company.builder().title("Blue Tech").id(1L).build())
-                .role(new Role("Admin"))
-                .build();
-    }
-
-    private UserDto getUserDto(String role) {
-        return UserDto.builder()
-                .id(1L)
-                .username("test@test.com")
-                .firstname("Tom")
-                .lastname("Hanks")
-                .password("Abc1")
-                .company(CompanyDto.builder().title("Blue Tech").id(1L).build())
-                .role(new RoleDto(1L, role))
-                .company(CompanyDto.builder().build())
-                .build();
-    }
-
-    private static List<User> getUsers() {
-        return List.of(
-                User.builder()
-                        .company(Company.builder().title("Blue Tech").id(2L).build())
-                        .role(new Role("Admin"))
-                        .firstname("Chris")
-                        .lastname("Brown")
-                        .username("admin@bluetech.com")
-                        .phone("123456789")
-                        .build(),
-                User.builder()
-                        .company(Company.builder().title("Active Tech").id(1L).build())
-                        .role(new Role("Manager"))
-                        .firstname("Mary")
-                        .lastname("Grant")
-                        .username("manager@activetech.com")
-                        .phone("123456789")
-                        .build()
+        return Stream.of(
+                arguments(userDto, user, true),
+                arguments(userDto, null, false)
         );
     }
 
-    private static List<UserDto> getUserDTOs() {
-        return List.of(
-                UserDto.builder()
-                        .company(CompanyDto.builder().title("Blue Tech").id(2L).build())
-                        .role(new RoleDto(1L, "Admin"))
-                        .firstname("Chris")
-                        .lastname("Brown")
-                        .username("admin@bluetech.com")
-                        .phone("123456789")
-                        .build(),
-                UserDto.builder()
-                        .company(CompanyDto.builder().title("Active Tech").id(1L).build())
-                        .role(new RoleDto(1L, "Manager"))
-                        .firstname("Mary")
-                        .lastname("Grant")
-                        .username("manager@activetech.com")
-                        .phone("123456789")
-                        .build()
-        );
-    }
+
 }

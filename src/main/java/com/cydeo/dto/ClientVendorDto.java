@@ -1,10 +1,7 @@
 package com.cydeo.dto;
 
 import com.cydeo.enums.ClientVendorType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.Valid;
@@ -18,6 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ClientVendorDto {
 
     private Long id;
