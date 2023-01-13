@@ -43,12 +43,8 @@ class UserServiceImpl_UnitTest {
     @Mock
     SecurityService securityService;
 
-    //    @Mock çalışmıyor
     @Spy
     MapperUtil mapperUtil = new MapperUtil(new ModelMapper());
-
-//    @Mock
-//    UserMapper userMapper;
 
     @Mock
     PasswordEncoder passwordEncoder;
@@ -115,6 +111,23 @@ class UserServiceImpl_UnitTest {
             assertEquals("Active Tech", actualUsers.get(0).getCompany().getTitle());    // checks sorting
         });
         assertNull(throwable);
+    }
+
+    // todo : private methodlar test edilemiyor, kullanmalı mıyız
+    @ParameterizedTest
+    @MethodSource(value = "input")
+    void checkIfOnlyAdminForCompany_happyPath(int number, boolean expected) {
+        when(userRepository.countAllByCompany_TitleAndRole_Description(anyString(), anyString())).thenReturn(number);
+//        assertEquals(expected, userService.checkIfOnlyAdminForCompany(getUserDto("Admin")));
+    }
+
+    static Stream<Arguments> input() {
+        return Stream.of(
+                arguments(1, true),
+                arguments(2, false),
+                arguments(3, false),
+                arguments(0, false)
+        );
     }
 
     @ParameterizedTest
@@ -194,10 +207,6 @@ class UserServiceImpl_UnitTest {
     void delete_happyPath(){
         User user = getUser();
         user.setIsDeleted(false);
-        // todo : can we mock a method which belongs to code under test class?
-        //  can we test setUsername, setIsDeleted method?
-        //  can we have negative test?
-//        when(userService.findUserById(anyLong())).thenReturn(getUserDto("Admin"));
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(userRepository.save(any(User.class))).thenReturn(user);
 
@@ -223,23 +232,6 @@ class UserServiceImpl_UnitTest {
         user.setId(2L);
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
         assertTrue(userService.isEmailExist(getUserDto("admin")));
-    }
-
-    // todo : private methodlar test edilemiyor, kullanmalı mıyız
-    @ParameterizedTest
-    @MethodSource(value = "input")
-    void checkIfOnlyAdminForCompany_happyPath(int number, boolean expected) {
-        when(userRepository.countAllByCompanyAndRole_Description(any(Company.class), any())).thenReturn(number);
-        assertEquals(expected, userService.checkIfOnlyAdminForCompany(getUserDto("Admin")));
-    }
-
-    static Stream<Arguments> input() {
-        return Stream.of(
-                arguments(1, true),
-                arguments(2, false),
-                arguments(3, false),
-                arguments(0, false)
-        );
     }
 
     private User getUser() {

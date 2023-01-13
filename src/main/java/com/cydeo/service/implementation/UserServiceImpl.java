@@ -49,20 +49,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getFilteredUsers() {
-        throw new RuntimeException("test runtime");
-//        User currentUser = mapperUtil.convert(securityService.getLoggedInUser(), new User());
-//        List<User> userList;
-//        if (currentUser.getRole().getDescription().equals("Root User")) {
-//            userList = userRepository.findAllByRole_Description("Admin");
-//        } else {
-//            userList = userRepository.findAllByCompany_Title(currentUser.getCompany());
-//        }
-//        return userList.stream()
-//                .sorted(Comparator.comparing((User u) -> u.getCompany().getTitle())
-//                        .thenComparing(u -> u.getRole().getDescription()))
-//                .map(entity -> mapperUtil.convert(entity, new UserDto()))
-//                .peek(dto -> dto.setIsOnlyAdmin(this.checkIfOnlyAdminForCompany(dto)))
-//                .collect(Collectors.toList());
+        User currentUser = mapperUtil.convert(securityService.getLoggedInUser(), new User());
+        List<User> userList;
+        if (currentUser.getRole().getDescription().equals("Root User")) {
+            userList = userRepository.findAllByRole_Description("Admin");
+        } else {
+            userList = userRepository.findAllByCompany(currentUser.getCompany());
+        }
+        return userList.stream()
+                .sorted(Comparator.comparing((User u) -> u.getCompany().getTitle())
+                        .thenComparing(u -> u.getRole().getDescription()))
+                .map(entity -> mapperUtil.convert(entity, new UserDto()))
+                .peek(dto -> dto.setIsOnlyAdmin(this.checkIfOnlyAdminForCompany(dto)))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -87,8 +86,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long userId) {
-        //todo : cannot test with below line
-//        User user = mapperUtil.convert(findUserById(userId), new User());
         User user = userRepository.findById(userId).orElseThrow();
         user.setUsername(user.getUsername() + "-" + user.getId());  // without this modification, if entity has column(unique=true)
                                                                     // and we want to save a user with same email, it throws exception.
@@ -104,9 +101,9 @@ public class UserServiceImpl implements UserService {
         return !userWithUpdatedEmail.getId().equals(userDto.getId());
     }
 
-    public Boolean checkIfOnlyAdminForCompany(UserDto dto) {
-        Company company = mapperUtil.convert(dto.getCompany(), new Company());
-        return userRepository.countAllByCompanyAndRole_Description(company,"Admin") == 1;
+    private boolean checkIfOnlyAdminForCompany(UserDto dto) {
+        if (!dto.getRole().getDescription().equalsIgnoreCase("Admin")) return false;
+        return userRepository.countAllByCompany_TitleAndRole_Description(dto.getCompany().getTitle(),"Admin") == 1;
     }
 
 

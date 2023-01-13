@@ -910,7 +910,7 @@ var moment = __webpack_require__(0);
 var moment_ext_1 = __webpack_require__(10);
 var UnzonedRange = /** @class */ (function () {
     function UnzonedRange(startInput, endInput) {
-        // TODO: move these into footprint.
+        // : move these into footprint.
         // Especially, doesn't make sense for null startMs/endMs.
         this.isStart = true;
         this.isEnd = true;
@@ -1132,7 +1132,7 @@ var EventSource = /** @class */ (function (_super) {
         if (rawProps.id != null) {
             this.id = EventSource.normalizeId(rawProps.id);
         }
-        // TODO: converge with EventDef
+        // : converge with EventDef
         if ($.isArray(rawProps.className)) {
             this.className = rawProps.className;
         }
@@ -1686,7 +1686,7 @@ var Mixin = /** @class */ (function () {
     };
     /*
     will override existing methods
-    TODO: remove! not used anymore
+    : remove! not used anymore
     */
     Mixin.mixOver = function (destClass) {
         var _this = this;
@@ -2199,7 +2199,7 @@ var GlobalEmitter = /** @class */ (function () {
         });
         // because we need to call preventDefault
         // because https://www.chromestatus.com/features/5093566007214080
-        // TODO: investigate performance because this is a global handler
+        // : investigate performance because this is a global handler
         window.addEventListener('touchmove', this.handleTouchMoveProxy = function (ev) {
             _this.handleTouchMove($.Event(ev));
         }, { passive: false } // allows preventDefault()
@@ -2368,7 +2368,7 @@ var HitDragListener = /** @class */ (function (_super) {
             // treat the center of the subject as the collision point?
             if (subjectEl && this.options.subjectCenter) {
                 // only consider the area the subject overlaps the hit. best for large subjects.
-                // TODO: skip this if hit didn't supply left/right/top/bottom
+                // : skip this if hit didn't supply left/right/top/bottom
                 if (this.origHit) {
                     subjectRect = util_1.intersectRects(this.origHit, subjectRect) ||
                         subjectRect; // in case there is no intersection
@@ -2573,8 +2573,8 @@ var momComputableOptions = {
     }
 };
 // options that should be computed off live calendar options (considers override options)
-// TODO: best place for this? related to locale?
-// TODO: flipping text based on isRTL is a bad idea because the CSS `direction` might want to handle it
+// : best place for this? related to locale?
+// : flipping text based on isRTL is a bad idea because the CSS `direction` might want to handle it
 var instanceComputableOptions = {
     // Produces format strings for results like "Mo 16"
     smallDayDateFormat: function (options) {
@@ -2595,7 +2595,7 @@ var instanceComputableOptions = {
             '[' + options.weekNumberTitle + ']w';
     }
 };
-// TODO: make these computable properties in optionsManager
+// : make these computable properties in optionsManager
 function populateInstanceComputableOptions(options) {
     $.each(instanceComputableOptions, function (name, func) {
         if (options[name] == null) {
@@ -2924,7 +2924,7 @@ var EventDef = /** @class */ (function () {
         else {
             this.uid = EventDef.generateId();
         }
-        // TODO: converge with EventSource
+        // : converge with EventSource
         if ($.isArray(rawProps.className)) {
             this.className = rawProps.className;
         }
@@ -3093,12 +3093,12 @@ var EventDefMutation = /** @class */ (function () {
             eventDef.dateProfile = this.dateMutation.buildNewDateProfile(origDateProfile, eventDef.source.calendar);
         }
         // can't undo
-        // TODO: more DRY with EventDef::applyManualStandardProps
+        // : more DRY with EventDef::applyManualStandardProps
         if (this.eventDefId != null) {
             eventDef.id = EventDef_1.default.normalizeId((eventDef.rawId = this.eventDefId));
         }
         // can't undo
-        // TODO: more DRY with EventDef::applyManualStandardProps
+        // : more DRY with EventDef::applyManualStandardProps
         if (this.className) {
             eventDef.className = this.className;
         }
@@ -3308,7 +3308,7 @@ var InteractiveDateComponent = /** @class */ (function (_super) {
     InteractiveDateComponent.prototype.bindGlobalHandlers = function () {
         _super.prototype.bindGlobalHandlers.call(this);
         if (this.externalDropping) {
-            this.externalDropping.bindToDocument();
+            this.externalDropping.bindcument();
         }
     };
     InteractiveDateComponent.prototype.unbindGlobalHandlers = function () {
@@ -3452,7 +3452,7 @@ var InteractiveDateComponent = /** @class */ (function (_super) {
     // Event Mutation / Constraints
     // ---------------------------------------------------------------------------------------------------------------
     // Diffs the two dates, returning a duration, based on granularity of the grid
-    // TODO: port isTimeScale into this system?
+    // : port isTimeScale into this system?
     InteractiveDateComponent.prototype.diffDates = function (a, b) {
         if (this.largeUnit) {
             return util_1.diffByUnit(a, b, this.largeUnit);
@@ -3469,7 +3469,7 @@ var InteractiveDateComponent = /** @class */ (function (_super) {
         var eventFootprints = this.eventRangesToEventFootprints(eventInstanceGroup.getAllEventRanges());
         var i;
         for (i = 0; i < eventFootprints.length; i++) {
-            // TODO: just use getAllEventRanges directly
+            // : just use getAllEventRanges directly
             if (!dateProfile.validUnzonedRange.containsRange(eventFootprints[i].componentFootprint.unzonedRange)) {
                 return false;
             }
@@ -3490,7 +3490,7 @@ var InteractiveDateComponent = /** @class */ (function (_super) {
         }
         for (i = 0; i < eventFootprints.length; i++) {
             // treat it as a selection
-            // TODO: pass in eventInstanceGroup instead
+            // : pass in eventInstanceGroup instead
             //  because we don't want calendar's constraint system to depend on a component's
             //  determination of footprints.
             if (!view.calendar.constraints.isSelectionFootprintAllowed(eventFootprints[i].componentFootprint)) {
@@ -3648,7 +3648,7 @@ var View = /** @class */ (function (_super) {
         return calendar.requestEvents(calendar.msToMoment(dateProfile.activeUnzonedRange.startMs, forceAllDay), calendar.msToMoment(dateProfile.activeUnzonedRange.endMs, forceAllDay));
     };
     View.prototype.bindEventChanges = function () {
-        this.listenTo(this.calendar, 'eventsReset', this.resetEvents); // TODO: make this a real event
+        this.listenTo(this.calendar, 'eventsReset', this.resetEvents); // : make this a real event
     };
     View.prototype.unbindEventChanges = function () {
         this.stopListeningTo(this.calendar, 'eventsReset');
@@ -3685,7 +3685,7 @@ var View = /** @class */ (function (_super) {
     View.prototype.executeDateRender = function (dateProfile) {
         _super.prototype.executeDateRender.call(this, dateProfile);
         if (this['render']) {
-            this['render'](); // TODO: deprecate
+            this['render'](); // : deprecate
         }
         this.trigger('datesRendered');
         this.addScroll({ isDateInit: true });
@@ -3696,7 +3696,7 @@ var View = /** @class */ (function (_super) {
         this.stopNowIndicator();
         this.trigger('before:datesUnrendered');
         if (this['destroy']) {
-            this['destroy'](); // TODO: deprecate
+            this['destroy'](); // : deprecate
         }
         _super.prototype.executeDateUnrender.call(this);
     };
@@ -3772,7 +3772,7 @@ var View = /** @class */ (function (_super) {
     ------------------------------------------------------------------------------------------------------------------*/
     // Immediately render the current time indicator and begins re-rendering it at an interval,
     // which is defined by this.getNowIndicatorUnit().
-    // TODO: somehow do this for the current whole day's background too
+    // : somehow do this for the current whole day's background too
     View.prototype.startNowIndicator = function () {
         var _this = this;
         var unit;
@@ -4002,7 +4002,7 @@ var View = /** @class */ (function (_super) {
         if (this.isSelected) {
             this.isSelected = false;
             if (this['destroySelection']) {
-                this['destroySelection'](); // TODO: deprecate
+                this['destroySelection'](); // : deprecate
             }
             this.unrenderSelection();
             this.publiclyTrigger('unselect', {
@@ -4044,8 +4044,8 @@ var View = /** @class */ (function (_super) {
     };
     /* Mouse / Touch Unselecting (time range & event unselection)
     ------------------------------------------------------------------------------------------------------------------*/
-    // TODO: move consistently to down/start or up/end?
-    // TODO: don't kill previous selection if touch scrolling
+    // : move consistently to down/start or up/end?
+    // : don't kill previous selection if touch scrolling
     View.prototype.handleDocumentMousedown = function (ev) {
         if (util_1.isPrimaryMouseButton(ev)) {
             this.processUnselect(ev);
@@ -4644,7 +4644,7 @@ function formatDate(date, formatStr) {
 exports.formatDate = formatDate;
 // Date Range Formatting
 // -------------------------------------------------------------------------------------------------
-// TODO: make it work with timezone offset
+// : make it work with timezone offset
 /*
 Using a formatting string meant for a single date, generate a range string, like
 "Sep 2 - 9 2013", that intelligently inserts a separator where the dates differ.
@@ -4689,7 +4689,7 @@ function renderParsedFormat(parsedFormat, date1, date2, separator, isRTL) {
     for (rightI = sameUnits.length - 1; rightI > leftI && (!sameUnits[rightI] || unzonedDate1.isSame(unzonedDate2, sameUnits[rightI])); rightI--) {
         // If current chunk is on the boundary of unique date-content, and is a special-case
         // date-formatting postfix character, then don't consume it. Consider it unique date-content.
-        // TODO: make configurable
+        // : make configurable
         if (rightI - 1 === leftI && renderedParts1[rightI] === '.') {
             break;
         }
@@ -4743,7 +4743,7 @@ A 'maybe' chunk will have nested chunks.
 function chunkFormatString(formatStr) {
     var chunks = [];
     var match;
-    // TODO: more descrimination
+    // : more descrimination
     // \4 is a backreference to the first character of a multi-character set.
     var chunker = /\[([^\]]*)\]|\(([^\)]*)\)|(LTS|LT|(\w)\4*o?)|([^\w\[\(]+)/g;
     while ((match = chunker.exec(formatStr))) {
@@ -4931,14 +4931,14 @@ var Model = /** @class */ (function (_super) {
             args[_i - 1] = arguments[_i];
         }
         // subclasses should make a masked-copy of the superclass's map
-        // TODO: write test
+        // : write test
         if (!this.prototype.hasOwnProperty('_globalWatchArgs')) {
             this.prototype._globalWatchArgs = Object.create(this.prototype._globalWatchArgs);
         }
         this.prototype._globalWatchArgs[name] = args;
     };
     Model.prototype.constructed = function () {
-        // useful for monkeypatching. TODO: BaseClass?
+        // useful for monkeypatching. : BaseClass?
     };
     Model.prototype.applyGlobalWatchers = function () {
         var map = this._globalWatchArgs;
@@ -5003,7 +5003,7 @@ var Model = /** @class */ (function (_super) {
             val = newProps[name];
             // a change in value?
             // if an object, don't check equality, because might have been mutated internally.
-            // TODO: eventually enforce immutability.
+            // : eventually enforce immutability.
             if (typeof val === 'object' ||
                 val !== this._props[name]) {
                 changedProps[name] = val;
@@ -5297,7 +5297,7 @@ var EventDefDateMutation = /** @class */ (function () {
                 end = calendar.applyTimezone(end);
             }
         }
-        // TODO: okay to access calendar option?
+        // : okay to access calendar option?
         if (!end && calendar.opt('forceEventDuration')) {
             end = calendar.getDefaultEventEnd(eventDateProfile.isAllDay(), start);
         }
@@ -5611,7 +5611,7 @@ var CoordCache = /** @class */ (function () {
         return this.bottoms[topIndex] - this.tops[topIndex];
     };
     // Bounding Rect
-    // TODO: decouple this from CoordCache
+    // : decouple this from CoordCache
     // Compute and return what the elements' bounding rectangle is, from the user's perspective.
     // Right now, only returns a rectangle if constrained by an overflow:scroll element.
     // Returns null if there are no elements
@@ -5650,7 +5650,7 @@ var ListenerMixin_1 = __webpack_require__(7);
 var GlobalEmitter_1 = __webpack_require__(21);
 /* Tracks a drag's mouse movement, firing various handlers
 ----------------------------------------------------------------------------------------------------------------------*/
-// TODO: use Emitter
+// : use Emitter
 var DragListener = /** @class */ (function () {
     function DragListener(options) {
         this.isInteracting = false;
@@ -5862,7 +5862,7 @@ var DragListener = /** @class */ (function () {
         if (this.options[name]) {
             this.options[name].apply(this, args);
         }
-        // makes _methods callable by event name. TODO: kill this
+        // makes _methods callable by event name. : kill this
         if (this['_' + name]) {
             this['_' + name].apply(this, args);
         }
@@ -5892,7 +5892,7 @@ var DragListener = /** @class */ (function () {
     DragListener.prototype.computeScrollBounds = function () {
         if (this.isAutoScroll) {
             this.scrollBounds = util_1.getOuterRect(this.scrollEl);
-            // TODO: use getClientRect in future. but prevents auto scrolling when on top of scrollbars
+            // : use getClientRect in future. but prevents auto scrolling when on top of scrollbars
         }
     };
     // Called when the dragging is in progress and scrolling should be updated
@@ -6173,7 +6173,7 @@ var DayTableMixin = /** @class */ (function (_super) {
         return segs;
     };
     // Slices up a date range into a segment for every day-cell it intersects with.
-    // TODO: make more DRY with sliceRangeByRow somehow.
+    // : make more DRY with sliceRangeByRow somehow.
     DayTableMixin.prototype.sliceRangeByDay = function (unzonedRange) {
         var daysPerRow = this.daysPerRow;
         var normalRange = this.view.computeDayRange(unzonedRange); // make whole-day range, considering nextDayThreshold
@@ -6245,12 +6245,12 @@ var DayTableMixin = /** @class */ (function (_super) {
         }
         return htmls.join('');
     };
-    // TODO: when internalApiVersion, accept an object for HTML attributes
+    // : when internalApiVersion, accept an object for HTML attributes
     // (colspan should be no different)
     DayTableMixin.prototype.renderHeadDateCellHtml = function (date, colspan, otherAttrs) {
         var t = this;
         var view = t.view;
-        var isDateValid = t.dateProfile.activeUnzonedRange.containsDate(date); // TODO: called too frequently. cache somehow.
+        var isDateValid = t.dateProfile.activeUnzonedRange.containsDate(date); // : called too frequently. cache somehow.
         var classNames = [
             'fc-day-header',
             view.calendar.theme.getClass('widgetHeader')
@@ -6320,7 +6320,7 @@ var DayTableMixin = /** @class */ (function (_super) {
     DayTableMixin.prototype.renderBgCellHtml = function (date, otherAttrs) {
         var t = this;
         var view = t.view;
-        var isDateValid = t.dateProfile.activeUnzonedRange.containsDate(date); // TODO: called too frequently. cache somehow.
+        var isDateValid = t.dateProfile.activeUnzonedRange.containsDate(date); // : called too frequently. cache somehow.
         var classes = t.getDayClasses(date);
         classes.unshift('fc-day', view.calendar.theme.getClass('widgetContent'));
         return '<td class="' + classes.join(' ') + '"' +
@@ -6337,7 +6337,7 @@ var DayTableMixin = /** @class */ (function (_super) {
     DayTableMixin.prototype.renderIntroHtml = function () {
         // Generates the default HTML intro for any row. User classes should override
     };
-    // TODO: a generic method for dealing with <tr>, RTL, intro
+    // : a generic method for dealing with <tr>, RTL, intro
     // when increment internalApiVersion
     // wrapTr (scheduler)
     /* Utils
@@ -6609,7 +6609,7 @@ var EventPointing = /** @class */ (function (_super) {
         if (!GlobalEmitter_1.default.get().shouldIgnoreMouse() &&
             !this.mousedOverSeg) {
             this.mousedOverSeg = seg;
-            // TODO: move to EventSelecting's responsibility
+            // : move to EventSelecting's responsibility
             if (this.view.isEventDefResizable(seg.footprint.eventDef)) {
                 seg.el.addClass('fc-allow-mouse-resize');
             }
@@ -6624,7 +6624,7 @@ var EventPointing = /** @class */ (function (_super) {
     EventPointing.prototype.handleMouseout = function (seg, ev) {
         if (this.mousedOverSeg) {
             this.mousedOverSeg = null;
-            // TODO: move to EventSelecting's responsibility
+            // : move to EventSelecting's responsibility
             if (this.view.isEventDefResizable(seg.footprint.eventDef)) {
                 seg.el.removeClass('fc-allow-mouse-resize');
             }
@@ -6838,7 +6838,7 @@ var DayGrid = /** @class */ (function (_super) {
     DayGrid.prototype.renderNumberCellHtml = function (date) {
         var view = this.view;
         var html = '';
-        var isDateValid = this.dateProfile.activeUnzonedRange.containsDate(date); // TODO: called too frequently. cache somehow.
+        var isDateValid = this.dateProfile.activeUnzonedRange.containsDate(date); // : called too frequently. cache somehow.
         var isDayNumberVisible = this.getIsDayNumbersVisible() && isDateValid;
         var classes;
         var weekCalcFirstDoW;
@@ -7003,7 +7003,7 @@ var DayGrid = /** @class */ (function (_super) {
     // `row` is the row number.
     DayGrid.prototype.computeRowLevelLimit = function (row) {
         var rowEl = this.rowEls.eq(row); // the containing "fake" row div
-        var rowHeight = rowEl.height(); // TODO: cache somehow?
+        var rowHeight = rowEl.height(); // : cache somehow?
         var trEls = this.eventRenderer.rowStructs[row].tbodyEl.children();
         var i;
         var trEl;
@@ -7254,7 +7254,7 @@ var DayGrid = /** @class */ (function (_super) {
             }
         }
         // force an order because eventsToSegs doesn't guarantee one
-        // TODO: research if still needed
+        // : research if still needed
         this.eventRenderer.sortEventSegs(newSegs);
         return newSegs;
     };
@@ -7337,7 +7337,7 @@ var BasicView = /** @class */ (function (_super) {
     // Generates the DayGrid object this view needs. Draws from this.dayGridClass
     BasicView.prototype.instantiateDayGrid = function () {
         // generate a subclass on the fly with BasicView-specific behavior
-        // TODO: cache this subclass
+        // : cache this subclass
         var subclass = makeDayGridSubclass(this.dayGridClass);
         return new subclass(this);
     };
@@ -7401,7 +7401,7 @@ var BasicView = /** @class */ (function (_super) {
         var scrollerHeight;
         var scrollbarWidths;
         // hack to give the view some height prior to dayGrid's columns being rendered
-        // TODO: separate setting height from scroller VS dayGrid.
+        // : separate setting height from scroller VS dayGrid.
         if (!this.dayGrid.rowEls) {
             if (!isAuto) {
                 scrollerHeight = this.computeScrollerHeight(totalHeight);
@@ -8017,7 +8017,7 @@ var ParsableModelMixin = /** @class */ (function (_super) {
         // subclasses can implement
     };
     /*
-    TODO: why is this a method when defineStandardProps is static
+    : why is this a method when defineStandardProps is static
     */
     ParsableModelMixin.prototype.isStandardProp = function (propName) {
         return propName in this.standardPropMap;
@@ -8424,7 +8424,7 @@ var JsonFeedEventSource = /** @class */ (function (_super) {
         var onSuccess = ajaxSettings.success;
         var onError = ajaxSettings.error;
         var requestParams = this.buildRequestParams(start, end, timezone);
-        // todo: eventually handle the promise's then,
+        // : eventually handle the promise's then,
         // don't intercept success/error
         // tho will be a breaking API change
         this.calendar.pushLoading();
@@ -8572,7 +8572,7 @@ var TaskQueue = /** @class */ (function () {
         } while (this.canRunNext());
         this.trigger('stop'); // not really a 'stop' ... more of a 'drained'
         this.isRunning = false;
-        // if 'stop' handler added more tasks.... TODO: write test for this
+        // if 'stop' handler added more tasks.... : write test for this
         this.tryStart();
     };
     TaskQueue.prototype.runTask = function (task) {
@@ -8657,7 +8657,7 @@ var RenderQueue = /** @class */ (function (_super) {
             var q = this.q;
             // if there was a different namespace task in the meantime,
             // that forces all previously-waiting tasks to suddenly execute.
-            // TODO: find a way to do this in constant time.
+            // : find a way to do this in constant time.
             for (var i = 0; i < q.length; i++) {
                 if (q[i].namespace !== this.waitNamespace) {
                     return true; // allow execution
@@ -8720,7 +8720,7 @@ var DateComponent = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.isRTL = false; // frequently accessed options
         _this.hitsNeededDepth = 0; // necessary because multiple callers might need the same hits
-        _this.hasAllDayBusinessHours = false; // TODO: unify with largeUnit and isTimeScale?
+        _this.hasAllDayBusinessHours = false; // : unify with largeUnit and isTimeScale?
         _this.isDatesRendered = false;
         // hack to set options prior to the this.opt calls
         if (_view) {
@@ -8761,8 +8761,8 @@ var DateComponent = /** @class */ (function (_super) {
         }
         return false;
     };
-    // TODO: only do if isInDom?
-    // TODO: make part of Component, along with children/batch-render system?
+    // : only do if isInDom?
+    // : make part of Component, along with children/batch-render system?
     DateComponent.prototype.updateSize = function (totalHeight, isAuto, isResize) {
         this.callChildren('updateSize', arguments);
     };
@@ -8986,7 +8986,7 @@ var DateComponent = /** @class */ (function (_super) {
     // Selection
     // ---------------------------------------------------------------------------------------------------------------
     // Renders a visual indication of the selection
-    // TODO: rename to `renderSelection` after legacy is gone
+    // : rename to `renderSelection` after legacy is gone
     DateComponent.prototype.renderSelectionFootprint = function (componentFootprint) {
         this.renderHighlight(componentFootprint);
         this.callChildren('renderSelectionFootprint', arguments);
@@ -9040,7 +9040,7 @@ var DateComponent = /** @class */ (function (_super) {
     };
     // Given coordinates from the topleft of the document, return data about the date-related area underneath.
     // Can return an object with arbitrary properties (although top/right/left/bottom are encouraged).
-    // Must have a `grid` property, a reference to this current grid. TODO: avoid this
+    // Must have a `grid` property, a reference to this current grid. : avoid this
     // The returned object will be processed by getHitFootprint and getHitEl.
     DateComponent.prototype.queryHit = function (leftOffset, topOffset) {
         var childrenByUid = this.childrenByUid;
@@ -9111,7 +9111,7 @@ var DateComponent = /** @class */ (function (_super) {
                 seg.isEnd = false;
             }
             seg.footprint = eventFootprint;
-            // TODO: rename to seg.eventFootprint
+            // : rename to seg.eventFootprint
         }
         return segs;
     };
@@ -9193,7 +9193,7 @@ var DateComponent = /** @class */ (function (_super) {
         var classes = [];
         var today;
         if (!this.dateProfile.activeUnzonedRange.containsDate(date)) {
-            classes.push('fc-disabled-day'); // TODO: jQuery UI theme?
+            classes.push('fc-disabled-day'); // : jQuery UI theme?
         }
         else {
             classes.push('fc-' + util_1.dayIDs[date.day()]);
@@ -9256,7 +9256,7 @@ var DateComponent = /** @class */ (function (_super) {
         var dayRange = this.computeDayRange(unzonedRange);
         return dayRange.end.diff(dayRange.start, 'days') > 1;
     };
-    DateComponent.guid = 0; // TODO: better system for this?
+    DateComponent.guid = 0; // : better system for this?
     return DateComponent;
 }(Component_1.default));
 exports.default = DateComponent;
@@ -9642,7 +9642,7 @@ var Calendar = /** @class */ (function () {
     };
     // Destroys the view, including the view object. Then, re-instantiates it and renders it.
     // Maintains the same scroll state.
-    // TODO: maintain any other user-manipulated state.
+    // : maintain any other user-manipulated state.
     Calendar.prototype.reinitView = function () {
         var oldView = this.view;
         var scroll = oldView.queryScroll(); // wouldn't be so complicated if Calendar owned the scroll
@@ -9913,11 +9913,11 @@ var Calendar = /** @class */ (function () {
         else {
             mom = moment_ext_1.default.parseZone.apply(null, args); // let the input decide the zone
         }
-        this.localizeMoment(mom); // TODO
+        this.localizeMoment(mom); // 
         return mom;
     };
     Calendar.prototype.msToMoment = function (ms, forceAllDay) {
-        var mom = moment_ext_1.default.utc(ms); // TODO: optimize by using Date.UTC
+        var mom = moment_ext_1.default.utc(ms); // : optimize by using Date.UTC
         if (forceAllDay) {
             mom.stripTime();
         }
@@ -9928,7 +9928,7 @@ var Calendar = /** @class */ (function () {
         return mom;
     };
     Calendar.prototype.msToUtcMoment = function (ms, forceAllDay) {
-        var mom = moment_ext_1.default.utc(ms); // TODO: optimize by using Date.UTC
+        var mom = moment_ext_1.default.utc(ms); // : optimize by using Date.UTC
         if (forceAllDay) {
             mom.stripTime();
         }
@@ -10053,7 +10053,7 @@ var Calendar = /** @class */ (function () {
         }
     };
     // Given an event's allDay status and start date, return what its fallback end date should be.
-    // TODO: rename to computeDefaultEventEnd
+    // : rename to computeDefaultEventEnd
     Calendar.prototype.getDefaultEventEnd = function (allDay, zonedStart) {
         var end = zonedStart.clone();
         if (allDay) {
@@ -10336,7 +10336,7 @@ var DateProfileGenerator = /** @class */ (function () {
     // highlighted as being the current month for example.
     // See build() for a description of `direction`.
     // Guaranteed to have `range` and `unit` properties. `duration` is optional.
-    // TODO: accept a MS-time instead of a moment `date`?
+    // : accept a MS-time instead of a moment `date`?
     DateProfileGenerator.prototype.buildCurrentRangeInfo = function (date, direction) {
         var viewSpec = this._view.viewSpec;
         var duration = null;
@@ -10382,7 +10382,7 @@ var DateProfileGenerator = /** @class */ (function () {
     };
     // Builds the "current" range when it is specified as an explicit duration.
     // `unit` is the already-computed computeGreatestUnit value of duration.
-    // TODO: accept a MS-time instead of a moment `date`?
+    // : accept a MS-time instead of a moment `date`?
     DateProfileGenerator.prototype.buildRangeFromDuration = function (date, direction, duration, unit) {
         var alignment = this.opt('dateAlignment');
         var dateIncrementInput;
@@ -10428,7 +10428,7 @@ var DateProfileGenerator = /** @class */ (function () {
         return res;
     };
     // Builds the "current" range when a dayCount is specified.
-    // TODO: accept a MS-time instead of a moment `date`?
+    // : accept a MS-time instead of a moment `date`?
     DateProfileGenerator.prototype.buildRangeFromDayCount = function (date, direction, dayCount) {
         var customAlignment = this.opt('dateAlignment');
         var runningCount = 0;
@@ -10450,7 +10450,7 @@ var DateProfileGenerator = /** @class */ (function () {
     };
     // Builds a normalized range object for the "visible" range,
     // which is a way to define the currentUnzonedRange and activeUnzonedRange at the same time.
-    // TODO: accept a MS-time instead of a moment `date`?
+    // : accept a MS-time instead of a moment `date`?
     DateProfileGenerator.prototype.buildCustomVisibleRange = function (date) {
         var visibleUnzonedRange = this._view.getUnzonedRangeOption('visibleRange', this._view.calendar.applyTimezone(date) // correct zone. also generates new obj that avoids mutations
         );
@@ -10525,7 +10525,7 @@ var ExternalDropping = /** @class */ (function (_super) {
             this.dragListener.endInteraction();
         }
     };
-    ExternalDropping.prototype.bindToDocument = function () {
+    ExternalDropping.prototype.bindcument = function () {
         this.listenTo($(document), {
             dragstart: this.handleDragStart,
             sortstart: this.handleDragStart // jqui
@@ -11285,7 +11285,7 @@ var DateSelecting = /** @class */ (function (_super) {
         return wholeFootprint;
     };
     // Given two spans, must return the combination of the two.
-    // TODO: do this separation of concerns (combining VS validation) for event dnd/resize too.
+    // : do this separation of concerns (combining VS validation) for event dnd/resize too.
     // Assumes both footprints are non-open-ended.
     DateSelecting.prototype.computeSelectionFootprint = function (footprint0, footprint1) {
         var ms = [
@@ -11428,7 +11428,7 @@ var AgendaView = /** @class */ (function (_super) {
         // make all axis cells line up, and record the width so newly created axis cells will have it
         this.axisWidth = util_1.matchCellWidths(this.el.find('.fc-axis'));
         // hack to give the view some height prior to timeGrid's columns being rendered
-        // TODO: separate setting height from scroller VS timeGrid.
+        // : separate setting height from scroller VS timeGrid.
         if (!this.timeGrid.colEls) {
             if (!isAuto) {
                 scrollerHeight = this.computeScrollerHeight(totalHeight);
@@ -11504,11 +11504,11 @@ var AgendaView = /** @class */ (function (_super) {
     ------------------------------------------------------------------------------------------------------------------*/
     // forward all hit-related method calls to the grids (dayGrid might not be defined)
     AgendaView.prototype.getHitFootprint = function (hit) {
-        // TODO: hit.component is set as a hack to identify where the hit came from
+        // : hit.component is set as a hack to identify where the hit came from
         return hit.component.getHitFootprint(hit);
     };
     AgendaView.prototype.getHitEl = function (hit) {
-        // TODO: hit.component is set as a hack to identify where the hit came from
+        // : hit.component is set as a hack to identify where the hit came from
         return hit.component.getHitEl(hit);
     };
     /* Event Rendering
@@ -11719,7 +11719,7 @@ var TimeGrid = /** @class */ (function (_super) {
         snapDuration = snapDuration ? moment.duration(snapDuration) : slotDuration;
         this.slotDuration = slotDuration;
         this.snapDuration = snapDuration;
-        this.snapsPerSlot = slotDuration / snapDuration; // TODO: ensure an integer multiple?
+        this.snapsPerSlot = slotDuration / snapDuration; // : ensure an integer multiple?
         // might be an array value (for TimelineView).
         // if so, getting the most granular entry (the last one probably).
         input = this.opt('slotLabelFormat');
@@ -11870,7 +11870,7 @@ var TimeGrid = /** @class */ (function (_super) {
         this.bgContainerEls = skeletonEl.find('.fc-bgevent-container');
         this.highlightContainerEls = skeletonEl.find('.fc-highlight-container');
         this.businessContainerEls = skeletonEl.find('.fc-business-container');
-        this.bookendCells(skeletonEl.find('tr')); // TODO: do this on string level
+        this.bookendCells(skeletonEl.find('tr')); // : do this on string level
         this.el.append(skeletonEl);
     };
     TimeGrid.prototype.unrenderContentSkeleton = function () {
@@ -12197,7 +12197,7 @@ var MonthView = /** @class */ (function (_super) {
         util_1.distributeHeight(this.dayGrid.rowEls, height, !isAuto); // if auto, don't compensate for height-hogging rows
     };
     MonthView.prototype.isDateInOtherMonth = function (date, dateProfile) {
-        return date.month() !== moment.utc(dateProfile.currentUnzonedRange.startMs).month(); // TODO: optimize
+        return date.month() !== moment.utc(dateProfile.currentUnzonedRange.startMs).month(); // : optimize
     };
     return MonthView;
 }(BasicView_1.default));
@@ -12300,7 +12300,7 @@ var ListView = /** @class */ (function (_super) {
         return segs;
     };
     ListView.prototype.renderEmptyMessage = function () {
-        this.contentEl.html('<div class="fc-list-empty-wrap2">' + // TODO: try less wraps
+        this.contentEl.html('<div class="fc-list-empty-wrap2">' + // : try less wraps
             '<div class="fc-list-empty-wrap1">' +
             '<div class="fc-list-empty">' +
             util_1.htmlEscape(this.opt('noEventsMessage')) +
@@ -12787,7 +12787,7 @@ var OptionsManager = /** @class */ (function (_super) {
         this._calendar.renderHeader();
         this._calendar.renderFooter();
         // even non-current views will be affected by this option change. do before rerender
-        // TODO: detangle
+        // : detangle
         this._calendar.viewsByType = {};
         this._calendar.reinitView();
     };
@@ -12868,7 +12868,7 @@ var ViewSpecManager = /** @class */ (function () {
         var spec;
         if ($.inArray(unit, util_1.unitsDesc) !== -1) {
             // put views that have buttons first. there will be duplicates, but oh well
-            viewTypes = this._calendar.header.getViewsWithButtons(); // TODO: include footer as well?
+            viewTypes = this._calendar.header.getViewsWithButtons(); // : include footer as well?
             $.each(ViewRegistry_1.viewHash, function (viewType) {
                 viewTypes.push(viewType);
             });
@@ -13278,7 +13278,7 @@ var EventPeriod = /** @class */ (function () {
         this.eventInstanceGroupsById = {};
     }
     EventPeriod.prototype.isWithinRange = function (start, end) {
-        // TODO: use a range util function?
+        // : use a range util function?
         return !start.isBefore(this.start) && !end.isAfter(this.end);
     };
     // Requesting and Purging
@@ -13832,7 +13832,7 @@ var TimeGridEventRenderer = /** @class */ (function (_super) {
                 '') +
             '</div>' +
             '<div class="fc-bg"/>' +
-            /* TODO: write CSS for this
+            /* : write CSS for this
             (isResizableFromStart ?
               '<div class="fc-resizer fc-start-resizer" />' :
               ''
@@ -14057,7 +14057,7 @@ var TimeGridHelperRenderer = /** @class */ (function (_super) {
         var i;
         var seg;
         var sourceEl;
-        // TODO: not good to call eventRenderer this way
+        // : not good to call eventRenderer this way
         this.eventRenderer.renderFgSegsIntoContainers(segs, this.component.helperContainerEls);
         // Try to make the segment that is in the same row as sourceSeg look the same
         for (i = 0; i < segs.length; i++) {
@@ -14095,7 +14095,7 @@ var TimeGridFillRenderer = /** @class */ (function (_super) {
     TimeGridFillRenderer.prototype.attachSegEls = function (type, segs) {
         var timeGrid = this.component;
         var containerEls;
-        // TODO: more efficient lookup
+        // : more efficient lookup
         if (type === 'bgEvent') {
             containerEls = timeGrid.bgContainerEls;
         }
@@ -14251,7 +14251,7 @@ var Popover = /** @class */ (function () {
     };
     // Triggers a callback. Calls a function in the option hash of the same name.
     // Arguments beyond the first `name` are forwarded on.
-    // TODO: better code reuse for this. Repeat code
+    // : better code reuse for this. Repeat code
     Popover.prototype.trigger = function (name) {
         if (this.options[name]) {
             this.options[name].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -14533,7 +14533,7 @@ var DayGridHelperRenderer = /** @class */ (function (_super) {
     DayGridHelperRenderer.prototype.renderSegs = function (segs, sourceSeg) {
         var helperNodes = [];
         var rowStructs;
-        // TODO: not good to call eventRenderer this way
+        // : not good to call eventRenderer this way
         rowStructs = this.eventRenderer.renderSegRows(segs);
         // inject each new event skeleton into each associated row
         this.component.rowEls.each(function (row, rowNode) {

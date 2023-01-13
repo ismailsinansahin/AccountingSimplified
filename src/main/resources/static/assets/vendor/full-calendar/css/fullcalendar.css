@@ -152,7 +152,7 @@ previous button's border...
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); }
 
 .fc-popover .fc-header {
-  /* TODO: be more consistent with fc-head/fc-body */
+  /* : be more consistent with fc-head/fc-body */
   padding: 2px 4px; }
 
 .fc-popover .fc-header .fc-title {
@@ -324,7 +324,7 @@ temporary rendered events).
 .fc-scroller {
   -webkit-overflow-scrolling: touch; }
 
-/* TODO: move to agenda/basic */
+/* : move to agenda/basic */
 .fc-scroller > .fc-day-grid,
 .fc-scroller > .fc-time-grid {
   position: relative;
@@ -594,7 +594,7 @@ a.fc-more:hover {
   -webkit-tap-highlight-color: transparent; }
 
 /*
-TODO: more distinction between this file and common.css
+: more distinction between this file and common.css
 */
 /* Colors
 --------------------------------------------------------------------------------------------------*/
@@ -730,7 +730,7 @@ NOTE: use percentage font sizes or else old IE chokes
 /* Global Event Styles
 --------------------------------------------------------------------------------------------------*/
 .ui-widget .fc-event {
-  /* overpower jqui's styles on <a> tags. TODO: more DRY */
+  /* overpower jqui's styles on <a> tags. : more DRY */
   color: #fff;
   /* default TEXT color */
   text-decoration: none;

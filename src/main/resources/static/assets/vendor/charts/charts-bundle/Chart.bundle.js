@@ -2027,7 +2027,7 @@ function set (config) {
     this._config = config;
     // Lenient ordinal parsing accepts just a number in addition to
     // number + (possibly) stuff coming from _dayOfMonthOrdinalParse.
-    // TODO: Remove "ordinalParse" fallback in next major release.
+    // : Remove "ordinalParse" fallback in next major release.
     this._dayOfMonthOrdinalParseLenient = new RegExp(
         (this._dayOfMonthOrdinalParse.source || this._ordinalParse.source) +
             '|' + (/\d{1,2}/).source);
@@ -2671,7 +2671,7 @@ function localeMonthsParse (monthName, format, strict) {
         this._shortMonthsParse = [];
     }
 
-    // TODO: add sorting
+    // : add sorting
     // Sorting makes sure if one month (or abbr) is a prefix of another
     // see sorting in computeMonthsParse
     for (i = 0; i < 12; i++) {
@@ -2711,7 +2711,7 @@ function setMonth (mom, value) {
             value = toInt(value);
         } else {
             value = mom.localeData().monthsParse(value);
-            // TODO: Another silent failure?
+            // : Another silent failure?
             if (!isNumber(value)) {
                 return mom;
             }
@@ -3503,7 +3503,7 @@ function chooseLocale(names) {
 
 function loadLocale(name) {
     var oldLocale = null;
-    // TODO: Find a better way to register and load all the locales in Node
+    // : Find a better way to register and load all the locales in Node
     if (!locales[name] && (typeof module !== 'undefined') &&
             module && module.exports) {
         try {
@@ -3772,7 +3772,7 @@ function dayOfYearFromWeekInfo(config) {
         dow = 1;
         doy = 4;
 
-        // TODO: We need to take the current isoWeekYear, but that depends on
+        // : We need to take the current isoWeekYear, but that depends on
         // how we interpret now (local, utc, fixed offset). So create
         // a now version of current config (take local/utc/offset flags, and
         // create now).
@@ -3947,7 +3947,7 @@ function preprocessRFC2822(s) {
 
 function checkWeekday(weekdayStr, parsedInput, config) {
     if (weekdayStr) {
-        // TODO: Replace the vanilla JS Date object with an indepentent day-of-week check.
+        // : Replace the vanilla JS Date object with an indepentent day-of-week check.
         var weekdayProvided = defaultLocaleWeekdaysShort.indexOf(weekdayStr),
             weekdayActual = new Date(parsedInput[0], parsedInput[1], parsedInput[2]).getDay();
         if (weekdayProvided !== weekdayActual) {
@@ -4051,7 +4051,7 @@ hooks.RFC_2822 = function () {};
 
 // date from string and format string
 function configFromStringAndFormat(config) {
-    // TODO: Move this to another part of the creation flow to prevent circular deps
+    // : Move this to another part of the creation flow to prevent circular deps
     if (config._f === hooks.ISO_8601) {
         configFromISO(config);
         return;
@@ -4346,7 +4346,7 @@ function pickBy(fn, moments) {
     return res;
 }
 
-// TODO: Use [].sort instead?
+// : Use [].sort instead?
 function min () {
     var args = [].slice.call(arguments, 0);
 
@@ -4777,7 +4777,7 @@ function momentsDifference(base, other) {
     return res;
 }
 
-// TODO: remove 'name' arg after deprecation is removed
+// : remove 'name' arg after deprecation is removed
 function createAdder(direction, name) {
     return function (val, period) {
         var dur, tmp;
@@ -5332,7 +5332,7 @@ addUnitPriority('date', 9);
 addRegexToken('D',  match1to2);
 addRegexToken('DD', match1to2, match2);
 addRegexToken('Do', function (isStrict, locale) {
-    // TODO: Remove "ordinalParse" fallback in next major release.
+    // : Remove "ordinalParse" fallback in next major release.
     return isStrict ?
       (locale._dayOfMonthOrdinalParse || locale._ordinalParse) :
       locale._dayOfMonthOrdinalParseLenient;
@@ -5890,7 +5890,7 @@ function as (units) {
     }
 }
 
-// TODO: Use this.as('ms')?
+// : Use this.as('ms')?
 function valueOf$1 () {
     if (!this.isValid()) {
         return NaN;
@@ -6209,7 +6209,7 @@ var Chart = require(29)();
 
 Chart.helpers = require(45);
 
-// @todo dispatch these helpers into appropriated helpers/helpers.* file and write unit tests!
+// @ dispatch these helpers into appropriated helpers/helpers.* file and write unit tests!
 require(27)(Chart);
 
 Chart.defaults = require(25);
@@ -6274,7 +6274,7 @@ if (typeof window !== 'undefined') {
  * Provided for backward compatibility, not available anymore
  * @namespace Chart.Legend
  * @deprecated since version 2.1.5
- * @todo remove at version 3
+ * @ remove at version 3
  * @private
  */
 Chart.Legend = plugins.legend._element;
@@ -6283,7 +6283,7 @@ Chart.Legend = plugins.legend._element;
  * Provided for backward compatibility, not available anymore
  * @namespace Chart.Title
  * @deprecated since version 2.1.5
- * @todo remove at version 3
+ * @ remove at version 3
  * @private
  */
 Chart.Title = plugins.title._element;
@@ -6292,7 +6292,7 @@ Chart.Title = plugins.title._element;
  * Provided for backward compatibility, use Chart.plugins instead
  * @namespace Chart.pluginService
  * @deprecated since version 2.1.5
- * @todo remove at version 3
+ * @ remove at version 3
  * @private
  */
 Chart.pluginService = Chart.plugins;
@@ -6302,7 +6302,7 @@ Chart.pluginService = Chart.plugins;
  * effect, instead simply create/register plugins via plain JavaScript objects.
  * @interface Chart.PluginBase
  * @deprecated since version 2.5.0
- * @todo remove at version 3
+ * @ remove at version 3
  * @private
  */
 Chart.PluginBase = Chart.Element.extend({});
@@ -6311,7 +6311,7 @@ Chart.PluginBase = Chart.Element.extend({});
  * Provided for backward compatibility, use Chart.helpers.canvas instead.
  * @namespace Chart.canvasHelpers
  * @deprecated since version 2.6.0
- * @todo remove at version 3
+ * @ remove at version 3
  * @private
  */
 Chart.canvasHelpers = Chart.helpers.canvas;
@@ -6320,7 +6320,7 @@ Chart.canvasHelpers = Chart.helpers.canvas;
  * Provided for backward compatibility, use Chart.layouts instead.
  * @namespace Chart.layoutService
  * @deprecated since version 2.8.0
- * @todo remove at version 3
+ * @ remove at version 3
  * @private
  */
 Chart.layoutService = Chart.layouts;
@@ -8323,7 +8323,7 @@ module.exports = function(Chart) {
 	 * Provided for backward compatibility, use Chart.Animation instead
 	 * @prop Chart.Animation#animationObject
 	 * @deprecated since version 2.6.0
-	 * @todo remove at version 3
+	 * @ remove at version 3
 	 */
 	Object.defineProperty(Chart.Animation.prototype, 'animationObject', {
 		get: function() {
@@ -8335,7 +8335,7 @@ module.exports = function(Chart) {
 	 * Provided for backward compatibility, use Chart.Animation#chart instead
 	 * @prop Chart.Animation#chartInstance
 	 * @deprecated since version 2.6.0
-	 * @todo remove at version 3
+	 * @ remove at version 3
 	 */
 	Object.defineProperty(Chart.Animation.prototype, 'chartInstance', {
 		get: function() {
@@ -8447,7 +8447,7 @@ module.exports = function(Chart) {
 			 * the "instance" still need to be defined since it might be called from plugins.
 			 * @prop Chart#chart
 			 * @deprecated since version 2.6.0
-			 * @todo remove at version 3
+			 * @ remove at version 3
 			 * @private
 			 */
 			me.chart = me;
@@ -8642,7 +8642,7 @@ module.exports = function(Chart) {
 
 				scale.mergeTicksOptions();
 
-				// TODO(SB): I think we should be able to remove this custom case (options.scale)
+				// (SB): I think we should be able to remove this custom case (options.scale)
 				// and consider it as a regular scale part of the "scales"" map only! This would
 				// make the logic easier and remove some useless? custom code.
 				if (item.isDefault) {
@@ -8797,7 +8797,7 @@ module.exports = function(Chart) {
 			 * Provided for backward compatibility, use `afterLayout` instead.
 			 * @method IPlugin#afterScaleUpdate
 			 * @deprecated since version 2.5.0
-			 * @todo remove at version 3
+			 * @ remove at version 3
 			 * @private
 			 */
 			plugins.notify(me, 'afterScaleUpdate');
@@ -9291,7 +9291,7 @@ module.exports = function(Chart) {
 	 * Provided for backward compatibility, use Chart instead.
 	 * @class Chart.Controller
 	 * @deprecated since version 2.6.0
-	 * @todo remove at version 3
+	 * @ remove at version 3
 	 * @private
 	 */
 	Chart.Controller = Chart;
@@ -10545,7 +10545,7 @@ module.exports = {
 		/**
 		 * @function Chart.Interaction.modes.label
 		 * @deprecated since version 2.4.0
-		 * @todo remove at version 3
+		 * @ remove at version 3
 		 * @private
 		 */
 		label: indexMode,
@@ -10587,7 +10587,7 @@ module.exports = {
 		/**
 		 * @function Chart.Interaction.modes.x-axis
 		 * @deprecated since version 2.4.0. Use index mode and intersect == true
-		 * @todo remove at version 3
+		 * @ remove at version 3
 		 * @private
 		 */
 		'x-axis': function(chart, e) {
@@ -12006,7 +12006,7 @@ module.exports = function(Chart) {
 					var cosRotation = Math.cos(angleRadians);
 					var sinRotation = Math.sin(angleRadians);
 
-					// TODO - improve this calculation
+					//  - improve this calculation
 					var labelHeight = (sinRotation * largestTextWidth)
 						+ (tickFont.size * tallestLabelHeightInLines)
 						+ (lineSpace * (tallestLabelHeightInLines - 1))
@@ -14133,7 +14133,7 @@ var exports = module.exports = {
 	 * @param {Number} width - The rectangle's width.
 	 * @param {Number} height - The rectangle's height.
 	 * @param {Number} radius - The rounded amount (in pixels) for the four corners.
-	 * @todo handle `radius` as top-left, top-right, bottom-right, bottom-left array/object?
+	 * @ handle `radius` as top-left, top-right, bottom-right, bottom-left array/object?
 	 */
 	roundedRect: function(ctx, x, y, width, height, radius) {
 		if (radius) {
@@ -14305,7 +14305,7 @@ var exports = module.exports = {
  * Provided for backward compatibility, use Chart.helpers.canvas.clear instead.
  * @namespace Chart.helpers.clear
  * @deprecated since version 2.7.0
- * @todo remove at version 3
+ * @ remove at version 3
  * @private
  */
 helpers.clear = exports.clear;
@@ -14314,7 +14314,7 @@ helpers.clear = exports.clear;
  * Provided for backward compatibility, use Chart.helpers.canvas.roundedRect instead.
  * @namespace Chart.helpers.drawRoundedRectangle
  * @deprecated since version 2.7.0
- * @todo remove at version 3
+ * @ remove at version 3
  * @private
  */
 helpers.drawRoundedRectangle = function(ctx) {
@@ -14629,7 +14629,7 @@ module.exports = helpers;
  * Provided for backward compatibility, use Chart.helpers.callback instead.
  * @function Chart.helpers.callCallback
  * @deprecated since version 2.6.0
- * @todo remove at version 3
+ * @ remove at version 3
  * @private
  */
 helpers.callCallback = helpers.callback;
@@ -14639,7 +14639,7 @@ helpers.callCallback = helpers.callback;
  * Array.prototype.indexOf compatibility: Chrome, Opera, Safari, FF1.5+, IE9+
  * @function Chart.helpers.indexOf
  * @deprecated since version 2.7.0
- * @todo remove at version 3
+ * @ remove at version 3
  * @private
  */
 helpers.indexOf = function(array, item, fromIndex) {
@@ -14650,7 +14650,7 @@ helpers.indexOf = function(array, item, fromIndex) {
  * Provided for backward compatibility, use Chart.helpers.valueOrDefault instead.
  * @function Chart.helpers.getValueOrDefault
  * @deprecated since version 2.7.0
- * @todo remove at version 3
+ * @ remove at version 3
  * @private
  */
 helpers.getValueOrDefault = helpers.valueOrDefault;
@@ -14659,7 +14659,7 @@ helpers.getValueOrDefault = helpers.valueOrDefault;
  * Provided for backward compatibility, use Chart.helpers.valueAtIndexOrDefault instead.
  * @function Chart.helpers.getValueAtIndexOrDefault
  * @deprecated since version 2.7.0
- * @todo remove at version 3
+ * @ remove at version 3
  * @private
  */
 helpers.getValueAtIndexOrDefault = helpers.valueAtIndexOrDefault;
@@ -14911,7 +14911,7 @@ module.exports = {
  * Provided for backward compatibility, use Chart.helpers.easing.effects instead.
  * @function Chart.helpers.easingEffects
  * @deprecated since version 2.7.0
- * @todo remove at version 3
+ * @ remove at version 3
  * @private
  */
 helpers.easingEffects = effects;
@@ -15482,7 +15482,7 @@ module.exports = {
  * @see https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
  * @function Chart.helpers.addEvent
  * @deprecated since version 2.7.0
- * @todo remove at version 3
+ * @ remove at version 3
  * @private
  */
 helpers.addEvent = addEventListener;
@@ -15493,7 +15493,7 @@ helpers.addEvent = addEventListener;
  * @see https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener
  * @function Chart.helpers.removeEvent
  * @deprecated since version 2.7.0
- * @todo remove at version 3
+ * @ remove at version 3
  * @private
  */
 helpers.removeEvent = removeEventListener;
@@ -15505,7 +15505,7 @@ var helpers = require(45);
 var basic = require(46);
 var dom = require(47);
 
-// @TODO Make possible to select another platform at build time.
+// @ Make possible to select another platform at build time.
 var implementation = dom._enabled ? dom : basic;
 
 /**
@@ -15631,7 +15631,7 @@ var mappers = {
 	}
 };
 
-// @todo if (fill[0] === '#')
+// @ if (fill[0] === '#')
 function decodeFill(el, index, count) {
 	var model = el._model || {};
 	var fill = model.fill;

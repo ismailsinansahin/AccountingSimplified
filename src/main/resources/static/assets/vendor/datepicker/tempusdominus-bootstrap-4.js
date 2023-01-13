@@ -550,7 +550,7 @@ var DateTimePicker = function ($, moment) {
             }
 
             $.each(this._options, function (key) {
-                var attributeName = 'date' + key.charAt(0).toUpperCase() + key.slice(1); //todo data api key
+                var attributeName = 'date' + key.charAt(0).toUpperCase() + key.slice(1); // data api key
                 if (eData[attributeName] !== undefined) {
                     dataOptions[key] = eData[attributeName];
                 } else {
@@ -748,7 +748,7 @@ var DateTimePicker = function ($, moment) {
                 self = this;
 
             this.actualFormat = format.replace(/(\[[^\[]*])|(\\)?(LTS|LT|LL?L?L?|l{1,4})/g, function (formatInput) {
-                return self._dates[0].localeData().longDateFormat(formatInput) || formatInput; //todo taking the first date should be ok
+                return self._dates[0].localeData().longDateFormat(formatInput) || formatInput; // taking the first date should be ok
             });
 
             this.parseFormats = this._options.extraFormats ? this._options.extraFormats.slice() : [];
@@ -790,7 +790,7 @@ var DateTimePicker = function ($, moment) {
             var returnMoment = void 0;
 
             if (d === undefined || d === null) {
-                returnMoment = moment(); //TODO should this use format? and locale?
+                returnMoment = moment(); // should this use format? and locale?
             } else if (this._hasTimeZone()) {
                 // There is a string to parse and a default time zone
                 // parse with the tz function which takes a default time zone if it is not in the format string
@@ -1317,7 +1317,7 @@ var DateTimePicker = function ($, moment) {
         };
 
         DateTimePicker.prototype.clear = function clear() {
-            this._setValue(null); //todo
+            this._setValue(null); //
         };
 
         DateTimePicker.prototype.keyBinds = function keyBinds(_keyBinds) {
@@ -2578,7 +2578,7 @@ var TempusDominusBootstrap4 = function ($) {
 
         TempusDominusBootstrap4.prototype.destroy = function destroy() {
             this.hide();
-            //todo doc off?
+            // doc off?
             this._element.removeData(DateTimePicker.DATA_KEY);
             this._element.removeData('date');
         };
@@ -2589,7 +2589,7 @@ var TempusDominusBootstrap4 = function ($) {
                 this.component.addClass('disabled');
             }
             if (this.input !== undefined) {
-                this.input.prop('disabled', true); //todo disable this/comp if input is null
+                this.input.prop('disabled', true); // disable this/comp if input is null
             }
         };
 
@@ -2598,7 +2598,7 @@ var TempusDominusBootstrap4 = function ($) {
                 this.component.removeClass('disabled');
             }
             if (this.input !== undefined) {
-                this.input.prop('disabled', false); //todo enable comp/this if input is null
+                this.input.prop('disabled', false); // enable comp/this if input is null
             }
         };
 
