@@ -2,8 +2,8 @@ package com.cydeo.service.implementation;
 
 
 import com.cydeo.annotation.ExecutionTime;
-import com.cydeo.dto.CurrencyApiResponse;
-import com.cydeo.dto.CurrencyDto;
+import com.cydeo.dto.common.CurrencyApiResponse;
+import com.cydeo.dto.common.CurrencyDto;
 import com.cydeo.dto.InvoiceDto;
 import com.cydeo.enums.InvoiceStatus;
 import com.cydeo.enums.InvoiceType;

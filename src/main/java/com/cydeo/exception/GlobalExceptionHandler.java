@@ -1,7 +1,7 @@
 package com.cydeo.exception;
 
 import com.cydeo.annotation.AccountingExceptionMessage;
-import com.cydeo.dto.DefaultExceptionMessageDto;
+import com.cydeo.dto.common.DefaultExceptionMessageDto;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

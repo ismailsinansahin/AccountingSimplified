@@ -1,6 +1,6 @@
 package com.cydeo.service;
 
-import com.cydeo.dto.addressApi.State;
+import com.cydeo.dto.common.State;
 
 import java.util.List;
 

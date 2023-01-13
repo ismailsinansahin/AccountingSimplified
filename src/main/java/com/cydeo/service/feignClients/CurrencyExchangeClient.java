@@ -1,7 +1,7 @@
 package com.cydeo.service.feignClients;
 
 
-import com.cydeo.dto.CurrencyApiResponse;
+import com.cydeo.dto.common.CurrencyApiResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.http.MediaType;

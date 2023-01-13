@@ -1,9 +1,9 @@
 package com.cydeo.service.feignClients;
 
 
-import com.cydeo.dto.addressApi.Country;
-import com.cydeo.dto.addressApi.State;
-import com.cydeo.dto.addressApi.TokenDto;
+import com.cydeo.dto.common.Country;
+import com.cydeo.dto.common.State;
+import com.cydeo.dto.common.TokenDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;

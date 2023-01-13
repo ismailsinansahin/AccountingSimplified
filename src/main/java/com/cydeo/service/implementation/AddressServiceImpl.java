@@ -1,8 +1,8 @@
 package com.cydeo.service.implementation;
 
-import com.cydeo.dto.addressApi.Country;
-import com.cydeo.dto.addressApi.State;
-import com.cydeo.dto.addressApi.TokenDto;
+import com.cydeo.dto.common.Country;
+import com.cydeo.dto.common.State;
+import com.cydeo.dto.common.TokenDto;
 import com.cydeo.service.feignClients.AddressFeignClient;
 import com.cydeo.service.AddressService;
 

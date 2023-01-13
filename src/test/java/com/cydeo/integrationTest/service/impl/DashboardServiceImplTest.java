@@ -1,7 +1,7 @@
 package com.cydeo.integrationTest.service.impl;
 
 
-import com.cydeo.dto.CurrencyDto;
+import com.cydeo.dto.common.CurrencyDto;
 import com.cydeo.service.DashboardService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;

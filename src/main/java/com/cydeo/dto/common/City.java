@@ -1,4 +1,4 @@
-package com.cydeo.dto.addressApi;
+package com.cydeo.dto.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

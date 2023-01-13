@@ -1,4 +1,4 @@
-package com.cydeo.dto;
+package com.cydeo.dto.common;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
