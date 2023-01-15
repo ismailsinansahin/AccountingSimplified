@@ -12,15 +12,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
@@ -42,7 +37,6 @@ class UserServiceImplTest {
     SecurityService securityService;
 
     User user;
-    Authentication authentication;
 
     @BeforeEach
     public void initTest() {
@@ -54,7 +48,6 @@ class UserServiceImplTest {
         user.setInsertDateTime(LocalDateTime.now());
         user.setLastUpdateDateTime(LocalDateTime.now());
         user = repository.save(user);
-        authentication = SecurityContextHolder.getContext().getAuthentication();
     }
 
 
@@ -93,13 +86,17 @@ class UserServiceImplTest {
     @WithAnonymousUser
     @DisplayName("When create new User then success")
     public void GIVEN_USER_DTO_WHEN_SAVE_THEN_SUCCESS(){
+        // Given
+        int beforeSize = repository.findAll().size();
         // When
         UserDto userDto = mapperUtil.convert(user, new UserDto());
         userDto.setId(null);
         userDto.setUsername("Test Username");
         var returnedUser = userService.save(userDto);
+        int afterSize = repository.findAll().size();
         // Then
         assertThat(returnedUser.getUsername().equals("Test Username"));
+        assertThat(beforeSize + 1 == afterSize);
 
     }
 
