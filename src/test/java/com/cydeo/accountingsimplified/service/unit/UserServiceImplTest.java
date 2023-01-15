@@ -70,8 +70,15 @@ class UserServiceImplTest {
     @Test
     @DisplayName("When_given_non_existing_id_then_fail")
     public void GIVEN_NON_EXISTING_ID_WHEN_FIND_BY_ID_THEN_FAIL(){
-        when(repository.findUserById(anyLong())).thenThrow(NoSuchElementException.class);
+        when(repository.findUserById(anyLong())).thenThrow(NoSuchElementException.class); // Mockito return null by itself...
         assertThrows(NoSuchElementException.class, () -> service.findUserById(anyLong()));
+    }
+
+    @Test
+    @DisplayName("When_given_null_id_then_fail")
+    public void GIVEN_NULL_ID_WHEN_FIND_BY_ID_THEN_FAIL(){
+        when(repository.findUserById(null)).thenThrow(NoSuchElementException.class); // Mockito return null by itself...
+        assertThrows(NoSuchElementException.class, () -> service.findUserById(null));
     }
 
 
@@ -95,14 +102,18 @@ class UserServiceImplTest {
         // Given
         UserDto adminUserDto = TestDocumentInitializer.getUser("Admin");
         User adminUser = mapperUtil.convert(adminUserDto, new User());
+        adminUser.getCompany().setTitle("Fed");
+        User adminUser2 = mapperUtil.convert(adminUserDto, new User());
+        adminUser2.getCompany().setTitle("Abc");
         UserDto rootUser = TestDocumentInitializer.getUser("Root User");
         // When
-        doReturn(Arrays.asList(adminUser)).when(repository).findAllByRole_Description("Admin");
+        doReturn(Arrays.asList(adminUser,adminUser2)).when(repository).findAllByRole_Description("Admin");
         doReturn(rootUser).when(securityService).getLoggedInUser();
         var users = service.getFilteredUsers();
         // Then
         assertThat(users.size() > 0);
         assertThat(users.get(0).getRole().getDescription().equals("Admin"));
+        assertThat(users.get(0).getCompany().getTitle().equals("Abc"));
     }
 
     @Test
@@ -123,19 +134,21 @@ class UserServiceImplTest {
     @DisplayName("Given UserDto when update then success")
     public void GIVEN_USER_DTO_WHEN_UPDATE_THEN_SUCCESS(){
         // Given
-        String testPassword = "$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK";
+        // String testPassword = "$2a$10$nAB5j9G1c3JHgg7qzhiIXO7cqqr5oJ3LXRNQJKssDUwHXzDGUztNK";
         UserDto userDto = TestDocumentInitializer.getUser("Admin");
         User user = mapperUtil.convert(userDto, new User());
+
         UserDto updateUserDto = TestDocumentInitializer.getUser("Manager");
         User updateUser = mapperUtil.convert(updateUserDto, new User());
         // When
-        doReturn(testPassword).when(passwordEncoder).encode(anyString());
+        //doReturn(anyString()).when(passwordEncoder).encode(anyString());
         doReturn(user).when(repository).findUserById(anyLong());
         doReturn(updateUser).when(repository).save(any(User.class));
 
         var resultUser = service.update(updateUserDto);
         // Then
         assertThat(resultUser.getRole().getDescription().equals("Manager"));
+        verify(passwordEncoder, times(1)).encode(anyString());
 
     }
 

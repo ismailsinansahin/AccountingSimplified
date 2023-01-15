@@ -21,10 +21,13 @@ public class BaseEntityListener extends AuditingEntityListener {
         baseEntity.insertDateTime = LocalDateTime.now();
         baseEntity.lastUpdateDateTime = LocalDateTime.now();
 
-        if (authentication != null && !authentication.getName().equals("anonymousUser")) {
+        if (authentication != null && !authentication.getPrincipal().equals("anonymous")) {
             UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
             baseEntity.insertUserId = principal.getId();
             baseEntity.lastUpdateUserId = principal.getId();
+        } else {
+            baseEntity.insertUserId = -1L;
+            baseEntity.lastUpdateUserId = -1L;
         }
     }
 
@@ -35,9 +38,12 @@ public class BaseEntityListener extends AuditingEntityListener {
 
         baseEntity.lastUpdateDateTime = LocalDateTime.now();
 
-        if (authentication != null && !authentication.getName().equals("anonymousUser")) {
+        if (authentication != null && !authentication.getPrincipal().equals("anonymous")) {
             UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
             baseEntity.lastUpdateUserId = principal.getId();
+        } else {
+            baseEntity.insertUserId = -1L;
+            baseEntity.lastUpdateUserId = -1L;
         }
     }
 }
