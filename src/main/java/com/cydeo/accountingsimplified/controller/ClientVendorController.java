@@ -1,10 +1,14 @@
 package com.cydeo.accountingsimplified.controller;
 
 import com.cydeo.accountingsimplified.dto.ClientVendorDto;
+import com.cydeo.accountingsimplified.dto.ResponseWrapper;
+import com.cydeo.accountingsimplified.entity.ClientVendor;
 import com.cydeo.accountingsimplified.enums.ClientVendorType;
 import com.cydeo.accountingsimplified.service.AddressService;
 import com.cydeo.accountingsimplified.service.ClientVendorService;
 import com.cydeo.accountingsimplified.service.InvoiceService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,81 +17,62 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.Arrays;
+import java.util.List;
 
-@Controller
-@RequestMapping("/clientVendors")
+@RestController
+@RequestMapping("/api/v1/clientVendors")
 public class ClientVendorController {
 
     private final ClientVendorService clientVendorService;
     private final InvoiceService invoiceService;
-    private final AddressService addressService;
 
-    public ClientVendorController(ClientVendorService clientVendorService, InvoiceService invoiceService, AddressService addressService) {
+    public ClientVendorController(ClientVendorService clientVendorService, InvoiceService invoiceService) {
         this.clientVendorService = clientVendorService;
         this.invoiceService = invoiceService;
-        this.addressService = addressService;
     }
 
-    @GetMapping("/list")
-    public String list(Model model) throws Exception {
-        model.addAttribute("clientVendors", clientVendorService.getAllClientVendors());
-        return "clientVendor/clientVendor-list";
+    @GetMapping
+    public ResponseEntity<ResponseWrapper> getClientVendors() throws Exception {
+        List<ClientVendorDto> clientVendors = clientVendorService.getAllClientVendors();
+        return ResponseEntity.ok(new ResponseWrapper("Client/vendors are successfully retrieved",clientVendors, HttpStatus.OK));
     }
 
-    @GetMapping("/create")
-    public String create(Model model) {
-        model.addAttribute("newClientVendor", new ClientVendorDto());
-        return "clientVendor/clientVendor-create";
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseWrapper> getClientVendorById(@PathVariable("id") Long id) {
+        ClientVendorDto clientVendor = clientVendorService.findClientVendorById(id);
+        return ResponseEntity.ok(new ResponseWrapper("Client/vendors are successfully retrieved",clientVendor, HttpStatus.OK));
     }
 
-    @PostMapping("/create")
-    public String create(@Valid @ModelAttribute("newClientVendor") ClientVendorDto clientVendorDto, BindingResult result, Model model) throws Exception {
+    @PostMapping
+    public ResponseEntity<ResponseWrapper> createClientVendor(@RequestBody ClientVendorDto clientVendorDto, BindingResult result, Model model) throws Exception {
         boolean isDuplicatedCompanyName = clientVendorService.companyNameExists(clientVendorDto);
-        if (result.hasErrors() || isDuplicatedCompanyName) {
-            if (isDuplicatedCompanyName) {
-                result.rejectValue("clientVendorName", " ", "A client/vendor with this name already exists. Please try with different name.");
-            }
-            return "clientVendor/clientVendor-create";
+        if (isDuplicatedCompanyName) {
+            throw new Exception("Client/vendor with this name already exists");
         }
         clientVendorService.create(clientVendorDto);
-        return "redirect:/clientVendors/list";
+        return ResponseEntity.ok(new ResponseWrapper("Client/vendor is successfully created",HttpStatus.OK));
     }
 
-    @GetMapping("/update/{clientVendorId}")
-    public String update(@PathVariable("clientVendorId") Long clientVendorId, Model model) {
-        model.addAttribute("clientVendor", clientVendorService.findClientVendorById(clientVendorId));
-        return "clientVendor/clientVendor-update";
-    }
-
-    @PostMapping("/update/{clientVendorId}")
-    public String update(@PathVariable("clientVendorId") Long clientVendorId, @Valid @ModelAttribute("clientVendor") ClientVendorDto clientVendorDto, BindingResult result) throws ClassNotFoundException, CloneNotSupportedException {
-        clientVendorDto.setId(clientVendorId);
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseWrapper> updateClientVendor(@PathVariable("id") Long id, @RequestBody ClientVendorDto clientVendorDto) throws Exception {
+        clientVendorDto.setId(id);
         boolean isDuplicatedCompanyName = clientVendorService.companyNameExists(clientVendorDto);
-        if (result.hasErrors() || isDuplicatedCompanyName) {
-            if (isDuplicatedCompanyName) {
-                result.rejectValue("clientVendorName", " ", "A client/vendor with this name already exists. Please try with different name.");
-            }
-            return "clientVendor/clientVendor-update";
+        if (isDuplicatedCompanyName) {
+            throw new Exception("Client/vendor with this name already exists");
         }
-        clientVendorService.update(clientVendorId, clientVendorDto);
-        return "redirect:/clientVendors/list";
+        clientVendorService.update(id, clientVendorDto);
+        return ResponseEntity.ok(new ResponseWrapper("Client/vendor is successfully updated",HttpStatus.OK));
     }
 
     @GetMapping(value = "/delete/{clientVendorId}")
-    public String delete(@PathVariable("clientVendorId") Long clientVendorId, RedirectAttributes redirAttrs) {
-        if (invoiceService.checkIfInvoiceExist(clientVendorId)){
-            redirAttrs.addFlashAttribute("error", "Can not be deleted...You have invoices with this client/vendor");
-            return "redirect:/clientVendors/list";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseWrapper> delete(@PathVariable("id") Long id) throws Exception {
+        if (invoiceService.checkIfInvoiceExist(id)){
+            throw new Exception("You have Invoices with this Client/Vendor");
         }
-        clientVendorService.delete(clientVendorId);
-        return "redirect:/clientVendors/list";
+        clientVendorService.delete(id);
+        return ResponseEntity.ok(new ResponseWrapper("Client/vendor is successfully deleted",HttpStatus.OK));
     }
 
-    @ModelAttribute
-    public void commonAttributes(Model model){
-        model.addAttribute("countries",addressService.getCountryList() );
-        model.addAttribute("clientVendorTypes", Arrays.asList(ClientVendorType.values()));
-        model.addAttribute("title", "Cydeo Accounting-Client/Vendor");
-    }
 
 }

@@ -1,95 +1,74 @@
 package com.cydeo.accountingsimplified.controller;
 
 import com.cydeo.accountingsimplified.dto.CompanyDto;
+import com.cydeo.accountingsimplified.dto.ResponseWrapper;
 import com.cydeo.accountingsimplified.service.AddressService;
 import com.cydeo.accountingsimplified.service.CompanyService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
-
-@Controller
-@RequestMapping("/companies")
+@RestController
+@RequestMapping("/api/v1/companies")
 public class CompanyController {
 
     private final CompanyService companyService;
-    private final AddressService addressService;
 
-    public CompanyController(CompanyService companyService, AddressService addressService) {
+    public CompanyController(CompanyService companyService) {
         this.companyService = companyService;
-        this.addressService = addressService;
     }
 
-    @GetMapping("/list")
-    public String list(Model model) {
-        model.addAttribute("companies", companyService.getAllCompanies());
-        return "company/company-list";
+    @GetMapping
+    public ResponseEntity<ResponseWrapper> getCompanies() {
+        List<CompanyDto> companies = companyService.getAllCompanies();
+        return ResponseEntity.ok(new ResponseWrapper("Companies successfully retrieved",companies, HttpStatus.OK));
     }
 
-    @GetMapping("/create")
-    public String create(Model model) {
-        model.addAttribute("newCompany", new CompanyDto());
-        return "company/company-create";
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseWrapper> getCompanyById(@PathVariable("id") Long id) {
+        CompanyDto company = companyService.findCompanyById(id);
+        return ResponseEntity.ok(new ResponseWrapper("Company successfully retrieved",company, HttpStatus.OK));
     }
 
-    @PostMapping("/create")
-    public String create(@Valid @ModelAttribute("newCompany") CompanyDto companyDto, BindingResult bindingResult, Model model) {
+    @PostMapping
+    public ResponseEntity<ResponseWrapper> createCompany(@RequestBody CompanyDto companyDto) throws Exception {
 
         if (companyService.isTitleExist(companyDto.getTitle())) {
-            bindingResult.rejectValue("title", " ", "This title already exists.");
+           throw new Exception("Company title already exist");
         }
-
-        if (bindingResult.hasErrors()) {
-            return "company/company-create";
-        }
-
         companyService.create(companyDto);
-        return "redirect:/companies/list";
+        return ResponseEntity.ok(new ResponseWrapper("Company successfully created",HttpStatus.OK));
+
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseWrapper> update(@RequestBody CompanyDto companyDto, @PathVariable("id") Long id) throws Exception {
 
-    @GetMapping("/update/{companyId}")
-    public String update(@PathVariable("companyId") Long companyId, Model model) {
-        model.addAttribute("company", companyService.findCompanyById(companyId));
-        return "company/company-update";
-    }
-
-    @PostMapping("/update/{companyId}")
-    public String update(@Valid @ModelAttribute("company") CompanyDto companyDto, BindingResult bindingResult, @PathVariable Long companyId, Model model) throws CloneNotSupportedException {
-
-        boolean isThisCompanyTitle = companyDto.getTitle().equals(companyService.findCompanyById(companyId).getTitle());
+        boolean isThisCompanyTitle = companyDto.getTitle().equals(companyService.findCompanyById(id).getTitle());
         if (companyService.isTitleExist(companyDto.getTitle()) && !isThisCompanyTitle) {
-            bindingResult.rejectValue("title", " ", "This title already exists.");
+            throw new Exception("Company title already exist");
         }
-
-        if (bindingResult.hasErrors()) {
-            companyDto.setId(companyId);
-            return "company/company-update";
-        }
-
-        companyService.update(companyId, companyDto);
-        return "redirect:/companies/list";
+        companyService.update(id, companyDto);
+        return ResponseEntity.ok(new ResponseWrapper("Company successfully updated",HttpStatus.OK));
     }
 
-    @GetMapping("/activate/{companyId}")
-    public String activate(@PathVariable("companyId") Long companyId) {
-        companyService.activate(companyId);
-        return "redirect:/companies/list";
+
+    @GetMapping("/activate/{id}")
+    public ResponseEntity<ResponseWrapper> activate(@PathVariable("id") Long id) {
+        companyService.activate(id);
+        return ResponseEntity.ok(new ResponseWrapper("Company successfully activated",HttpStatus.OK));
     }
 
-    @GetMapping("/deactivate/{companyId}")
-    public String deactivate(@PathVariable("companyId") Long companyId) {
-        companyService.deactivate(companyId);
-        return "redirect:/companies/list";
-    }
-
-    @ModelAttribute
-    public void commonAttributes(Model model){
-        model.addAttribute("countries",addressService.getCountryList() );
-        model.addAttribute("title", "Cydeo Accounting-Company");
+    @GetMapping("/deactivate/{id}")
+    public ResponseEntity<ResponseWrapper> deactivate(@PathVariable("id") Long id) {
+        companyService.deactivate(id);
+        return ResponseEntity.ok(new ResponseWrapper("Company successfully deactivated",HttpStatus.OK));
     }
 
 }
