@@ -18,20 +18,22 @@ public class InvoiceController {
         this.invoiceService = invoiceService;
     }
 
-    @GetMapping
-    public ResponseEntity<ResponseWrapper> getInvoices(InvoiceType invoiceType) throws Exception {
+    @GetMapping("/get/{type}")
+    public ResponseEntity<ResponseWrapper> getSalesInvoices(@PathVariable("type") String type) throws Exception {
+        InvoiceType invoiceType = type.equalsIgnoreCase("sales") ? InvoiceType.SALES : InvoiceType.PURCHASE;
         var invoices = invoiceService.getAllInvoicesOfCompany(invoiceType);
         return ResponseEntity.ok(new ResponseWrapper("Invoices successfully retrieved",invoices, HttpStatus.OK));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseWrapper> getInvoiceByTypeAndId(@PathVariable("id") Long id) throws Exception {
+    public ResponseEntity<ResponseWrapper> getInvoiceById(@PathVariable("id") Long id) throws Exception {
        var invoice = invoiceService.findInvoiceById(id);
        return ResponseEntity.ok(new ResponseWrapper("Invoice successfully retrieved",invoice, HttpStatus.OK));
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<ResponseWrapper> create(@RequestBody InvoiceDto invoiceDto, InvoiceType invoiceType) {
+    @PostMapping("/create/{type}")
+    public ResponseEntity<ResponseWrapper> create(@RequestBody InvoiceDto invoiceDto, @PathVariable("type") String type) {
+        InvoiceType invoiceType = type.equalsIgnoreCase("sales") ? InvoiceType.SALES : InvoiceType.PURCHASE;
         invoiceService.save(invoiceDto, invoiceType);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("Invoice successfully created",HttpStatus.CREATED));
     }
