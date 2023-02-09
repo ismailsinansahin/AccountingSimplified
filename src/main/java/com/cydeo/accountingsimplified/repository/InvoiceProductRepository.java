@@ -11,8 +11,10 @@ import org.springframework.stereotype.Repository;
 import com.cydeo.accountingsimplified.entity.Invoice;
 import com.cydeo.accountingsimplified.entity.InvoiceProduct;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Repository
+@CrossOrigin(origins = "http://localhost:4200/")
 public interface InvoiceProductRepository extends JpaRepository<InvoiceProduct, Long> {
 
     InvoiceProduct findInvoiceProductById(Long id);
