@@ -22,11 +22,9 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-    private final CategoryService categoryService;
 
-    public ProductController(ProductService productService, CategoryService categoryService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -59,16 +57,16 @@ public class ProductController {
             throw new Exception("This Product Name already exists.");
         }
         productService.update(id, productDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("Product successfully updated",HttpStatus.OK));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseWrapper("Product successfully updated",HttpStatus.OK));
     }
 
-    @GetMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ResponseWrapper> delete(@PathVariable("id") Long id) throws Exception {
         if (productService.checkProductQuantity(id))  {
             throw new Exception("This product can not be deleted, You have Invoice/s with that product...");
         }
         productService.delete(id);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("Product successfully deleted",HttpStatus.OK));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseWrapper("Product successfully deleted",HttpStatus.OK));
     }
 
 }

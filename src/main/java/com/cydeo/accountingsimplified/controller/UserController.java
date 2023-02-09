@@ -1,90 +1,68 @@
 package com.cydeo.accountingsimplified.controller;
 
+import com.cydeo.accountingsimplified.dto.ResponseWrapper;
 import com.cydeo.accountingsimplified.dto.UserDto;
 import com.cydeo.accountingsimplified.service.CompanyService;
 import com.cydeo.accountingsimplified.service.RoleService;
 import com.cydeo.accountingsimplified.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
-@Controller
-@RequestMapping("/users")
+@RestController
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     private final UserService userService;
-    private final RoleService roleService;
-    private final CompanyService companyService;
 
-    public UserController(UserService userService, RoleService roleService, CompanyService companyService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.roleService = roleService;
-        this.companyService = companyService;
     }
 
-    @GetMapping("/list")
-    public String list(Model model) throws Exception {
-        model.addAttribute("users", userService.getFilteredUsers());
-        return "user/user-list";
+    @GetMapping
+    public ResponseEntity<ResponseWrapper> getUsers() throws Exception {
+        List<UserDto> users = userService.getFilteredUsers();
+        return ResponseEntity.ok(new ResponseWrapper("Users successfully retrieved",users, HttpStatus.OK));
     }
 
-    @GetMapping("/create")
-    public String create(Model model) {
-        model.addAttribute("newUser", new UserDto());
-        return "user/user-create";
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseWrapper> getUserById(@PathVariable("id") Long id){
+        UserDto user = userService.findUserById(id);
+        return ResponseEntity.ok(new ResponseWrapper("User successfully retrieved",user, HttpStatus.OK));
     }
 
-    @PostMapping("/create")
-    public String create(@Valid @ModelAttribute("newUser") UserDto userDto, BindingResult result, Model model) {
+    @PostMapping
+    public ResponseEntity<ResponseWrapper> create(@RequestBody UserDto userDto) throws Exception {
         boolean emailExist = userService.emailExist(userDto);
-
-        if (result.hasErrors() || emailExist){
-            if (emailExist) {
-                result.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
-            }
-
-            return "user/user-create";
+        if (emailExist){
+            throw new Exception("A user with this email already exists.");
         }
-
         userService.save(userDto);
-        return "redirect:/users/list";
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("User successfully created",HttpStatus.CREATED));
     }
 
-    @GetMapping("/update/{userId}")
-    public String update(@PathVariable("userId") Long userId, Model model) {
-        model.addAttribute("user", userService.findUserById(userId));
-        return "user/user-update";
-    }
-
-    @PostMapping("/update/{userId}")
-    public String update(@PathVariable("userId") Long userId, @Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
-        userDto.setId(userId);  // spring cannot set id since it is not seen in UI and we need to check if updated email is used by different user.
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseWrapper> update(@PathVariable("id") Long id, @RequestBody UserDto userDto) throws Exception {
+        userDto.setId(id);  // spring cannot set id since it is not seen in UI and we need to check if updated email is used by different user.
         boolean emailExist = userService.emailExist(userDto);
-
-        if (result.hasErrors() || emailExist){
-            if (emailExist) {
-                result.rejectValue("username", " ", "A user with this email already exists. Please try with different email.");
-            }
-            return "user/user-update";
+        if (emailExist){
+            throw new Exception("A user with this email already exists");
         }
         userService.update(userDto);
-        return "redirect:/users/list";
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseWrapper("User successfully created",HttpStatus.OK));
     }
 
-    @GetMapping("/delete/{userId}")
-    public String delete(@PathVariable("userId") Long userId){
-        userService.delete(userId);
-        return "redirect:/users/list";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseWrapper> delete(@PathVariable("id") Long id){
+        userService.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseWrapper("User successfully deleted",HttpStatus.OK));
     }
 
-    @ModelAttribute
-    public void commonAttributes(Model model){
-        model.addAttribute("companies", companyService.getAllCompanies());
-        model.addAttribute("userRoles", roleService.getFilteredRolesForCurrentUser());
-        model.addAttribute("title", "Cydeo Accounting-User");
-    }
 
 }
