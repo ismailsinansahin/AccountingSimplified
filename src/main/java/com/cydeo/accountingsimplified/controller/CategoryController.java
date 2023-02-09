@@ -1,17 +1,22 @@
 package com.cydeo.accountingsimplified.controller;
 
 import com.cydeo.accountingsimplified.dto.CategoryDto;
+import com.cydeo.accountingsimplified.dto.ResponseWrapper;
 import com.cydeo.accountingsimplified.service.CategoryService;
+import com.stripe.exception.ApiException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
-@Controller
-@RequestMapping("/categories")
+@RestController
+@RequestMapping("/api/v1/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -20,67 +25,44 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/list")
-    public String list(Model model) throws Exception {
-        model.addAttribute("categories", categoryService.getAllCategories());
-        return "category/category-list";
+    @GetMapping
+    public ResponseEntity<ResponseWrapper> getCategories() throws Exception {
+        List<CategoryDto> categoryList = categoryService.getAllCategories();
+        return ResponseEntity.ok(new ResponseWrapper("Categories are successfully retrieved",categoryList, HttpStatus.OK));
     }
 
-    @GetMapping("/create")
-    public String create(Model model) {
-        model.addAttribute("newCategory", new CategoryDto());
-        return "category/category-create";
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseWrapper> getCategoryById(@PathVariable("id") Long id){
+        CategoryDto category = categoryService.findCategoryById(id);
+        return ResponseEntity.ok(new ResponseWrapper("User is successfully retrieved",category, HttpStatus.OK));
     }
 
-    @PostMapping("/create")
-    public String create(@Valid @ModelAttribute("newCategory") CategoryDto categoryDto, BindingResult bindingResult) throws Exception {
+    @PostMapping
+    public ResponseEntity<ResponseWrapper> create(@ModelAttribute("newCategory") CategoryDto categoryDto) throws Exception {
 
         boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto);
-
         if (categoryDescriptionExist) {
-            bindingResult.rejectValue("description", " ", "This category description already exists");
+            throw new Exception("This category description already exists");
         }
-
-        if (bindingResult.hasErrors()) {
-            return "category/category-create";
-        }
-
         categoryService.create(categoryDto);
-        return "redirect:/categories/list";
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("Category successfully created",HttpStatus.CREATED));
     }
 
-    @GetMapping("/update/{categoryId}")
-    public String update(@PathVariable("categoryId") Long categoryId, Model model) {
-        CategoryDto categoryById = categoryService.findCategoryById(categoryId);
-        model.addAttribute("category", categoryById);
-        return "category/category-update";
-    }
-
-    @PostMapping("/update/{categoryId}")
-    public String update(@Valid @ModelAttribute("category") CategoryDto categoryDto, BindingResult bindingResult, @PathVariable("categoryId") Long categoryId) {
-        categoryDto.setId(categoryId);
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseWrapper> update(@RequestBody CategoryDto categoryDto, @PathVariable("id") Long id) throws Exception {
+        categoryDto.setId(id);
         boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto);
-
         if (categoryDescriptionExist) {
-            bindingResult.rejectValue("description", " ", "This category description already exists");
+            throw new Exception("This category description already exists");
         }
-
-        if (bindingResult.hasErrors()) {
-            return "category/category-update";
-        }
-
-        categoryService.update(categoryId, categoryDto);
-        return "redirect:/categories/list";
+        categoryService.update(id, categoryDto);
+        return ResponseEntity.ok(new ResponseWrapper("Category successfully updated",HttpStatus.OK));
     }
 
-    @GetMapping("/delete/{categoryId}")
-    public String delete(@PathVariable("categoryId") Long categoryId) {
-        categoryService.delete(categoryId);
-        return "redirect:/categories/list";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseWrapper> delete(@PathVariable("id") Long id) {
+        categoryService.delete(id);
+        return ResponseEntity.ok(new ResponseWrapper("Categroy successfully deleted",HttpStatus.OK));
     }
 
-    @ModelAttribute
-    public void commonAttributes(Model model){
-        model.addAttribute("title", "Cydeo Accounting-Category");
-    }
 }
