@@ -43,7 +43,7 @@ public class CompanyController {
            throw new Exception("Company title already exist");
         }
         companyService.create(companyDto);
-        return ResponseEntity.ok(new ResponseWrapper("Company successfully created",HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("Company successfully created",HttpStatus.CREATED));
 
     }
 

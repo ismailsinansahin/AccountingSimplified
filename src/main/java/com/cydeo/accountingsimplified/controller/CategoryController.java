@@ -34,7 +34,7 @@ public class CategoryController {
     @GetMapping("/{id}")
     public ResponseEntity<ResponseWrapper> getCategoryById(@PathVariable("id") Long id){
         CategoryDto category = categoryService.findCategoryById(id);
-        return ResponseEntity.ok(new ResponseWrapper("User is successfully retrieved",category, HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("Category successfully retrieved",category, HttpStatus.OK));
     }
 
     @PostMapping
@@ -62,7 +62,7 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseWrapper> delete(@PathVariable("id") Long id) {
         categoryService.delete(id);
-        return ResponseEntity.ok(new ResponseWrapper("Categroy successfully deleted",HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("Category successfully deleted",HttpStatus.OK));
     }
 
 }

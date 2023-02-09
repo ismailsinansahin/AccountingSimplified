@@ -44,13 +44,13 @@ public class ClientVendorController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseWrapper> createClientVendor(@RequestBody ClientVendorDto clientVendorDto, BindingResult result, Model model) throws Exception {
+    public ResponseEntity<ResponseWrapper> createClientVendor(@RequestBody ClientVendorDto clientVendorDto) throws Exception {
         boolean isDuplicatedCompanyName = clientVendorService.companyNameExists(clientVendorDto);
         if (isDuplicatedCompanyName) {
             throw new Exception("Client/vendor with this name already exists");
         }
         clientVendorService.create(clientVendorDto);
-        return ResponseEntity.ok(new ResponseWrapper("Client/vendor is successfully created",HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("Client/vendor is successfully created",HttpStatus.CREATED));
     }
 
     @PutMapping("/{id}")
