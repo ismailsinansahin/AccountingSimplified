@@ -1,5 +1,7 @@
 package com.cydeo.accountingsimplified.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -10,45 +12,21 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder()
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDto {
 
     private Long id;
-
-    @NotBlank
-    @Size(min = 2, max = 50)
     private String firstname;
-
-    @NotBlank
-    @Size(min = 2, max = 50)
     private String lastname;
-
-    @NotBlank
-    @Email
-//    @Pattern("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$")
-//    @Pattern("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@(?!-)[a-zA-Z0-9.-]+$")    // email validation permitted by RFC 5322
     private String username;
-
-//    @NotBlank   // @Pattern is enough to check if it is not blank
-    @Pattern(regexp = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}")
     private String password;
 
-    @NotNull
+    @JsonIgnore
     private String confirmPassword;
-
-//    @NotBlank // @Pattern is enough to check if it is not blank
-//    @Pattern(regexp = "^1-[0-9]{3}?-[0-9]{3}?-[0-9]{4}$")                         //  format "1-xxx-xxx-xxxx"
-//    imported from https://www.baeldung.com/java-regex-validate-phone-numbers :
-    @Pattern(regexp = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$" // +111 (202) 555-0125  +1 (202) 555-0125
-            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"                                  // +111 123 456 789
-            + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$")                     // +111 123 45 67 89
     private String phone;
-
-    @NotNull
     private RoleDto role;
-
-    @NotNull
     private CompanyDto company;
-
+    @JsonIgnore
     private Boolean isOnlyAdmin;
 
 
