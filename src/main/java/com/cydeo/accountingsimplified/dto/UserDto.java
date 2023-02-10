@@ -20,7 +20,6 @@ public class UserDto {
     private String lastname;
     private String username;
     private String password;
-
     @JsonIgnore
     private String confirmPassword;
     private String phone;
