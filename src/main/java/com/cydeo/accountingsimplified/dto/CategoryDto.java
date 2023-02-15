@@ -1,5 +1,7 @@
 package com.cydeo.accountingsimplified.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -11,13 +13,15 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CategoryDto {
 
     private Long id;
-    @NotBlank(message = "Description is a required field.")
-    @Size(max = 100, min = 2, message = "Description should have 2-100 characters long.")
     private String description;
 
+    @JsonIgnore
     private CompanyDto company;
+
+    @JsonIgnore
     private boolean hasProduct;
 }

@@ -38,14 +38,14 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseWrapper> create(@ModelAttribute("newCategory") CategoryDto categoryDto) throws Exception {
+    public ResponseEntity<ResponseWrapper> create(@RequestBody CategoryDto categoryDto) throws Exception {
 
         boolean categoryDescriptionExist = categoryService.isCategoryDescriptionExist(categoryDto);
         if (categoryDescriptionExist) {
             throw new Exception("This category description already exists");
         }
-        categoryService.create(categoryDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("Category successfully created",HttpStatus.CREATED));
+        CategoryDto category = categoryService.create(categoryDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("Category successfully created",category, HttpStatus.CREATED));
     }
 
     @PutMapping("/{id}")
@@ -55,8 +55,8 @@ public class CategoryController {
         if (categoryDescriptionExist) {
             throw new Exception("This category description already exists");
         }
-        categoryService.update(id, categoryDto);
-        return ResponseEntity.ok(new ResponseWrapper("Category successfully updated",HttpStatus.OK));
+        CategoryDto category = categoryService.update(id, categoryDto);
+        return ResponseEntity.ok(new ResponseWrapper("Category successfully updated",category, HttpStatus.OK));
     }
 
     @DeleteMapping("/{id}")

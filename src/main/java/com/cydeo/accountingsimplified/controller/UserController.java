@@ -2,17 +2,11 @@ package com.cydeo.accountingsimplified.controller;
 
 import com.cydeo.accountingsimplified.dto.ResponseWrapper;
 import com.cydeo.accountingsimplified.dto.UserDto;
-import com.cydeo.accountingsimplified.service.CompanyService;
-import com.cydeo.accountingsimplified.service.RoleService;
 import com.cydeo.accountingsimplified.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -44,8 +38,8 @@ public class UserController {
         if (emailExist){
             throw new Exception("A user with this email already exists.");
         }
-        userService.save(userDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("User successfully created",HttpStatus.CREATED));
+        UserDto user = userService.save(userDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("User successfully created",user, HttpStatus.CREATED));
     }
 
     @PutMapping("/{id}")
@@ -55,8 +49,8 @@ public class UserController {
         if (emailExist){
             throw new Exception("A user with this email already exists");
         }
-        userService.update(userDto);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseWrapper("User successfully created",HttpStatus.OK));
+        UserDto user = userService.update(userDto);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseWrapper("User successfully created",user, HttpStatus.OK));
     }
 
     @DeleteMapping("/{id}")
