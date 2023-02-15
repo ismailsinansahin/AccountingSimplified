@@ -49,8 +49,8 @@ public class ClientVendorController {
         if (isDuplicatedCompanyName) {
             throw new Exception("Client/vendor with this name already exists");
         }
-        clientVendorService.create(clientVendorDto);
-        return ResponseEntity.ok(new ResponseWrapper("Client/vendor is successfully created",HttpStatus.CREATED));
+        ClientVendorDto clientVendor = clientVendorService.create(clientVendorDto);
+        return ResponseEntity.ok(new ResponseWrapper("Client/vendor is successfully created",clientVendor, HttpStatus.CREATED));
     }
 
     @PutMapping("/{id}")
@@ -60,11 +60,10 @@ public class ClientVendorController {
         if (isDuplicatedCompanyName) {
             throw new Exception("Client/vendor with this name already exists");
         }
-        clientVendorService.update(id, clientVendorDto);
-        return ResponseEntity.ok(new ResponseWrapper("Client/vendor is successfully updated",HttpStatus.OK));
+        ClientVendorDto clientVendor = clientVendorService.update(id, clientVendorDto);
+        return ResponseEntity.ok(new ResponseWrapper("Client/vendor is successfully updated",clientVendor, HttpStatus.OK));
     }
 
-    @GetMapping(value = "/delete/{clientVendorId}")
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseWrapper> delete(@PathVariable("id") Long id) throws Exception {
         if (invoiceService.checkIfInvoiceExist(id)){
