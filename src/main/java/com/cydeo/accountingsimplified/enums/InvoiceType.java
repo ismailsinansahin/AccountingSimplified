@@ -2,8 +2,8 @@ package com.cydeo.accountingsimplified.enums;
 
 public enum InvoiceType {
 
-    PURCHASE("Purchase Invoice"),
-    SALES("Sales Invoice");
+    PURCHASE("Purchase"),
+    SALE("Sale");
 
     private String value;
 

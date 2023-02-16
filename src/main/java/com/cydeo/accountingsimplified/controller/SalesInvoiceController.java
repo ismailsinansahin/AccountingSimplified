@@ -35,13 +35,13 @@ public class SalesInvoiceController {
 
     @GetMapping("/list")
     public String list(Model model) throws Exception {
-        model.addAttribute("invoices", invoiceService.getAllInvoicesOfCompany(InvoiceType.SALES));
+        model.addAttribute("invoices", invoiceService.getAllInvoicesOfCompany(InvoiceType.SALE));
         return "invoice/sales-invoice-list";
     }
 
     @GetMapping("/create")
     public String create(Model model) throws Exception {
-        model.addAttribute("newSalesInvoice", invoiceService.getNewInvoice(InvoiceType.SALES));
+        model.addAttribute("newSalesInvoice", invoiceService.getNewInvoice(InvoiceType.SALE));
         return "invoice/sales-invoice-create";
     }
 
@@ -52,7 +52,7 @@ public class SalesInvoiceController {
             return "invoice/sales-invoice-create";
         }
 
-        var invoice = invoiceService.save(invoiceDto, InvoiceType.SALES);
+        var invoice = invoiceService.save(invoiceDto, InvoiceType.SALE);
         return "redirect:/salesInvoices/update/" + invoice.getId();
     }
 

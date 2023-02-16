@@ -68,7 +68,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
         // Get All InvoiceProducts related to that invoice...
         List<InvoiceProduct> invoiceProductList = invoiceProductRepository.findAllByInvoice_Id(invoiceId);
         // If type of invoice is SALES
-        if (type == InvoiceType.SALES) {
+        if (type == InvoiceType.SALE) {
             // Then Loop through all sale invoiceProducts...
             for (InvoiceProduct each : invoiceProductList) {
                 // If You have enough quantity of that product in your stock then move to next step
@@ -107,7 +107,7 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
 
     private void updateQuantityOfProduct(InvoiceProduct invoiceProduct, InvoiceType type) {
         ProductDto productDto = mapperUtil.convert(invoiceProduct.getProduct(), new ProductDto());
-        if (type.equals(InvoiceType.SALES)) {
+        if (type.equals(InvoiceType.SALE)) {
             productDto.setQuantityInStock(productDto.getQuantityInStock() - invoiceProduct.getQuantity());
         } else {
             productDto.setQuantityInStock(productDto.getQuantityInStock() + invoiceProduct.getQuantity());

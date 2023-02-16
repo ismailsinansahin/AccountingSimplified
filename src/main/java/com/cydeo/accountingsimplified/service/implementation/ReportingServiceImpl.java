@@ -40,7 +40,7 @@ public class ReportingServiceImpl extends CommonService implements ReportingServ
     @Override
     public Map<String, BigDecimal> getMonthlyProfitLossDataMap() {
         Map<String, BigDecimal> profitLossDataMap = new TreeMap<>();
-        List<InvoiceProduct> salesInvoiceProducts = invoiceProductRepository.findAllByInvoice_InvoiceTypeAndInvoice_Company(InvoiceType.SALES, getCompany());
+        List<InvoiceProduct> salesInvoiceProducts = invoiceProductRepository.findAllByInvoice_InvoiceTypeAndInvoice_Company(InvoiceType.SALE, getCompany());
         for (InvoiceProduct invoiceProduct : salesInvoiceProducts) {
             int year = invoiceProduct.getInvoice().getDate().getYear();
             String month = invoiceProduct.getInvoice().getDate().getMonth().toString();

@@ -59,6 +59,8 @@ public class InvoiceServiceImpl extends CommonService implements InvoiceService 
         invoiceDto.setCompany(securityService.getLoggedInUser().getCompany());
         invoiceDto.setInvoiceType(invoiceType);
         invoiceDto.setInvoiceStatus(InvoiceStatus.AWAITING_APPROVAL);
+        invoiceDto.setInvoiceNo(generateInvoiceNo(invoiceType));
+        invoiceDto.setDate(LocalDate.now());
         Invoice invoice = mapperUtil.convert(invoiceDto, new Invoice());
         return mapperUtil.convert(invoiceRepository.save(invoice), new InvoiceDto());
     }

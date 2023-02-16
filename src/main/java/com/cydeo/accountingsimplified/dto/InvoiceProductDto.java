@@ -1,5 +1,6 @@
 package com.cydeo.accountingsimplified.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
 
@@ -16,20 +17,15 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceProductDto {
 
     private Long id;
 
-    @NotNull(message = "Quantity is a required field.")
-    @Range(min = 1, max = 100, message = "Maximum order count is 100")
     private Integer quantity;
 
-    @NotNull(message = "Price is a required field.")
-    @Range(min = 1, message = "Price should be at least $1")
     private BigDecimal price;
 
-    @NotNull(message = "Tax is a required field.")
-    @Range(min = 0, max = 20, message = "Tax should be between 5% and 20%")
     private Integer tax;
 
     private BigDecimal total;
@@ -38,8 +34,6 @@ public class InvoiceProductDto {
 
     private InvoiceDto invoice;
 
-    @NotNull(message = "Product is a required field.")
-    @Valid
     private ProductDto product;
 
 }

@@ -2,6 +2,7 @@ package com.cydeo.accountingsimplified.dto;
 
 import com.cydeo.accountingsimplified.enums.InvoiceStatus;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class InvoiceDto {
 
     private Long id;
@@ -34,8 +36,6 @@ public class InvoiceDto {
 
     private CompanyDto company;
 
-    @NotNull(message = "This is a required field.")
-    @Valid
     private ClientVendorDto clientVendor;
 
     private BigDecimal price;

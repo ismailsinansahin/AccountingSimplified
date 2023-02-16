@@ -2,12 +2,15 @@ package com.cydeo.accountingsimplified.service.implementation;
 
 import com.cydeo.accountingsimplified.dto.CategoryDto;
 import com.cydeo.accountingsimplified.entity.Category;
+import com.cydeo.accountingsimplified.exception.AccountingException;
 import com.cydeo.accountingsimplified.mapper.MapperUtil;
 import com.cydeo.accountingsimplified.repository.CategoryRepository;
 import com.cydeo.accountingsimplified.service.CategoryService;
 import com.cydeo.accountingsimplified.service.ProductService;
 import com.cydeo.accountingsimplified.service.SecurityService;
 import com.cydeo.accountingsimplified.service.common.CommonService;
+import com.stripe.exception.ApiException;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -58,8 +61,12 @@ public class CategoryServiceImpl extends CommonService implements CategoryServic
         return mapperUtil.convert(categoryRepository.save(category), new CategoryDto());
     }
 
+    @SneakyThrows
     @Override
     public void delete(Long categoryId) {
+        if(hasProduct(categoryId)){
+            throw new AccountingException("There is/are products with this Category");
+        }
         Category category = categoryRepository.findById(categoryId).get();
         category.setIsDeleted(true);
         category.setDescription(category.getDescription() + "-" + category.getId());
