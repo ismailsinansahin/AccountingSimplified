@@ -46,8 +46,8 @@ public class ProductController {
         if (productService.isProductNameExist(productDto)) {
             throw new Exception("This Product Name already exists.");
         }
-        productService.save(productDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("Product successfully created",HttpStatus.CREATED));
+        ProductDto product = productService.save(productDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("Product successfully created",product, HttpStatus.CREATED));
     }
 
     @PutMapping("/{id}")
@@ -56,8 +56,8 @@ public class ProductController {
         if (productService.isProductNameExist(productDto)) {
             throw new Exception("This Product Name already exists.");
         }
-        productService.update(id, productDto);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseWrapper("Product successfully updated",HttpStatus.OK));
+        ProductDto product = productService.update(id, productDto);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseWrapper("Product successfully updated",product, HttpStatus.OK));
     }
 
     @DeleteMapping("/{id}")

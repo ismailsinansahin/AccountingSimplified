@@ -1,6 +1,7 @@
 package com.cydeo.accountingsimplified.dto;
 
 import com.cydeo.accountingsimplified.enums.ProductUnit;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;

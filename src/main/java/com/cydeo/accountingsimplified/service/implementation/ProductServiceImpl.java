@@ -87,7 +87,7 @@ public class ProductServiceImpl extends CommonService implements ProductService 
     public boolean checkProductQuantity(Long productId){
         Product product = productRepository.findById(productId).get();
         List<InvoiceProduct> invoiceProducts = invoiceProductService.findAllInvoiceProductsByProductId(product.getId());
-        if (invoiceProducts.size() == 0 && product.getQuantityInStock() == 0){
+        if (invoiceProducts.size() != 0 && product.getQuantityInStock() == 0){
             return true;
         }
         return false;
