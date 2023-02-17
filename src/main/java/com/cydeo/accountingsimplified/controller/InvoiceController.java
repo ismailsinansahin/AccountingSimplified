@@ -61,8 +61,8 @@ public class InvoiceController {
 
     @PostMapping("/invoice-product/{id}")
     public ResponseEntity<ResponseWrapper> addInvoiceProduct(@PathVariable("id") Long id, @RequestBody InvoiceProductDto invoiceProductDto) {
-        invoiceProductService.save(id, invoiceProductDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("InvoiceProduct successfully created",HttpStatus.CREATED));
+        InvoiceProductDto iProduct = invoiceProductService.save(id, invoiceProductDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("InvoiceProduct successfully created",iProduct, HttpStatus.CREATED));
     }
 
     @GetMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")

@@ -1,5 +1,6 @@
 package com.cydeo.accountingsimplified.entity;
 
+import com.cydeo.accountingsimplified.dto.InvoiceProductDto;
 import com.cydeo.accountingsimplified.enums.InvoiceStatus;
 import com.cydeo.accountingsimplified.enums.InvoiceType;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,9 @@ public class Invoice extends BaseEntity{
 
     @ManyToOne
     private ClientVendor clientVendor;
+
+//    @OneToMany(cascade = CascadeType.ALL)
+//    private List<InvoiceProduct> invoiceProducts;
 
 
 }

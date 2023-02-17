@@ -55,12 +55,13 @@ public class InvoiceProductServiceImpl implements InvoiceProductService {
     }
 
     @Override
-    public void save(Long invoiceId, InvoiceProductDto invoiceProductDto) {
+    public InvoiceProductDto save(Long invoiceId, InvoiceProductDto invoiceProductDto) {
         Invoice invoice = mapperUtil.convert(invoiceService.findInvoiceById(invoiceId), new Invoice());
         InvoiceProduct invoiceProduct = mapperUtil.convert(invoiceProductDto, new InvoiceProduct());
         invoiceProduct.setInvoice(invoice);
         invoiceProduct.setProfitLoss(BigDecimal.ZERO);
-        invoiceProductRepository.save(invoiceProduct);
+        var iProduct = invoiceProductRepository.save(invoiceProduct);
+        return mapperUtil.convert(iProduct, new InvoiceProductDto());
     }
 
     @Override

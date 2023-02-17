@@ -1,5 +1,6 @@
 package com.cydeo.accountingsimplified.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
@@ -29,7 +30,11 @@ public class InvoiceProductDto {
     private Integer tax;
 
     private BigDecimal total;
+
+    @JsonIgnore
     private BigDecimal profitLoss;
+
+    @JsonIgnore
     private int remainingQuantity;
 
     private InvoiceDto invoice;
