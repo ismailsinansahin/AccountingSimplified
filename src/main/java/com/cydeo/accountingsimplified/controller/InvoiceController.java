@@ -23,7 +23,7 @@ public class InvoiceController {
 
     @GetMapping("/get/{type}")
     public ResponseEntity<ResponseWrapper> getInvoices(@PathVariable("type") String type) throws Exception {
-        InvoiceType invoiceType = type.equalsIgnoreCase("sales") ? InvoiceType.SALE : InvoiceType.PURCHASE;
+        InvoiceType invoiceType = type.equalsIgnoreCase("sale") ? InvoiceType.SALE : InvoiceType.PURCHASE;
         var invoices = invoiceService.getAllInvoicesOfCompany(invoiceType);
         return ResponseEntity.ok(new ResponseWrapper("Invoices successfully retrieved",invoices, HttpStatus.OK));
     }
@@ -55,8 +55,8 @@ public class InvoiceController {
 
     @GetMapping("/approve/{id}")
     public ResponseEntity<ResponseWrapper> approve(@PathVariable("id") Long id){
-        invoiceService.approve(id);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseWrapper("Invoice approved",HttpStatus.OK));
+        var invoice = invoiceService.approve(id);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseWrapper("Invoice approved",invoice, HttpStatus.OK));
     }
 
     @PostMapping("/invoice-product/{id}")

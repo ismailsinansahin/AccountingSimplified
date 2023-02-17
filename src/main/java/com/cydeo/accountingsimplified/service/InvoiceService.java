@@ -16,7 +16,7 @@ public interface InvoiceService {
     InvoiceDto getNewInvoice(InvoiceType invoiceType) throws Exception;
     InvoiceDto save(InvoiceDto invoiceDto, InvoiceType invoiceType);
     InvoiceDto update(Long id, InvoiceDto invoiceDto);
-    void approve(Long id);
+    InvoiceDto approve(Long id);
     InvoiceDto printInvoice(Long id);
     void delete(Long id);
     List<InvoiceDto> getLastThreeInvoices();

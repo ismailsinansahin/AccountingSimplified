@@ -69,18 +69,18 @@ public class InvoiceServiceImpl extends CommonService implements InvoiceService 
     public InvoiceDto update(Long invoiceId, InvoiceDto invoiceDto) {
         Invoice invoice = invoiceRepository.findInvoiceById(invoiceId);
         invoice.setClientVendor(mapperUtil.convert(invoiceDto.getClientVendor(), new ClientVendor()));
-        invoiceRepository.save(invoice);
-        return mapperUtil.convert(invoice, invoiceDto);
+        var savedInvoice = invoiceRepository.save(invoice);
+        return mapperUtil.convert(savedInvoice, new InvoiceDto());
     }
 
     @Override
-    public void approve(Long invoiceId) {
+    public InvoiceDto approve(Long invoiceId) {
         Invoice invoice = invoiceRepository.findInvoiceById(invoiceId);
         invoiceProductService.completeApprovalProcedures(invoiceId, invoice.getInvoiceType());
         invoice.setInvoiceStatus(InvoiceStatus.APPROVED);
         invoice.setDate(LocalDate.now());
         invoiceRepository.save(invoice);
-        mapperUtil.convert(invoice, new InvoiceDto());
+        return mapperUtil.convert(invoice, new InvoiceDto());
     }
 
     @Override
