@@ -39,8 +39,6 @@ public class Invoice extends BaseEntity{
     @ManyToOne
     private ClientVendor clientVendor;
 
-//    @OneToMany(cascade = CascadeType.ALL)
-//    private List<InvoiceProduct> invoiceProducts;
 
 
 }

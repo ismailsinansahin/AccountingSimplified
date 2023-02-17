@@ -59,18 +59,23 @@ public class InvoiceController {
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseWrapper("Invoice approved",invoice, HttpStatus.OK));
     }
 
-    @PostMapping("/invoice-product/{id}")
+    @GetMapping("/invoice-products/{invoiceId}")
+    public ResponseEntity<ResponseWrapper> getInvoiceProducts(@PathVariable("invoiceId") Long invoiceId) {
+        var iProducts = invoiceProductService.getInvoiceProductsOfInvoice(invoiceId);
+        return ResponseEntity.ok(new ResponseWrapper("Invoices successfully retrieved",iProducts, HttpStatus.OK));
+    }
+    @PostMapping("/invoice-products/{id}")
     public ResponseEntity<ResponseWrapper> addInvoiceProduct(@PathVariable("id") Long id, @RequestBody InvoiceProductDto invoiceProductDto) {
         InvoiceProductDto iProduct = invoiceProductService.save(id, invoiceProductDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseWrapper("InvoiceProduct successfully created",iProduct, HttpStatus.CREATED));
     }
 
-    @GetMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
-    public String removeInvoiceProduct(@PathVariable("invoiceId") Long invoiceId,
-                                       @PathVariable("invoiceProductId") Long invoiceProductId) {
-        invoiceProductService.delete(invoiceProductId);
-        return "redirect:/purchaseInvoices/update/" + invoiceId;
-    }
+//    @GetMapping("/removeInvoiceProduct/{invoiceId}/{invoiceProductId}")
+//    public String removeInvoiceProduct(@PathVariable("invoiceId") Long invoiceId,
+//                                       @PathVariable("invoiceProductId") Long invoiceProductId) {
+//        invoiceProductService.delete(invoiceProductId);
+//        return "redirect:/purchaseInvoices/update/" + invoiceId;
+//    }
 
 
 }
